@@ -1,0 +1,9 @@
+-- Para executar as api de documentação (apidoc) e de testes (phpunit)
+-- é necessário que sejam executadas de dentro da pasta vendor/bin/
+
+
+-- apidoc
+-- api /souce/
+
+-- phpunit
+-- phpunit ../source

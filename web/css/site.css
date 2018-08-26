@@ -1,0 +1,412 @@
+/** 
+* Main Site CSS
+*/
+html, body, .modal-content { height: 100%; min-width: 350px; }
+/* background color */
+body { background-color: #ecf0f1; }
+/* wrap */
+.wrap {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding: 0 0 60px;
+}
+.wrap > .container { padding: 70px 15px 20px; }
+/* footer */
+.footer, .main-footer {
+    height: 60px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+    padding-left: 50px;
+}
+/* fix row */
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+.container .row { 
+    margin-left: -15px;
+    margin-right: -15px;
+}
+/* jumbotron */
+.jumbotron { text-align: center; background-color: transparent; }
+.jumbotron .btn { font-size: 21px; padding: 14px 24px; }
+.not-set {
+    color: #c55;
+    font-style: italic;
+}
+/* add sorting icons to gridview sort links */
+a.asc:after, a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
+}
+a.asc:after { content: /*"\e113"*/ "\e151"; }
+a.desc:after { content: /*"\e114"*/ "\e152"; }
+.sort-numerical a.asc:after { content: "\e153"; }
+.sort-numerical a.desc:after { content: "\e154"; }
+.sort-ordinal a.asc:after { content: "\e155"; }
+.sort-ordinal a.desc:after { content: "\e156"; }
+.grid-view th { white-space: nowrap; }
+.hint-block {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+}
+.error-summary {
+    color: #a94442;
+    background: #fdf7f7;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
+.kv-expand-header-cell, .kv-expand-icon-cell { font-size:0.8em; }
+.round {
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    background-color: #000;
+    color: #FFF;
+    text-align: center;
+}
+.round.hollow {
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    background-color: #FFF;
+    color: #000;
+    text-align: center;
+}
+.round.round-sm {
+    height: 15px;
+    width: 15px;
+    line-height: 20px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    font-size: 0.7em;
+}
+.round.round-lg {
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    font-size: 1.5em;
+}
+/* sobrescreve os breadcrumbs padrão do adminLte */
+.content-header {
+	padding: 0px 0px;
+}
+.content-header div > .breadcrumb {
+  float: right;
+  background: transparent;
+  margin-top: 0px;
+  margin-bottom: 0;
+  font-size: 12px;
+  padding: 7px 5px;
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  border-radius: 2px;
+}
+.content-header div > .breadcrumb > li > a {
+  color: #444;
+  text-decoration: none;
+  display: inline-block;
+}
+.content-header div > .breadcrumb > li > a > .fa,
+.content-header div > .breadcrumb > li > a > .glyphicon,
+.content-header div > .breadcrumb > li > a > .ion {
+  margin-right: 5px;
+}
+.content-header div > .breadcrumb > li + li:before {
+  content: '>\00a0';
+}
+@media (max-width: 991px) {
+  .content-header div > .breadcrumb {
+	    position: relative;
+	    margin-top: 5px;
+	    top: 0;
+	    right: 0;
+	    float: none;
+	    background: #d2d6de;
+	    padding-left: 10px;
+	    border-radius: 0px;
+	}
+	.content-header div > .breadcrumb li:before {
+	    color: #97a0b3;
+	}
+}
+/* sobrescreve o nowrap do bootstrap */
+.dropdown-header { white-space: normal !important; }
+/* sobrescreve o css padrao do button toggledata */
+a[id$='-togdata-page'] { border-radius: 0px !important; }
+/* tamanho das fonts */
+.font6  { font-size: 6px; }
+.font7  { font-size: 7px; }
+.font8  { font-size: 8px; }
+.font9  { font-size: 9px; }
+.font10 { font-size: 10px; }
+.font10 { font-size: 11px; }
+.font12 { font-size: 12px; }
+.font13 { font-size: 13px; }
+.font14 { font-size: 14px; }
+.font15 { font-size: 15px; }
+.font16 { font-size: 16px; }
+.font18 { font-size: 18px; }
+.font20 { font-size: 20px; }
+.font22 { font-size: 23px; }
+.font24 { font-size: 24px; }
+.font25 { font-size: 25px; }
+.font26 { font-size: 26px; }
+.font28 { font-size: 28px; }
+.font30 { font-size: 30px; }
+/* novas cores para buttons */
+/* emerald */
+.btn-emerald { background-color: #2ecc71; border-color: #2ecc71; color: #fff;}
+.btn-emerald:hover, .btn-emerald:focus, .btn-emerald:active, .btn-emerald.active {
+  background-color: #27b262; 
+  border-color: #27b262;
+  color: #fff;
+}
+.btn-emerald.disabled:hover, .btn-emerald.disabled:focus, .btn-emerald.disabled:active,
+.btn-emerald.disabled.active, .btn-emerald[disabled]:hover, .btn-emerald[disabled]:focus,
+.btn-emerald[disabled]:active, .btn-emerald[disabled].active 
+fieldset[disabled] .btn-emerald:hover,
+fieldset[disabled] .btn-emerald:focus,
+fieldset[disabled] .btn-emerald:active,
+fieldset[disabled] .btn-emerald.active {
+  background-color: #2ecc71; 
+  border-color: #2ecc71;
+}
+/* purple */
+.btn-purple { background-color: #9b59b6; border-color: #9b59b6; color: #fff;}
+.btn-purple:hover, .btn-purple:focus, .btn-purple:active, .btn-purple.active {
+  background-color: #8b4fa3; 
+  border-color: #8b4fa3;
+  color: #fff;
+}
+.btn-purple.disabled:hover, .btn-purple.disabled:focus, .btn-purple.disabled:active,
+.btn-purple.disabled.active, .btn-purple[disabled]:hover, .btn-purple[disabled]:focus,
+.btn-purple[disabled]:active, .btn-purple[disabled].active 
+fieldset[disabled] .btn-purple:hover,
+fieldset[disabled] .btn-purple:focus,
+fieldset[disabled] .btn-purple:active,
+fieldset[disabled] .btn-purple.active {
+  background-color: #9b59b6; 
+  border-color: #9b59b6;
+}
+/* orange */
+.btn-orange { background-color: #ed8223; border-color: #ed8223; color: #fff;}
+.btn-orange:hover, .btn-orange:focus, .btn-orange:active, .btn-orange.active {
+  background-color: #db7820; 
+  border-color: #db7820;
+  color: #fff;
+}
+.btn-orange.disabled:hover, .btn-orange.disabled:focus, .btn-orange.disabled:active,
+.btn-orange.disabled.active, .btn-orange[disabled]:hover, .btn-orange[disabled]:focus,
+.btn-orange[disabled]:active, .btn-orange[disabled].active 
+fieldset[disabled] .btn-orange:hover,
+fieldset[disabled] .btn-orange:focus,
+fieldset[disabled] .btn-orange:active,
+fieldset[disabled] .btn-orange.active {
+  background-color: #ed8223; 
+  border-color: #ed8223;
+}
+/* pink */
+.btn-pink { background-color: #e91e63; border-color: #e91e63; color: #fff;}
+.btn-pink:hover, .btn-pink:focus, .btn-pink:active, .btn-pink.active {
+  background-color: #d81b60; 
+  border-color: #d81b60;
+  color: #fff;
+}
+.btn-pink.disabled:hover, .btn-pink.disabled:focus, .btn-pink.disabled:active,
+.btn-pink.disabled.active, .btn-pink[disabled]:hover, .btn-pink[disabled]:focus,
+.btn-pink[disabled]:active, .btn-pink[disabled].active 
+fieldset[disabled] .btn-pink:hover,
+fieldset[disabled] .btn-pink:focus,
+fieldset[disabled] .btn-pink:active,
+fieldset[disabled] .btn-pink.active {
+  background-color: #e91e63; 
+  border-color: #e91e63;
+}
+/* green */
+.btn-green { background-color: #8bc34A; border-color: #8bc34A; color: #fff;}
+.btn-green:hover, .btn-green:focus, .btn-green:active, .btn-green.active {
+  background-color: #7cb342; 
+  border-color: #7cb342;
+  color: #fff;
+}
+.btn-green.disabled:hover, .btn-green.disabled:focus, .btn-green.disabled:active,
+.btn-green.disabled.active, .btn-green[disabled]:hover, .btn-green[disabled]:focus,
+.btn-green[disabled]:active, .btn-green[disabled].active 
+fieldset[disabled] .btn-green:hover,
+fieldset[disabled] .btn-green:focus,
+fieldset[disabled] .btn-green:active,
+fieldset[disabled] .btn-green.active {
+  background-color: #8bc34A; 
+  border-color: #8bc34A;
+}
+/* lava */
+.btn-lava { background-color: #f44336; border-color: #f44336; color: #fff;}
+.btn-lava:hover, .btn-lava:focus, .btn-lava:active, .btn-lava.active {
+  background-color: #e23e31; 
+  border-color: #e23e31;
+  color: #fff;
+}
+.btn-lava.disabled:hover, .btn-lava.disabled:focus, .btn-lava.disabled:active,
+.btn-lava.disabled.active, .btn-lava[disabled]:hover, .btn-lava[disabled]:focus,
+.btn-lava[disabled]:active, .btn-lava[disabled].active 
+fieldset[disabled] .btn-lava:hover,
+fieldset[disabled] .btn-lava:focus,
+fieldset[disabled] .btn-lava:active,
+fieldset[disabled] .btn-lava.active {
+  background-color: #f44336; 
+  border-color: #f44336;
+}
+/* cloud */
+.btn-cloud { background-color: #98dbf9; border-color: #56afd8; color: rgba(0,0,0,0.8);}
+.btn-cloud:hover, .btn-cloud:focus, .btn-cloud:active, .btn-cloud.active {
+  background-color: #98dbf9; 
+  border-color: #56afd8;
+  color: #fff;
+}
+.btn-cloud.disabled:hover, .btn-cloud.disabled:focus, .btn-cloud.disabled:active,
+.btn-cloud.disabled.active, .btn-cloud[disabled]:hover, .btn-cloud[disabled]:focus,
+.btn-cloud[disabled]:active, .btn-cloud[disabled].active 
+fieldset[disabled] .btn-teste:hover,
+fieldset[disabled] .btn-teste:focus,
+fieldset[disabled] .btn-teste:active,
+fieldset[disabled] .btn-teste.active {
+  background-color: #98dbf9; 
+  border-color: #56afd8;
+}
+/* ------------------------------------------------------------------------------------------- */
+.btn-custom { background-color: #08c; border-color: #08c; }
+.btn-custom:hover, .btn-custom:focus, .btn-custom:active, .btn-custom.active {
+  background-color: #0077b3;
+  border-color: #006699;
+}
+.btn-custom.disabled:hover, .btn-custom.disabled:focus, .btn-custom.disabled:active,
+.btn-custom.disabled.active, .btn-custom[disabled]:hover, .btn-custom[disabled]:focus,
+.btn-custom[disabled]:active, .btn-custom[disabled].active 
+fieldset[disabled] .btn-custom:hover,
+fieldset[disabled] .btn-custom:focus,
+fieldset[disabled] .btn-custom:active,
+fieldset[disabled] .btn-custom.active {
+  background-color: #08c;
+  border-color: #08c;
+}
+/* class to pointer */
+.pointer { cursor: pointer; }
+/* bootstrap card */
+.card {
+	margin: 10px 60px;
+	border: 1px solid rgba(0,0,0,0.5);
+	background-color: #f9f7f7;
+}
+.card-header {
+	border-bottom: 1px solid rgba(0,0,0,0.5);
+	padding: 10px;
+}
+.card-info, .card-info .card-header {
+	border-color: #31708f;
+}
+.card-info .card-header {
+	background-color: #d9edf7;
+}
+/* add formatation to table */
+.table-bordered-primary,
+.table-bordered-primary > thead > tr > th,
+.table-bordered-primary > tbody > tr > th,
+.table-bordered-primary > tfoot > tr > th,
+.table-bordered-primary > thead > tr > td,
+.table-bordered-primary > tbody > tr > td,
+.table-bordered-primary > tfoot > tr > td {
+   border: 0.5px solid #337ab7;
+}
+/* dropdown */
+.dropdown-fba {
+	position: fixed; 
+	bottom: 15px;
+	right: 15px;
+	width: 197px;
+	-webkit-transition-property: bottom;
+    -webkit-transition-duration: 1s;
+}
+.dropdown-fba ul {
+	background-color: transparent;
+	border: none;
+	padding-bottom: 5px !important;
+}
+.dropdown-fba li {
+	margin-top: 5px;
+}
+.btn-modal-contato {
+    -moz-transition:    all 700ms ease !important;
+    -webkit-transition: all 700ms ease !important;
+    -o-transition:      all 700ms ease !important;
+    -ms-transition:     all 700ms ease !important;
+    transition:         all 700ms ease !important;
+}
+/* custom background-color */
+.bg-purple, .label-purple { background-color: #9b59b6 !important; color: #fff; }
+.bg-lava, .label-lava { background-color: #f44336 !important; color: #fff; }
+.bg-orange, .label-orange { background-color: #ed8223 !important; color: #fff; }
+.bg-emerald, .label-emerald { background-color: #2ecc71 !important; color: #fff; }
+.bg-pink, .label-pink { background-color: #e91e63 !important; color: #fff; }
+.label-green { background-color: #8bc34A !important; color: #fff; }
+
+/* custom css */
+.btn-flat {
+	border-radius: 0px !important;
+}
+.panel, .panel-heading, .panel-body, .panel-footer {
+	border-radius: 0px !important;
+}
+.panel-heading, .panel-body {
+	padding: 20px;
+}
+.panel-box {
+	border-top-width: 5px;
+	border-bottom: none;
+	border-right: none;
+	border-left: none;
+	border-radius: 0px 0px 10px 10px !important;
+}
+/* logout - temporario */
+/* align the logout "link" (button in form) of the navbar */
+.nav li > form > button.logout {
+    padding: 15px;
+    border: none;
+}
+
+@media(max-width:767px) {
+    .nav li > form > button.logout {
+        display:block;
+        text-align: left;
+        width: 100%;
+        padding: 10px 15px;
+    }
+}
+
+.nav > li > form > button.logout:focus,
+.nav > li > form > button.logout:hover {
+    text-decoration: none;
+}
+
+.nav > li > form > button.logout:focus {
+    outline: none;
+}
