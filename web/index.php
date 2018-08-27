@@ -13,6 +13,6 @@ try {
     
 }catch(\Exception $e) {
 
-    throw new BadRequestHttpException('<p>Erro ao se conectar com base de dados.</p><b>Erro: </b>'.$e->getMessage());
+    throw new yii\web\BadRequestHttpException('<p>Erro ao se conectar com base de dados.</p><b>Erro: </b>'.$e->getMessage());
 
 }

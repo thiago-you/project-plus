@@ -1,16 +1,17 @@
 -- ----------------------------------------------------------------------------------------------------------------
 -- Thiago
--- 04/09/2017
+-- 27/08/2018
 -- Cria uma database inicial (vazia)
 -- ----------------------------------------------------------------------------------------------------------------
 -- seta uma database default ara uso
 USE `mysql`;
 -- deleta a database antiga
-DROP DATABASE IF EXISTS `autosolutions`;
+DROP DATABASE IF EXISTS `exemplo_db`;
 --  cria a database
-CREATE DATABASE `autosolutions` CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`;
+-- CREATE DATABASE `autosolutions` CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`;
+CREATE DATABASE `exemplo_db` DEFAULT CHARACTER SET utf8 ;
 -- seta a nova database para uso
-USE `autosolutions`;
+USE `exemplo_db`;
 -- ----------------------------------------------------------------------------------------------------------------
 -- cria a tabela de clientes
 CREATE TABLE `cliente` (
@@ -42,24 +43,4 @@ CREATE TABLE `telefone` (
   `tipo` ENUM('M', 'F') NOT NULL DEFAULT 'M',
   PRIMARY KEY (`id_cliente`, `fone`),
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id_cliente`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
--- cria a tabela de veiculo
-CREATE TABLE `veiculo` (
-  `id_veiculo` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `placa` CHAR(7) NOT NULL,
-  `marca` VARCHAR(100),
-  `modelo` VARCHAR(100),
-  `ano` DATETIME,
-  `cor` VARCHAR(100),
-  `detalhes` VARCHAR(250) COMMENT 'Detalhes e caracteristicas adicionais do veiculo'
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
--- cria a tabela de relação entre cliente e veiculo
-CREATE TABLE `cliente_veiculo` (
-  `id_cliente` INT NOT NULL,
-  `id_veiculo` INT NOT NULL,
-  PRIMARY KEY (`id_cliente`, `id_veiculo`),
-  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id_cliente`),
-  FOREIGN KEY (`id_veiculo`) REFERENCES `veiculo`(`id_veiculo`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
