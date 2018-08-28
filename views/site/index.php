@@ -2,9 +2,10 @@
 $this->title = 'Auto Solutions';
 ?>
 <div class="site-index">
-	<br/><br/>
+	<br><br>
     <div class="jumbotron">
-        <h1>Auto Solutions</h1>
-        <h3>A solução inteligente para o seu negócio.</h3>
+        <h1>Exemplo</h1>
+        <br>
+        <h3><i class="fa fa-cog fa-spin"></i>&nbsp; Aplicação ainda em desenvolvimento ...</h3>
     </div>
 </div>
