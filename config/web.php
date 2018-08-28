@@ -3,12 +3,12 @@ $params = require(__DIR__ . '/params.php');
 $db = require(__DIR__ . '/db.php');
 
 $config = [
-    'id' => 'autosolutionsSystem',
+    'id' => 'exemplo-demo',
     'language' => 'pt-BR',
     'sourceLanguage' => 'pt-BR',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'name' => 'Auto Solutions',
+    'name' => 'Exemplo',
     'components' => [
         'i18n' => [
             'translations' => [

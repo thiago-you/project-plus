@@ -26,13 +26,13 @@ class BaseController extends Controller
 		];
 	}
 	
-	public function init()
+	public function beforeAction($action)
 	{
-	    if(Yii::$app->user->isGuest && $this->module->requestedRoute != 'site/login') {
-	        return $this->redirect(['/site/login', 'invalidAcess' => true]);
-        }
-	 
-	    parent::init();
+		if (Yii::$app->user->isGuest && $this->module->requestedRoute != 'site/login') {
+			return $this->redirect(['/site/login', 'invalidAcess' => true]);
+		}
+		
+		return parent::beforeAction($action);
 	}
 }
 ?>
