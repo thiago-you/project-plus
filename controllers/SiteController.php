@@ -59,6 +59,11 @@ class SiteController extends BaseController
      */
     public function actionIndex()
     {
+        // se for guest redireciona para o login
+        if (\Yii::$app->user->isGuest) {
+            return $this->redirect(['site/login'])->send();
+        }
+        
         return $this->render('index');
     }
 
@@ -69,12 +74,12 @@ class SiteController extends BaseController
      */
     public function actionLogin($invalidAcess = null)
     {
-        if(!Yii::$app->user->isGuest) {
+        if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
         // mensagem de erro ao tentar acessar alguma tela sem login
-        if($invalidAcess) {
+        if ($invalidAcess) {
             Yii::$app->session->setFlash('danger', '<i class="fa fa-warning"></i>&nbsp; Oops... Parece que você ainda não está logado. Por favor, realize o login para acessar o sistema');
         }
         
