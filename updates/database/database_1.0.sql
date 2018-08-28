@@ -16,10 +16,10 @@ USE `exemplo_db`;
 -- cria a tabela de clientes
 CREATE TABLE `cliente` (
   `id_cliente` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `nome` VARCHAR(100) NOT NULL,
-  `sobrenome` VARCHAR(150) NOT NULL,
+  `nome` VARCHAR(250) NOT NULL,
   `apelido` VARCHAR(100),
   `documento` VARCHAR(14) COMMENT 'Documento pode ser usado para CPF, RG ou CNPJ',
+  `telefone` VARCHAR(11) NOT NULL, 
   `sexo` ENUM('M', 'F') DEFAULT 'M',
   `data_nascimento` DATETIME,
   `data_cadastro` DATETIME NOT NULL,
@@ -33,14 +33,4 @@ CREATE TABLE `cliente` (
   `email` VARCHAR(100),
   `situacao` INT,
   `tipo` CHAR(1)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
--- cria a tabela de telefone
-CREATE TABLE `telefone` (
-  `id_cliente` INT NOT NULL,
-  `fone` CHAR(11) NOT NULL,
-  `descricao` VARCHAR(100) NOT NULL,
-  `tipo` ENUM('M', 'F') NOT NULL DEFAULT 'M',
-  PRIMARY KEY (`id_cliente`, `fone`),
-  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id_cliente`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
