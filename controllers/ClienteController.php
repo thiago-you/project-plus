@@ -8,6 +8,7 @@ use app\models\ClienteSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ClienteController implements the CRUD actions for Cliente model.
@@ -38,9 +39,15 @@ class ClienteController extends BaseController
         $searchModel = new ClienteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        // model do import file
+        $modelImport = new \yii\base\DynamicModel(['fileImport' => 'File Import']);
+        $modelImport->addRule(['fileImport'],'required');
+        $modelImport->addRule(['fileImport'], 'file', ['extensions' => 'ods,xls,xlsx']);
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        	'modelImport' => $modelImport
         ]);
     }
 
@@ -52,9 +59,14 @@ class ClienteController extends BaseController
     public function actionCadastrar()
     {
         $model = new Cliente();
-
-        if($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        
+        if ($post = \Yii::$app->request->post()) {
+        	$model->load($post);
+        	if (!$model->save()) {
+        		// TODO implementar mensagem de erro
+        	}
+        	
+        	return $this->redirect(['index']);
         }
           
         return $this->render('create', [
@@ -73,7 +85,12 @@ class ClienteController extends BaseController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($post = \Yii::$app->request->post()) {
+        	$model->load($post);
+        	if (!$model->save()) {
+        		// TODO implementar mensagem de erro
+        	}
+	        
             return $this->redirect(['index']);
         }
         
@@ -82,6 +99,39 @@ class ClienteController extends BaseController
         ]);
     }
 
+    /**
+     * TODO
+     * Realiza o upload e processamento de um arquivo Excel
+     */
+    public function actionUploadExcel() 
+    {
+    	// model do import file
+    	$modelImport = new \yii\base\DynamicModel(['fileImport' => 'File Import']);
+    	$modelImport->addRule(['fileImport'],'required');
+    	$modelImport->addRule(['fileImport'], 'file', ['extensions' => 'ods,xls,xlsx']);
+		
+    	$modelImport->fileImport = UploadedFile::getInstance($modelImport,'fileImport');
+    	
+    	if ($modelImport->fileImport && $modelImport->validate()) {
+    		/* $inputFileType = \PHPExcel_IOFactory::identify($modelImport->fileImport->tempName);
+    		$objReader = \PHPExcel_IOFactory::createReader($inputFileType);
+    		$objPHPExcel = $objReader->load($modelImport->fileImport->tempName);
+    		$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+    		$baseRow = 3;
+    		
+    		while (!empty($sheetData[$baseRow]['B'])) {
+    			var_dump((string)$sheetData[$baseRow]['B']);
+    			$baseRow++;
+    		} */
+    		
+    		var_dump('to aqui');
+    	} else {
+    		var_dump($modelImport->errors);
+    	}
+    	
+    	die;	
+    }
+    
     /**
      * Deletes an existing Cliente model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

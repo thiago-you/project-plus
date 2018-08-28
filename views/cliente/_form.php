@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
                         <?= $form->field($model, 'nome')->textInput(['maxlength' => true]); ?>
         			</div>
         			<div class="col-md-6">
-                    	<?= $form->field($model, 'sobrenome')->textInput(['maxlength' => true]); ?>
+                    	<?= $form->field($model, 'telefone')->textInput(['maxlength' => true]); ?>
                     </div>
         		</div>
     			<div class="row">

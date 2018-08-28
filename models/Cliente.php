@@ -12,25 +12,23 @@ use Yii;
  * @since 1.0
  * 
  * @property integer $id_cliente
- * @property string $nome
- * @property string $sobrenome
- * @property string $apelido
- * @property string $documento
- * @property string $sexo
- * @property string $data_nascimento
- * @property string $data_cadastro
- * @property string $cep
- * @property string $endereco
- * @property string $numero
- * @property string $complemento
- * @property string $bairro
+ * @property string  $nome
+ * @property string  $apelido
+ * @property string  $documento
+ * @property string  $telefone
+ * @property string  $sexo
+ * @property string  $data_nascimento
+ * @property string  $data_cadastro
+ * @property string  $cep
+ * @property string  $endereco
+ * @property string  $numero
+ * @property string  $complemento
+ * @property string  $bairro
  * @property integer $id_cidade
  * @property integer $id_estado
- * @property string $email
+ * @property string  $email
  * @property integer $situacao
- * @property string $tipo
- *
- * @property Telefone[] $telefones
+ * @property string  $tipo
  */
 class Cliente extends \yii\db\ActiveRecord
 {
@@ -55,12 +53,12 @@ class Cliente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome', 'sobrenome', 'data_cadastro'], 'required'],
+            [['nome', 'telefone'], 'required'],
             [['sexo'], 'string'],
             [['data_nascimento', 'data_cadastro'], 'safe'],
             [['id_cidade', 'id_estado', 'situacao'], 'integer'],
+        	['nome', 'string', 'max' => 250],
             [['nome', 'apelido', 'email'], 'string', 'max' => 100],
-            [['sobrenome'], 'string', 'max' => 150],
             [['documento'], 'string', 'max' => 14],
             [['cep'], 'string', 'max' => 8],
             [['endereco'], 'string', 'max' => 50],
@@ -68,6 +66,7 @@ class Cliente extends \yii\db\ActiveRecord
             [['complemento'], 'string', 'max' => 20],
             [['bairro'], 'string', 'max' => 30],
             [['tipo'], 'string', 'max' => 1],
+        	[['telefone'], 'string', 'max' => 11],
         ];
     }
 
@@ -81,9 +80,9 @@ class Cliente extends \yii\db\ActiveRecord
         return [
             'id_cliente' => 'Cód.',
             'nome' => 'Nome',
-            'sobrenome' => 'Sobrenome',
             'apelido' => 'Apelido',
             'documento' => 'Documento',
+        	'telefone' => 'Telefone',
             'sexo' => 'Sexo',
             'data_nascimento' => 'Data de Nascimento',
             'data_cadastro' => 'Data de Cadastro',
@@ -99,20 +98,6 @@ class Cliente extends \yii\db\ActiveRecord
             'tipo' => 'Tipo',
         ];
     }
-
-    /**
-    * Procura e retorna uma lista de telefones que possuem relação com a tabela cliente
-    *
-    * ```
-    * $component->hasMany(class::(), ['atributo' => 'atributo']);
-    * ```
-    *
-    * @return array => telefone relacionados com cliente ou null se nada for encontrado
-    */
-    public function getTelefones()
-    {
-        return $this->hasMany(Telefone::className(), ['id_cliente' => 'id_cliente']);
-    }
     
     /**
      * Inicializa a data de cadastro como a data atual antes de persistir os dados.
@@ -123,9 +108,8 @@ class Cliente extends \yii\db\ActiveRecord
      */
     public function beforeSave($insert)
     {
-        parent::beforeSave($insert);
-
         $this->data_cadastro = date('Y-m-d');   
-        return true;
+        
+        return parent::beforeSave($insert);;
     }
 }
