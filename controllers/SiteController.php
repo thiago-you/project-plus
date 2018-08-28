@@ -74,17 +74,16 @@ class SiteController extends BaseController
      */
     public function actionLogin($invalidAcess = null)
     {
+        // se não for guets retorna para a home
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        // mensagem de erro ao tentar acessar alguma tela sem login
-        if ($invalidAcess) {
-            Yii::$app->session->setFlash('danger', '<i class="fa fa-warning"></i>&nbsp; Oops... Parece que você ainda não está logado. Por favor, realize o login para acessar o sistema');
-        }
+        // layout de login
+        $this->layout = 'login';
         
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        if ($model->load(\Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
         

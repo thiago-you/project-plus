@@ -3,7 +3,6 @@ namespace app\base;
 
 use Yii;
 use yii\helpers\Json;
-use yii\data\ArrayDataProvider;
 
 /**
  * Classe que contém métodos úteis para formatação, renderização de valores, etc.
@@ -451,19 +450,4 @@ class Util
         // retorna a data formatada
         return (date($format, strtotime(str_replace('/', '-', $data))));
     }
-    
-    /**
-     * Retorna a versão atual do sistema
-     * Busca a versão na tag do branch
-     *
-     * @return string
-     */
-    public static function getVersion()
-    {
-        return '1.0';
-        return Yii::$app->params['version'];
-    }
 }
-// ----------------------------------------------------------------------------------------------------------
-// end file
-// ----------------------------------------------------------------------------------------------------------

@@ -1,10 +1,9 @@
 <?php
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
+use app\assets\AppAsset;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use app\assets\AppAsset;
-use app\base\Util;
 
 AppAsset::register($this);
 ?>
@@ -98,7 +97,7 @@ AppAsset::register($this);
                 <footer class="main-footer">
                		<div class="row">
                    		<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                           	&copy; Auto Solutions <?= date('Y') ?> - v<?= Util::getVersion(); ?>
+                           	&copy; Auto Solutions <?= date('Y') ?> - v<?= \Yii::$app->params['version']; ?>
                         </div>
                         <!-- ./copyright -->
                     </div>

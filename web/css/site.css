@@ -384,7 +384,7 @@ fieldset[disabled] .btn-custom.active {
 	border-bottom: none;
 	border-right: none;
 	border-left: none;
-	border-radius: 0px 0px 10px 10px !important;
+	border-radius: 2px !important;
 }
 /* logout - temporario */
 /* align the logout "link" (button in form) of the navbar */

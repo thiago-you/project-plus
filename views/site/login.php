@@ -1,47 +1,92 @@
 <?php
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 $this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="panel panel-primary panel-box">
-	<div class="panel-body">
-        <h1><?= Html::encode($this->title) ?></h1>
-    	<br/>
-        <p>Favor preencher os campos a seguir para efetuar login:</p>
-        <br/><br/>
-        <?php $form = ActiveForm::begin([
-                  'id' => 'login-form',
-                  'layout' => 'horizontal',
-                  'fieldConfig' => [
-                      'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-                      'labelOptions' => ['class' => 'col-lg-1 control-label'],
-                  ],
-              ]); 
-        ?>
-        	<div class="row">
-        		<div class="col-md-12">
-                    <div class="form-group">
-                        <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label('Usuario'); ?>
-                        <?= $form->field($model, 'password')->passwordInput()->label('Senha'); ?>
-                        <?= $form->field($model, 'rememberMe')->checkbox([
-                                'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-                            ])->label('Lembrar Login');
-                        ?>
+<div class="container">
+    <div class="panel panel-primary panel-box">
+    	<div class="panel-body">
+            <h2 class="text-center"><?= Html::encode($this->title); ?></h2>
+            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+            	<div class="row">
+                	<div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1 col-xs-12">
+                        <div class="form-group">
+                            <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label('Usuario'); ?>
+                            <?= $form->field($model, 'password')->passwordInput()->label('Senha'); ?>
+                            <?= $form->field($model, 'rememberMe')->checkbox()->label('Lembrar Login'); ?>
+                        </div>
                     </div>
+       			</div>
+       			<!-- ./inputs -->
+       			<br>
+       			<div class="row">
+       				<div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1 col-xs-12">
+                        <div class="form-group"> 
+                             <?= Html::submitButton('<i class="fa fa-arrow-right"></i>&nbsp; Login', ['class' => 'btn btn-primary btn-block btn-flat', 'name' => 'login-button']) ?>
+                        </div>
+                   	</div>
+       			</div>
+       			<!-- ./button -->
+            <?php ActiveForm::end(); ?>
+            <!-- ./form -->
+            <br>
+            <small class="help-block">
+                <i class="fa fa-info-circle"></i>&nbsp; Login Padrão para o ambiente de desenvolvimento: <b>admin/admin</b>.
+            </small>
+            <!-- ./help -->
+            <div class="row sys-info">
+            	<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                	<?= date('d/m/Y H:i', strtotime('now')); ?>
                 </div>
-   			</div>
-   			<div class="row">
-   				<div class="col-md-3 col-md-offset-1">
-                    <div class="form-group"> 
-                         <?= Html::submitButton('<i class="fa fa-arrow-right"></i>&nbsp; Login', ['class' => 'btn btn-primary btn-block btn-flat', 'name' => 'login-button']) ?>
-                    </div>
-               	</div>
-   			</div>
-        <?php ActiveForm::end(); ?>
-        <div class="help-block">
-            <i class="fa fa-info-circle"></i>&nbsp; Login Padrão para o ambiente de desenvolvimento: <strong>admin/admin</strong> ou <strong>demo/demo</strong>.<br>
+                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6 text-right">
+                	V<?= \Yii::$app->params['version']; ?>
+                </div>
+            </div>
         </div>
+        <!-- ./panle-body -->
     </div>
+    <!-- ./panel -->
 </div>
+<!-- ./container -->
+<style type="text/css">
+#login-page {
+    background-image: url('<?= Url::home().'img/img-'.rand(1, 10); ?>.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+    overflow: hidden;
+}
+#login-page .container {
+    margin-top: 6%;
+}
+#login-page .container .panel {
+    position: absolute;
+    width: 430px;
+    left: 50%;
+    margin-left: -215px;
+    box-shadow: 0px 2px 6px 0px rgba(0,0,0,.6);
+}
+#login-page .container .panel,
+#login-page .container .panel .panel-body {
+    padding-bottom: 2px;
+}
+#login-page .container .panel .sys-info {
+    margin-top: 20px;
+    font-size: 10px;
+    color: #737373;
+    font-weight: bold;
+}
+.select2-container--krajee .select2-selection { border-radius: 0px !important; }
+.content-error {
+    padding: 15px 15px 0px 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.alert {
+    border-radius: 0px;
+}
+</style>
+<!-- ./style da img de fundo -->
