@@ -1,5 +1,5 @@
-<?php
-$this->title = 'Auto Solutions';
+<?php 
+$this->title = 'Home';
 ?>
 <div class="site-index">
 	<br><br>
