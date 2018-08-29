@@ -10,16 +10,19 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     public $accessToken;
 
     /**
+     * @var string => usuario admin
+     */
+    const adminUsername = 'admin';
+    
+    /**
      * Usuario Admin
      */
-    private static $users = [
-        '0' => [
-            'id' => '0',
-            'username' => 'admin',
-            'password' => 'admin',
-        	'authKey' => '0-key',
-        	'accessToken' => '0-token',
-        ],
+    private static $admin = [
+        'id' => '0',
+        'username' => 'admin',
+        'password' => 'admin',
+    	'authKey' => '0-key',
+    	'accessToken' => '0-token',
     ];
 
     /**
@@ -52,28 +55,15 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public static function findByUsername($username)
     {
-    	// pega a lista de usuarios locais
-    	$users = self::$users;
-    	
-    	// busca o usuario
-    	if ($colaborador = Colaborador::find()->where(['username' => $username])->one()) {    		
-    		$users[] = [
-    			'id' => $colaborador->id,
-    			'username' => $colaborador->username,
-    			'password' => $colaborador->senha,
-    			'authKey' => "{$colaborador->id}-key",
-    			'accessToken' => "{$colaborador->id}-token",
-    		];
+    	// retorna o admin ou busca um usuario no banco
+        $user = self::$admin;
+    	if ($username !== self::adminUsername) {
+    	    $user = Colaborador::find()->where(['username' => $username])->select([
+    	        'id', 'username', 'password', 'authKey'
+    	    ])->asArray(true)->one();
     	}
     	
-    	// verifica se o usuario existe e retorna o usuario
-        foreach ($users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+    	return new static($user);
     }
 
     /**

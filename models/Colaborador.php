@@ -1,8 +1,5 @@
 <?php
-
 namespace app\models;
-
-use Yii;
 
 /**
  * This is the model class for table "colaborador".
@@ -10,7 +7,8 @@ use Yii;
  * @property int $id
  * @property string $nome
  * @property string $username
- * @property string $senha
+ * @property string $password
+ * @property string $authKey
  * @property string $cargo Cargo do usuario
  */
 class Colaborador extends \yii\db\ActiveRecord
@@ -31,8 +29,8 @@ class Colaborador extends \yii\db\ActiveRecord
         return [
             [['nome', 'username'], 'required'],
             [['nome'], 'string', 'max' => 250],
-            [['username', 'cargo'], 'string', 'max' => 100],
-            [['senha'], 'string', 'max' => 60],
+            [['cargo'], 'string', 'max' => 100],
+            [['username', 'password', 'authKey'], 'string', 'max' => 30],
         ];
     }
 
@@ -45,7 +43,8 @@ class Colaborador extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nome' => 'Nome',
             'username' => 'Username',
-            'senha' => 'Senha',
+            'password' => 'password',
+            'authKey' => 'authKey',
             'cargo' => 'Cargo',
         ];
     }
