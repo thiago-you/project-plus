@@ -30,21 +30,25 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        // retorna o admin ou busca um usuario no banco
+        $user = null;
+        if (self::$admin['id'] === $id) {
+            $user = self::$admin;
+        } else {            
+            $user = Colaborador::find()->where(['id' => $id])->select([
+                'id', 'username', 'password', 'authKey'
+            ])->asArray(true)->one();
+        }
+        
+        return $user ? new static($user) : null;
     }
 
     /**
-     * @inheritdoc
+     * @deprecated não implementado
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        throw new \Exception('Não suportado.');
     }
 
     /**
@@ -63,7 +67,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     	    ])->asArray(true)->one();
     	}
     	
-    	return new static($user);
+    	return $user ? new static($user) : null;
     }
 
     /**
