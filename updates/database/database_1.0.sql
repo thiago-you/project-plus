@@ -15,7 +15,7 @@ USE `exemplo_db`;
 -- ----------------------------------------------------------------------------------------------------------------
 -- cria a tabela de clientes
 CREATE TABLE `cliente` (
-  `id_cliente` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `nome` VARCHAR(250) NOT NULL,
   `apelido` VARCHAR(100),
   `documento` VARCHAR(14) COMMENT 'Documento pode ser usado para CPF, RG ou CNPJ',
@@ -33,4 +33,12 @@ CREATE TABLE `cliente` (
   `email` VARCHAR(100),
   `situacao` INT,
   `tipo` CHAR(1)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- cria a tabela de usuario
+CREATE TABLE `colaborador` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `nome` VARCHAR(250) NOT NULL,
+  `username` VARCHAR(100) NOT NULL,
+  `senha` VARCHAR(60),
+  `cargo` VARCHAR(100) COMMENT 'Cargo do usuario'
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;

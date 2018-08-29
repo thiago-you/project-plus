@@ -1,8 +1,5 @@
 <?php
-
 namespace app\models;
-
-use Yii;
 
 /**
  * Esta é a classe para a tabela (entidade) "cliente".
@@ -11,7 +8,7 @@ use Yii;
  * @author Thiago You <thya9o@outlook.com>
  * @since 1.0
  * 
- * @property integer $id_cliente
+ * @property integer $id
  * @property string  $nome
  * @property string  $apelido
  * @property string  $documento
@@ -78,7 +75,7 @@ class Cliente extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_cliente' => 'Cód.',
+            'id' => 'Cód.',
             'nome' => 'Nome',
             'apelido' => 'Apelido',
             'documento' => 'Documento',

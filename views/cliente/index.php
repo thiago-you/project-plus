@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'dataProvider' => $dataProvider,
                 //'filterModel' => $searchModel,
                 'columns' => [
-                   'id_cliente',
+                   'id',
                    'nome',
                    'telefone',
                    'apelido',

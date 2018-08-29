@@ -1,11 +1,8 @@
 <?php
-
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Cliente;
 
 /**
  * ClienteSearch represents the model behind the search form about `app\models\Cliente`.
@@ -18,7 +15,7 @@ class ClienteSearch extends Cliente
     public function rules()
     {
         return [
-            [['id_cliente', 'id_cidade', 'id_estado', 'situacao'], 'integer'],
+            [['id', 'id_cidade', 'id_estado', 'situacao'], 'integer'],
             [['nome', 'apelido', 'documento', 'telefone', 'sexo', 'data_nascimento', 'data_cadastro', 'cep', 'endereco', 'numero', 'complemento', 'bairro', 'email', 'tipo'], 'safe'],
         ];
     }
@@ -59,7 +56,7 @@ class ClienteSearch extends Cliente
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id_cliente' => $this->id_cliente,
+            'id' => $this->id,
             'data_nascimento' => $this->data_nascimento,
             'data_cadastro' => $this->data_cadastro,
             'id_cidade' => $this->id_cidade,

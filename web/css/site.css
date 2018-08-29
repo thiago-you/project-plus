@@ -410,3 +410,11 @@ fieldset[disabled] .btn-custom.active {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+#main-navbar {
+	background-color: rgba(0, 168, 255,.5);
+	border-bottom: 0px;
+    box-shadow: 0px 2px 6px 0px rgba(0,0,0,.3);
+}
+#main-navbar a {
+    color: #333;
+}

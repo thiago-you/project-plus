@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\web\View;
 
 $this->title = 'Login';
 ?>
@@ -13,7 +14,7 @@ $this->title = 'Login';
             	<div class="row">
                 	<div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1 col-xs-12">
                         <div class="form-group">
-                            <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label('Usuario'); ?>
+                            <?= $form->field($model, 'username')->textInput(['id' => 'usuario-nome', 'autofocus' => true])->label('Usuario'); ?>
                             <?= $form->field($model, 'password')->passwordInput()->label('Senha'); ?>
                             <?= $form->field($model, 'rememberMe')->checkbox()->label('Lembrar Login'); ?>
                         </div>
@@ -33,7 +34,7 @@ $this->title = 'Login';
             <!-- ./form -->
             <br>
             <small class="help-block">
-                <i class="fa fa-info-circle"></i>&nbsp; Login Padrão para o ambiente de desenvolvimento: <b>admin/admin</b>.
+                <i class="fa fa-info-circle"></i>&nbsp; Login padrão para o ambiente de desenvolvimento: <b>admin/admin</b>.
             </small>
             <!-- ./help -->
             <div class="row sys-info">
@@ -90,3 +91,11 @@ $this->title = 'Login';
 }
 </style>
 <!-- ./style da img de fundo -->
+<?php 
+$script = <<<JS
+	$(document).ready(function() {
+		$('#usuario-nome').focus();
+	});
+JS;
+$this->registerJs($script, View::POS_LOAD);
+?>

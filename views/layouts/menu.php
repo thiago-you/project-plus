@@ -9,9 +9,8 @@ use yii\helpers\Url;
     <!-- ./menu -->
 	<form class="navbar-form navbar-left">
 		<div class="form-group">
-			<input type="text" class="form-control" placeholder="Buscar">
+			<input type="text" class="form-control" placeholder="Pesquisar Cliente">
 		</div>
-		<button type="submit" class="btn btn-default">Buscar</button>
 	</form>
 	<!-- ./pesquisa -->
 	<ul class="nav navbar-nav navbar-right">

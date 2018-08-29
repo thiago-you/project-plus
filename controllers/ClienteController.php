@@ -1,14 +1,12 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
 use app\models\Cliente;
-use app\models\ClienteSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\filters\VerbFilter;
+use app\models\ClienteSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * ClienteController implements the CRUD actions for Cliente model.
