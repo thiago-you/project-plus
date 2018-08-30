@@ -34,7 +34,7 @@ CREATE TABLE `cliente` (
   `situacao` INT,
   `tipo` CHAR(1)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
--- cria a tabela de usuario
+-- cria a tabela de colaborador
 CREATE TABLE `colaborador` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `nome` VARCHAR(250) NOT NULL,
