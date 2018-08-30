@@ -4,6 +4,7 @@ use yii\helpers\Url;
 <!-- Collect the nav links, forms, and other content for toggling -->
 <div class="collapse navbar-collapse" id="menu-navbar-collapse">
 	<ul class="nav navbar-nav">
+		<li><a href="<?= Url::to(['/colaborador']); ?>">Colaborador</a></li>
 		<li><a href="<?= Url::to(['/cliente']); ?>">Clientes</a></li>
 	</ul>
     <!-- ./menu -->

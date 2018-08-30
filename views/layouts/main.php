@@ -1,7 +1,6 @@
 <?php
 use yii\helpers\Html;
 use app\assets\AppAsset;
-use yii\widgets\Breadcrumbs;
 
 AppAsset::register($this);
 ?>
@@ -37,25 +36,6 @@ AppAsset::register($this);
                         <!-- ./navbar -->
                     </div>
                		<div class="container">
-                        <section id="breadcrumbs-header" class="content-header">
-                        	<div class="row">
-                        		<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                                    <h1 class="font20">
-                                        <?php if($this->title == 'Auto Solutions'): ?>
-                                            <small>Bem vindo, </small>
-                                            <?= ucfirst(\Yii::$app->user->identity->username); ?>.
-                                        <?php else: ?>
-											<?= $this->title; ?>                                        
-                                        <?php endif; ?>
-                                    </h1>
-                                    <?= Breadcrumbs::widget([
-                                            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                                        ]);
-                                    ?>
-                                </div>
-                            </div>
-                        </section>
-                        <!-- ./breadcrumbs container -->
                         <section class="content">
                         	<div class="row">
                             	<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
