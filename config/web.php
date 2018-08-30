@@ -91,14 +91,14 @@ $config = [
                     'all' => [
                         'icon' => 'resize-full',
                         'label' => false,
-                        'class' => 'btn btn-default btn-flat btn-sm',
+                        'class' => 'btn btn-default btn-flat',
                         'title' => 'Mostrar todos os resultados',
                         'data-toggle' => 'tooltip',
                     ],
                     'page' => [
                         'icon' => 'resize-small',
                         'label' => false,
-                        'class' => 'btn btn-default btn-flat btn-sm',
+                        'class' => 'btn btn-default btn-flat',
                         'title' => 'Mostar resultados com paginação',
                         'data-toggle' => 'tooltip',
                     ],

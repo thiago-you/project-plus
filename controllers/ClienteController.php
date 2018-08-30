@@ -1,7 +1,6 @@
 <?php
 namespace app\controllers;
 
-use Yii;
 use app\models\Cliente;
 use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
@@ -35,8 +34,15 @@ class ClienteController extends BaseController
     public function actionIndex()
     {
         $searchModel = new ClienteSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        // seta os params do filtro
+        if (!$params = \Yii::$app->request->post()) {
+            $params = \Yii::$app->request->queryParams;
+        }
 
+        // realiza o filtro
+        $dataProvider = $searchModel->search($params);
+        
         // model do import file
         $modelImport = new \yii\base\DynamicModel(['fileImport' => 'File Import']);
         $modelImport->addRule(['fileImport'],'required');
@@ -50,11 +56,9 @@ class ClienteController extends BaseController
     }
 
     /**
-     * Creates a new Cliente model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Cadastra um registro
      */
-    public function actionCadastrar()
+    public function actionCreate()
     {
         $model = new Cliente();
         
@@ -74,12 +78,9 @@ class ClienteController extends BaseController
     }
 
     /**
-     * Updates an existing Cliente model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
+     * Altera um registro
      */
-    public function actionAlterar($id)
+    public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
@@ -131,43 +132,49 @@ class ClienteController extends BaseController
     }
     
     /**
-     * Deletes an existing Cliente model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
+     * Deleta um registro
      */
-    public function actionDeletar($id)
+    public function actionDelete($id)
     {
         $this->findModel($id)->delete();
         return $this->redirect(['index']);
     }
 
-    //TODO
     /**
-     * Redireciona para as actions corretas ate os links serem acertados
+     * Busca um cliente por ajax typeahead
      */
-    public function actionUpdate($id)
+    public function actionSearchList(array $q)
     {
-     return $this->redirect(['alterar', 'id' => $id]);
-    }
-    public function actionDelete($id)
-    {
-     return $this->redirect(['deletar', 'id' => $id]);
+        $data = [];
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $query = Cliente::find();
+        
+        if (isset($q['nome'])) { $query->select('nome')->andWhere(['like', 'nome', $q['nome']])->distinct(true); }
+        if (isset($q['telefone'])) { $query->select('telefone')->andWhere(['like', 'telefone', $q['telefone']])->distinct(true); }
+        if (isset($q['documento'])) { $query->select('documento')->andWhere(['like', 'documento', $q['documento']])->distinct(true); }
+        
+        $model = $query->all();
+        
+        if ($model != null) {
+            foreach ($model as $key) {
+                if (isset($q['nome'])) { $data[]['value'] = $key['nome']; }
+                if (isset($q['telefone'])) { $data[]['value'] = $key['telefone']; }
+                if (isset($q['documento'])) { $data[]['value'] = $key['documento']; }
+            }
+        }
+        
+        return $data;
     }
     
     /**
-     * Finds the Cliente model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Cliente the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * Busca um registro
      */
     protected function findModel($id)
     {
-        if(($model = Cliente::findOne($id)) !== null) {
+        if (($model = Cliente::findOne($id)) !== null) {
             return $model;
-        }else {
-            throw new NotFoundHttpException('Página não encontrada.');
         }
+        
+        throw new NotFoundHttpException();
     }
 }

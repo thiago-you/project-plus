@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\base\Util;
 
 ?>
 <?php $form = ActiveForm::begin(); ?>
@@ -79,8 +80,8 @@ use yii\widgets\ActiveForm;
                     <div class="form-group">
                         <?= Html::submitButton('<i class="fa fa-save"></i>&nbsp; '. ($model->isNewRecord ? 'Cadastrar' : 'Alterar'), [
                                 'class' => $model->isNewRecord 
-                                ? 'btn btn-emerald btn-flat btn-block' 
-                                : 'btn btn-primary btn-flat btn-block'            
+                                ? Util::BTN_COLOR_SUCCESS.' btn-block' 
+                                : Util::BTN_COLOR_PRIMARY.' btn-block'            
                             ]);
                         ?>
                     </div>
@@ -88,7 +89,7 @@ use yii\widgets\ActiveForm;
     			<div class="col-md-3 pull-right">
                     <div class="form-group">
                         <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/cliente'], [
-                                'class' => 'btn btn-flat btn-warning btn-block',
+                                'class' => Util::BTN_COLOR_DEFAULT.' btn-block',
                             ]);
                         ?>
                     </div>

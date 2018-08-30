@@ -49,8 +49,6 @@ class ClienteSearch extends Cliente
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
@@ -65,16 +63,8 @@ class ClienteSearch extends Cliente
         ]);
 
         $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'apelido', $this->apelido])
-            ->andFilterWhere(['like', 'documento', $this->documento])
-            ->andFilterWhere(['like', 'sexo', $this->sexo])
-            ->andFilterWhere(['like', 'cep', $this->cep])
-            ->andFilterWhere(['like', 'endereco', $this->endereco])
-            ->andFilterWhere(['like', 'numero', $this->numero])
-            ->andFilterWhere(['like', 'complemento', $this->complemento])
-            ->andFilterWhere(['like', 'bairro', $this->bairro])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'tipo', $this->tipo]);
+            ->andFilterWhere(['like', 'telefone', $this->telefone])
+            ->andFilterWhere(['like', 'documento', $this->documento]);
 
         return $dataProvider;
     }
