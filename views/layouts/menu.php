@@ -3,11 +3,9 @@ use yii\helpers\Url;
 use kartik\typeahead\Typeahead;
 use yii\web\View;
 ?>
-<!-- Collect the nav links, forms, and other content for toggling -->
 <div class="collapse navbar-collapse" id="menu-navbar-collapse">
 	<ul class="nav navbar-nav">
-		<li><a href="<?= Url::to(['/colaborador']); ?>">Colaborador</a></li>
-		<li><a href="<?= Url::to(['/cliente']); ?>">Clientes</a></li>
+		<li><a href="<?= Url::to(['/cliente']); ?>"><i class="fa fa-users"></i>&nbsp; Clientes</a></li>
 	</ul>
     <!-- ./menu -->
 	<form class="navbar-form navbar-left">
@@ -18,7 +16,7 @@ use yii\web\View;
 					'pluginOptions' => ['highlight' => true],
 					'options' => [
 						'placeholder' => 'Pesquisar cliente ...',		
-						'style' => 'width: 350px;',
+						'style' => 'width: 400px;',
 						'autocomplete' => 'off',
 					],
 					'dataset' => [

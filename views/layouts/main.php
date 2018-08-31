@@ -28,9 +28,9 @@ AppAsset::register($this);
                 	<div class="main-header">
                         <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
                 			<div id="main-container" class="container">
-                				<div class="navbar-header font20 text-center">
+                				<div class="navbar-header text-center">
                                     <a class="navbar-brand" href="<?= \Yii::$app->homeUrl; ?>">
-                                    	Exemplo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+                                    	Exemplo <span class="separador">|</span>
                                     </a>
                                 </div>
                                 <!-- ./brand -->
@@ -41,8 +41,12 @@ AppAsset::register($this);
                         </nav>
                         <!-- ./navbar -->
                     </div>
-               		<div class="container">
-                        <section class="content">
+               		<div class="container-fluid">
+               			<div class="sidenav">
+               				<?= $this->render('side-menu'); ?>
+               			</div>
+               			<!-- ./side menu -->
+                        <section class="main-content">
                         	<div class="row">
                             	<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
                             		<?php foreach (\Yii::$app->session->getAllFlashes() as $key => $message): ?>
@@ -61,15 +65,6 @@ AppAsset::register($this);
                		</div> 
             	</div>
                 <!-- .content-wrapper -->
-                <footer class="main-footer">
-               		<div class="row">
-                   		<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                           	&copy; Exemplo <?= date('Y') ?> - v<?= \Yii::$app->params['version']; ?>
-                        </div>
-                        <!-- ./copyright -->
-                    </div>
-                </footer>
-    			<!-- ./footer -->
             <?php $this->endBody() ?>
         </body>
         <!-- ./body -->
