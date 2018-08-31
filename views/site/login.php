@@ -7,7 +7,7 @@ use yii\web\View;
 $this->title = 'Login';
 ?>
 <div class="container">
-    <div class="panel panel-primary panel-box">
+    <div class="panel panel-default panel-box">
     	<div class="panel-body">
             <h2 class="text-center"><?= Html::encode($this->title); ?></h2>
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
@@ -80,7 +80,6 @@ $this->title = 'Login';
     color: #737373;
     font-weight: bold;
 }
-.select2-container--krajee .select2-selection { border-radius: 0px !important; }
 .content-error {
     padding: 15px 15px 0px 15px;
     margin-right: auto;

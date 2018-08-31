@@ -7,6 +7,7 @@ use yii\web\Response;
 use app\models\LoginForm;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use app\assets\AppAsset;
 
 class SiteController extends BaseController
 {
@@ -63,6 +64,9 @@ class SiteController extends BaseController
         if (\Yii::$app->user->isGuest) {
             return $this->redirect(['site/login'])->send();
         }
+        
+        // registra a api para gerar graficos
+        AppAsset::register(\Yii::$app->view)->js[] = 'plugins/chart.js/dist/Chart.js';
         
         return $this->render('index');
     }

@@ -1,9 +1,14 @@
 /** 
 * Main Site CSS
 */
-html, body, .modal-content { height: 100%; min-width: 350px; }
+html, body, .modal-content { 
+	height: 100%; 
+	min-width: 350px; 
+}
 /* background color */
-body { background-color: #ecf0f1; }
+body { 
+	background-color: #f4f4f4; 
+}
 /* wrap */
 .wrap {
     min-height: 100%;
@@ -492,3 +497,22 @@ section.main-content {
 	border-color: #f7f7f7;
 	width: 125px;
 }
+
+/* cards */
+.card {
+	width: 350px;
+	height: 200px;
+	box-shadow: 2px 2px 4px 0px rgba(0,0,0,.3);
+	border: 1px solid rgba(0,0,0,0.2);
+	border-radius: 2px;
+}
+
+.card .card-body {
+	padding-left: 20px;
+	padding-right: 10px;
+}
+
+.card .card-body .card-title {
+	font-size: 18px;
+}
+
