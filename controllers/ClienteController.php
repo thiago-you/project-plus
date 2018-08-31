@@ -31,7 +31,7 @@ class ClienteController extends BaseController
      * Lists all Cliente models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($nome = '')
     {
         $searchModel = new ClienteSearch();
         
@@ -40,6 +40,11 @@ class ClienteController extends BaseController
             $params = \Yii::$app->request->queryParams;
         }
 
+        // seta o nome da pesquisa rápida
+        if (!empty($nome)) {
+        	$params['ClienteSearch']['nome'] = $nome;
+        }
+        
         // realiza o filtro
         $dataProvider = $searchModel->search($params);
         
@@ -141,10 +146,33 @@ class ClienteController extends BaseController
     }
 
     /**
+     * Realiza a pesquisa rápida de um ou mais clientes
+     */
+    public function actionQuickSearch($nome = '')
+    {
+    	// busca todos os clientes com o nome passado
+    	$cliente = Cliente::find()->where(['like', 'nome', $nome])->all();
+
+    	// se achou apenas um cliente, redireciona para a página do cliente
+    	// se houver mais clientes com este nome
+    	// redireciona para a página de listagem de clientes
+    	if (!empty($nome) && count($cliente) == 1) {
+    		return $this->redirect(['update', 'id' => $cliente[0]->id]);
+    	}
+    	
+    	return $this->redirect(['index', 'nome' => $nome]);
+    }
+    
+    /**
      * Busca um cliente por ajax typeahead
      */
     public function actionSearchList(array $q)
     {
+    	// valida a requisição
+    	if (!\Yii::$app->request->isAjax) {
+    		throw new NotFoundHttpException();
+    	}
+    	
         $data = [];
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $query = Cliente::find();

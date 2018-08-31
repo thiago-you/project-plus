@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\Url;
+use kartik\typeahead\Typeahead;
+use yii\web\View;
 ?>
 <!-- Collect the nav links, forms, and other content for toggling -->
 <div class="collapse navbar-collapse" id="menu-navbar-collapse">
@@ -10,7 +12,34 @@ use yii\helpers\Url;
     <!-- ./menu -->
 	<form class="navbar-form navbar-left">
 		<div class="form-group">
-			<input type="text" class="form-control" placeholder="Pesquisar Cliente">
+			<?= Typeahead::widget([
+					'id' => 'quick-search-nome',
+					'name' => 'nome',
+					'pluginOptions' => ['highlight' => true],
+					'options' => [
+						'placeholder' => 'Pesquisar cliente ...',		
+						'style' => 'width: 350px;',
+						'autocomplete' => 'off',
+					],
+					'dataset' => [
+						[
+							'display'=> 'value',
+							'notFound' => '<span class="alert alert-danger"><i class="fa fa-ban"></i>&nbsp; Nehum cliente foi encontrado ...</div>',
+							'remote'=>[
+								'url' => Url::to(['cliente/search-list']).'?q[nome]=%QUERY',
+								'wildcard' => '%QUERY',
+							],
+						],
+					],
+					'pluginEvents' => [
+						'typeahead:select' => 'function(event, data) { 
+							if (data.value != undefined && data.value.length > 0) {
+								window.location = BASE_PATH + "cliente/quick-search?nome="+data.value;	
+							}
+						}',
+					],
+				]);
+			?>
 		</div>
 	</form>
 	<!-- ./pesquisa -->
@@ -24,5 +53,20 @@ use yii\helpers\Url;
     <!-- ./logout -->
 </div>
 <!-- /.navbar-collapse -->
+<?php 
+$script = <<< JS
+	$(document).ready(function() {
+		$('body').on('keypress keydown keyup', '#quick-search-nome', function(e) {
+			if (e.which == 13) {
+				if (this.value != undefined && this.value.length > 0) {
+					window.location = BASE_PATH + "cliente/quick-search?nome="+this.value;
+				}
+			}
+		});
+	});
+JS;
+$this->registerJs($script, View::POS_LOAD);
+?>		
+		
 		
 		

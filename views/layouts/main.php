@@ -1,7 +1,13 @@
 <?php
+use yii\web\View;
 use yii\helpers\Html;
 use app\assets\AppAsset;
 
+$base_path = \Yii::getAlias('@web');
+$script = <<< JS
+const BASE_PATH = '{$base_path}/';
+JS;
+$this->registerJs($script, View::POS_BEGIN);
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
