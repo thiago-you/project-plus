@@ -16,23 +16,23 @@ USE `exemplo_db`;
 -- cria a tabela de clientes
 CREATE TABLE `cliente` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `nome` VARCHAR(250) NOT NULL,
-  `apelido` VARCHAR(100),
-  `documento` VARCHAR(14) COMMENT 'Documento pode ser usado para CPF, RG ou CNPJ',
-  `telefone` VARCHAR(11) NOT NULL, 
+  `nome` VARCHAR(250) NOT NULL COMMENT 'Razao social ou nome do cliente',
+  `nome_social` VARCHAR(250) COMMENT 'Nome fantasia ou apelido do cliente',
+  `rg` VARCHAR(14),
+  `documento` VARCHAR(14) COMMENT 'Documento pode ser usado para CPF ou CNPJ',
+  `inscricao_estadual` VARCHAR(15),
   `sexo` ENUM('M', 'F') DEFAULT 'M',
   `data_nascimento` DATETIME,
   `data_cadastro` DATETIME NOT NULL,
-  `cep` CHAR(8),
-  `endereco` VARCHAR(50),
-  `numero` VARCHAR(5),
-  `complemento` VARCHAR(20),
-  `bairro` VARCHAR(30),
-  `id_cidade` INT,
-  `id_estado` INT,
-  `email` VARCHAR(100),
-  `situacao` INT,
-  `tipo` CHAR(1)
+  `estado_civil` TINYINT(1) NOT NULL DEFAULT '1',
+  `nome_conjuge` VARCHAR(250),
+  `nome_pai` VARCHAR(250),
+  `nome_mae` VARCHAR(250),
+  `empresa` VARCHAR(250),
+  `profissao` VARCHAR(100),
+  `salario` DECIMAL(10,2),
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S' COMMENT 'Flag que valida se o cliente esta ativo',
+  `tipo` ENUM('F', 'J') NOT NULL DEFAULT 'F' COMMENT 'Flag que valida se o cliente é tipo fisico (F) ou juridico (J)'
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de colaborador
 CREATE TABLE `colaborador` (
@@ -42,4 +42,99 @@ CREATE TABLE `colaborador` (
   `password` VARCHAR(30) NOT NULL,
   `authKey` CHAR(30),
   `cargo` VARCHAR(100) COMMENT 'Cargo do usuario'
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- cria a tabela de telefone
+CREATE TABLE `telefone` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_cliente` INT NOT NULL,
+  `numero` VARCHAR(15) NOT NULL,
+  `ramal` VARCHAR(4),
+  `tipo` TINYINT(1) NOT NULL DEFAULT 1,
+  `observacao` VARCHAR(100),
+  `contato` ENUM('S', 'N') NOT NULL DEFAULT 'N' COMMENT 'Flag que valida de o numero e para contato',
+  `whatsapp` ENUM('S', 'N') NOT NULL DEFAULT 'S' COMMENT 'Flag que valida se o numero possui whatsapp',
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
+  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
+);
+-- cria a tabela de eventos
+CREATE TABLE `evento` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_cliente` INT NOT NULL,
+  `colaborador_id` INT NOT NULL,
+  `titulo` VARCHAR(100) NOT NULL,
+  `descricao` VARCHAR(250),
+  `data` DATETIME,
+  `telefone` VARCHAR(15),
+  `tipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Flag que valida o tipo do evento',
+  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`),
+  FOREIGN KEY (`colaborador_id`) REFERENCES `colaborador`(`id`)
+);
+-- cria a tabela de endereco
+CREATE TABLE `endereco` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_cliente` INT NOT NULL,
+  `logradouro` VARCHAR(100) NOT NULL,
+  `numero` VARCHAR(10) NOT NULL,
+  `complemento` VARCHAR(50),
+  `bairro` VARCHAR(100),
+  `cep` CHAR(8),
+  `cidade` INT,
+  `estado` TINYINT(1),
+  `observacao` VARCHAR(250),
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S' COMMENT 'Flag que valida se o endereco esta ativo',
+  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
+);
+-- cria a tabela de email
+CREATE TABLE `email` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_cliente` INT NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `observacao` VARCHAR(250),
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S' COMMENT 'Flag que valida se o email esta ativo',
+  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
+);
+-- cria a tabela de referencia
+CREATE TABLE `referencia` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_cliente` INT NOT NULL,
+  `nome` VARCHAR(250) NOT NULL,
+  `cpf` VARCHAR(11) NOT NULL,
+  `observacao` VARCHAR(250),
+  `tipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Flag que valida o tipo da referencia',
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S' COMMENT 'Flag que valida se a referencia esta ativa',
+  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
+);
+-- cria a tabela de contrato
+CREATE TABLE `contrato` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_cliente` INT NOT NULL,
+  `codigo_cliente` VARCHAR(50),
+  `codigo_contrato` VARCHAR(50),
+  `num_contrato` VARCHAR(50),
+  `num_plano` VARCHAR(50),
+  `valor` DECIMAL(10,2),
+  `data_cadastro` DATE NOT NULL,
+  `data_vencimento` DATE,
+  `tipo` TINYINT(1) DEFAULT '1',
+  `regiao` VARCHAR(50),
+  `filial` VARCHAR(50),
+  `observacao` VARCHAR(250),
+  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- cria a tabela de negociacao
+CREATE TABLE `negociacao` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_contrato` INT NOT NULL,
+  `data_negociacao` DATE NOT NULL,
+  `data_cadastro` DATETIME NOT NULL,
+  FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- cria a tabela de parcela do contrato
+CREATE TABLE `contrato_parcela` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_contrato` INT NOT NULL,
+  `data_cadastro` DATETIME NOT NULL,
+  `data_vencimento` DATE NOT NULL,
+  `valor` DECIMAL(10,2),
+  FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
