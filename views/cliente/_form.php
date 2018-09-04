@@ -62,7 +62,9 @@ use yii\widgets\ActiveForm;
                         <?= Html::submitButton('<i class="fa fa-save"></i>&nbsp; '. ($model->isNewRecord ? 'Cadastrar' : 'Alterar'), [
                                 'class' => $model->isNewRecord 
                                 ? Util::BTN_COLOR_SUCCESS.' btn-block' 
-                                : Util::BTN_COLOR_PRIMARY.' btn-block'            
+                                : Util::BTN_COLOR_PRIMARY.' btn-block',
+                            'title' => 'teste',
+                            'data-toggle' => 'tooltip',
                             ]);
                         ?>
                     </div>
