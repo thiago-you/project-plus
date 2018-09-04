@@ -63,8 +63,6 @@ use yii\widgets\ActiveForm;
                                 'class' => $model->isNewRecord 
                                 ? Util::BTN_COLOR_SUCCESS.' btn-block' 
                                 : Util::BTN_COLOR_PRIMARY.' btn-block',
-                            'title' => 'teste',
-                            'data-toggle' => 'tooltip',
                             ]);
                         ?>
                     </div>
