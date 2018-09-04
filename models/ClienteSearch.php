@@ -1,17 +1,19 @@
 <?php
-
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Cliente;
 
 /**
  * ClienteSearch represents the model behind the search form of `app\models\Cliente`.
  */
 class ClienteSearch extends Cliente
 {
+	/**
+	 * @var
+	 */
+	public $telefone;
+	
     /**
      * {@inheritdoc}
      */
@@ -19,7 +21,11 @@ class ClienteSearch extends Cliente
     {
         return [
             [['id', 'estado_civil'], 'integer'],
-            [['nome', 'nome_social', 'rg', 'documento', 'inscricao_estadual', 'sexo', 'data_nascimento', 'data_cadastro', 'nome_conjuge', 'nome_pai', 'nome_mae', 'empresa', 'profissao', 'ativo', 'tipo'], 'safe'],
+            [[
+            	'nome', 'nome_social', 'rg', 'documento', 'inscricao_estadual', 'sexo', 'data_nascimento', 
+            	'data_cadastro', 'nome_conjuge', 'nome_pai', 'nome_mae', 'empresa', 'profissao', 'ativo', 'tipo',
+            	'telefone',
+            ], 'safe'],
             [['salario'], 'number'],
         ];
     }

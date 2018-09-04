@@ -2,7 +2,7 @@
 $this->title = 'Home';
 ?>
 <div class='site-index'>
-	<div class='container'>
+	<section>
 		<div class='card'>
 			<div class='card-body'>
             	<h3 class='card-title'><i class='fa fa-user-plus'></i>&nbsp; Novos Clientes</h3>
@@ -11,7 +11,7 @@ $this->title = 'Home';
 			</div>
 		</div>
 		<!-- ./card -->
-	</div>
+	</section>
 	<!-- ./container -->
     <div class='jumbotron'>
         <h3><i class='fa fa-cog fa-spin'></i>&nbsp; Aplicação ainda em desenvolvimento ...</h3>

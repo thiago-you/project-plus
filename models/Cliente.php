@@ -26,12 +26,12 @@ use Yii;
  * @property string $ativo Flag que valida se o cliente esta ativo
  * @property string $tipo Flag que valida se o cliente é tipo fisico (F) ou juridico (J)
  *
- * @property Contrato[] $contratos
- * @property Email[] $emails
- * @property Endereco[] $enderecos
- * @property Evento[] $eventos
+ * @property Contrato[]   $contratos
+ * @property Email[]      $emails
+ * @property Endereco[]   $enderecos
+ * @property Evento[]     $eventos
  * @property Referencia[] $referencias
- * @property Telefone[] $telefones
+ * @property Telefone[]   $telefones
  */
 class Cliente extends \yii\db\ActiveRecord
 {
@@ -67,22 +67,22 @@ class Cliente extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => 'Cód.',
             'nome' => 'Nome',
             'nome_social' => 'Nome Social',
             'rg' => 'Rg',
             'documento' => 'Documento',
-            'inscricao_estadual' => 'Inscricao Estadual',
+            'inscricao_estadual' => 'Inscrição Estadual',
             'sexo' => 'Sexo',
-            'data_nascimento' => 'Data Nascimento',
-            'data_cadastro' => 'Data Cadastro',
+            'data_nascimento' => 'Data de Nascimento',
+            'data_cadastro' => 'Data de Cadastro',
             'estado_civil' => 'Estado Civil',
-            'nome_conjuge' => 'Nome Conjuge',
-            'nome_pai' => 'Nome Pai',
-            'nome_mae' => 'Nome Mae',
+            'nome_conjuge' => 'Nome do(a) Cônjuge',
+            'nome_pai' => 'Nome do Pai',
+            'nome_mae' => 'Nome da Mãe',
             'empresa' => 'Empresa',
-            'profissao' => 'Profissao',
-            'salario' => 'Salario',
+            'profissao' => 'Profissão',
+            'salario' => 'Salário',
             'ativo' => 'Ativo',
             'tipo' => 'Tipo',
         ];

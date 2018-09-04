@@ -100,59 +100,6 @@
             ]
         },
         {
-            "name": "bower-asset/bootstrap3-dialog",
-            "version": "v1.35.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nakupanda/bootstrap3-dialog.git",
-                "reference": "3dd11d586f78de75356af418907ec6e3b347377c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nakupanda/bootstrap3-dialog/zipball/3dd11d586f78de75356af418907ec6e3b347377c",
-                "reference": "3dd11d586f78de75356af418907ec6e3b347377c",
-                "shasum": ""
-            },
-            "require": {
-                "bower-asset/bootstrap": ">=3.1.0",
-                "bower-asset/jquery": ">=1.9.0"
-            },
-            "type": "bower-asset-library",
-            "extra": {
-                "bower-asset-main": [
-                    "dist/less/bootstrap-dialog.less",
-                    "dist/css/bootstrap-dialog.min.css",
-                    "dist/js/bootstrap-dialog.min.js"
-                ],
-                "bower-asset-ignore": [
-                    "source",
-                    "spec",
-                    ".bowerrc",
-                    ".gitignore",
-                    ".jshintignore",
-                    ".jshintrc",
-                    "bower.json",
-                    "gruntfile.js",
-                    "package.json",
-                    "README.md"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Make use of Bootstrap Modal more monkey-friendly. http://nakupanda.github.io/bootstrap3-dialog/",
-            "keywords": [
-                "css",
-                "framework",
-                "front-end",
-                "js",
-                "less",
-                "mobile-first",
-                "responsive",
-                "web"
-            ]
-        },
-        {
             "name": "bower-asset/inputmask",
             "version": "3.3.11",
             "source": {
@@ -622,12 +569,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/lexer.git",
-                "reference": "c0970c7889bfd33504c4fa54f35451c27897381d"
+                "reference": "3cab40356d8f30a0bb9d817ed4c33c097a4f0edf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/lexer/zipball/c0970c7889bfd33504c4fa54f35451c27897381d",
-                "reference": "c0970c7889bfd33504c4fa54f35451c27897381d",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/3cab40356d8f30a0bb9d817ed4c33c097a4f0edf",
+                "reference": "3cab40356d8f30a0bb9d817ed4c33c097a4f0edf",
                 "shasum": ""
             },
             "require": {
@@ -665,13 +612,16 @@
                     "email": "schmittjoh@gmail.com"
                 }
             ],
-            "description": "Base library for a lexer that can be used in Top-Down, Recursive Descent Parsers.",
-            "homepage": "http://www.doctrine-project.org",
+            "description": "PHP Doctrine Lexer parser library that can be used in Top-Down, Recursive Descent Parsers.",
+            "homepage": "https://www.doctrine-project.org/projects/lexer.html",
             "keywords": [
+                "annotations",
+                "docblock",
                 "lexer",
-                "parser"
+                "parser",
+                "php"
             ],
-            "time": "2018-05-14T15:49:16+00:00"
+            "time": "2018-09-01T01:23:47+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -838,16 +788,16 @@
         },
         {
             "name": "kartik-v/bootstrap-fileinput",
-            "version": "dev-master",
+            "version": "v4.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "4b73af3f548ac774170b1812b5f760a839eebbc8"
+                "reference": "e3126b482e72022b819f4aae58096f3f17d55a90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/4b73af3f548ac774170b1812b5f760a839eebbc8",
-                "reference": "4b73af3f548ac774170b1812b5f760a839eebbc8",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/e3126b482e72022b819f4aae58096f3f17d55a90",
+                "reference": "e3126b482e72022b819f4aae58096f3f17d55a90",
                 "shasum": ""
             },
             "type": "library",
@@ -887,7 +837,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2018-08-21T19:15:29+00:00"
+            "time": "2018-08-30T02:05:20+00:00"
         },
         {
             "name": "kartik-v/bootstrap-star-rating",
@@ -1093,17 +1043,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-dialog.git",
-                "reference": "4c53e2f56c2cbde88ca1844750e73f3979b17324"
+                "reference": "becec018697a62565c32557d83b58854c8b03b43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-dialog/zipball/4c53e2f56c2cbde88ca1844750e73f3979b17324",
-                "reference": "4c53e2f56c2cbde88ca1844750e73f3979b17324",
+                "url": "https://api.github.com/repos/kartik-v/yii2-dialog/zipball/becec018697a62565c32557d83b58854c8b03b43",
+                "reference": "becec018697a62565c32557d83b58854c8b03b43",
                 "shasum": ""
             },
             "require": {
-                "bower-asset/bootstrap3-dialog": "~1.34",
-                "kartik-v/yii2-krajee-base": "~1.7"
+                "kartik-v/yii2-krajee-base": "~1.9"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1113,7 +1062,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "kartik\\dialog\\": ""
+                    "kartik\\dialog\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1137,7 +1086,7 @@
                 "modal",
                 "yii2"
             ],
-            "time": "2018-08-16T06:05:42+00:00"
+            "time": "2018-09-03T10:35:26+00:00"
         },
         {
             "name": "kartik-v/yii2-grid",
@@ -1145,12 +1094,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-grid.git",
-                "reference": "1d6c7d4bbe587702a7dd74fb2d982490f16e5857"
+                "reference": "0e6ff6cbb68c96453b0806ee9c7ffb08cd8c7b08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/1d6c7d4bbe587702a7dd74fb2d982490f16e5857",
-                "reference": "1d6c7d4bbe587702a7dd74fb2d982490f16e5857",
+                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/0e6ff6cbb68c96453b0806ee9c7ffb08cd8c7b08",
+                "reference": "0e6ff6cbb68c96453b0806ee9c7ffb08cd8c7b08",
                 "shasum": ""
             },
             "require": {
@@ -1190,7 +1139,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-07-20T13:57:00+00:00"
+            "time": "2018-09-03T10:39:32+00:00"
         },
         {
             "name": "kartik-v/yii2-helpers",
@@ -1249,12 +1198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "49a0b2f43f5ff2e9d1ccf63775bd83f057ed7db8"
+                "reference": "1d36fae5cdc2538ad048182f0b7362f40e45cea4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/49a0b2f43f5ff2e9d1ccf63775bd83f057ed7db8",
-                "reference": "49a0b2f43f5ff2e9d1ccf63775bd83f057ed7db8",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/1d36fae5cdc2538ad048182f0b7362f40e45cea4",
+                "reference": "1d36fae5cdc2538ad048182f0b7362f40e45cea4",
                 "shasum": ""
             },
             "require": {
@@ -1292,7 +1241,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-08-26T07:23:36+00:00"
+            "time": "2018-08-29T02:57:02+00:00"
         },
         {
             "name": "kartik-v/yii2-money",
@@ -1407,12 +1356,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-activeform.git",
-                "reference": "a9877e184534558cc318ef290a5f500944f21e8a"
+                "reference": "3fc7bd32489870d86a17038c6c8092fdd5e35be2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-activeform/zipball/a9877e184534558cc318ef290a5f500944f21e8a",
-                "reference": "a9877e184534558cc318ef290a5f500944f21e8a",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-activeform/zipball/3fc7bd32489870d86a17038c6c8092fdd5e35be2",
+                "reference": "3fc7bd32489870d86a17038c6c8092fdd5e35be2",
                 "shasum": ""
             },
             "require": {
@@ -1451,7 +1400,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-08-28T12:36:25+00:00"
+            "time": "2018-09-03T11:50:22+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-affix",
@@ -1617,12 +1566,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
-                "reference": "64a2a012cc73182772404eeecfc1d7cac40cb884"
+                "reference": "01a5940fb1b70b39b7916a4e68768f8626024ddc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/64a2a012cc73182772404eeecfc1d7cac40cb884",
-                "reference": "64a2a012cc73182772404eeecfc1d7cac40cb884",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/01a5940fb1b70b39b7916a4e68768f8626024ddc",
+                "reference": "01a5940fb1b70b39b7916a4e68768f8626024ddc",
                 "shasum": ""
             },
             "require": {
@@ -1663,7 +1612,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-08-28T07:58:24+00:00"
+            "time": "2018-08-29T12:10:45+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-datetimepicker",
@@ -1671,12 +1620,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datetimepicker.git",
-                "reference": "04759ddf6aa4f461c0d7eabd970cc418ff4c09d8"
+                "reference": "22d8c40665d59b76383e658de6ef2c187ed0da14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/04759ddf6aa4f461c0d7eabd970cc418ff4c09d8",
-                "reference": "04759ddf6aa4f461c0d7eabd970cc418ff4c09d8",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/22d8c40665d59b76383e658de6ef2c187ed0da14",
+                "reference": "22d8c40665d59b76383e658de6ef2c187ed0da14",
                 "shasum": ""
             },
             "require": {
@@ -1717,7 +1666,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-08-28T07:53:06+00:00"
+            "time": "2018-08-29T11:42:11+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-depdrop",
@@ -3003,12 +2952,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "2c55ab6c8ec274f76e84be402f89189d2568eab8"
+                "reference": "8825902c0aa49377cf08dc5951dbfaa66e1625bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/2c55ab6c8ec274f76e84be402f89189d2568eab8",
-                "reference": "2c55ab6c8ec274f76e84be402f89189d2568eab8",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/8825902c0aa49377cf08dc5951dbfaa66e1625bc",
+                "reference": "8825902c0aa49377cf08dc5951dbfaa66e1625bc",
                 "shasum": ""
             },
             "require": {
@@ -3095,7 +3044,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2018-08-28T09:31:43+00:00"
+            "time": "2018-08-31T10:58:25+00:00"
         },
         {
             "name": "yiisoft/yii2-apidoc",
@@ -3383,6 +3332,59 @@
             "time": "2017-08-30T11:04:43+00:00"
         },
         {
+            "name": "bower-asset/bootstrap3-dialog",
+            "version": "v1.35.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nakupanda/bootstrap3-dialog.git",
+                "reference": "3dd11d586f78de75356af418907ec6e3b347377c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nakupanda/bootstrap3-dialog/zipball/3dd11d586f78de75356af418907ec6e3b347377c",
+                "reference": "3dd11d586f78de75356af418907ec6e3b347377c",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/bootstrap": ">=3.1.0",
+                "bower-asset/jquery": ">=1.9.0"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "dist/less/bootstrap-dialog.less",
+                    "dist/css/bootstrap-dialog.min.css",
+                    "dist/js/bootstrap-dialog.min.js"
+                ],
+                "bower-asset-ignore": [
+                    "source",
+                    "spec",
+                    ".bowerrc",
+                    ".gitignore",
+                    ".jshintignore",
+                    ".jshintrc",
+                    "bower.json",
+                    "gruntfile.js",
+                    "package.json",
+                    "README.md"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Make use of Bootstrap Modal more monkey-friendly. http://nakupanda.github.io/bootstrap3-dialog/",
+            "keywords": [
+                "css",
+                "framework",
+                "front-end",
+                "js",
+                "less",
+                "mobile-first",
+                "responsive",
+                "web"
+            ]
+        },
+        {
             "name": "bower-asset/typeahead.js",
             "version": "v0.11.1",
             "source": {
@@ -3656,12 +3658,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "870a62d7b0d63d4e0ffa8f2ce3ab7c8a53d1846d"
+                "reference": "17becf3b5d22399af644022f9b5a9755eff4375a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/870a62d7b0d63d4e0ffa8f2ce3ab7c8a53d1846d",
-                "reference": "870a62d7b0d63d4e0ffa8f2ce3ab7c8a53d1846d",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/17becf3b5d22399af644022f9b5a9755eff4375a",
+                "reference": "17becf3b5d22399af644022f9b5a9755eff4375a",
                 "shasum": ""
             },
             "require": {
@@ -3698,12 +3700,12 @@
                 }
             ],
             "description": "A small, lightweight utility to instantiate objects in PHP without invoking their constructors",
-            "homepage": "https://github.com/doctrine/instantiator",
+            "homepage": "https://www.doctrine-project.org/projects/instantiator.html",
             "keywords": [
                 "constructor",
                 "instantiate"
             ],
-            "time": "2018-03-05T09:41:42+00:00"
+            "time": "2018-09-01T09:40:46+00:00"
         },
         {
             "name": "fzaninotto/faker",
@@ -5180,12 +5182,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "8ca04d87a73d209b918f352f72f8ebba3fcb61c4"
+                "reference": "75b35ad9f925b632e5fd81dbfc87c679cee2ed67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/8ca04d87a73d209b918f352f72f8ebba3fcb61c4",
-                "reference": "8ca04d87a73d209b918f352f72f8ebba3fcb61c4",
+                "url": "https://api.github.com/repos/symfony/console/zipball/75b35ad9f925b632e5fd81dbfc87c679cee2ed67",
+                "reference": "75b35ad9f925b632e5fd81dbfc87c679cee2ed67",
                 "shasum": ""
             },
             "require": {
@@ -5241,7 +5243,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-21T12:03:16+00:00"
+            "time": "2018-09-02T17:48:09+00:00"
         },
         {
             "name": "symfony/contracts",
@@ -5359,12 +5361,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "16f79e1e7399a7880ca8b98e7049ac44665fc20b"
+                "reference": "d980feed1a209d15aceeaff5759a60356e2dcad8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/16f79e1e7399a7880ca8b98e7049ac44665fc20b",
-                "reference": "16f79e1e7399a7880ca8b98e7049ac44665fc20b",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/d980feed1a209d15aceeaff5759a60356e2dcad8",
+                "reference": "d980feed1a209d15aceeaff5759a60356e2dcad8",
                 "shasum": ""
             },
             "require": {
@@ -5408,7 +5410,7 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-24T10:01:11+00:00"
+            "time": "2018-09-02T17:48:09+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -5480,12 +5482,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "e85fcc2297c61b09193d17ac606413cedf2092c7"
+                "reference": "4cf18147c61cc36e6dcad9486b34a6452c05af33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/e85fcc2297c61b09193d17ac606413cedf2092c7",
-                "reference": "e85fcc2297c61b09193d17ac606413cedf2092c7",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/4cf18147c61cc36e6dcad9486b34a6452c05af33",
+                "reference": "4cf18147c61cc36e6dcad9486b34a6452c05af33",
                 "shasum": ""
             },
             "require": {
@@ -5521,7 +5523,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26T11:25:51+00:00"
+            "time": "2018-09-02T17:48:09+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -5646,12 +5648,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "6a8916b671bb8dcdc150dfb857636ad5402edb68"
+                "reference": "24d8e1bfbc758c129661637bab1880f9cbc75603"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/6a8916b671bb8dcdc150dfb857636ad5402edb68",
-                "reference": "6a8916b671bb8dcdc150dfb857636ad5402edb68",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/24d8e1bfbc758c129661637bab1880f9cbc75603",
+                "reference": "24d8e1bfbc758c129661637bab1880f9cbc75603",
                 "shasum": ""
             },
             "require": {
@@ -5697,7 +5699,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-18T16:57:16+00:00"
+            "time": "2018-09-02T17:48:09+00:00"
         },
         {
             "name": "theseer/tokenizer",

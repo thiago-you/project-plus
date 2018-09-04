@@ -3,7 +3,8 @@
 */
 html, body, .modal-content { 
 	height: 100%; 
-	min-width: 350px; 
+	min-width: 350px;
+	overflow-x: hidden; 
 }
 /* background color */
 body { 
@@ -383,6 +384,9 @@ fieldset[disabled] .btn-custom.active {
 	border-left: none;
 	border-radius: 2px !important;
 }
+.panel-footer {
+	background-color: inherit;
+}
 /* main nav */
 .nav li > form > button.logout {
     padding: 15px;
@@ -451,7 +455,7 @@ fieldset[disabled] .btn-custom.active {
 .sidenav a {
     padding: 6px 5px 6px 16px;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 14px;
     color: #e5e5e5;
     display: block;
     font-weight: bold;
