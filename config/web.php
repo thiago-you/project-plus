@@ -1,6 +1,6 @@
 <?php
 $params = require(__DIR__ . '/params.php');
-$db = require(__DIR__ . '/../local/db.php');
+$db = file_exists(__DIR__ . '/../local/db.php') ? require(__DIR__ . '/../local/db.php') : require(__DIR__ . '/db.php');;
 $envDev = file_exists(__DIR__ . '/../local/env-dev.php') ? require(__DIR__ . '/../local/env-dev.php') : YII_ENV_DEV;
 
 $config = [
