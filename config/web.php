@@ -1,6 +1,6 @@
 <?php
 $params = require(__DIR__ . '/params.php');
-$db = require(__DIR__ . '../local/db.php');
+$db = require(__DIR__ . '/../local/db.php');
 
 $config = [
     'id' => 'exemplo-demo',
