@@ -19,6 +19,15 @@ $config = [
                 ],
             ],
         ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    //'js' => 'jquery-3.3.1.min.js',
+                    //'js' => ['jquery.js' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js'],
+                    'jsOptions' => ['type' => 'text/javascript'],
+                ],
+            ],
+        ],
         'request' => [
             'cookieValidationKey' => 'LAUQ_XSYuSvr_t-EKTSxVIGSImnWAgZb',
         ],
