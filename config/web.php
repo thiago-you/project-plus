@@ -1,6 +1,7 @@
 <?php
 $params = require(__DIR__ . '/params.php');
 $db = require(__DIR__ . '/../local/db.php');
+$envDev = file_exists(__DIR__ . '/../local/env-dev.php') ? require(__DIR__ . '/../local/env-dev.php') : YII_ENV_DEV;
 
 $config = [
     'id' => 'exemplo-demo',
@@ -120,7 +121,7 @@ $config = [
     ],
 ];
 
-if (YII_ENV_DEV) {
+if ($envDev) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
