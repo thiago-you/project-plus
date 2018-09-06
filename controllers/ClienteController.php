@@ -6,6 +6,8 @@ use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
 use app\models\ClienteSearch;
 use yii\web\NotFoundHttpException;
+use app\base\Util;
+use app\models\Telefone;
 
 /**
  * ClienteController implements the CRUD actions for Cliente model.
@@ -68,16 +70,66 @@ class ClienteController extends BaseController
         $model = new Cliente();
         
         if ($post = \Yii::$app->request->post()) {
-        	$model->load($post);
-        	if (!$model->save()) {
-        		// TODO implementar mensagem de erro
+        	try {        		
+        		$transaction = \Yii::$app->db->beginTransaction();
+        		
+        		// carrega os dados da model
+        		$model->load($post);
+	        	
+	        	// valida o tipo do cliente
+	        	if ($model->tipo == Cliente::TIPO_FISICO) {
+	        		$model->nome = $post['cliente-nome'];
+	        		$model->documento = Util::unmask($post['cliente-cpf'], true);
+	        		$model->nome_social = $post['cliente-apelido'];
+	        	} else {
+	        		$model->nome = $post['cliente-razao-social'];
+	        		$model->documento = Util::unmask($post['cliente-cnpj'], true);
+	        		$model->nome_social = $post['cliente-fantasia'];
+	        	}
+	        	
+	        	// remove a mascara do rg
+	        	$model->rg = Util::unmask($model->rg);
+	        	
+	        	// salva o cliente
+	        	if (!$model->save()) {
+	        		throw new \Exception(Util::renderErrors($model->getErrors()));
+	        	}
+	        	
+	        	// salva os telefones cadastrados
+	        	if (isset($post['Telefones']) && is_array($post['Telefones'])) {
+	        		foreach ($post['Telefones'] as $telefone) {
+	        			if (isset($telefone['numero']) && !empty($telefone['numero'])) {
+	        				// cria a model de telefone e
+	        				// seta os dados
+	        				$modelTelefone = new Telefone();
+	        				$modelTelefone->id_cliente = $model->id ? $model->id : $model->getPrimaryKey();
+	        				$modelTelefone->numero     = $telefone['numero'];
+	        				$modelTelefone->ramal      = $telefone['ramal'];
+	        				$modelTelefone->tipo       = $telefone['tipo'];
+	        				$modelTelefone->contato   = $telefone['contato'];
+	        				$modelTelefone->whatsapp   = $telefone['whatsapp'];
+	        				$modelTelefone->ativo      = $telefone['ativo'];
+	        				$modelTelefone->observacao = $telefone['observacao'];
+	        				
+	        				// salva o telefone
+	        				if (!$modelTelefone->save()) {
+	        					throw new \Exception(Util::renderErrors($modelTelefone->getErrors()));
+	        				}
+	        			}
+	        		}
+	        	}
+	        	
+	        	$transaction->commit();
+	        	return $this->redirect(['index']);
+        	} catch (\Exception $e) {
+        		$transaction->rollBack();
+        		\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
         	}
-        	
-        	return $this->redirect(['index']);
         }
           
         return $this->render('create', [
         	'model' => $model,
+        	'layout' => $model->tipo && $model->tipo == Cliente::TIPO_JURIDICO ? 'J' : 'F',
         ]);
         
     }
@@ -100,6 +152,7 @@ class ClienteController extends BaseController
         
         return $this->render('update', [
             'model' => $model,
+        	'layout' => $model->tipo && $model->tipo == Cliente::TIPO_JURIDICO ? 'J' : 'F',
         ]);
     }
 

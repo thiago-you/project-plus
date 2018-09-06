@@ -16,7 +16,7 @@ use Yii;
  * @property string $sexo
  * @property string $data_nascimento
  * @property string $data_cadastro
- * @property int $estado_civil
+ * @property int    $estado_civil
  * @property string $nome_conjuge
  * @property string $nome_pai
  * @property string $nome_mae
@@ -35,6 +35,13 @@ use Yii;
  */
 class Cliente extends \yii\db\ActiveRecord
 {
+	// const to tipo do cliente
+	CONST TIPO_FISICO = 'F';
+	CONST TIPO_JURIDICO = 'J';
+	// const do sexo do cliente
+	CONST SEXO_MASC = 'M';
+	CONST SEXO_FEM = 'F';
+	
     /**
      * {@inheritdoc}
      */
@@ -49,13 +56,13 @@ class Cliente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome', 'data_cadastro'], 'required'],
+            //[['nome', 'data_cadastro'], 'required'],
             [['sexo', 'ativo', 'tipo'], 'string'],
             [['data_nascimento', 'data_cadastro'], 'safe'],
             [['estado_civil'], 'integer'],
             [['salario'], 'number'],
             [['nome', 'nome_social', 'nome_conjuge', 'nome_pai', 'nome_mae', 'empresa'], 'string', 'max' => 250],
-            [['rg', 'documento'], 'string', 'max' => 14],
+            [['rg', 'documento'], 'string'],
             [['inscricao_estadual'], 'string', 'max' => 15],
             [['profissao'], 'string', 'max' => 100],
         ];
@@ -134,5 +141,31 @@ class Cliente extends \yii\db\ActiveRecord
     public function getTelefones()
     {
         return $this->hasMany(Telefone::className(), ['id_cliente' => 'id']);
+    }
+    
+    /**
+     * Retorna uma lista de estados civis
+     */
+    public static function getListaEstadoCivil() 
+    {
+    	return [
+    		'1' => 'Solteiro(a)',
+    		'2' => 'Casado(a)',
+    		'3' => 'Divorciado(a)',
+    		'4' => 'Viuvo(a)',
+    	];
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
+    public function beforeSave($insert) 
+    {
+    	if (empty($this->data_cadastro)) {
+    		$this->data_cadastro = date('Y-m-d H:i:s');
+    	}
+    	
+    	return parent::beforeSave($insert);
     }
 }

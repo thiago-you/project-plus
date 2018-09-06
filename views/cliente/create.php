@@ -6,6 +6,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="cliente-create">
     <?= $this->render('_form', [
             'model' => $model,
+    		'layout' => $layout,
         ]);
     ?>
 </div>

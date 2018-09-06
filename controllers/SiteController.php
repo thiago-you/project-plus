@@ -107,14 +107,4 @@ class SiteController extends BaseController
 
         return $this->goHome();
     }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
 }

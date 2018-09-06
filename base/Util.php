@@ -60,7 +60,7 @@ class Util
      * @param array $errors
      * @return string (html)
      */
-    public static function renderModelErrors(array $errors)
+    public static function renderErrors(array $errors)
     {
         if(count($errors) == 0)
             return null;
@@ -89,7 +89,7 @@ class Util
      * ]
      *
      */
-    public static function maskBackend($val, $mask, $removeMask = false, $option = null)
+    public static function mask($val, $mask, $removeMask = false, $option = null)
     {
         // force val as string
         if(!is_string($val)) {
@@ -98,12 +98,12 @@ class Util
        
         // remove a mascara inicial para inserir outra
         if($removeMask) {
-            $val = self::removeMascara($val);
+            $val = self::unmask($val);
         }
         
         // remove a mascara inicial para inserir outra
         if($removeMask) {
-            $val = self::removeMascara($val);
+            $val = self::unmask($val);
         }
         
         // define mask
@@ -309,7 +309,7 @@ class Util
      * @param array $extra (Caractres extras a serem removidos)
      * @return string
      */
-    public static function removeMascara($campo, $removerEspaco = false, $extra = [])
+    public static function unmask($campo, $removerEspaco = false, $extra = [])
     {
         // set chars to remove
         $remover = array('.', '-', '/', '(', ')', 'R', '$', '%', '_');

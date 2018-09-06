@@ -7,6 +7,7 @@ $this->params['breadcrumbs'][] = 'Alterar';
 <div class="cliente-update">
     <?= $this->render('_form', [
             'model' => $model,
+    		'layout' => $layout,
         ]);
     ?>
 </div>

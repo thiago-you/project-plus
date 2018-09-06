@@ -1,6 +1,7 @@
 <?php
 use app\base\Util;
 use yii\helpers\Html;
+use app\models\Cliente;
 use kartik\grid\GridView;
 
 $this->title = 'Clientes';
@@ -19,20 +20,26 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?php $columns = [
                 [
                     'attribute' => 'id',
-                    'hAlign' => GridView::ALIGN_CENTER
+                    'hAlign' => GridView::ALIGN_CENTER,
                 ],
                 [
                     'attribute' => 'nome',
-                    'width' => '30%'
+                    'width' => '40%'
                 ],
 				[
 					'attribute' => 'documento',
 					'label' => 'CPF/CNPJ',
-					//'width' => '30%'
+					'value' => function($model) {
+						if ($model->tipo == Cliente::TIPO_FISICO) {
+							return Util::mask($model->documento, Util::MASK_CPF);
+						}
+						
+						return Util::mask($model->documento, Util::MASK_CNPJ);
+					}
 				],
     		    [
                     'attribute' => 'sexo',
-    		        'hAlign' => GridView::ALIGN_CENTER
+    		        'hAlign' => GridView::ALIGN_CENTER,
     		    ],
                 [
                     'class' => 'yii\grid\ActionColumn',
