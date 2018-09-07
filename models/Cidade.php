@@ -1,16 +1,15 @@
 <?php
-
 namespace app\models;
-
-use Yii;
 
 /**
  * This is the model class for table "cidade".
  *
- * @property int $Id
- * @property int $codigo
+ * @property int    $Id
+ * @property int    $codigo
  * @property string $nome
  * @property string $uf
+ * 
+ * @property Estado $estado
  */
 class Cidade extends \yii\db\ActiveRecord
 {
@@ -46,5 +45,13 @@ class Cidade extends \yii\db\ActiveRecord
             'nome' => 'Nome',
             'uf' => 'Uf',
         ];
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEstado()
+    {
+        return $this->hasMany(Estado::className(), ['sigla' => 'uf']);
     }
 }

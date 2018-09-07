@@ -3,8 +3,9 @@ use `exemplo_db`;
 CREATE TABLE estado(
  id_estado INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
  codigo_ibge VARCHAR(4) NOT NULL,
+ nome VARCHAR(30) NOT NULL,
  sigla CHAR(2) NOT NULL,
- nome VARCHAR(30) NOT NULL
+ UNIQUE KEY(sigla)
 ) ENGINE=INNODB CHARSET=utf8 COLLATE=utf8_general_ci;   
 
 Insert Into estado (codigo_ibge,sigla,nome) Values(12,'AC','Acre');  

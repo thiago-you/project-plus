@@ -1,8 +1,5 @@
 <?php
-
 namespace app\models;
-
-use Yii;
 
 /**
  * This is the model class for table "estados".
@@ -41,10 +38,18 @@ class Estado extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_estado' => 'Id Estado',
-            'codigo_ibge' => 'Codigo Ibge',
+            'id_estado' => 'Cód. Estado',
+            'codigo_ibge' => 'Código IBGE',
             'sigla' => 'Sigla',
             'nome' => 'Nome',
         ];
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCidades()
+    {
+        return $this->hasMany(Cidade::className(), ['uf' => 'sigla']);
     }
 }

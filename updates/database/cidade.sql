@@ -5,8 +5,12 @@ CREATE TABLE cidade (
   Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   codigo INT NOT NULL,
   nome VARCHAR(255) NOT NULL,
-  uf CHAR(2) NOT NULL
+  uf CHAR(2) NOT NULL,
+  FOREIGN KEY (uf) REFERENCES estado(sigla)
 );
+
+-- cria o index
+CREATE INDEX index_cidade_uf ON cidade (uf);
 
 -- Insert Data --
 Insert into cidade (codigo, nome, uf) values ('1100015','Alta Floresta D''Oeste', 'RO');
