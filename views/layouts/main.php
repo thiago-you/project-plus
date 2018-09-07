@@ -33,7 +33,7 @@ AppAsset::register($this);
                 			<div id="main-container" class="container">
                 				<div class="navbar-header text-center">
                                     <a class="navbar-brand" href="<?= \Yii::$app->homeUrl; ?>">
-                                    	Exemplo <span class="separador">|</span>
+                                    	Maklen <i>RC</i> <span class="separador">|</span>
                                     </a>
                                 </div>
                                 <!-- ./brand -->

@@ -4,13 +4,13 @@ $db = file_exists(__DIR__ . '/../local/db.php') ? require(__DIR__ . '/../local/d
 $envDev = file_exists(__DIR__ . '/../local/env-dev.php') ? require(__DIR__ . '/../local/env-dev.php') : YII_ENV_DEV;
 
 $config = [
-    'id' => 'exemplo-demo',
+    'id' => 'maklenrc',
     'language' => 'pt-BR',
     'sourceLanguage' => 'pt-BR',
     'timeZone' => 'America/Sao_Paulo',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'name' => 'Exemplo',
+    'name' => 'Maklen RC',
     'components' => [
         'i18n' => [
             'translations' => [
