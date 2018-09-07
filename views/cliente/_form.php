@@ -71,10 +71,11 @@ use yii\widgets\MaskedInput;
         				<div class="cliente-fisico" style="display: <?= $layout == Cliente::TIPO_FISICO ? 'block' : 'none'; ?>;">
 		        			<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
 		                        <?= $form->field($model, 'data_nascimento')->widget(DatePicker::className(), [
-                        				'pluginOptions' => [
+                                        'removeButton' => false,
+                                        'pluginOptions' => [
                         					'autoclose' => true,
                         					'format' => 'yyyy-mm-dd'
-                        				]
+                        				],
 		                        	]);
 		                        ?>
 		                    </div>

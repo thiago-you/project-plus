@@ -15,11 +15,20 @@ use Yii;
  * @property int $prioridade Nivel de prioridade da campanha
  * @property string $por_parcela
  * @property string $por_portal
+ * @property string $tipo
  *
  * @property Credor $credor
+ * @property CredorCalculo $credorCalculo
  */
 class CredorCampanha extends \yii\db\ActiveRecord
 {
+    // flag para whatsapp e ativo
+    CONST SIM = 'S';
+    CONST NAO = 'N';
+    // const para o tipo de calculo
+    CONST CALCULO_A_VISTA = 'V';
+    CONST CALCULO_PARCELADO = 'P';
+    
     /**
      * {@inheritdoc}
      */
@@ -52,11 +61,11 @@ class CredorCampanha extends \yii\db\ActiveRecord
             'id' => 'ID',
             'id_credor' => 'Id Credor',
             'nome' => 'Nome',
-            'vigencia_inicial' => 'Vigencia Inicial',
-            'vigencia_final' => 'Vigencia Final',
+            'vigencia_inicial' => 'Vigência Inicial',
+            'vigencia_final' => 'Vigência Final',
             'prioridade' => 'Prioridade',
-            'por_parcela' => 'Por Parcela',
-            'por_portal' => 'Por Portal',
+            'por_parcela' => 'Enquadrar Por Parcela',
+            'por_portal' => 'Portal do Cliente',
         ];
     }
 
@@ -66,5 +75,13 @@ class CredorCampanha extends \yii\db\ActiveRecord
     public function getCredor()
     {
         return $this->hasOne(Credor::className(), ['id' => 'id_credor']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCredorCalculo()
+    {
+        return $this->hasOne(CredorCalculo::className(), ['id_campanha' => 'id']);
     }
 }

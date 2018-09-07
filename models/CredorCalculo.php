@@ -7,15 +7,14 @@ use Yii;
 /**
  * This is the model class for table "credor_calculo".
  *
- * @property int $id
- * @property int $id_credor
+ * @property int    $id
+ * @property int    $id_campanha
  * @property string $atraso
  * @property string $multa
  * @property string $juros
- * @property string $tipo Tipo do calculo => V: A vista / P: Parcelado
- * @property int $parcela_num Numero da parcela qunado o tipo for parcelado
- *
- * @property Credor $credor
+ * @property int    $parcela_num Numero da parcela qunado o tipo for parcelado
+ * 
+ * @property CredorCampanha $credorCampanha
  */
 class CredorCalculo extends \yii\db\ActiveRecord
 {
@@ -33,12 +32,11 @@ class CredorCalculo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_credor', 'atraso'], 'required'],
-            [['id_credor', 'parcela_num'], 'integer'],
+            [['id_campanha', 'atraso'], 'required'],
+            [['id_campanha', 'parcela_num'], 'integer'],
             [['multa', 'juros'], 'number'],
-            [['tipo'], 'string'],
             [['atraso'], 'string', 'max' => 3],
-            [['id_credor'], 'exist', 'skipOnError' => true, 'targetClass' => Credor::className(), 'targetAttribute' => ['id_credor' => 'id']],
+            [['id_campanha'], 'exist', 'skipOnError' => true, 'targetClass' => CredorCampanha::className(), 'targetAttribute' => ['id_campanha' => 'id']],
         ];
     }
 
@@ -48,21 +46,20 @@ class CredorCalculo extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'id_credor' => 'Id Credor',
+            'id' => 'Cód.',
+            'id_campanha' => 'Cód. Campanha',
             'atraso' => 'Atraso',
             'multa' => 'Multa',
             'juros' => 'Juros',
-            'tipo' => 'Tipo',
-            'parcela_num' => 'Parcela Num',
+            'parcela_num' => 'N° Parcela',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCredor()
+    public function getCredorCampanha()
     {
-        return $this->hasOne(Credor::className(), ['id' => 'id_credor']);
+        return $this->hasOne(CredorCampanha::className(), ['id' => 'id_campanha']);
     }
 }

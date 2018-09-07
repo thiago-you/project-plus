@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "credor".
  *
  * @property int    $id
+ * @property int    $id_campanha
  * @property string $nome
  * @property int    $tipo
  * @property int    $tipo_cobranca
@@ -27,8 +28,8 @@ use Yii;
  * @property string $codigo
  * @property string $sigla
  *
+ * @property CredorCampanha   $credorCampanha
  * @property CredorCampanha[] $credorCampanhas
- * @property CredorCalculo[]  $credorCalculos
  */
 class Credor extends \yii\db\ActiveRecord
 {
@@ -56,7 +57,7 @@ class Credor extends \yii\db\ActiveRecord
     {
         return [
             [['nome', 'cnpj', 'telefone', 'email', 'logradouro', 'numero'], 'required'],
-            [['tipo', 'tipo_cobranca', 'cidade_id', 'estado_id'], 'integer'],
+            [['tipo', 'tipo_cobranca', 'cidade_id', 'estado_id', 'id_campanha'], 'integer'],
             [['ativo'], 'string'],
             [['razao_social'], 'number'],
             [['nome', 'logo', 'codigo', 'sigla'], 'string', 'max' => 250],
@@ -76,6 +77,7 @@ class Credor extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'Cód.',
+            'id_campanha' => 'Campanha',
             'nome' => 'Nome',
             'razao_social' => 'Razão Social',
             'tipo' => 'Tipo',
@@ -100,16 +102,16 @@ class Credor extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCreadorCampanhas()
+    public function getCredorCampanha()
     {
-        return $this->hasMany(CredorCampanha::className(), ['id_credor' => 'id']);
+        return $this->hasOne(CredorCampanha::className(), ['id' => 'id_campanha']);
     }
-
+    
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCredorCalculos()
+    public function getCredorCampanhas()
     {
-        return $this->hasMany(CredorCalculo::className(), ['id_credor' => 'id']);
+        return $this->hasMany(CredorCampanha::className(), ['id_credor' => 'id']);
     }
 }
