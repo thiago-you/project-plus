@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\base\Util;
+use app\base\AjaxResponse;
+use yii\helpers\Json;
 
 /**
  * CredorController implements the CRUD actions for Credor model.
@@ -117,23 +119,43 @@ class CredorController extends Controller
     }
 
     /**
-     * Updates an existing Credor model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * Configuração de campanha e cálculo do credor
      */
     public function actionConfiguracao($id)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-        
         return $this->render('configuracao', [
             'model' => $model,
         ]);
+    }
+    
+    /**
+     * Atualiza a campanha do credor
+     */
+    public function actionUpdateCampanha()
+    {
+        // valida a requisição
+        if (!$post = \Yii::$app->request->post()) {
+            throw new NotFoundHttpException();
+        }
+        
+        // busca o credor
+        $model = $this->findModel($post['id_credor']);
+        
+        try {
+            // cria o retorno e carrega os dados da campanha
+            $retorno = new AjaxResponse();
+            
+            $model->id_campanha = $post['id_campanha'];
+            if (!$model->save()) {
+                throw new \Exception();
+            }
+        } catch(\Exception $e) {
+            $retorno->success = false;
+        }
+        
+        return Json::encode($retorno);
     }
     
     /**

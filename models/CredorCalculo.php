@@ -9,7 +9,8 @@ use Yii;
  *
  * @property int    $id
  * @property int    $id_campanha
- * @property string $atraso
+ * @property string $atraso_inicio
+ * @property string $atraso_fim
  * @property string $multa
  * @property string $juros
  * @property int    $parcela_num Numero da parcela qunado o tipo for parcelado
@@ -32,10 +33,10 @@ class CredorCalculo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_campanha', 'atraso'], 'required'],
+            [['id_campanha'], 'required'],
             [['id_campanha', 'parcela_num'], 'integer'],
             [['multa', 'juros'], 'number'],
-            [['atraso'], 'string', 'max' => 3],
+            [['atraso_inicio', 'atraso_fim'], 'string', 'max' => 3],
             [['id_campanha'], 'exist', 'skipOnError' => true, 'targetClass' => CredorCampanha::className(), 'targetAttribute' => ['id_campanha' => 'id']],
         ];
     }
@@ -48,7 +49,8 @@ class CredorCalculo extends \yii\db\ActiveRecord
         return [
             'id' => 'Cód.',
             'id_campanha' => 'Cód. Campanha',
-            'atraso' => 'Atraso',
+            'atraso_inicio' => 'Ínicio do Atraso',
+            'atraso_fim' => 'Fim do Atraso',
             'multa' => 'Multa',
             'juros' => 'Juros',
             'parcela_num' => 'N° Parcela',
@@ -61,5 +63,13 @@ class CredorCalculo extends \yii\db\ActiveRecord
     public function getCredorCampanha()
     {
         return $this->hasOne(CredorCampanha::className(), ['id' => 'id_campanha']);
+    }
+    
+    /**
+     * Retorna a faixa de atraso
+     */
+    public function getAtraso() 
+    {
+        return "{$this->atraso_inicio} - {$this->atraso_fim}";
     }
 }

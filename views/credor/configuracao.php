@@ -75,52 +75,24 @@ $this->params['breadcrumbs'][] = $this->title;
       			<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
       				<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Nova Faixa', [
     		                'id' => 'nova-faixa', 
-    		                'class' => Util::BTN_COLOR_EMERALD.' btn-block',
+    		                'class' => Util::BTN_COLOR_EMERALD.' btn-block campanha-action-button',
                             'disabled' => $model->id_campanha ? false : true,
-    		                'data-toggle' => 'modal',
-    		                'data-target' => '#modal-faixa-calculo'
       				   ]); 
       				?>
       			</div>
       		</div>
       		<div class="row">
       			<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-      				<table class="table table-bordered table-hover">
-      					<thead>
-      						<tr>
-    		  					<th>Atraso</th>
-    		  					<th>Multa</th>
-    		  					<th>Juros</th>
-    		  					<th class="text-center"></th>
-    		  				</tr>
-      					</thead>
-      					<!-- ./thead -->
-      					<tbody>
-    			  			<?php if($model->credorCampanha): ?>
-    	  						<?php foreach($model->credorCampanha->credorCalculos as $calculo): ?>
-    	  							<tr id="<?= $calculo->id; ?>">
-    	  								<td><?= $calculo->getAtraso(); ?></td>
-    	  								<td><?= $calculo->multa; ?></td>
-    	  								<td><?= $calculo->juros; ?></td>
-    	  								<td class="text-center">
-    	  									<?= Html::button('<i class="fa fa-edit"></i>', [
-                	  				                'class' => Util::BTN_COLOR_WARNING.' editar-faixa'
-                			  				   ]); 
-                			  				?>
-    	  									<?= Html::button('<i class="fa fa-times"></i>', [ 
-                	  				                'class' => Util::BTN_COLOR_DANGER.' excluir-faixa'
-                			  				   ]); 
-                			  				?>
-    	  								</td>
-    	  							</tr>
-    	  						<?php endforeach; ?>
-    			  			<?php endif; ?>
-      					</tbody>
-      					<!-- ./tbody -->
-      				</table>
-      				<!-- ./table -->
+      				<div id="lista-faixas">
+						<?= $this->render('/credor-calculo/index', [
+				                'model' => $model->id_campanha ? $model->credorCampanha->credorCalculos : [],        
+                            ]); 
+						?>
+      				</div>
+      				<!-- ./lista de faixas -->
       			</div>
       		</div>
+      		<!-- ./row -->
         </div>
         <!-- ./painel-body -->
         <div class="panel-footer">
@@ -197,8 +169,8 @@ $(document).ready(function() {
         modal.modal('show');
 
         // envia o post para renderizar o form
-        $.post(BASE_PATH + 'credor-campanha/create', function(result) {
-            modal.find('.modal-body').html(result).find('form input#credorcampanha-id_credor').val($('#credor-id').val());
+        $.post(BASE_PATH + 'credor-campanha/create', function(response) {
+            modal.find('.modal-body').html(response).find('form input#credorcampanha-id_credor').val($('#credor-id').val());
         });
     });
 
@@ -211,8 +183,8 @@ $(document).ready(function() {
         modal.modal('show');
 
         // envia o post para renderizar o form
-        $.post(BASE_PATH + 'credor-campanha/update?id='+$('#credor-id_campanha').val(), function(result) {
-            modal.find('.modal-body').html(result);
+        $.post(BASE_PATH + 'credor-campanha/update?id='+$('#credor-id_campanha').val(), function(response) {
+            modal.find('.modal-body').html(response);
         });
     });
 
@@ -267,7 +239,34 @@ $(document).ready(function() {
             $('.campanha-action-button').prop('disabled', false);
         } else {
             $('.campanha-action-button').prop('disabled', true);
-        }        
+        }    
+
+        // monta os params
+        let postData = {
+            'id_credor': $('#credor-id').val(),
+            'id_campanha': $('#credor-id_campanha').val(),
+        };
+
+        // envia a requisicao para atualizar a lista
+        $('#credor-id_campanha').prop('disabled', true);
+        $.post(BASE_PATH + 'credor/update-campanha', postData, function(response) {
+            let data = JSON.parse(response);
+            if (data.success == false) {
+                toastr.error('Não foi possível atualizar o credor. Por favor, tente novamente mais tarde.');
+            }
+
+            // exibe animação de carregamento
+            $('#lista-faixas').html('<br><br><h1 class="text-primary text-center"><i class="fa fa-spinner fa-spin"></i>&nbsp; Carregando...</h1><br><br>');
+
+            // renderiza a lista de faixas
+            $.get(BASE_PATH + 'credor-calculo/index?id='+$('#credor-id_campanha').val(), function(response) {
+                $('#lista-faixas').html(response);
+            });
+        }).fail(function() {
+            toastr.error('Não foi possível atualizar o credor. Por favor, tente novamente mais tarde.');
+        }).always(function() {
+            $('#credor-id_campanha').prop('disabled', false);
+        });    
     });
 
     // registra a campanha por ajax
@@ -302,6 +301,53 @@ $(document).ready(function() {
             }
         }).fail(function() {
             toastr.error('Não foi possível adicionar a campanha. Por favor, tente novamente mais tarde.');
+        });
+
+        return false;
+	});
+
+    // cadastra uma nova faixa de calculo
+    $('body').on('click', '#nova-faixa', function() {
+        // busca e exibe a modal
+        let modal = $('#modal-faixa-calculo'); 
+        modal.modal('show');       
+        
+        // exibe a modal
+        $.post(BASE_PATH + 'credor-calculo/create', function(response) {
+            modal.find('.modal-body').html(response).find('form input#credorcalculo-id_campanha').val($('#credor-id_campanha').val());
+        });
+    });
+
+    // registra a faixa de calculo por ajax
+	$('body').on('submit', '#form-calculo', function(e) {
+        e.preventDefault();			
+
+        // pega a lista e o id            
+        let action = $('#form-calculo').attr('action');
+        let params = $('#form-calculo').serializeArray();
+
+        // envia a requisicao para cadastrar a campanha
+        $.post(action, params, function(response) {
+            let data = JSON.parse(response);
+            
+            if (data.success == true) {
+                // fecha a modal
+                $('#modal-campanha').modal('hide');
+                // exibe a mensagem de sucesso
+                toastr.success('A faixa de cálculo foi cadastrada com sucesso.');  
+
+                // exibe animação de carregamento
+                $('#lista-faixas').html('<br><br><h1 class="text-primary text-center"><i class="fa fa-spinner fa-spin"></i>&nbsp; Carregando...</h1><br><br>');
+
+                // renderiza a lista de faixas
+                $.get(BASE_PATH + 'credor-calculo/index?id='+$('#credor-id_campanha').val(), function(response) {
+                    $('#lista-faixas').html(response);
+                });
+            } else {
+                toastr.error('Não foi possível adicionar a faixa de cálculo. Por favor, tente novamente mais tarde.');
+            }
+        }).fail(function() {
+            toastr.error('Não foi possível adicionar a faixa de cálculo. Por favor, tente novamente mais tarde.');
         });
 
         return false;

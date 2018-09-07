@@ -1,13 +1,13 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
-use app\models\CredorCalculo;
-use app\models\CredorCalculoSearch;
+use yii\helpers\Json;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use app\base\AjaxResponse;
 use yii\filters\VerbFilter;
+use app\models\CredorCalculo;
+use yii\web\NotFoundHttpException;
 
 /**
  * CredorCalculoController implements the CRUD actions for CredorCalculo model.
@@ -33,27 +33,12 @@ class CredorCalculoController extends Controller
      * Lists all CredorCalculo models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id = null)
     {
-        $searchModel = new CredorCalculoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single CredorCalculo model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        $model = CredorCalculo::findAll(['id_campanha' => $id]);
+        
+        return $this->renderAjax('index', [
+            'model' => $model,
         ]);
     }
 
@@ -64,13 +49,32 @@ class CredorCalculoController extends Controller
      */
     public function actionCreate()
     {
-        $model = new CredorCalculo();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        // valida a requisição
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
         }
-
-        return $this->render('create', [
+        
+        // cria a model
+        $model = new CredorCalculo();
+        
+        // salva a camapnha
+        if ($post = \Yii::$app->request->post()) {
+            try {
+                // cria o retorno e carrega os dados da campanha
+                $retorno = new AjaxResponse();
+                $model->load($post);
+                
+                if (!$model->save()) {
+                    throw new \Exception();
+                }
+            } catch(\Exception $e) {
+                $retorno->success = false;
+            }
+            
+            return Json::encode($retorno);
+        }
+        
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }

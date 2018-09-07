@@ -18,7 +18,7 @@ use Yii;
  * @property string $tipo
  *
  * @property Credor $credor
- * @property CredorCalculo $credorCalculo
+ * @property CredorCalculo[] $credorCalculos
  */
 class CredorCampanha extends \yii\db\ActiveRecord
 {
@@ -80,8 +80,8 @@ class CredorCampanha extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCredorCalculo()
+    public function getCredorCalculos()
     {
-        return $this->hasOne(CredorCalculo::className(), ['id_campanha' => 'id']);
+        return $this->hasMany(CredorCalculo::className(), ['id_campanha' => 'id']);
     }
 }
