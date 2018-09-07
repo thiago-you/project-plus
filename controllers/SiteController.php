@@ -1,13 +1,12 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
 use yii\web\Response;
+use app\assets\AppAsset;
 use app\models\LoginForm;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\assets\AppAsset;
 
 class SiteController extends BaseController
 {
