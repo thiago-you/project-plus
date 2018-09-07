@@ -78,8 +78,8 @@ CREATE TABLE `endereco` (
   `complemento` VARCHAR(50),
   `bairro` VARCHAR(100),
   `cep` CHAR(8),
-  `cidade` INT,
-  `estado` TINYINT(1),
+  `cidade_id` INT,
+  `estado_id` INT,
   `observacao` VARCHAR(250),
   `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S' COMMENT 'Flag que valida se o endereco esta ativo',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
