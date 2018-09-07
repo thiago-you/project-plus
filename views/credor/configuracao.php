@@ -332,7 +332,7 @@ $(document).ready(function() {
             
             if (data.success == true) {
                 // fecha a modal
-                $('#modal-campanha').modal('hide');
+                $('#modal-faixa-calculo').modal('hide');
                 // exibe a mensagem de sucesso
                 toastr.success('A faixa de cálculo foi cadastrada com sucesso.');  
 
