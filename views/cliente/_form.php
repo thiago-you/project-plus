@@ -217,16 +217,17 @@ use yii\widgets\MaskedInput;
 					  							])->label(false); 
 					                        ?>
 				                        </td>
-					  					<td><?= $form->field($telefone, 'observacao')->textInput([
+					  					<td>
+					  						<?= $form->field($telefone, 'observacao')->textInput([
 				  									'id' => null,
 			  										'name' => "Telefones[$telefone->id][observacao]",
 				  									'maxlength' => true,
 						  						])->label(false); 
 						  					?>
 					  					</td>
-					  					<td>
+					  					<td class="text-center">
 					  						<?= Html::button('<i class="fa fa-times"></i>', [
-			  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar-telefone', 
+			  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
 					  							]); 
 						  					?>
 					  					</td>
@@ -279,9 +280,231 @@ use yii\widgets\MaskedInput;
 				  							]); 
 					  					?>
 				  					</td>
-				  					<td>
+				  					<td class="text-center">
 				  						<?= Html::button('<i class="fa fa-times"></i>', [
-		  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar-telefone', 
+		  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+				  							]); 
+					  					?>
+				  					</td>
+				  				</tr>
+			  				<?php endif; ?>
+			  			</tbody>
+			  		</table>
+			  		<!-- ./table telefone -->
+			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Email', ['id' => 'add-email', 'class' => Util::BTN_COLOR_EMERALD]); ?>
+			  		<table id="table-emails" class="table table-bordered table-hover">
+			  			<thead>
+			  				<tr>
+			  					<th class="text-center" colspan="3">Emails</th>
+			  				</tr>
+			  				<tr>
+			  					<th>Email</th>
+			  					<th>Observação</th>
+			  					<th></th>
+			  				</tr>
+			  			</thead>
+			  			<tbody>
+			  				<?php if (is_array($model->emails) && !empty($model->emails)): ?>
+			  					<?php foreach ($model->emails as $email): ?>
+				  					<?= Html::hiddenInput("Emails[$email->id][id]", $email->id); ?>
+				  					<!-- ./hidden id -->
+				  					<tr data-id="<?= $email->id; ?>">
+					  					<td>
+					  						<?= $form->field($email, 'email')->textInput([
+		  											'id' => null,
+					  								'name' => "Emails[$email->id][email]",
+			  										'maxlength' => true,
+					  							])->label(false); 
+					  						?>
+				  						</td>
+					  					<td>
+					  						<?= $form->field($email, 'observacao')->textInput([
+				  									'id' => null,
+					  								'name' => "Emails[$email->id][observacao]",
+				  									'maxlength' => true,
+						  						])->label(false); 
+						  					?>
+					  					</td>
+					  					<td class="text-center">
+					  						<?= Html::button('<i class="fa fa-times"></i>', [
+			  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+					  							]); 
+						  					?>
+					  					</td>
+					  				</tr>
+				  				<?php endforeach; ?>
+			  				<?php else: ?>
+			  					<tr data-id="1">
+				  					<td>
+				  						<?= Html::textInput('Emails[1][email]', null, [
+		  										'maxlength' => true,
+				  								'class' => 'form-control',
+				  							]); 
+				  						?>
+			  						</td>
+				  					<td>
+				  						<?= Html::textInput('Emails[1][observacao]', null, [
+		  										'maxlength' => true, 
+		  										'class' => 'form-control',
+				  							]); 
+					  					?>
+				  					</td>
+				  					<td class="text-center">
+				  						<?= Html::button('<i class="fa fa-times"></i>', [
+		  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+				  							]); 
+					  					?>
+				  					</td>
+				  				</tr>
+			  				<?php endif; ?>
+			  			</tbody>
+			  		</table>
+			  		<!-- ./table email -->
+			  	</div>
+			  	<!-- ./tab contato -->
+			  	<div class="tab-pane" id="tab-endereco">
+			  		<br>
+			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Endereço', ['id' => 'add-endereco', 'class' => Util::BTN_COLOR_EMERALD]); ?>
+			  		<table id="table-enderecos" class="table table-bordered table-hover">
+			  			<thead>
+			  				<tr>
+			  					<th class="text-center" colspan="8">Endereços</th>
+			  				</tr>
+			  				<tr>
+			  					<th>Logradouro</th>
+			  					<th width="10%">Número</th>
+			  					<th width="10%">Complemento</th>
+			  					<th width="10%">Bairro</th>
+			  					<th width="10%">CEP</th>
+			  					<th width="10%">Cidade</th>
+			  					<th width="10%">Estado</th>
+			  					<th width="5%"></th>
+			  				</tr>
+			  			</thead>
+			  			<tbody>
+			  				<?php if (is_array($model->enderecos) && !empty($model->enderecos)): ?>
+			  					<?php foreach ($model->enderecos as $endereco): ?>
+				  					<?= Html::hiddenInput("Enderecos[$endereco->id][id]", $endereco->id); ?>
+				  					<!-- ./hidden id -->
+				  					<tr data-id="<?= $endereco->id; ?>">
+					  					<td>
+					  						<?= $form->field($endereco, 'logradouro')->textInput([
+		  											'id' => null,
+		  											'name' => "Enderecos[$endereco->id][logradouro]",
+			  										'maxlength' => true,
+					  							])->label(false); 
+					  						?>
+				  						</td>
+					  					<td>
+					  						<?= $form->field($endereco, 'numero')->textInput([
+			  										'id' => null,
+			  										'name' => "Enderecos[$endereco->id][numero]",
+			  										'maxlength' => true,
+  												])->label(false); 
+					  						?>
+				  						</td>
+					  					<td>
+					  						<?= $form->field($endereco, 'complemento')->textInput([
+			  										'id' => null,
+			  										'name' => "Enderecos[$endereco->id][complemento]",
+			  										'maxlength' => true,
+  												])->label(false); 
+					  						?>
+				  						</td>
+					  					<td>
+					  						<?= $form->field($endereco, 'bairro')->textInput([
+			  										'id' => null,
+			  										'name' => "Enderecos[$endereco->id][bairro]",
+			  										'maxlength' => true,
+  												])->label(false); 
+					  						?>
+				                        </td>
+					  					<td>
+					  						<?= $form->field($endereco, 'cep')->textInput([
+			  										'id' => null,
+			  										'name' => "Enderecos[$endereco->id][cep]",
+			  										'maxlength' => true,
+  												])->label(false); 
+					  						?>
+				                        </td>
+					  					<td>
+					  						<?= $form->field($endereco, 'cidade_id')->textInput([
+			  										'id' => null,
+			  										'name' => "Enderecos[$endereco->id][cidade_id]",
+			  										'maxlength' => true,
+  												])->label(false); 
+					  						?>
+				                        </td>
+					  					<td>
+					  						<?= $form->field($endereco, 'estado_id')->textInput([
+				  									'id' => null,
+			  										'name' => "Enderecos[$endereco->id][estado_id]",
+				  									'maxlength' => true,
+						  						])->label(false); 
+						  					?>
+					  					</td>
+					  					<td class="text-center">
+					  						<?= Html::button('<i class="fa fa-times"></i>', [
+			  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+					  							]); 
+						  					?>
+					  					</td>
+					  				</tr>
+				  				<?php endforeach; ?>
+			  				<?php else: ?>
+			  					<tr data-id="1">
+				  					<td>
+				  						<?= Html::textInput('Enderecos[1][logradouro]', null, [
+		  										'maxlength' => true,
+				  								'class' => 'form-control',
+				  							]); 
+				  						?>
+			  						</td>
+				  					<td>
+				  						<?= Html::textInput('Enderecos[1][numero]', null, [
+			  									'maxlength' => true,
+				  								'class' => 'form-control',
+  											]); 
+					  					?>
+			  						</td>
+				  					<td>
+				  						<?= Html::textInput('Enderecos[1][complemento]', null, [
+			  									'maxlength' => true,
+				  								'class' => 'form-control',
+  											]); 
+					  					?>
+			  						</td>
+				  					<td>
+				  						<?= Html::textInput('Enderecos[1][bairro]', null, [
+			  									'maxlength' => true,
+				  								'class' => 'form-control',
+  											]); 
+					  					?>
+			                        </td>
+				  					<td>
+				  						<?= Html::textInput('Enderecos[1][cep]', null, [
+			  									'maxlength' => true,
+				  								'class' => 'form-control',
+  											]); 
+					  					?>
+			                        </td>
+				  					<td>
+				  						<?= Html::textInput('Enderecos[1][cidade_id]', null, [
+			  									'maxlength' => true,
+				  								'class' => 'form-control',
+  											]); 
+					  					?>
+			                        </td>
+				  					<td>
+				  						<?= Html::textInput('Enderecos[1][estado_id]', null, [
+		  										'maxlength' => true, 
+		  										'class' => 'form-control',
+				  							]); 
+					  					?>
+				  					</td>
+				  					<td class="text-center">
+				  						<?= Html::button('<i class="fa fa-times"></i>', [
+		  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
 				  							]); 
 					  					?>
 				  					</td>
@@ -291,10 +514,11 @@ use yii\widgets\MaskedInput;
 			  		</table>
 			  		<!-- ./table telefone -->
 			  	</div>
-			  	<!-- ./tab contato -->
-			  	<div class="tab-pane" id="tab-endereco">
-			  	</div>
 			  	<!-- ./tab endereco -->
+			  	<div class="tab-pane" id="tab-contrato">
+			  		
+			  	</div>
+			  	<!-- ./tab contrato -->
 			</div>
         </div>
         <!-- ./painel-body -->
@@ -351,6 +575,11 @@ $script = <<<JS
 			let tbody = $('#table-telefones').find('tbody');
 			let telefoneId = parseInt(tbody.find('tr:last').data('id'));
 			
+			// valida se é um numero 
+			if (isNaN(telefoneId)) {
+				telefoneId = 0;
+			}
+
 			// cria e atribui a linha
 			tbody.append('<tr></tr>');
 			let linha = tbody.find('tr:last');
@@ -364,11 +593,60 @@ $script = <<<JS
 			linha.append('<td><select class="form-control" name="Telefones['+telefoneId+'][whatsapp]"><option value="S">Sim</option><option value="N" selected="">Não</option></select></td>');
 			linha.append('<td><select class="form-control" name="Telefones['+telefoneId+'][ativo]"><option value="S">Sim</option><option value="N">Não</option></select></td>');
 			linha.append('<td><input class="form-control" name="Telefones['+telefoneId+'][observacao]" maxlength="" type="text"/></td>');
-			linha.append('<td><button class="btn btn-sm btn-danger btn-flat btn-deletar-telefone"><i class="fa fa-times"></i></button></td>');
+			linha.append('<td class="text-center"><button class="btn btn-sm btn-danger btn-flat btn-deletar"><i class="fa fa-times"></i></button></td>');
 		});
 
-		// deleta um telefone
-		$('body').on('click', '.btn-deletar-telefone', function() {
+		// adiciona um novo email na lista
+		$('body').on('click', '#add-email', function() {
+			// busca a tabela e o ultimo id
+			let tbody = $('#table-emails').find('tbody');
+			let emailId = parseInt(tbody.find('tr:last').data('id'));
+			
+			// valida se é um numero 
+			if (isNaN(emailId)) {
+				emailId = 0;
+			}
+
+			// cria e atribui a linha
+			tbody.append('<tr></tr>');
+			let linha = tbody.find('tr:last');
+			
+			// adiciona os campos na linha
+			linha.attr('data-id', ++emailId);
+			linha.append('<td><input class="form-control" name="Emails['+emailId+'][email]" maxlength="" type="text"/></td>');
+			linha.append('<td><input class="form-control" name="Emails['+emailId+'][observacao]" maxlength="" type="text"/></td>');
+			linha.append('<td class="text-center"><button class="btn btn-sm btn-danger btn-flat btn-deletar"><i class="fa fa-times"></i></button></td>');
+		});
+
+		// adiciona um novo endereco na lista
+		$('body').on('click', '#add-endereco', function() {
+			// busca a tabela e o ultimo id
+			let tbody = $('#table-enderecos').find('tbody');
+			let enderecoId = parseInt(tbody.find('tr:last').data('id'));
+			
+			// valida se é um numero 
+			if (isNaN(enderecoId)) {
+				enderecoId = 0;
+			}
+
+			// cria e atribui a linha
+			tbody.append('<tr></tr>');
+			let linha = tbody.find('tr:last');
+			
+			// adiciona os campos na linha
+			linha.attr('data-id', ++enderecoId);
+			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][logradouro]" maxlength="" type="text"/></td>');
+			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][numero]" maxlength="" type="text"/></td>');
+			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][complemento]" maxlength="" type="text"/></td>');
+			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][bairro]" maxlength="" type="text"/></td>');
+			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][cep]" maxlength="" type="text"/></td>');
+			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][cidade_id]" maxlength="" type="text"/></td>');
+			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][estado_id]" maxlength="" type="text"/></td>');
+			linha.append('<td class="text-center"><button class="btn btn-sm btn-danger btn-flat btn-deletar"><i class="fa fa-times"></i></button></td>');
+		});
+
+		// deleta um registro
+		$('body').on('click', '.btn-deletar', function() {
 			$(this).closest('tr').remove();
 		});
 	});

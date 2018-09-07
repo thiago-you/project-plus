@@ -14,8 +14,8 @@ use Yii;
  * @property string $complemento
  * @property string $bairro
  * @property string $cep
- * @property int $cidade
- * @property int $estado
+ * @property int $cidade_id
+ * @property int $estado_id
  * @property string $observacao
  * @property string $ativo Flag que valida se o endereco esta ativo
  *
@@ -38,7 +38,7 @@ class Endereco extends \yii\db\ActiveRecord
     {
         return [
             [['id_cliente', 'logradouro', 'numero'], 'required'],
-            [['id_cliente', 'cidade', 'estado'], 'integer'],
+            [['id_cliente', 'cidade_id', 'estado_id'], 'integer'],
             [['ativo'], 'string'],
             [['logradouro', 'bairro'], 'string', 'max' => 100],
             [['numero'], 'string', 'max' => 10],
@@ -62,8 +62,8 @@ class Endereco extends \yii\db\ActiveRecord
             'complemento' => 'Complemento',
             'bairro' => 'Bairro',
             'cep' => 'Cep',
-            'cidade' => 'Cidade',
-            'estado' => 'Estado',
+            'cidade_id' => 'Cidade',
+            'estado_id' => 'Estado',
             'observacao' => 'Observacao',
             'ativo' => 'Ativo',
         ];

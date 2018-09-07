@@ -17,6 +17,10 @@ use Yii;
  */
 class Email extends \yii\db\ActiveRecord
 {
+	// flag para ativo
+	CONST SIM = 'S';
+	CONST NAO = 'N';
+	
     /**
      * {@inheritdoc}
      */

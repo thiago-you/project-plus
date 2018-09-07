@@ -1,11 +1,8 @@
 <?php
-
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Endereco;
 
 /**
  * EnderecoSearch represents the model behind the search form of `app\models\Endereco`.
@@ -18,7 +15,7 @@ class EnderecoSearch extends Endereco
     public function rules()
     {
         return [
-            [['id', 'id_cliente', 'cidade', 'estado'], 'integer'],
+            [['id', 'id_cliente', 'cidade_id', 'estado_id'], 'integer'],
             [['logradouro', 'numero', 'complemento', 'bairro', 'cep', 'observacao', 'ativo'], 'safe'],
         ];
     }
@@ -61,8 +58,8 @@ class EnderecoSearch extends Endereco
         $query->andFilterWhere([
             'id' => $this->id,
             'id_cliente' => $this->id_cliente,
-            'cidade' => $this->cidade,
-            'estado' => $this->estado,
+            'cidade_d' => $this->cidade_id,
+            'estado_id' => $this->estado_id,
         ]);
 
         $query->andFilterWhere(['like', 'logradouro', $this->logradouro])

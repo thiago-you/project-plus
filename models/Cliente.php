@@ -168,4 +168,18 @@ class Cliente extends \yii\db\ActiveRecord
     	
     	return parent::beforeSave($insert);
     }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeDelete()
+     */
+    public function beforeDelete() 
+    {
+    	// deleta todos os dados relacionados ao cliente
+    	Telefone::deleteAll(['id_cliente' => $this->id]);
+    	Email::deleteAll(['id_cliente' => $this->id]);
+    	Endereco::deleteAll(['id_cliente' => $this->id]);
+    	
+    	return parent::beforeDelete();
+    }
 }

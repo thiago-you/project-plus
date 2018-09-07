@@ -92,22 +92,22 @@ class Util
     public static function mask($val, $mask, $removeMask = false, $option = null)
     {
         // force val as string
-        if(!is_string($val)) {
+        if (!is_string($val)) {
             $val = strval($val);
         }
        
         // remove a mascara inicial para inserir outra
-        if($removeMask) {
+        if ($removeMask) {
             $val = self::unmask($val);
         }
         
         // remove a mascara inicial para inserir outra
-        if($removeMask) {
+        if ($removeMask) {
             $val = self::unmask($val);
         }
         
         // define mask
-        switch($mask) {
+        switch ($mask) {
             case self::MASK_CNPJ:
                 $mask = '##.###.###/####-##';
                 break;
@@ -118,41 +118,42 @@ class Util
                 $mask = '#####-###';
                 break;
             case self::MASK_TELEFONE:
-                if (strlen($val) == 11)
+            	if (strlen($val) == 11) {
                     $mask = '(##) #####-####';
-                    else
-                        $mask = '(##) ####-####';
-                        break;
+            	} else {
+                    $mask = '(##) ####-####';
+            	}
+                break;
             case self::MASK_MONEY:
                 // $option => define decimal length
-                if(!$val) {
+                if (!$val) {
                     $val = 0.00;
                 }
-                if($option == 'decimalLength') {
+                if ($option == 'decimalLength') {
                     $val = floatval($val);
                     $option = count(explode('.', $val)) == 1 ? 2 : strlen(explode('.', $val)[1]);
                 }
-                if(empty($option)) {
+                if (empty($option)) {
                     $option = 2;
                 }
                 return 'R$ ' . number_format($val, $option, ',', '.');
                 break;
             case self::MASK_NUMBER:
                 // $option => define decimal length
-                if(!$val) {
+                if (!$val) {
                     $val = 0.00;
                 }
-                if($option == 'decimalLength') {
+                if ($option == 'decimalLength') {
                     $val = floatval($val);
                     $option = count(explode('.', $val)) == 1 ? 2 : strlen(explode('.', $val)[1]);
                 }
-                if(empty($option)) {
+                if (empty($option)) {
                     $option = 2;
                 }
                 return number_format($val, $option, ',', '.');
                 break;
             case self::MASK_PERCENT:
-                if(!$val) {
+                if (!$val) {
                     $val = 0.00;
                 }
                 return number_format($val, 2, ',', '.') . ' %';
@@ -164,15 +165,17 @@ class Util
         
         // format value with defined mask
         $maskared = '';
-        if(strlen($val)) {
+        if (strlen($val)) {
             $k = 0;
-            for($i = 0; $i < strlen($mask); $i++) {
-                if($mask[$i] == '#') {
-                    if(isset($val[$k]))
+            for ($i = 0; $i < strlen($mask); $i++) {
+                if ($mask[$i] == '#') {
+                	if (isset($val[$k])) {
                         $maskared .= $val[$k++];
-                }else {
-                    if(isset($mask[$i]))
+                	}
+                } else {
+                	if (isset($mask[$i])) {
                         $maskared .= $mask[$i];
+                	}
                 }
             }
         }
