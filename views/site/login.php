@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\web\View;
 
-$this->title = 'Login';
+$this->title = \Yii::$app->name;
 ?>
 <div class="container">
     <div class="panel panel-default panel-box">
@@ -87,6 +87,20 @@ $this->title = 'Login';
 }
 .alert {
     border-radius: 0px;
+}
+@media screen and (max-width: 480px) {
+    #login-page .container .panel {
+        width: 300px;
+        left: 50%;
+        margin-left: -150px;
+    }
+}
+@media screen and (max-width: 350px) {
+    #login-page .container .panel {
+        width: 260px;
+        left: 50%;
+        margin-left: -130px;
+    }
 }
 </style>
 <!-- ./style da img de fundo -->
