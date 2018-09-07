@@ -180,9 +180,10 @@ CREATE TABLE `credor_campanha` (
 CREATE TABLE `credor_calculo` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_campanha` INT NOT NULL,
-  `atraso` VARCHAR(3) NOT NULL,
-  `multa` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-  `juros` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  `atraso_inicio` VARCHAR(3),
+  `atraso_fim` VARCHAR(3),
+  `multa` DECIMAL(10,2) DEFAULT 0.00,
+  `juros` DECIMAL(10,2) DEFAULT 0.00,
   `parcela_num` INT COMMENT 'Numero da parcela qunado o tipo for parcelado',
   FOREIGN KEY (`id_campanha`) REFERENCES `credor_campanha`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
