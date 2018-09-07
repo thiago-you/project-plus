@@ -31,7 +31,7 @@ CREATE TABLE `cliente` (
   `empresa` VARCHAR(250),
   `profissao` VARCHAR(100),
   `salario` DECIMAL(10,2),
-  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S' COMMENT 'Flag que valida se o cliente esta ativo',
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
   `tipo` ENUM('F', 'J') NOT NULL DEFAULT 'F' COMMENT 'Flag que valida se o cliente é tipo fisico (F) ou juridico (J)'
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de colaborador
@@ -41,7 +41,7 @@ CREATE TABLE `colaborador` (
   `username` VARCHAR(30) NOT NULL,
   `password` VARCHAR(30) NOT NULL,
   `authKey` CHAR(30),
-  `cargo` VARCHAR(100) COMMENT 'Cargo do usuario'
+  `cargo` VARCHAR(100)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de telefone
 CREATE TABLE `telefone` (
@@ -57,7 +57,7 @@ CREATE TABLE `telefone` (
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
 );
 -- cria a tabela de eventos
-CREATE TABLE `evento` (
+CREATE TABLE `acionamento` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_cliente` INT NOT NULL,
   `colaborador_id` INT NOT NULL,
@@ -65,7 +65,8 @@ CREATE TABLE `evento` (
   `descricao` VARCHAR(250),
   `data` DATETIME,
   `telefone` VARCHAR(15),
-  `tipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Flag que valida o tipo do evento',
+  `tipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os tipos possiveis',
+  `subtipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os subtipos possiveis',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`),
   FOREIGN KEY (`colaborador_id`) REFERENCES `colaborador`(`id`)
 );
@@ -81,7 +82,7 @@ CREATE TABLE `endereco` (
   `cidade_id` INT,
   `estado_id` INT,
   `observacao` VARCHAR(250),
-  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S' COMMENT 'Flag que valida se o endereco esta ativo',
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
 );
 -- cria a tabela de email
@@ -90,7 +91,7 @@ CREATE TABLE `email` (
   `id_cliente` INT NOT NULL,
   `email` VARCHAR(100) NOT NULL,
   `observacao` VARCHAR(250),
-  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S' COMMENT 'Flag que valida se o email esta ativo',
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
 );
 -- cria a tabela de referencia
@@ -100,8 +101,8 @@ CREATE TABLE `referencia` (
   `nome` VARCHAR(250) NOT NULL,
   `cpf` VARCHAR(11) NOT NULL,
   `observacao` VARCHAR(250),
-  `tipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Flag que valida o tipo da referencia',
-  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S' COMMENT 'Flag que valida se a referencia esta ativa',
+  `tipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os tipos possiveis',
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
 );
 -- cria a tabela de contrato
@@ -137,4 +138,49 @@ CREATE TABLE `contrato_parcela` (
   `data_vencimento` DATE NOT NULL,
   `valor` DECIMAL(10,2),
   FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- cria a tabela de credor
+CREATE TABLE `credor` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `nome` VARCHAR(250) NOT NULL,
+  `tipo` TINYINT(1) DEFAULT '1',
+  `tipo_cobranca` TINYINT(1) DEFAULT '1',
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
+  `razao_social` DECIMAL(10,2),
+  `cnpj` VARCHAR(14) NOT NULL,
+  `numero` VARCHAR(15) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `logradouro` VARCHAR(100) NOT NULL,
+  `numero` VARCHAR(10) NOT NULL,
+  `complemento` VARCHAR(50),
+  `bairro` VARCHAR(100),
+  `cep` CHAR(8),
+  `cidade_id` INT,
+  `estado_id` INT,
+  `logo` VARCHAR(250) COMMENT 'Caminho para a logo do credor',
+  `codigo` VARCHAR(250),
+  `sigla` VARCHAR(250)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- tabela de calculo do credor
+CREATE TABLE `credor_calculo` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_credor` INT NOT NULL,
+  `atraso` VARCHAR(3) NOT NULL,
+  `multa` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  `juros` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  `tipo` ENUM('V', 'P') NOT NULL DEFAULT 'V' COMMENT 'Tipo do calculo => V: A vista / P: Parcelado',
+  `parcela_num` INT COMMENT 'Numero da parcela qunado o tipo for parcelado',
+  FOREIGN KEY (`id_credor`) REFERENCES `credor`(`id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- tabela de campanha de calculo do credor
+CREATE TABLE `credor_campanha` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_credor` INT NOT NULL,
+  `nome` VARCHAR(250) NOT NULL,
+  `vigencia_inicial` DATE NOT NULL,
+  `vigencia_final` DATE,
+  `prioridade` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Nivel de prioridade da campanha',
+  `por_parcela` ENUM('S', 'N'),
+  `por_portal` ENUM('S', 'N'),
+  FOREIGN KEY (`id_credor`) REFERENCES `credor`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
