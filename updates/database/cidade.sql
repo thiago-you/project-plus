@@ -1,4 +1,4 @@
-USE `exemplo_db`;
+USE `maklenrc`;
 
 -- cria a tabela
 CREATE TABLE cidade (

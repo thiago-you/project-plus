@@ -1,4 +1,4 @@
-use `exemplo_db`;
+use `maklenrc`;
 
 CREATE TABLE estado(
  id_estado INT NOT NULL AUTO_INCREMENT PRIMARY KEY,

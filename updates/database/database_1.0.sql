@@ -7,11 +7,12 @@
 USE `mysql`;
 -- deleta a database antiga
 DROP DATABASE IF EXISTS `exemplo_db`;
+DROP DATABASE IF EXISTS `maklenrc`;
 --  cria a database
 -- CREATE DATABASE `autosolutions` CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`;
-CREATE DATABASE `exemplo_db` DEFAULT CHARACTER SET utf8 ;
+CREATE DATABASE `maklenrc` DEFAULT CHARACTER SET utf8 ;
 -- seta a nova database para uso
-USE `exemplo_db`;
+USE `maklenrc`;
 -- ----------------------------------------------------------------------------------------------------------------
 -- cria a tabela de clientes
 CREATE TABLE `cliente` (
