@@ -1,51 +1,85 @@
 <?php
-
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
+use app\base\Util;
+use app\models\Credor;
 
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\CredorSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Credors';
+$this->title = 'Credores';
 $this->params['breadcrumbs'][] = $this->title;
-?>
-<div class="credor-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+// columns
+$columns = [
+    [
+        'attribute' => 'id',
+        'hAlign' => GridView::ALIGN_CENTER,
+    ],
+    [
+        'attribute' => 'nome',
+        'width' => '40%'
+    ],
+	[
+		'attribute' => 'tipo',
+	],
+    [
+        'attribute' => 'ativo',
+        'hAlign' => GridView::ALIGN_CENTER,
+    	'value' => function($model) {
+	    	if ($model->tipo == Credor::ATIVO) {
+	    		return 'SIM';
+	    	}
+	    	
+	    	return 'NÃO';
+    	}
+    ],
+    [
+        'class' => 'kartik\grid\ActionColumn',
+    	'hAlign'=> GridView::ALIGN_CENTER,
+    	'template' => '{update}{delete}',
+    	'header' => '',
+    	'buttons' => [
+    		'update' => function ($url, $model) {
+    			return Html::a('<i class="fa fa-pencil-alt"></i>', ['/credor/update/', 'id' => $model->id], [
+    				'class' => Util::BTN_COLOR_WARNING,
+    				'title' => 'Alterar',
+    				'data-toggle' => 'tooltip',
+    			]);
+    		},
+    		'delete' => function ($url, $model) {
+    			return Html::a('<i class="fa fa-trash-alt"></i>', $url, [
+    				'class' => Util::BTN_COLOR_DANGER,
+    				'title' => 'Excluír',
+    				'data-toggle' => 'tooltip',
+    				'data-method' => 'post',
+    			]);
+    		},
+    	],
+    ],
+];
 
-    <p>
-        <?= Html::a('Create Credor', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'nome',
-            'tipo',
-            'tipo_cobranca',
-            'ativo',
-            //'razao_social',
-            //'cnpj',
-            //'telefone',
-            //'email:email',
-            //'logradouro',
-            //'numero',
-            //'complemento',
-            //'bairro',
-            //'cep',
-            //'cidade_id',
-            //'estado_id',
-            //'logo',
-            //'codigo',
-            //'sigla',
-
-            ['class' => 'yii\grid\ActionColumn'],
+// grid
+echo GridView::widget([
+    'dataProvider' => $dataProvider,
+    //'filterModel' => $searchModel,
+    'columns' => $columns,
+    /* 'pjax' => true,
+    'pjaxSettings' => [
+        'options' => [
+            'id' => 'grid-clientes',
+            'enablePushState'=>false
         ],
-    ]); ?>
-</div>
+    ], */
+    'toolbar' => [
+        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Credor', ['create'], ['class' => Util::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Credor', 'data-toggle' => 'tooltip',])],
+        ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Util::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
+        '{toggleData}',
+    ],
+    'bordered' => true,
+    'striped' => true,
+    'condensed' => true,
+    'responsive' => true,
+    'hover' => true,
+    'showPageSummary' => false,
+    'persistResize' => false,
+]);
+?>
+

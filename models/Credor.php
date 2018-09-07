@@ -32,6 +32,15 @@ use Yii;
  */
 class Credor extends \yii\db\ActiveRecord
 {
+	// flag que determina se o credor esta ativo ou nao
+	CONST ATIVO = 'S';
+	CONST NAO_ATIVO = 'N';
+	// const para o tipo
+	CONST TIPO_PADRAO = '1';
+	// const para o tipo de cobranca
+	CONST TIPO_COBRANCA_ADM = '1';
+	CONST TIPO_COBRANCA_JUR = '2';
+	
     /**
      * {@inheritdoc}
      */
@@ -66,22 +75,22 @@ class Credor extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => 'Cód.',
             'nome' => 'Nome',
+            'razao_social' => 'Razão Social',
             'tipo' => 'Tipo',
-            'tipo_cobranca' => 'Tipo Cobranca',
+            'tipo_cobranca' => 'Tipo de Cobrança',
             'ativo' => 'Ativo',
-            'razao_social' => 'Razao Social',
-            'cnpj' => 'Cnpj',
+            'cnpj' => 'CNPJ',
             'telefone' => 'Telefone',
             'email' => 'Email',
             'logradouro' => 'Logradouro',
-            'numero' => 'Numero',
+            'numero' => 'Número',
             'complemento' => 'Complemento',
             'bairro' => 'Bairro',
-            'cep' => 'Cep',
-            'cidade_id' => 'Cidade ID',
-            'estado_id' => 'Estado ID',
+            'cep' => 'CEP',
+            'cidade_id' => 'Cidade',
+            'estado_id' => 'Estado',
             'logo' => 'Logo',
             'codigo' => 'Codigo',
             'sigla' => 'Sigla',

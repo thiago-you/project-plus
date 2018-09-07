@@ -47,16 +47,13 @@ AppAsset::register($this);
                			</div>
                			<!-- ./side menu -->
                         <section class="main-content">
-                        	<div class="row">
-                            	<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            		<?php foreach (\Yii::$app->session->getAllFlashes() as $key => $message): ?>
-                                    	<div class="alert alert-flat alert-<?= $key ?> flash-msg">
-                                    		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    		<?= $message ?>
-                                    	</div>
-                            		<?php endforeach; ?>
-                           		</div>
-                            </div>
+                            <?php foreach (\Yii::$app->session->getAllFlashes() as $key => $message): ?>
+								<div class="alert alert-flat alert-<?= $key ?> flash-msg">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <?= $message ?>
+                                </div>
+                            <?php endforeach; ?>
+                           		
                             <!-- ./flash-msg -->
                             <?= $content ?>
                             <!-- ./page-content -->

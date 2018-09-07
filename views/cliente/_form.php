@@ -227,7 +227,7 @@ use yii\widgets\MaskedInput;
 					  					</td>
 					  					<td class="text-center">
 					  						<?= Html::button('<i class="fa fa-times"></i>', [
-			  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+			  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
 					  							]); 
 						  					?>
 					  					</td>
@@ -282,7 +282,7 @@ use yii\widgets\MaskedInput;
 				  					</td>
 				  					<td class="text-center">
 				  						<?= Html::button('<i class="fa fa-times"></i>', [
-		  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+		  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
 				  							]); 
 					  					?>
 				  					</td>
@@ -327,7 +327,7 @@ use yii\widgets\MaskedInput;
 					  					</td>
 					  					<td class="text-center">
 					  						<?= Html::button('<i class="fa fa-times"></i>', [
-			  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+			  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
 					  							]); 
 						  					?>
 					  					</td>
@@ -351,7 +351,7 @@ use yii\widgets\MaskedInput;
 				  					</td>
 				  					<td class="text-center">
 				  						<?= Html::button('<i class="fa fa-times"></i>', [
-		  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+		  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
 				  							]); 
 					  					?>
 				  					</td>
@@ -445,7 +445,7 @@ use yii\widgets\MaskedInput;
 					  					</td>
 					  					<td class="text-center">
 					  						<?= Html::button('<i class="fa fa-times"></i>', [
-			  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+			  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
 					  							]); 
 						  					?>
 					  					</td>
@@ -504,7 +504,7 @@ use yii\widgets\MaskedInput;
 				  					</td>
 				  					<td class="text-center">
 				  						<?= Html::button('<i class="fa fa-times"></i>', [
-		  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+		  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
 				  							]); 
 					  					?>
 				  					</td>

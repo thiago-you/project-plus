@@ -42,8 +42,27 @@ $this->params['breadcrumbs'][] = $this->title;
     		        'hAlign' => GridView::ALIGN_CENTER,
     		    ],
                 [
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{update}{delete}',
+                    'class' => 'kartik\grid\ActionColumn',
+                	'hAlign'=> GridView::ALIGN_CENTER,
+                	'template' => '{update}{delete}',
+                	'header' => '',
+                	'buttons' => [
+                		'update' => function ($url, $model) {
+                			return Html::a('<i class="fa fa-pencil-alt"></i>', ['/cliente/update/', 'id' => $model->id], [
+                				'class' => Util::BTN_COLOR_WARNING,
+                				'title' => 'Alterar',
+                				'data-toggle' => 'tooltip',
+                			]);
+                		},
+                		'delete' => function ($url, $model) {
+                			return Html::a('<i class="fa fa-trash-alt"></i>', $url, [
+                				'class' => Util::BTN_COLOR_DANGER,
+                				'title' => 'Excluír',
+                				'data-toggle' => 'tooltip',
+                				'data-method' => 'post',
+                			]);
+                		},
+                	],
                 ],
             ];
 		

@@ -21,16 +21,16 @@ class Util
 	CONST BTN_CANCEL_FORM  = 'btn btn-default btn-flat';
 	
 	// BTN COLORS
-	CONST BTN_COLOR_PRIMARY = 'btn btn-primary btn-flat';
-	CONST BTN_COLOR_SUCCESS = 'btn btn-success btn-flat';
-	CONST BTN_COLOR_DANGER  = 'btn btn-danger btn-flat';
-	CONST BTN_COLOR_WARNING = 'btn btn-warning btn-flat';
-	CONST BTN_COLOR_DEFAULT = 'btn btn-default btn-flat';
-	CONST BTN_COLOR_INFO    = 'btn btn-info btn-flat';
-	CONST BTN_COLOR_EMERALD = 'btn btn-emerald btn-flat';
-	CONST BTN_COLOR_PURPLE  = 'btn btn-purple btn-flat';
-	CONST BTN_COLOR_PINK    = 'btn btn-pink btn-flat';
-	CONST BTN_COLOR_ORANGE  = 'btn btn-orange btn-flat';
+	CONST BTN_COLOR_PRIMARY = 'btn btn-primary btn-flat btn-sm';
+	CONST BTN_COLOR_SUCCESS = 'btn btn-success btn-flat btn-sm';
+	CONST BTN_COLOR_DANGER  = 'btn btn-danger btn-flat btn-sm';
+	CONST BTN_COLOR_WARNING = 'btn btn-warning btn-flat btn-sm';
+	CONST BTN_COLOR_DEFAULT = 'btn btn-default btn-flat btn-sm';
+	CONST BTN_COLOR_INFO    = 'btn btn-info btn-flat btn-sm';
+	CONST BTN_COLOR_EMERALD = 'btn btn-emerald btn-flat btn-sm';
+	CONST BTN_COLOR_PURPLE  = 'btn btn-purple btn-flat btn-sm';
+	CONST BTN_COLOR_PINK    = 'btn btn-pink btn-flat btn-sm';
+	CONST BTN_COLOR_ORANGE  = 'btn btn-orange btn-flat btn-sm';
 		
 	CONST CLASS_CREATE = 'success';
 	CONST CLASS_UPDATE = 'warning';
