@@ -15,7 +15,7 @@ use yii\web\View;
 					'name' => 'nome',
 					'pluginOptions' => ['highlight' => true],
 					'options' => [
-						'placeholder' => 'Pesquisar cliente ...',		
+						'placeholder' => 'Pesquisar cliente pelo nome ou CPF/CNPJ...',		
 						'style' => 'width: 400px;',
 						'autocomplete' => 'off',
 					],
@@ -24,7 +24,7 @@ use yii\web\View;
 							'display'=> 'value',
 							'notFound' => '<span class="alert alert-danger"><i class="fa fa-ban"></i>&nbsp; Nehum cliente foi encontrado ...</div>',
 							'remote'=>[
-								'url' => Url::to(['cliente/search-list']).'?q[nome]=%QUERY',
+								'url' => Url::to(['cliente/search-list']).'?q[quick]=%QUERY',
 								'wildcard' => '%QUERY',
 							],
 						],
@@ -57,7 +57,7 @@ $script = <<< JS
 		$('body').on('keypress keydown keyup', '#quick-search-nome', function(e) {
 			if (e.which == 13) {
 				if (this.value != undefined && this.value.length > 0) {
-					window.location = BASE_PATH + "cliente/quick-search?nome="+this.value;
+					window.location = BASE_PATH + "cliente/quick-search?value="+this.value;
 				}
 			}
 		});
