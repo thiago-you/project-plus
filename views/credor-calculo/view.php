@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Evento */
+/* @var $model app\models\CredorCalculo */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Eventos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Credor Calculos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="evento-view">
+<div class="credor-calculo-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -29,13 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'id_cliente',
-            'colaborador_id',
-            'titulo',
-            'descricao',
-            'data',
-            'telefone',
+            'id_credor',
+            'atraso',
+            'multa',
+            'juros',
             'tipo',
+            'parcela_num',
         ],
     ]) ?>
 

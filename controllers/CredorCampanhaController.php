@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Evento;
-use app\models\EventoSearch;
+use app\models\CredorCampanha;
+use app\models\CredorCampanhaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * EventoController implements the CRUD actions for Evento model.
+ * CredorCampanhaController implements the CRUD actions for CredorCampanha model.
  */
-class EventoController extends Controller
+class CredorCampanhaController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class EventoController extends Controller
     }
 
     /**
-     * Lists all Evento models.
+     * Lists all CredorCampanha models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new EventoSearch();
+        $searchModel = new CredorCampanhaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class EventoController extends Controller
     }
 
     /**
-     * Displays a single Evento model.
+     * Displays a single CredorCampanha model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,13 +58,13 @@ class EventoController extends Controller
     }
 
     /**
-     * Creates a new Evento model.
+     * Creates a new CredorCampanha model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Evento();
+        $model = new CredorCampanha();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,7 +76,7 @@ class EventoController extends Controller
     }
 
     /**
-     * Updates an existing Evento model.
+     * Updates an existing CredorCampanha model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,7 +96,7 @@ class EventoController extends Controller
     }
 
     /**
-     * Deletes an existing Evento model.
+     * Deletes an existing CredorCampanha model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -110,15 +110,15 @@ class EventoController extends Controller
     }
 
     /**
-     * Finds the Evento model based on its primary key value.
+     * Finds the CredorCampanha model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Evento the loaded model
+     * @return CredorCampanha the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Evento::findOne($id)) !== null) {
+        if (($model = CredorCampanha::findOne($id)) !== null) {
             return $model;
         }
 

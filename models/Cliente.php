@@ -26,12 +26,12 @@ use Yii;
  * @property string $ativo Flag que valida se o cliente esta ativo
  * @property string $tipo Flag que valida se o cliente é tipo fisico (F) ou juridico (J)
  *
- * @property Contrato[]   $contratos
- * @property Email[]      $emails
- * @property Endereco[]   $enderecos
- * @property Evento[]     $eventos
- * @property Referencia[] $referencias
- * @property Telefone[]   $telefones
+ * @property Contrato[]    $contratos
+ * @property Email[]       $emails
+ * @property Endereco[]    $enderecos
+ * @property Acionamento[] $acionamentos
+ * @property Referencia[]  $referencias
+ * @property Telefone[]    $telefones
  */
 class Cliente extends \yii\db\ActiveRecord
 {
@@ -122,9 +122,9 @@ class Cliente extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEventos()
+    public function getAcionamentos()
     {
-        return $this->hasMany(Evento::className(), ['id_cliente' => 'id']);
+        return $this->hasMany(Acionamento::className(), ['id_cliente' => 'id']);
     }
 
     /**

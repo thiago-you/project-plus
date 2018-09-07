@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Evento;
+use app\models\Acionamento;
 
 /**
- * EventoSearch represents the model behind the search form of `app\models\Evento`.
+ * AcionamentoSearch represents the model behind the search form of `app\models\Acionamento`.
  */
-class EventoSearch extends Evento
+class AcionamentoSearch extends Acionamento
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class EventoSearch extends Evento
     public function rules()
     {
         return [
-            [['id', 'id_cliente', 'colaborador_id', 'tipo'], 'integer'],
+            [['id', 'id_cliente', 'colaborador_id', 'tipo', 'subtipo'], 'integer'],
             [['titulo', 'descricao', 'data', 'telefone'], 'safe'],
         ];
     }
@@ -41,7 +41,7 @@ class EventoSearch extends Evento
      */
     public function search($params)
     {
-        $query = Evento::find();
+        $query = Acionamento::find();
 
         // add conditions that should always apply here
 
@@ -64,6 +64,7 @@ class EventoSearch extends Evento
             'colaborador_id' => $this->colaborador_id,
             'data' => $this->data,
             'tipo' => $this->tipo,
+            'subtipo' => $this->subtipo,
         ]);
 
         $query->andFilterWhere(['like', 'titulo', $this->titulo])

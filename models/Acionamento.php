@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "evento".
+ * This is the model class for table "acionamento".
  *
  * @property int $id
  * @property int $id_cliente
@@ -15,18 +15,19 @@ use Yii;
  * @property string $data
  * @property string $telefone
  * @property int $tipo Flag que valida o tipo do evento
+ * @property int $subtipo
  *
  * @property Cliente $cliente
  * @property Colaborador $colaborador
  */
-class Evento extends \yii\db\ActiveRecord
+class Acionamento extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'evento';
+        return 'acionamento';
     }
 
     /**
@@ -36,7 +37,7 @@ class Evento extends \yii\db\ActiveRecord
     {
         return [
             [['id_cliente', 'colaborador_id', 'titulo'], 'required'],
-            [['id_cliente', 'colaborador_id', 'tipo'], 'integer'],
+            [['id_cliente', 'colaborador_id', 'tipo', 'subtipo'], 'integer'],
             [['data'], 'safe'],
             [['titulo'], 'string', 'max' => 100],
             [['descricao'], 'string', 'max' => 250],
@@ -60,6 +61,7 @@ class Evento extends \yii\db\ActiveRecord
             'data' => 'Data',
             'telefone' => 'Telefone',
             'tipo' => 'Tipo',
+            'subtipo' => 'Subtipo',
         ];
     }
 

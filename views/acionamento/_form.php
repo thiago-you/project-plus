@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Evento */
+/* @var $model app\models\Acionamento */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="evento-form">
+<div class="acionamento-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -25,6 +25,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'telefone')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tipo')->textInput() ?>
+
+    <?= $form->field($model, 'subtipo')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
