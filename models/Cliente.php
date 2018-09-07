@@ -5,111 +5,181 @@ namespace app\models;
 use Yii;
 
 /**
- * Esta é a classe para a tabela (entidade) "cliente".
+ * This is the model class for table "cliente".
  *
- * @include @yii/docs/base-Component.md
- * @author Thiago You <thya9o@outlook.com>
- * @since 1.0
- * 
- * @property integer $id_cliente
- * @property string  $nome
- * @property string  $apelido
- * @property string  $documento
- * @property string  $telefone
- * @property string  $sexo
- * @property string  $data_nascimento
- * @property string  $data_cadastro
- * @property string  $cep
- * @property string  $endereco
- * @property string  $numero
- * @property string  $complemento
- * @property string  $bairro
- * @property integer $id_cidade
- * @property integer $id_estado
- * @property string  $email
- * @property integer $situacao
- * @property string  $tipo
+ * @property int $id
+ * @property string $nome Razao social ou nome do cliente
+ * @property string $nome_social Nome fantasia ou apelido do cliente
+ * @property string $rg
+ * @property string $documento Documento pode ser usado para CPF ou CNPJ
+ * @property string $inscricao_estadual
+ * @property string $sexo
+ * @property string $data_nascimento
+ * @property string $data_cadastro
+ * @property int    $estado_civil
+ * @property string $nome_conjuge
+ * @property string $nome_pai
+ * @property string $nome_mae
+ * @property string $empresa
+ * @property string $profissao
+ * @property string $salario
+ * @property string $ativo Flag que valida se o cliente esta ativo
+ * @property string $tipo Flag que valida se o cliente é tipo fisico (F) ou juridico (J)
+ *
+ * @property Contrato[]   $contratos
+ * @property Email[]      $emails
+ * @property Endereco[]   $enderecos
+ * @property Evento[]     $eventos
+ * @property Referencia[] $referencias
+ * @property Telefone[]   $telefones
  */
 class Cliente extends \yii\db\ActiveRecord
 {
+	// const to tipo do cliente
+	CONST TIPO_FISICO = 'F';
+	CONST TIPO_JURIDICO = 'J';
+	// const do sexo do cliente
+	CONST SEXO_MASC = 'M';
+	CONST SEXO_FEM = 'F';
+	
     /**
-    * Retorna o nome da tabela (entidade) utilizada pela classe.
-    * 
-    * @return string => Nome da tabela
-    */
+     * {@inheritdoc}
+     */
     public static function tableName()
     {
         return 'cliente';
     }
 
     /**
-    * Define as regras, restrições e validações para os atributos da classe.
-    * Estes atributos devem possuír no mínimo as mesmas restrições dos atributos da tabela na database,
-    * para que não ocorra erro durante a persistência.
-    * Regras adicionais podem ser aplicadas.
-    *
-    * @return array => regras para os atributos
-    */
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
-            [['nome', 'telefone'], 'required'],
-            [['sexo'], 'string'],
+            //[['nome', 'data_cadastro'], 'required'],
+            [['sexo', 'ativo', 'tipo'], 'string'],
             [['data_nascimento', 'data_cadastro'], 'safe'],
-            [['id_cidade', 'id_estado', 'situacao'], 'integer'],
-        	['nome', 'string', 'max' => 250],
-            [['nome', 'apelido', 'email'], 'string', 'max' => 100],
-            [['documento'], 'string', 'max' => 14],
-            [['cep'], 'string', 'max' => 8],
-            [['endereco'], 'string', 'max' => 50],
-            [['numero'], 'string', 'max' => 5],
-            [['complemento'], 'string', 'max' => 20],
-            [['bairro'], 'string', 'max' => 30],
-            [['tipo'], 'string', 'max' => 1],
-        	[['telefone'], 'string', 'max' => 11],
+            [['estado_civil'], 'integer'],
+            [['salario'], 'number'],
+            [['nome', 'nome_social', 'nome_conjuge', 'nome_pai', 'nome_mae', 'empresa'], 'string', 'max' => 250],
+            [['rg', 'documento'], 'string'],
+            [['inscricao_estadual'], 'string', 'max' => 15],
+            [['profissao'], 'string', 'max' => 100],
         ];
     }
 
     /**
-    * Retorna a label (descrição) de cada atirbuto
-    * 
-    * @return array => labels de cada atirbuto da classe
-    */
+     * {@inheritdoc}
+     */
     public function attributeLabels()
     {
         return [
-            'id_cliente' => 'Cód.',
+            'id' => 'Cód.',
             'nome' => 'Nome',
-            'apelido' => 'Apelido',
+            'nome_social' => 'Nome Social',
+            'rg' => 'Rg',
             'documento' => 'Documento',
-        	'telefone' => 'Telefone',
+            'inscricao_estadual' => 'Inscrição Estadual',
             'sexo' => 'Sexo',
             'data_nascimento' => 'Data de Nascimento',
             'data_cadastro' => 'Data de Cadastro',
-            'cep' => 'CEP',
-            'endereco' => 'Endereço',
-            'numero' => 'Numero',
-            'complemento' => 'Complemento',
-            'bairro' => 'Bairro',
-            'id_cidade' => 'Cidade',
-            'id_estado' => 'Estado',
-            'email' => 'Email',
-            'situacao' => 'Situação',
+            'estado_civil' => 'Estado Civil',
+            'nome_conjuge' => 'Nome do(a) Cônjuge',
+            'nome_pai' => 'Nome do Pai',
+            'nome_mae' => 'Nome da Mãe',
+            'empresa' => 'Empresa',
+            'profissao' => 'Profissão',
+            'salario' => 'Salário',
+            'ativo' => 'Ativo',
             'tipo' => 'Tipo',
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getContratos()
+    {
+        return $this->hasMany(Contrato::className(), ['id_cliente' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEmails()
+    {
+        return $this->hasMany(Email::className(), ['id_cliente' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEnderecos()
+    {
+        return $this->hasMany(Endereco::className(), ['id_cliente' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEventos()
+    {
+        return $this->hasMany(Evento::className(), ['id_cliente' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReferencias()
+    {
+        return $this->hasMany(Referencia::className(), ['id_cliente' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTelefones()
+    {
+        return $this->hasMany(Telefone::className(), ['id_cliente' => 'id']);
+    }
     
     /**
-     * Inicializa a data de cadastro como a data atual antes de persistir os dados.
-     * Este método chama o beforeSave (mesmo método) da super classe enviando o $insert.
-     *
-     * @param array $insert => atributos que foram alterados no registro
-     * @return boolean => true (verdadeiro) 
+     * Retorna uma lista de estados civis
      */
-    public function beforeSave($insert)
+    public static function getListaEstadoCivil() 
     {
-        $this->data_cadastro = date('Y-m-d');   
-        
-        return parent::beforeSave($insert);;
+    	return [
+    		'1' => 'Solteiro(a)',
+    		'2' => 'Casado(a)',
+    		'3' => 'Divorciado(a)',
+    		'4' => 'Viuvo(a)',
+    	];
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
+    public function beforeSave($insert) 
+    {
+    	if (empty($this->data_cadastro)) {
+    		$this->data_cadastro = date('Y-m-d H:i:s');
+    	}
+    	
+    	return parent::beforeSave($insert);
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeDelete()
+     */
+    public function beforeDelete() 
+    {
+    	// deleta todos os dados relacionados ao cliente
+    	Telefone::deleteAll(['id_cliente' => $this->id]);
+    	Email::deleteAll(['id_cliente' => $this->id]);
+    	Endereco::deleteAll(['id_cliente' => $this->id]);
+    	
+    	return parent::beforeDelete();
     }
 }

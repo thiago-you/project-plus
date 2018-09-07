@@ -1,9 +1,15 @@
 /** 
 * Main Site CSS
 */
-html, body, .modal-content { height: 100%; min-width: 350px; }
+html, body, .modal-content { 
+	height: 100%; 
+	min-width: 350px;
+	overflow-x: hidden; 
+}
 /* background color */
-body { background-color: #ecf0f1; }
+body { 
+	background-color: #f4f4f4; 
+}
 /* wrap */
 .wrap {
     min-height: 100%;
@@ -12,14 +18,6 @@ body { background-color: #ecf0f1; }
     padding: 0 0 60px;
 }
 .wrap > .container { padding: 70px 15px 20px; }
-/* footer */
-.footer, .main-footer {
-    height: 60px;
-    background-color: #f5f5f5;
-    border-top: 1px solid #ddd;
-    padding-top: 20px;
-    padding-left: 50px;
-}
 /* fix row */
 .row {
     margin-left: 0;
@@ -384,10 +382,12 @@ fieldset[disabled] .btn-custom.active {
 	border-bottom: none;
 	border-right: none;
 	border-left: none;
-	border-radius: 0px 0px 10px 10px !important;
+	border-radius: 2px !important;
 }
-/* logout - temporario */
-/* align the logout "link" (button in form) of the navbar */
+.panel-footer {
+	background-color: inherit;
+}
+/* main nav */
 .nav li > form > button.logout {
     padding: 15px;
     border: none;
@@ -410,3 +410,113 @@ fieldset[disabled] .btn-custom.active {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+#main-navbar {
+	background-color: rgba(0, 168, 255,.5);
+	background-image: linear-gradient(-90deg, #607D8B, #37474F);
+	border-bottom: 0px;
+    box-shadow: 0px 2px 6px 0px rgba(0,0,0,.3);
+}
+
+#main-navbar .navbar-header a {
+	font-size: 19px;
+}
+
+#main-navbar .navbar-header a span.separador {
+	padding-left: 27px;
+}
+
+#main-navbar a {
+    color: #e5e5e5;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#main-navbar a {
+    color: #e5e5e5;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+/* side nav */
+.sidenav {
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #455A64;
+    overflow-x: hidden;
+    padding-top: 70px;
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 6px 5px 6px 16px;
+    text-decoration: none;
+    font-size: 14px;
+    color: #e5e5e5;
+    display: block;
+    font-weight: bold;
+}
+
+/* When you mouse over the navigation links, change their color */
+#main-navbar a:hover, .sidenav a:hover {
+    color: #fff;
+}
+
+/* Style page content */
+section.main-content {
+	margin-top: 90px;
+    margin-left: 160px;
+    padding: 0px 10px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {
+    	padding-top: 15px;
+   	}
+    .sidenav a {
+    	font-size: 18px;
+   	}
+} 
+
+.sidenav footer {
+	color: #fff;
+	text-align: center;
+	position: fixed;
+	bottom: 0px;
+}
+
+.sidenav footer p {
+	font-size: 11px;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
+.sidenav footer hr {
+	margin: 0px 15px 6px 15px;
+	border-color: #f7f7f7;
+	width: 125px;
+}
+
+/* cards */
+.card {
+	width: 350px;
+	height: 200px;
+	box-shadow: 2px 2px 4px 0px rgba(0,0,0,.3);
+	border: 1px solid rgba(0,0,0,0.2);
+	border-radius: 2px;
+}
+
+.card .card-body {
+	padding-left: 20px;
+	padding-right: 10px;
+}
+
+.card .card-body .card-title {
+	font-size: 18px;
+}
+

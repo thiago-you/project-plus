@@ -1,30 +1,37 @@
 <?php
-
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Cliente;
 
 /**
- * ClienteSearch represents the model behind the search form about `app\models\Cliente`.
+ * ClienteSearch represents the model behind the search form of `app\models\Cliente`.
  */
 class ClienteSearch extends Cliente
 {
+	/**
+	 * @var
+	 */
+	public $telefone;
+	
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id_cliente', 'id_cidade', 'id_estado', 'situacao'], 'integer'],
-            [['nome', 'apelido', 'documento', 'telefone', 'sexo', 'data_nascimento', 'data_cadastro', 'cep', 'endereco', 'numero', 'complemento', 'bairro', 'email', 'tipo'], 'safe'],
+            [['id', 'estado_civil'], 'integer'],
+            [[
+            	'nome', 'nome_social', 'rg', 'documento', 'inscricao_estadual', 'sexo', 'data_nascimento', 
+            	'data_cadastro', 'nome_conjuge', 'nome_pai', 'nome_mae', 'empresa', 'profissao', 'ativo', 'tipo',
+            	'telefone',
+            ], 'safe'],
+            [['salario'], 'number'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
@@ -59,24 +66,25 @@ class ClienteSearch extends Cliente
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id_cliente' => $this->id_cliente,
+            'id' => $this->id,
             'data_nascimento' => $this->data_nascimento,
             'data_cadastro' => $this->data_cadastro,
-            'id_cidade' => $this->id_cidade,
-            'id_estado' => $this->id_estado,
-            'situacao' => $this->situacao,
+            'estado_civil' => $this->estado_civil,
+            'salario' => $this->salario,
         ]);
 
         $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'apelido', $this->apelido])
+            ->andFilterWhere(['like', 'nome_social', $this->nome_social])
+            ->andFilterWhere(['like', 'rg', $this->rg])
             ->andFilterWhere(['like', 'documento', $this->documento])
+            ->andFilterWhere(['like', 'inscricao_estadual', $this->inscricao_estadual])
             ->andFilterWhere(['like', 'sexo', $this->sexo])
-            ->andFilterWhere(['like', 'cep', $this->cep])
-            ->andFilterWhere(['like', 'endereco', $this->endereco])
-            ->andFilterWhere(['like', 'numero', $this->numero])
-            ->andFilterWhere(['like', 'complemento', $this->complemento])
-            ->andFilterWhere(['like', 'bairro', $this->bairro])
-            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'nome_conjuge', $this->nome_conjuge])
+            ->andFilterWhere(['like', 'nome_pai', $this->nome_pai])
+            ->andFilterWhere(['like', 'nome_mae', $this->nome_mae])
+            ->andFilterWhere(['like', 'empresa', $this->empresa])
+            ->andFilterWhere(['like', 'profissao', $this->profissao])
+            ->andFilterWhere(['like', 'ativo', $this->ativo])
             ->andFilterWhere(['like', 'tipo', $this->tipo]);
 
         return $dataProvider;

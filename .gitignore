@@ -23,9 +23,14 @@ composer.phar
 
 # phpunit itself is not needed
 phpunit.phar
+
 # local phpunit config
 /phpunit.xml
+
+# db config
+/config/db.php
 
 tests/_output/*
 tests/_support/_generated
 /RemoteSystemsTempFiles/
+/local/

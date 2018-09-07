@@ -11,8 +11,6 @@ try {
     $config = require(__DIR__ . '/../config/web.php');
     (new yii\web\Application($config))->run();
     
-}catch(\Exception $e) {
-
+} catch (\Exception $e) {
     throw new yii\web\BadRequestHttpException('<p>Erro ao se conectar com base de dados.</p><b>Erro: </b>'.$e->getMessage());
-
 }

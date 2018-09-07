@@ -3,7 +3,6 @@ namespace app\base;
 
 use Yii;
 use yii\helpers\Json;
-use yii\data\ArrayDataProvider;
 
 /**
  * Classe que contém métodos úteis para formatação, renderização de valores, etc.
@@ -28,6 +27,10 @@ class Util
 	CONST BTN_COLOR_WARNING = 'btn btn-warning btn-flat';
 	CONST BTN_COLOR_DEFAULT = 'btn btn-default btn-flat';
 	CONST BTN_COLOR_INFO    = 'btn btn-info btn-flat';
+	CONST BTN_COLOR_EMERALD = 'btn btn-emerald btn-flat';
+	CONST BTN_COLOR_PURPLE  = 'btn btn-purple btn-flat';
+	CONST BTN_COLOR_PINK    = 'btn btn-pink btn-flat';
+	CONST BTN_COLOR_ORANGE  = 'btn btn-orange btn-flat';
 		
 	CONST CLASS_CREATE = 'success';
 	CONST CLASS_UPDATE = 'warning';
@@ -57,7 +60,7 @@ class Util
      * @param array $errors
      * @return string (html)
      */
-    public static function renderModelErrors(array $errors)
+    public static function renderErrors(array $errors)
     {
         if(count($errors) == 0)
             return null;
@@ -86,25 +89,25 @@ class Util
      * ]
      *
      */
-    public static function maskBackend($val, $mask, $removeMask = false, $option = null)
+    public static function mask($val, $mask, $removeMask = false, $option = null)
     {
         // force val as string
-        if(!is_string($val)) {
+        if (!is_string($val)) {
             $val = strval($val);
         }
        
         // remove a mascara inicial para inserir outra
-        if($removeMask) {
-            $val = self::removeMascara($val);
+        if ($removeMask) {
+            $val = self::unmask($val);
         }
         
         // remove a mascara inicial para inserir outra
-        if($removeMask) {
-            $val = self::removeMascara($val);
+        if ($removeMask) {
+            $val = self::unmask($val);
         }
         
         // define mask
-        switch($mask) {
+        switch ($mask) {
             case self::MASK_CNPJ:
                 $mask = '##.###.###/####-##';
                 break;
@@ -115,41 +118,42 @@ class Util
                 $mask = '#####-###';
                 break;
             case self::MASK_TELEFONE:
-                if (strlen($val) == 11)
+            	if (strlen($val) == 11) {
                     $mask = '(##) #####-####';
-                    else
-                        $mask = '(##) ####-####';
-                        break;
+            	} else {
+                    $mask = '(##) ####-####';
+            	}
+                break;
             case self::MASK_MONEY:
                 // $option => define decimal length
-                if(!$val) {
+                if (!$val) {
                     $val = 0.00;
                 }
-                if($option == 'decimalLength') {
+                if ($option == 'decimalLength') {
                     $val = floatval($val);
                     $option = count(explode('.', $val)) == 1 ? 2 : strlen(explode('.', $val)[1]);
                 }
-                if(empty($option)) {
+                if (empty($option)) {
                     $option = 2;
                 }
                 return 'R$ ' . number_format($val, $option, ',', '.');
                 break;
             case self::MASK_NUMBER:
                 // $option => define decimal length
-                if(!$val) {
+                if (!$val) {
                     $val = 0.00;
                 }
-                if($option == 'decimalLength') {
+                if ($option == 'decimalLength') {
                     $val = floatval($val);
                     $option = count(explode('.', $val)) == 1 ? 2 : strlen(explode('.', $val)[1]);
                 }
-                if(empty($option)) {
+                if (empty($option)) {
                     $option = 2;
                 }
                 return number_format($val, $option, ',', '.');
                 break;
             case self::MASK_PERCENT:
-                if(!$val) {
+                if (!$val) {
                     $val = 0.00;
                 }
                 return number_format($val, 2, ',', '.') . ' %';
@@ -161,15 +165,17 @@ class Util
         
         // format value with defined mask
         $maskared = '';
-        if(strlen($val)) {
+        if (strlen($val)) {
             $k = 0;
-            for($i = 0; $i < strlen($mask); $i++) {
-                if($mask[$i] == '#') {
-                    if(isset($val[$k]))
+            for ($i = 0; $i < strlen($mask); $i++) {
+                if ($mask[$i] == '#') {
+                	if (isset($val[$k])) {
                         $maskared .= $val[$k++];
-                }else {
-                    if(isset($mask[$i]))
+                	}
+                } else {
+                	if (isset($mask[$i])) {
                         $maskared .= $mask[$i];
+                	}
                 }
             }
         }
@@ -306,7 +312,7 @@ class Util
      * @param array $extra (Caractres extras a serem removidos)
      * @return string
      */
-    public static function removeMascara($campo, $removerEspaco = false, $extra = [])
+    public static function unmask($campo, $removerEspaco = false, $extra = [])
     {
         // set chars to remove
         $remover = array('.', '-', '/', '(', ')', 'R', '$', '%', '_');
@@ -451,19 +457,4 @@ class Util
         // retorna a data formatada
         return (date($format, strtotime(str_replace('/', '-', $data))));
     }
-    
-    /**
-     * Retorna a versão atual do sistema
-     * Busca a versão na tag do branch
-     *
-     * @return string
-     */
-    public static function getVersion()
-    {
-        return '1.0';
-        return Yii::$app->params['version'];
-    }
 }
-// ----------------------------------------------------------------------------------------------------------
-// end file
-// ----------------------------------------------------------------------------------------------------------

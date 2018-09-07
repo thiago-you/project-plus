@@ -20,7 +20,7 @@
 	"minimum-stability" : "dev",
 	"require" : {
 		"php" : ">=5.4.0",
-		"yiisoft/yii2" : ">=2.0.12",
+		"yiisoft/yii2" : "~2.0.15",
 		"yiisoft/yii2-bootstrap" : "@dev",
 		"yiisoft/yii2-swiftmailer" : "@dev",
 		"kartik-v/yii2-widget-select2" : "@dev",
@@ -30,7 +30,7 @@
 		"kartik-v/yii2-widget-fileinput" : "@dev",
 		"kartik-v/yii2-money" : "*",
 		"kartik-v/yii2-widget-datepicker" : "@dev",
-		"kartik-v/yii2-widget-activeform" : "~1.4.9",
+		"kartik-v/yii2-widget-activeform" : ">=1.4.9",
 		"kartik-v/yii2-widgets" : "*",
 		"kartik-v/yii2-widget-typeahead" : "*",
 		"yiibr/yii2-br-validator" : "*",
@@ -41,7 +41,8 @@
 		"almasaeed2010/adminlte" : "~2.4",
 		"cebe/markdown-latex" : "~1.0",
 		"phpdocumentor/reflection-docblock" : "^2.0",
-		"yiisoft/yii2-apidoc" : "^2.1"
+		"yiisoft/yii2-apidoc" : "^2.1",
+		"fxp/composer-asset-plugin": ">=1.4.9"
 	},
 	"require-dev" : {
 		"yiisoft/yii2-debug" : "~2.0.0",

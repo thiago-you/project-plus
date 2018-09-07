@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Response;
+use app\assets\AppAsset;
 use app\models\LoginForm;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -58,6 +59,14 @@ class SiteController extends BaseController
      */
     public function actionIndex()
     {
+        // se for guest redireciona para o login
+        if (\Yii::$app->user->isGuest) {
+            return $this->redirect(['site/login'])->send();
+        }
+        
+        // registra a api para gerar graficos
+        AppAsset::register(\Yii::$app->view)->js[] = 'plugins/chart.js/dist/Chart.js';
+        
         return $this->render('index');
     }
 
@@ -68,17 +77,16 @@ class SiteController extends BaseController
      */
     public function actionLogin($invalidAcess = null)
     {
-        if(!Yii::$app->user->isGuest) {
+        // se não for guets retorna para a home
+        if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        // mensagem de erro ao tentar acessar alguma tela sem login
-        if($invalidAcess) {
-            Yii::$app->session->setFlash('danger', '<i class="fa fa-warning"></i>&nbsp; Oops... Parece que você ainda não está logado. Por favor, realize o login para acessar o sistema');
-        }
+        // layout de login
+        $this->layout = 'login';
         
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        if ($model->load(\Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
         
@@ -97,15 +105,5 @@ class SiteController extends BaseController
         Yii::$app->user->logout();
 
         return $this->goHome();
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
     }
 }

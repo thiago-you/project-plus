@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
@@ -10,44 +9,46 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     public $authKey;
     public $accessToken;
 
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
+    /**
+     * @var string => usuario admin
+     */
+    const adminUsername = 'admin';
+    
+    /**
+     * Usuario Admin
+     */
+    private static $admin = [
+        'id' => '0',
+        'username' => 'admin',
+        'password' => 'admin',
+    	'authKey' => '0-key',
+    	'accessToken' => '0-token',
     ];
-
 
     /**
      * @inheritdoc
      */
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        // retorna o admin ou busca um usuario no banco
+        $user = null;
+        if (self::$admin['id'] === $id) {
+            $user = self::$admin;
+        } else {            
+            $user = Colaborador::find()->where(['id' => $id])->select([
+                'id', 'username', 'password', 'authKey'
+            ])->asArray(true)->one();
+        }
+        
+        return $user ? new static($user) : null;
     }
 
     /**
-     * @inheritdoc
+     * @deprecated não implementado
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        throw new \Exception('Não suportado.');
     }
 
     /**
@@ -58,13 +59,15 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public static function findByUsername($username)
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+    	// retorna o admin ou busca um usuario no banco
+        $user = self::$admin;
+    	if ($username !== self::adminUsername) {
+    	    $user = Colaborador::find()->where(['username' => $username])->select([
+    	        'id', 'username', 'password', 'authKey'
+    	    ])->asArray(true)->one();
+    	}
+    	
+    	return $user ? new static($user) : null;
     }
 
     /**

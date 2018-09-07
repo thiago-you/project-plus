@@ -1,20 +1,31 @@
 <?php
 $params = require(__DIR__ . '/params.php');
-$db = require(__DIR__ . '/db.php');
+$db = file_exists(__DIR__ . '/../local/db.php') ? require(__DIR__ . '/../local/db.php') : require(__DIR__ . '/db.php');;
+$envDev = file_exists(__DIR__ . '/../local/env-dev.php') ? require(__DIR__ . '/../local/env-dev.php') : YII_ENV_DEV;
 
 $config = [
-    'id' => 'autosolutionsSystem',
+    'id' => 'exemplo-demo',
     'language' => 'pt-BR',
     'sourceLanguage' => 'pt-BR',
+    'timeZone' => 'America/Sao_Paulo',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'name' => 'Auto Solutions',
+    'name' => 'Exemplo',
     'components' => [
         'i18n' => [
             'translations' => [
                 'kvgrid'=> [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'forceTranslation' => true,
+                ],
+            ],
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    //'js' => 'jquery-3.3.1.min.js',
+                    //'js' => ['jquery.js' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js'],
+                    'jsOptions' => ['type' => 'text/javascript'],
                 ],
             ],
         ],
@@ -26,8 +37,11 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
-        ],
+            'authTimeout' => 3600 * 12,
+		],
+		'session' => [
+		    'timeout' => 3600 * 12,
+		],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
@@ -87,14 +101,14 @@ $config = [
                     'all' => [
                         'icon' => 'resize-full',
                         'label' => false,
-                        'class' => 'btn btn-default btn-flat btn-sm',
+                        'class' => 'btn btn-default btn-flat',
                         'title' => 'Mostrar todos os resultados',
                         'data-toggle' => 'tooltip',
                     ],
                     'page' => [
                         'icon' => 'resize-small',
                         'label' => false,
-                        'class' => 'btn btn-default btn-flat btn-sm',
+                        'class' => 'btn btn-default btn-flat',
                         'title' => 'Mostar resultados com paginação',
                         'data-toggle' => 'tooltip',
                     ],
@@ -107,7 +121,7 @@ $config = [
     ],
 ];
 
-if(YII_ENV_DEV) {
+if ($envDev) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
