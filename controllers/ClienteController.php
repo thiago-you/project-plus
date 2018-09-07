@@ -170,7 +170,7 @@ class ClienteController extends BaseController
 	        	}
 	        	
 	        	$transaction->commit();
-	        	\Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; Cliente foi cadastrado com sucesso.');
+	        	\Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O cliente foi cadastrado com sucesso.');
 	        	return $this->redirect(['index']);
         	} catch (\Exception $e) {
         		$transaction->rollBack();
@@ -318,7 +318,7 @@ class ClienteController extends BaseController
         		}
         		
         		$transaction->commit();
-        		\Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; Cliente foi alterado com sucesso.');
+        		\Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O cliente foi alterado com sucesso.');
         		return $this->redirect(['index']);
         	} catch (\Exception $e) {
         		$transaction->rollBack();
@@ -380,8 +380,7 @@ class ClienteController extends BaseController
 	        $model->delete();
 	        
 	        $transaction->commit();
-	        \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; Cliente foi excluído com sucesso.');
-	        return $this->redirect(['index']);
+	        \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O cliente foi excluído com sucesso.');
 	    } catch (\Exception $e) {
 	    	$transaction->rollBack();
 	    	\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");

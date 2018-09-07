@@ -34,19 +34,27 @@ $columns = [
     [
         'class' => 'kartik\grid\ActionColumn',
     	'hAlign'=> GridView::ALIGN_CENTER,
-    	'template' => '{update}{delete}',
+    	'template' => '{configuracao}{update}{delete}',
     	'header' => '',
+        'width' => '10%',
     	'buttons' => [
-    		'update' => function ($url, $model) {
-    			return Html::a('<i class="fa fa-pencil-alt"></i>', ['/credor/update/', 'id' => $model->id], [
-    				'class' => Util::BTN_COLOR_WARNING,
+            'configuracao' => function ($url, $model) {
+                return Html::a('<i class="fa fa-cogs fa-fw"></i>', ['/credor/configuracao/', 'id' => $model->id], [
+                    'class' => Util::BTN_COLOR_PURPLE.' btn-xs',
+                    'title' => 'Configurar Cálculo',
+                    'data-toggle' => 'tooltip',
+                ]);
+            },
+            'update' => function ($url, $model) {
+    			return Html::a('<i class="fa fa-pencil-alt fa-fw"></i>', ['/credor/update/', 'id' => $model->id], [
+	                'class' => Util::BTN_COLOR_WARNING.' btn-xs',
     				'title' => 'Alterar',
     				'data-toggle' => 'tooltip',
     			]);
     		},
     		'delete' => function ($url, $model) {
-    			return Html::a('<i class="fa fa-trash-alt"></i>', $url, [
-    				'class' => Util::BTN_COLOR_DANGER,
+    			return Html::a('<i class="fa fa-trash-alt fa-fw"></i>', $url, [
+	                'class' => Util::BTN_COLOR_DANGER.' btn-xs',
     				'title' => 'Excluír',
     				'data-toggle' => 'tooltip',
     				'data-method' => 'post',

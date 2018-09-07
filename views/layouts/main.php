@@ -17,6 +17,9 @@ AppAsset::register($this);
             <meta charset="UTF-8"/>
             <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <!-- ./meta -->
+            <link rel="shortcut icon" href="<?= \Yii::$app->request->baseUrl; ?>/img/favicon-1.png" type="image/png" />
+            <!-- ./favicon -->
             <?= Html::csrfMetaTags(); ?>
             <title><?= \Yii::$app->name . ' | ' . Html::encode($this->title); ?></title>
             <?php $this->head(); ?>

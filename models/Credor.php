@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\base\Util;
 
 /**
  * This is the model class for table "credor".
@@ -58,15 +59,12 @@ class Credor extends \yii\db\ActiveRecord
         return [
             [['nome', 'cnpj', 'telefone', 'email', 'logradouro', 'numero'], 'required'],
             [['tipo', 'tipo_cobranca', 'cidade_id', 'estado_id', 'id_campanha'], 'integer'],
-            [['ativo'], 'string'],
-            [['razao_social'], 'number'],
-            [['nome', 'logo', 'codigo', 'sigla'], 'string', 'max' => 250],
-            [['cnpj'], 'string', 'max' => 14],
+            [['ativo', 'cep'], 'string'],
+            [['nome', 'razao_social', 'logo', 'codigo', 'sigla'], 'string', 'max' => 250],
             [['telefone'], 'string', 'max' => 15],
             [['email', 'logradouro', 'bairro'], 'string', 'max' => 100],
             [['numero'], 'string', 'max' => 10],
             [['complemento'], 'string', 'max' => 50],
-            [['cep'], 'string', 'max' => 8],
         ];
     }
 
@@ -113,5 +111,19 @@ class Credor extends \yii\db\ActiveRecord
     public function getCredorCampanhas()
     {
         return $this->hasMany(CredorCampanha::className(), ['id_credor' => 'id']);
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
+    public function beforeSave($insert) 
+    {
+        // remove as mascaras
+        $this->cnpj = Util::unmask($this->cnpj);
+        $this->cep = Util::unmask($this->cep);
+        $this->telefone = Util::unmask($this->telefone);
+        
+        return parent::beforeSave($insert);
     }
 }

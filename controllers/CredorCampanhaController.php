@@ -8,6 +8,8 @@ use app\models\CredorCampanhaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
+use app\base\AjaxResponse;
 
 /**
  * CredorCampanhaController implements the CRUD actions for CredorCampanha model.
@@ -52,20 +54,51 @@ class CredorCampanhaController extends Controller
      */
     public function actionView($id)
     {
+        // valida a requisição
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
+        }
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new CredorCampanha model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Cadastra uma nova campanha por Ajax
      */
     public function actionCreate()
     {
+        // valida a requisição
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
+        }
+        
+        // cria a model
         $model = new CredorCampanha();
 
+        // salva a camapnha
+        if ($post = \Yii::$app->request->post()) {
+            try {
+                // cria o retorno e carrega os dados da campanha
+                $retorno = new AjaxResponse();
+                $model->load($post);
+
+                if (!$model->save()) {
+                    throw new \Exception();
+                }                
+                
+                // seta os dados de retorno
+                $retorno->id = $model->id ? $model->id : $model->getPrimaryKey();
+                $retorno->nome = $model->nome;
+                $retorno->newRecord = true;
+            } catch(\Exception $e) {
+                $retorno->success = false;
+            }
+            
+            return Json::encode($retorno);
+        }
+        
         return $this->renderAjax('create', [
             'model' => $model,
         ]);
@@ -80,10 +113,34 @@ class CredorCampanhaController extends Controller
      */
     public function actionUpdate($id)
     {
+        // valida a requisição
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
+        }
+        
+        // busca a model
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        // salva a camapnha
+        if ($post = \Yii::$app->request->post()) {
+            try {
+                // cria o retorno e carrega os dados da campanha
+                $retorno = new AjaxResponse();
+                $model->load($post);
+                
+                if (!$model->save()) {
+                    throw new \Exception();
+                }
+                
+                // seta os dados de retorno
+                $retorno->id = $model->id;
+                $retorno->nome = $model->nome;
+                $retorno->newRecord = false;
+            } catch(\Exception $e) {
+                $retorno->success = false;
+            }
+            
+            return Json::encode($retorno);
         }
 
         return $this->renderAjax('update', [
@@ -100,9 +157,24 @@ class CredorCampanhaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        // busca a model
+        $model = $this->findModel($id);
+        
+        try {
+            $transaction = \Yii::$app->db->beginTransaction();
+            // cria o retorno e carrega os dados da campanha
+            $retorno = new AjaxResponse();
+            
+            // deleta a campanha
+            $model->delete();
+            
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            $retorno->success = false;
+        }
+        
+        return Json::encode($retorno);
     }
 
     /**
@@ -118,6 +190,6 @@ class CredorCampanhaController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException();
     }
 }
