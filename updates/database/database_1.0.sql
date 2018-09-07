@@ -142,14 +142,15 @@ CREATE TABLE `contrato_parcela` (
 -- cria a tabela de credor
 CREATE TABLE `credor` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_campanha` INT NOT NULL,
   `nome` VARCHAR(250) NOT NULL,
-  `razao_social` VARCHAR(250) NOT NULL,
   `tipo` TINYINT(1) DEFAULT '1',
   `tipo_cobranca` TINYINT(1) DEFAULT '1',
   `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
+  `razao_social` DECIMAL(10,2),
   `cnpj` VARCHAR(14) NOT NULL,
-  `numero` VARCHAR(15),
-  `email` VARCHAR(100),
+  `telefone` VARCHAR(15) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
   `logradouro` VARCHAR(100) NOT NULL,
   `numero` VARCHAR(10) NOT NULL,
   `complemento` VARCHAR(50),
@@ -161,17 +162,6 @@ CREATE TABLE `credor` (
   `codigo` VARCHAR(250),
   `sigla` VARCHAR(250)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
--- tabela de calculo do credor
-CREATE TABLE `credor_calculo` (
-  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `id_credor` INT NOT NULL,
-  `atraso` VARCHAR(3) NOT NULL,
-  `multa` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-  `juros` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-  `tipo` ENUM('V', 'P') NOT NULL DEFAULT 'V' COMMENT 'Tipo do calculo => V: A vista / P: Parcelado',
-  `parcela_num` INT COMMENT 'Numero da parcela qunado o tipo for parcelado',
-  FOREIGN KEY (`id_credor`) REFERENCES `credor`(`id`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- tabela de campanha de calculo do credor
 CREATE TABLE `credor_campanha` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -182,5 +172,16 @@ CREATE TABLE `credor_campanha` (
   `prioridade` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Nivel de prioridade da campanha',
   `por_parcela` ENUM('S', 'N'),
   `por_portal` ENUM('S', 'N'),
+  `tipo` ENUM('V', 'P') NOT NULL DEFAULT 'V' COMMENT 'Tipo do calculo => V: A vista / P: Parcelado',
   FOREIGN KEY (`id_credor`) REFERENCES `credor`(`id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- tabela de calculo do credor
+CREATE TABLE `credor_calculo` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_campanha` INT NOT NULL,
+  `atraso` VARCHAR(3) NOT NULL,
+  `multa` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  `juros` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  `parcela_num` INT COMMENT 'Numero da parcela qunado o tipo for parcelado',
+  FOREIGN KEY (`id_campanha`) REFERENCES `credor_campanha`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
