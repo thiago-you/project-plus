@@ -9,6 +9,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<table class="table table-bordered table-hover">
 		<thead>
 			<tr>
+				<th width="50px" class="text-center">#</th>
 				<th>Atraso</th>
 				<th>Multa</th>
 				<th>Juros</th>
@@ -20,7 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			<?php if (!empty($model) && is_array($model)): ?>
         		<?php foreach($model as $calculo): ?>
         			<tr id="<?= $calculo->id; ?>">
-        				<td><?= $calculo->getAtraso(); ?></td>
+        				<td class="text-center"><?= ++$i; ?></td>
+    					<td><?= $calculo->getAtraso(); ?></td>
         				<td><?= Util::mask($calculo->multa, Util::MASK_MONEY); ?></td>
         				<td><?= Util::mask($calculo->juros, Util::MASK_MONEY); ?></td>
         				<td class="text-center">

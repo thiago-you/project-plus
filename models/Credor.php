@@ -126,4 +126,18 @@ class Credor extends \yii\db\ActiveRecord
         
         return parent::beforeSave($insert);
     }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeDelete()
+     */
+    public function beforeDelete() 
+    {
+        // deleta todas as campanhas do credor
+        foreach($this->credorCampanhas as $campanha) {
+            $campanha->delete();
+        }
+                
+        return parent::beforeDelete();    
+    }
 }

@@ -89,7 +89,7 @@ use yii\widgets\MaskedInput;
         <!-- ./painel-body -->
         <div class="panel-footer">
     		<div class="row">
-    			<div class="col-md-3">
+    			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6">
                     <div class="form-group">
                         <?= Html::submitButton('<i class="fa fa-save"></i>&nbsp; '. ($model->isNewRecord ? 'Cadastrar' : 'Alterar'), [
                                 'class' => $model->isNewRecord 
@@ -99,7 +99,7 @@ use yii\widgets\MaskedInput;
                         ?>
                     </div>
     			</div>
-    			<div class="col-md-3 pull-right">
+    			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6 pull-right">
                     <div class="form-group">
                         <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/credor'], [
                                 'class' => Util::BTN_COLOR_DEFAULT.' btn-block',
@@ -108,6 +108,7 @@ use yii\widgets\MaskedInput;
                     </div>
     			</div>
     		</div>
+    		<!-- ./row -->
         </div>
         <!-- ./panel-footer -->
 	</div>

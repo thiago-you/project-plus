@@ -84,4 +84,16 @@ class CredorCampanha extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CredorCalculo::className(), ['id_campanha' => 'id']);
     }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeDelete()
+     */
+    public function beforeDelete() 
+    {
+        // deleta todas as faixas de cálculo da campanha
+        CredorCalculo::deleteAll(['id_campanha' => $this->id]);
+        
+        return parent::beforeDelete(); 
+    }
 }

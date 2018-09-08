@@ -24,7 +24,7 @@ $columns = [
         'attribute' => 'ativo',
         'hAlign' => GridView::ALIGN_CENTER,
     	'value' => function($model) {
-	    	if ($model->tipo == Credor::ATIVO) {
+	    	if ($model->ativo == Credor::ATIVO) {
 	    		return 'SIM';
 	    	}
 	    	

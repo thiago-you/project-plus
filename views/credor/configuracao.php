@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- ./painel-body -->
         <div class="panel-footer">
     		<div class="row">
-    			<div class="col-md-3">
+    			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6">
                     <div class="form-group">
                         <?= Html::submitButton('<i class="fa fa-save"></i>&nbsp; Salvar', [
                                 'class' => Util::BTN_COLOR_SUCCESS.' btn-block'
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ?>
                     </div>
     			</div>
-    			<div class="col-md-3 pull-right">
+    			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6 pull-right">
                     <div class="form-group">
                         <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/credor'], [
                                 'class' => Util::BTN_COLOR_DEFAULT.' btn-block',
@@ -114,6 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
     			</div>
     		</div>
+    		<!-- ./row -->
         </div>
         <!-- ./panel-footer -->
 	</div>
@@ -207,7 +208,7 @@ $(document).ready(function() {
         this.blur();
         let campanhaId = $('#credor-id_campanha').val();
 
-        // mensagem de confirmacao
+        // mensagem de confirmação
         $.confirm({
             content: 'Você deseja mesmo exclúir este item?',
             backgroundDismiss: true,
@@ -333,8 +334,6 @@ $(document).ready(function() {
             if (data.success == true) {
                 // fecha a modal
                 $('#modal-faixa-calculo').modal('hide');
-                // exibe a mensagem de sucesso
-                toastr.success('A faixa de cálculo foi cadastrada com sucesso.');  
 
                 // exibe animação de carregamento
                 $('#lista-faixas').html('<br><br><h1 class="text-primary text-center"><i class="fa fa-spinner fa-spin"></i>&nbsp; Carregando...</h1><br><br>');
@@ -352,6 +351,53 @@ $(document).ready(function() {
 
         return false;
 	});
+
+    // edita uma faixa de cálculo
+    $('body').on('click', '.editar-faixa', function() {
+        let id = $(this).closest('tr').attr('id');
+
+        // busca e exibe a modal
+        let modal = $('#modal-faixa-calculo'); 
+        modal.modal('show');       
+        
+        // exibe a modal
+        $.post(BASE_PATH + 'credor-calculo/update?id='+id, function(response) {
+            modal.find('.modal-body').html(response);
+        });
+    });
+
+    // deleta uma faixa de cálculo
+    $('body').on('click', '.excluir-faixa', function() {
+        let id = $(this).closest('tr').attr('id');
+
+        // mensagem de confirmação
+        $.confirm({
+            content: 'Você deseja mesmo exclúir este item?',
+            backgroundDismiss: true,
+            buttons: {
+				ok: { 
+					action: function() {
+                        // deleta a faixa
+                        $.post(BASE_PATH + 'credor-calculo/delete?id='+id, function(response) {
+                            let data = JSON.parse(response);
+
+                            // verifica se a campanha foi deletada
+                            if (data.success == true) {
+                                // renderiza a lista de faixas
+                                $.get(BASE_PATH + 'credor-calculo/index?id='+$('#credor-id_campanha').val(), function(response) {
+                                    $('#lista-faixas').html(response);
+                                });
+                            } else {
+                                toastr.error('Não foi possível excluír a faixa de cálculo. Por favor, tente novamente mais tarde.');
+                            }
+                        }).fail(function() {
+                            toastr.error('Não foi possível excluír a faixa de cálculo. Por favor, tente novamente mais tarde.');
+                        });
+                    },
+				},
+			},
+        });
+    });
 });
 JS;
 $this->registerJs($script, View::POS_LOAD);

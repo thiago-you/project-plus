@@ -72,4 +72,18 @@ class CredorCalculo extends \yii\db\ActiveRecord
     {
         return "{$this->atraso_inicio} - {$this->atraso_fim}";
     }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
+    public function beforeSave($insert) 
+    {
+        // valida a data final de atraso
+        if (empty($this->atraso_fim)) {
+            $this->atraso_fim = 999;
+        }
+        
+        return parent::beforeSave($insert);    
+    }
 }
