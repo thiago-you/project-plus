@@ -1,7 +1,6 @@
 <?php
 namespace app\controllers;
 
-use Yii;
 use yii\helpers\Json;
 use yii\web\Controller;
 use app\base\AjaxResponse;
@@ -57,10 +56,10 @@ class CredorCalculoController extends Controller
         // cria a model
         $model = new CredorCalculo();
         
-        // salva a camapnha
+        // salva a faixa de calculo
         if ($post = \Yii::$app->request->post()) {
             try {
-                // cria o retorno e carrega os dados da campanha
+                // cria o retorno e carrega os dados da model
                 $retorno = new AjaxResponse();
                 $model->load($post);
                 
@@ -88,13 +87,32 @@ class CredorCalculoController extends Controller
      */
     public function actionUpdate($id)
     {
+        // valida a requisição
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
+        }
+        
+        // busca a model
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        // salva a faixa de calculo
+        if ($post = \Yii::$app->request->post()) {
+            try {
+                // cria o retorno e carrega os dados da model
+                $retorno = new AjaxResponse();
+                $model->load($post);
+                
+                if (!$model->save()) {
+                    throw new \Exception();
+                }
+            } catch(\Exception $e) {
+                $retorno->success = false;
+            }
+            
+            return Json::encode($retorno);
         }
 
-        return $this->render('update', [
+        return $this->renderAjax('update', [
             'model' => $model,
         ]);
     }
@@ -108,9 +126,24 @@ class CredorCalculoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        // busca a model
+        $model = $this->findModel($id);
 
-        return $this->redirect(['index']);
+        try {
+            $transaction = \Yii::$app->db->beginTransaction();
+            // cria o retorno e carrega os dados da model
+            $retorno = new AjaxResponse();
+            
+            // deleta a model
+            $model->delete();
+            
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            $retorno->success = false;
+        }
+        
+        return Json::encode($retorno);
     }
 
     /**
@@ -126,6 +159,6 @@ class CredorCalculoController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException();
     }
 }
