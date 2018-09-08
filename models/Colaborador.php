@@ -9,10 +9,15 @@ namespace app\models;
  * @property string $username
  * @property string $password
  * @property string $authKey
- * @property string $cargo Cargo do usuario
+ * @property int $cargo Cargo do usuario
  */
 class Colaborador extends \yii\db\ActiveRecord
 {
+    // const para os cargos disponíveis
+    CONST CARGO_ADMINISTRADOR = '1';
+    CONST CARGO_OPERADOR = '2';
+    CONST CARGO_CLIENTE = '3';
+    
     /**
      * {@inheritdoc}
      */
@@ -27,9 +32,9 @@ class Colaborador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome', 'username'], 'required'],
+            [['nome', 'username', 'password'], 'required'],
             [['nome'], 'string', 'max' => 250],
-            [['cargo'], 'string', 'max' => 100],
+            [['cargo'], 'integer'],
             [['username', 'password', 'authKey'], 'string', 'max' => 30],
         ];
     }
@@ -40,12 +45,24 @@ class Colaborador extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => 'Cód.',
             'nome' => 'Nome',
             'username' => 'Username',
-            'password' => 'password',
+            'password' => 'Senha',
             'authKey' => 'authKey',
             'cargo' => 'Cargo',
+        ];
+    }
+    
+    /**
+     * Retorna a lista de cargos disponíveis
+     */
+    public static function getListaCargos() 
+    {
+        return [
+            self::CARGO_ADMINISTRADOR => 'Administrador',
+            self::CARGO_OPERADOR => 'Operador',
+            self::CARGO_CLIENTE => 'Cliente',
         ];
     }
 }

@@ -1,38 +1,77 @@
 <?php
-
+use app\base\Util;
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\ColaboradorSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Colaboradors';
+$this->title = 'Colaboradores';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="colaborador-index">
+<?php $columns = [
+        [
+            'attribute' => 'id',
+            'hAlign' => GridView::ALIGN_CENTER,
+            'width' => '10%',
+        ],
+        [
+            'attribute' => 'nome',
+            'width' => '40%'
+        ],
+        [
+            'attribute' => 'cargo',
+        ],
+        [
+            'class' => 'kartik\grid\ActionColumn',
+        	'hAlign'=> GridView::ALIGN_CENTER,
+        	'template' => '{update}{delete}',
+        	'header' => '',
+        	'buttons' => [
+        		'update' => function ($url, $model) {
+        			var_dump($url);
+        			return Html::a('<i class="fa fa-pencil-alt"></i>', ['/colaborador/update/', 'id' => $model->id], [
+        				'class' => Util::BTN_COLOR_WARNING,
+        				'title' => 'Alterar',
+        				'data-toggle' => 'tooltip',
+        			]);
+        		},
+        		'delete' => function ($url, $model) {
+        			return Html::a('<i class="fa fa-trash-alt"></i>', $url, [
+        				'class' => Util::BTN_COLOR_DANGER,
+        				'title' => 'Excluír',
+        				'data-toggle' => 'tooltip',
+        				'data-method' => 'post',
+        			]);
+        		},
+        	],
+        ],
+    ];
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Create Colaborador', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?= GridView::widget([
+    // grid
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        'columns' => $columns,
+        /* 'pjax' => true,
+        'pjaxSettings' => [
+            'options' => [
+                'id' => 'grid-colaborador',
+                'enablePushState'=>false
+            ],
+        ], */
+	    'toolbar' => [
+	        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Colaborador', ['create'], ['class' => Util::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Colaborador', 'data-toggle' => 'tooltip',])],
+	        ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Util::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
+	        '{toggleData}',
+	    ],
+	    'bordered' => true,
+	    'striped' => true,
+	    'condensed' => true,
+	    'responsive' => true,
+	    'hover' => true,
+	    'showPageSummary' => false,
+	    'persistResize' => false,
+    ]);
+?>
 
-            'id',
-            'nome',
-            'username',
-            'password',
-            'authKey',
-            //'cargo',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-</div>
+       
+       
+       

@@ -8,6 +8,7 @@ use app\models\ColaboradorSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\base\Util;
 
 /**
  * ColaboradorController implements the CRUD actions for Colaborador model.
@@ -66,10 +67,25 @@ class ColaboradorController extends Controller
     {
         $model = new Colaborador();
 
-        if (\Yii::$app->request->isPost) {        	
-	        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-	            return $this->redirect(['view', 'id' => $model->id]);
-	        }
+        if ($post = \Yii::$app->request->post()) {
+            try {
+                $transaction = \Yii::$app->db->beginTransaction();
+                
+                // seta os dados da model
+                $model->load($post);
+                
+                // salva a model
+                if (!$model->save()) {
+                    throw new \Exception(Util::renderErrors($model->getErrors()));
+                }
+                
+                $transaction->commit();
+                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O colaborador foi cadastrado com sucesso.');
+                return $this->redirect(['index']);
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+            }
         }
 
         return $this->render('create', [
@@ -86,10 +102,28 @@ class ColaboradorController extends Controller
      */
     public function actionUpdate($id)
     {
+        // busca a model
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($post = \Yii::$app->request->post()) {
+            try {
+                $transaction = \Yii::$app->db->beginTransaction();
+                
+                // seta os dados da model
+                $model->load($post);
+                
+                // salva a model
+                if (!$model->save()) {
+                    throw new \Exception(Util::renderErrors($model->getErrors()));
+                }
+                
+                $transaction->commit();
+                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O colaborador foi alterado com sucesso.');
+                return $this->redirect(['index']);
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+            }
         }
 
         return $this->render('update', [
@@ -106,8 +140,22 @@ class ColaboradorController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        // busca a model
+        $model = $this->findModel($id);
+        
+        try {
+            $transaction = \Yii::$app->db->beginTransaction();
+            
+            // deleta o registro
+            $model->delete();
+            
+            $transaction->commit();
+            \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O colaborador foi excluído com sucesso.');
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+        }
+        
         return $this->redirect(['index']);
     }
 
@@ -124,6 +172,6 @@ class ColaboradorController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException();
     }
 }

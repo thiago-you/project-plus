@@ -42,7 +42,7 @@ CREATE TABLE `colaborador` (
   `username` VARCHAR(30) NOT NULL,
   `password` VARCHAR(30) NOT NULL,
   `authKey` CHAR(30),
-  `cargo` VARCHAR(100)
+  `cargo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os cargos possiveis'
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de telefone
 CREATE TABLE `telefone` (
