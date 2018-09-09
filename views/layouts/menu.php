@@ -5,7 +5,7 @@ use yii\web\View;
 ?>
 <div class="collapse navbar-collapse" id="menu-navbar-collapse">
 	<ul class="nav navbar-nav">
-		<li><a href="<?= Url::to(['/cliente']); ?>"><i class="fa fa-users"></i>&nbsp; Clientes</a></li>
+		<li><a href="<?= Url::to(['/contrato']); ?>"><i class="fa fa-file-invoice-dollar"></i>&nbsp; Contratos</a></li>
 	</ul>
     <!-- ./menu -->
 	<form class="navbar-form navbar-left">
@@ -15,8 +15,8 @@ use yii\web\View;
 					'name' => 'nome',
 					'pluginOptions' => ['highlight' => true],
 					'options' => [
-						'placeholder' => 'Pesquisar cliente pelo nome ou CPF/CNPJ...',		
-						'style' => 'width: 400px;',
+						'placeholder' => 'Pesquisar contrato pelo nome ou CPF/CNPJ do cliente...',		
+						'style' => 'width: 450px;',
 						'autocomplete' => 'off',
 					],
 					'dataset' => [

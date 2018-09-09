@@ -530,3 +530,9 @@ fieldset legend {
 fieldset label {
 	font-size: 12px;
 }
+/* active label */
+label.active-label {
+	padding-top: 15px;
+}
+
+
