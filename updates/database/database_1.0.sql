@@ -123,6 +123,7 @@ CREATE TABLE `contrato` (
   `regiao` VARCHAR(50),
   `filial` VARCHAR(50),
   `observacao` VARCHAR(250),
+  `situacao` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar as situacoes possiveis',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`),
   FOREIGN KEY (`id_credor`) REFERENCES `credor`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
