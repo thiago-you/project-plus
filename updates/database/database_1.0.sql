@@ -110,6 +110,7 @@ CREATE TABLE `referencia` (
 CREATE TABLE `contrato` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_cliente` INT NOT NULL,
+  `id_credor` INT NOT NULL,
   `codigo_cliente` VARCHAR(50),
   `codigo_contrato` VARCHAR(50),
   `num_contrato` VARCHAR(50),
@@ -117,11 +118,13 @@ CREATE TABLE `contrato` (
   `valor` DECIMAL(10,2),
   `data_cadastro` DATE NOT NULL,
   `data_vencimento` DATE,
+  `data_negociacao` DATE NOT NULL,
   `tipo` TINYINT(1) DEFAULT '1',
   `regiao` VARCHAR(50),
   `filial` VARCHAR(50),
   `observacao` VARCHAR(250),
-  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
+  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`),
+  FOREIGN KEY (`id_credor`) REFERENCES `credor`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de negociacao
 CREATE TABLE `negociacao` (
