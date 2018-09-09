@@ -3,6 +3,7 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use app\base\Util;
 
 /**
  * ContratoSearch represents the model behind the search form of `app\models\Contrato`.
@@ -52,7 +53,7 @@ class ContratoSearch extends Contrato
     {
         $query = Contrato::find()
         ->alias('con')
-        ->leftJoin('cliente cli', 'con.id_cliente = cli.id');
+        ->innerJoin('cliente cli', 'con.id_cliente = cli.id');
 
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
@@ -65,6 +66,10 @@ class ContratoSearch extends Contrato
             return $dataProvider;
         }
 
+        if (!empty($this->documento)) {
+            $this->documento = Util::unmask($this->documento, true);
+        }
+        
         // grid filtering conditions
         $query->andFilterWhere([
             'con.id' => $this->id,

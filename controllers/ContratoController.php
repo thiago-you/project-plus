@@ -8,6 +8,7 @@ use yii\filters\VerbFilter;
 use app\models\ContratoSearch;
 use app\models\ContratoParcela;
 use yii\web\NotFoundHttpException;
+use app\models\Cliente;
 
 /**
  * ContratoController implements the CRUD actions for Contrato model.
@@ -33,16 +34,8 @@ class ContratoController extends Controller
      * Lists all Contrato models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($index = '', $value = '')
     {
-        $searchModel = new ContratoSearch();
-        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-        
         $searchModel = new ContratoSearch();
         
         // seta os params do filtro
@@ -61,7 +54,6 @@ class ContratoController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'modelImport' => $modelImport
         ]);
     }
 
@@ -226,6 +218,116 @@ class ContratoController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Realiza a pesquisa rápida de um ou mais contratos
+     */
+    public function actionQuickSearch($value = null, $strict = null)
+    {
+        // monta o where de busca
+        $where = [
+            'nome' => ['like', 'cli.nome', $value],
+            'documento' => ['like', 'cli.documento', $value]
+        ];
+        
+        // valida o modo de busca (like ou stritamente o mesmo)
+        if ($strict) {
+            $where = [
+                'nome' => ['cli.nome' => $value],
+                'documento' => ['cli.documento' => $value]
+            ];
+        }
+        
+        // busca todos os clientes com o nome passado
+        // se nao achou nenhum cliente pelo nome, tenta pesquisar pelo cpf/cnpj
+        $index = 'nome';
+        if (!$contrato = Contrato::find()->alias('con')->innerJoin('cliente cli', 'cli.id = con.id_cliente')->where($where['nome'])->all()) {
+            // remove a mascara
+            $value = Util::unmask($value, true);
+            
+            // busca pelo busca pelo cpf/cnpj
+            $contrato = Contrato::find()->alias('con')->innerJoin('cliente cli', 'cli.id = con.id_cliente')->where($where['documento'])->all();
+            $index = 'documento';
+        }
+        
+        // se achou apenas um contrato, redireciona para a página do contrato
+        // se houver mais contatos com este nome
+        // redireciona para a página de listagem de contratos
+        if (!empty($value) && count($contrato) == 1) {
+            return $this->redirect(['update', 'id' => $contrato[0]->id]);
+        }
+        
+        return $this->redirect(['index', 'index' => $index, 'value' => $value]);
+    }
+    
+    /**
+     * Busca um cliente por ajax typeahead
+     */
+    public function actionSearchList(array $q)
+    {
+        // valida a requisição
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
+        }
+        
+        $data = [];
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $query = Cliente::find();
+        
+        if (isset($q['nome'])) { $query->select('nome')->andWhere(['like', 'nome', $q['nome']])->distinct(true); }
+        if (isset($q['telefone'])) { $query->select('telefone')->andWhere(['like', 'telefone', $q['telefone']])->distinct(true); }
+        if (isset($q['documento'])) { $query->select('documento')->andWhere(['like', 'documento', $q['documento']])->distinct(true); }
+        
+        // params da busca rapida
+        if (isset($q['quick'])) {
+            // se enviou um numero pesquisa pelo documento
+            // senao, busca pelo nome
+            if (is_numeric($q['quick'])) {
+                $query->select('documento')->andWhere(['like', 'documento', $q['quick']])->distinct(true);
+            } else {
+                $query->select('nome')->andWhere(['like', 'nome', $q['quick']])->distinct(true);
+            }
+        }
+
+        $model = $query->all();
+
+        if ($model != null) {
+            foreach ($model as $key) {
+                if (isset($q['nome'])) { $data[]['value'] = $key['nome']; }
+                if (isset($q['telefone'])) { $data[]['value'] = $key['telefone']; }
+                if (isset($q['documento'])) {
+                    $documento = $key['documento'];
+                    
+                    // verifica se é um cpf ou cpnj, se ssim formata o documento
+                    if (strlen($documento) == 11) {
+                        $documento = Util::mask($documento, Util::MASK_CPF);
+                    } elseif (strlen($documento) == 14) {
+                        $documento = Util::mask($documento, Util::MASK_CNPJ);
+                    }
+                    
+                    $data[]['value'] = $documento; 
+                }
+                if (isset($q['quick'])) {
+                    if (isset($key['documento'])) {
+                        $documento = $key['documento'];
+                        
+                        // verifica se é um cpf ou cpnj, se ssim formata o documento
+                        if (strlen($documento) == 11) {
+                            $documento = Util::mask($documento, Util::MASK_CPF);
+                        } elseif (strlen($documento) == 14) {
+                            $documento = Util::mask($documento, Util::MASK_CNPJ);
+                        }
+                        
+                        $data[]['value'] = $documento;
+                    } else {
+                        $data[]['value'] = $key['nome'];
+                    }
+                }
+            }
+        }
+        
+        return $data;
+    }
+    
     /**
      * Finds the Contrato model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

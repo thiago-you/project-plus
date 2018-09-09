@@ -8,6 +8,7 @@ use kartik\form\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\money\MaskMoney;
 use yii\web\View;
+use app\models\Contrato;
 ?>
 <?php $form = ActiveForm::begin(); ?>
 	<div class="panel panel-primary panel-box">
@@ -87,7 +88,10 @@ use yii\web\View;
                 	<!-- ./row -->
                 	<div class="row">
                     	<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-                    		<?= $form->field($model, 'tipo')->textInput() ?>
+                    		<?= $form->field($model, 'tipo')->dropDownList(Contrato::getListaTipos(), [
+                                    'prompt' => '',
+                        		]); 
+                    		?>
                     	</div>
                 	</div>
                 	<!-- ./row -->

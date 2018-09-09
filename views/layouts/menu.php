@@ -24,7 +24,7 @@ use yii\web\View;
 							'display'=> 'value',
 							'notFound' => '<span class="alert alert-danger"><i class="fa fa-ban"></i>&nbsp; Nehum cliente foi encontrado ...</div>',
 							'remote'=>[
-								'url' => Url::to(['cliente/search-list']).'?q[quick]=%QUERY',
+								'url' => Url::to(['contrato/search-list']).'?q[quick]=%QUERY',
 								'wildcard' => '%QUERY',
 							],
 						],
@@ -32,7 +32,7 @@ use yii\web\View;
 					'pluginEvents' => [
 						'typeahead:select' => 'function(event, data) { 
 							if (data.value != undefined && data.value.length > 0) {
-								window.location = BASE_PATH + "cliente/quick-search?nome="+data.value;	
+								window.location = BASE_PATH + "contrato/quick-search?value="+data.value+"&strict=true";	
 							}
 						}',
 					],
@@ -57,7 +57,7 @@ $script = <<< JS
 		$('body').on('keypress keydown keyup', '#quick-search-nome', function(e) {
 			if (e.which == 13) {
 				if (this.value != undefined && this.value.length > 0) {
-					window.location = BASE_PATH + "cliente/quick-search?value="+this.value;
+					window.location = BASE_PATH + "contrato/quick-search?value="+this.value;
 				}
 			}
 		});

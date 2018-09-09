@@ -3,8 +3,9 @@ use app\base\Util;
 use yii\helpers\Html;
 use app\models\Cliente;
 use kartik\grid\GridView;
+use app\models\Contrato;
 
-$this->title = 'Clientes';
+$this->title = 'Contratos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="panel panel-primary panel-box">
@@ -18,20 +19,15 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="panel-body">
 		<?php $columns = [
                 [
-                    'attribute' => 'id',
-                    'hAlign' => GridView::ALIGN_CENTER,
-                ],
-                [
                     'attribute' => 'cliente.nome',
-                    'width' => '40%',
+                    'width' => '30%',
                     'format' => 'raw',
                     'header' => '<span class="text-primary">Nome</span>',
                 ],
                 [
                     'attribute' => 'cliente.documento',
-                    'label' => 'CPF/CNPJ',
                     'format' => 'raw',
-                    'header' => '<span class="text-primary">Documento</span>',
+                    'header' => '<span class="text-primary">CPF/CNPJ</span>',
                     'value' => function($model) {
                         if ($model->cliente->documento) {                            
                             if ($model->cliente->tipo == Cliente::TIPO_FISICO) {
@@ -45,10 +41,39 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ],
                 [
+                    'attribute' => 'credor.nome',
+                    'width' => '20%',
+                    'format' => 'raw',
+                    'header' => '<span class="text-primary">Credor</span>',
+                ],
+                [
+                    'attribute' => 'codigo_contrato',
+                    'label' => 'Contrato',
+                ],
+                [
+                    'attribute' => 'atraso',
+                    'format' => 'raw',
+                    'header' => '<span class="text-primary">Atraso</span>',
+                    'value' => function($model) {
+                        return '';   
+                    }
+                ],
+                [
+                    'attribute' => 'situacao',
+                    'label' => 'Estágio',
+                    'value' => function($model) {
+                        if ($model->situacao == Contrato::SIT_EM_ANDAMENTO) {
+                            return 'Em Andamento';
+                        }
+                        
+                        return 'Fechado';
+                    }
+                ],
+                [
                     'class' => 'kartik\grid\ActionColumn',
                 	'hAlign'=> GridView::ALIGN_CENTER,
                 	'template' => '{negociacao}{update}{delete}',
-                    'width' => '15%',
+                    'width' => '150px',
                 	'header' => '',
                 	'buttons' => [
     	                'negociacao' => function ($url, $model) {

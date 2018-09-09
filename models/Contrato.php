@@ -21,6 +21,7 @@ use Yii;
  * @property string $regiao
  * @property string $filial
  * @property string $observacao
+ * @property int $situacao
  *
  * @property Cliente $cliente
  * @property Credor $credor
@@ -29,6 +30,14 @@ use Yii;
  */
 class Contrato extends \yii\db\ActiveRecord
 {
+    // consts para a situacao
+    CONST SIT_EM_ANDAMENTO = '1';
+    CONST SIT_FECADO = '2';
+    
+    /**
+     * @var string
+     */
+    public $atraso;
     
     /**
      * {@inheritdoc}
@@ -45,7 +54,7 @@ class Contrato extends \yii\db\ActiveRecord
     {
         return [
             [['id_cliente', 'id_credor', 'data_negociacao'], 'required'],
-            [['id_cliente', 'id_credor', 'tipo'], 'integer'],
+            [['id_cliente', 'id_credor', 'tipo', 'situacao'], 'integer'],
             [['valor'], 'number'],
             [['data_cadastro', 'data_vencimento', 'data_negociacao'], 'safe'],
             [['codigo_cliente', 'codigo_contrato', 'num_contrato', 'num_plano', 'regiao', 'filial'], 'string', 'max' => 50],
@@ -75,6 +84,7 @@ class Contrato extends \yii\db\ActiveRecord
             'regiao' => 'Região',
             'filial' => 'Filial',
             'observacao' => 'Observação',
+            'situacao' => 'Situação',
         ];
     }
 
@@ -108,6 +118,31 @@ class Contrato extends \yii\db\ActiveRecord
     public function getNegociacaos()
     {
         return $this->hasMany(Negociacao::className(), ['id_contrato' => 'id']);
+    }
+    
+    /**
+     * Retorna a lista de tipos do contrato
+     */
+    public static function getListaTipos() 
+    {
+        return [
+            '1' => 'Boleto / Mensalidade',
+            '2' => 'Capital de Giro Fisica',
+            '3' => 'Capital de Giro Juridica',
+            '4' => 'Cheque',
+            '5' => 'Curso Profissionalizante',
+            '6' => 'Depósito Indevido',
+            '7' => 'Desc. Cheque-Fisica',
+            '8' => 'Desc. Cheque-Juridica',
+            '9' => 'Desconto P. Juridica',
+            '10' => 'Ensino',
+            '11' => 'Espanhol',
+            '12' => 'Inglês',
+            '13' => 'Material Didadíco',
+            '14' => 'Mensalidade',
+            '15' => 'Nota Fiscal',
+            '16' => 'Nota Promissória',
+        ];
     }
     
     /**

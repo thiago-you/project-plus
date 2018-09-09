@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 	'header' => '',
                 	'buttons' => [
     	                'contrato' => function ($url, $model) {
-                            return Html::a('<i class="fa fa-pencil-alt"></i>', ['/cliente/contrato/', 'id' => $model->id], [
+                            return Html::a('<i class="fa fa-cog"></i>', '#', [
                                 'class' => Util::BTN_COLOR_PURPLE,
                                 'title' => 'Contratos do Cliente',
                                 'data-toggle' => 'tooltip',
