@@ -26,8 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         	'header' => '',
         	'buttons' => [
         		'update' => function ($url, $model) {
-        			var_dump($url);
-        			return Html::a('<i class="fa fa-pencil-alt"></i>', ['/colaborador/update/', 'id' => $model->id], [
+        			return Html::a('<i class="fa fa-pencil-alt"></i>', $url, [
         				'class' => Util::BTN_COLOR_WARNING,
         				'title' => 'Alterar',
         				'data-toggle' => 'tooltip',
@@ -48,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
     // grid
     echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => $columns,
         /* 'pjax' => true,
         'pjaxSettings' => [

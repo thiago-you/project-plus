@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use Yii;
@@ -9,6 +8,7 @@ use Yii;
  *
  * @property int $id
  * @property int $id_cliente
+ * @property int $id_credor
  * @property string $codigo_cliente
  * @property string $codigo_contrato
  * @property string $num_contrato
@@ -16,17 +16,20 @@ use Yii;
  * @property string $valor
  * @property string $data_cadastro
  * @property string $data_vencimento
+ * @property string $data_negociacao
  * @property int $tipo
  * @property string $regiao
  * @property string $filial
  * @property string $observacao
  *
  * @property Cliente $cliente
+ * @property Credor $credor
  * @property ContratoParcela[] $contratoParcelas
  * @property Negociacao[] $negociacaos
  */
 class Contrato extends \yii\db\ActiveRecord
 {
+    
     /**
      * {@inheritdoc}
      */
@@ -41,10 +44,10 @@ class Contrato extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_cliente', 'data_cadastro'], 'required'],
-            [['id_cliente', 'tipo'], 'integer'],
+            [['id_cliente', 'id_credor', 'data_negociacao'], 'required'],
+            [['id_cliente', 'id_credor', 'tipo'], 'integer'],
             [['valor'], 'number'],
-            [['data_cadastro', 'data_vencimento'], 'safe'],
+            [['data_cadastro', 'data_vencimento', 'data_negociacao'], 'safe'],
             [['codigo_cliente', 'codigo_contrato', 'num_contrato', 'num_plano', 'regiao', 'filial'], 'string', 'max' => 50],
             [['observacao'], 'string', 'max' => 250],
             [['id_cliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['id_cliente' => 'id']],
@@ -57,19 +60,21 @@ class Contrato extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'id_cliente' => 'Id Cliente',
-            'codigo_cliente' => 'Codigo Cliente',
-            'codigo_contrato' => 'Codigo Contrato',
-            'num_contrato' => 'Num Contrato',
-            'num_plano' => 'Num Plano',
+            'id' => 'Cód.',
+            'id_cliente' => 'Cliente',
+            'id_credor' => 'Credor',
+            'codigo_cliente' => 'Código do Cliente',
+            'codigo_contrato' => 'Código do Contrato',
+            'num_contrato' => 'N° Contrato',
+            'num_plano' => 'N° Plano',
             'valor' => 'Valor',
-            'data_cadastro' => 'Data Cadastro',
-            'data_vencimento' => 'Data Vencimento',
+            'data_cadastro' => 'Data do Contrato',
+            'data_vencimento' => 'Data de Expiração',
+            'data_negociacao' => 'Data de Negociação',
             'tipo' => 'Tipo',
-            'regiao' => 'Regiao',
+            'regiao' => 'Região',
             'filial' => 'Filial',
-            'observacao' => 'Observacao',
+            'observacao' => 'Observação',
         ];
     }
 
@@ -79,6 +84,14 @@ class Contrato extends \yii\db\ActiveRecord
     public function getCliente()
     {
         return $this->hasOne(Cliente::className(), ['id' => 'id_cliente']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCredor()
+    {
+        return $this->hasOne(Credor::className(), ['id' => 'id_credor']);
     }
 
     /**
@@ -95,5 +108,31 @@ class Contrato extends \yii\db\ActiveRecord
     public function getNegociacaos()
     {
         return $this->hasMany(Negociacao::className(), ['id_contrato' => 'id']);
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
+    public function beforeSave($insert) 
+    {
+        // seta a data de cadastro
+        if (empty($this->data_cadastro)) {
+            $this->data_cadastro = date('Y-m-d H:i:s');
+        }
+        
+        return parent::beforeSave($insert);        
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeDelete()
+     */
+    public function beforeDelete() 
+    {
+        // deleta todas as parcelas do contrato
+        ContratoParcela::deleteAll();
+        
+        return parent::beforeDelete();
     }
 }

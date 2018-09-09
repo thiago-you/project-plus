@@ -31,7 +31,7 @@ class ContratoParcela extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_contrato', 'data_cadastro', 'data_vencimento'], 'required'],
+            [['id_contrato', 'data_vencimento'], 'required'],
             [['id_contrato'], 'integer'],
             [['data_cadastro', 'data_vencimento'], 'safe'],
             [['valor'], 'number'],
@@ -59,5 +59,19 @@ class ContratoParcela extends \yii\db\ActiveRecord
     public function getContrato()
     {
         return $this->hasOne(Contrato::className(), ['id' => 'id_contrato']);
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
+    public function beforeSave($insert) 
+    {
+        // seta a data de cadastro da parcela
+        if (empty($this->data_cadastro)) {
+            $this->data_cadastro = date('Y-m-d H:i:s');
+        }
+        
+        return parent::beforeSave($insert);
     }
 }

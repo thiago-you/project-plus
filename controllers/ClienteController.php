@@ -66,7 +66,7 @@ class ClienteController extends BaseController
         	'modelImport' => $modelImport
         ]);
     }
-
+    
     /**
      * Cadastra um registro
      */
@@ -174,7 +174,7 @@ class ClienteController extends BaseController
 	        	return $this->redirect(['index']);
         	} catch (\Exception $e) {
         		$transaction->rollBack();
-        		\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+        		\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
         	}
         }
           
@@ -322,7 +322,7 @@ class ClienteController extends BaseController
         		return $this->redirect(['index']);
         	} catch (\Exception $e) {
         		$transaction->rollBack();
-        		\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+        		\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
         	}
         }
         
@@ -383,7 +383,7 @@ class ClienteController extends BaseController
 	        \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O cliente foi excluído com sucesso.');
 	    } catch (\Exception $e) {
 	    	$transaction->rollBack();
-	    	\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+	    	\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
 	    }
         
         return $this->redirect(['index']);

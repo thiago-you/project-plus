@@ -1,11 +1,8 @@
 <?php
-
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Contrato;
 
 /**
  * ContratoSearch represents the model behind the search form of `app\models\Contrato`.
@@ -13,13 +10,24 @@ use app\models\Contrato;
 class ContratoSearch extends Contrato
 {
     /**
+     * @var string => atributos do cliente
+     */
+    public $nome;
+    public $documento;
+    public $telefone;
+    
+    /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
             [['id', 'id_cliente', 'tipo'], 'integer'],
-            [['codigo_cliente', 'codigo_contrato', 'num_contrato', 'num_plano', 'data_cadastro', 'data_vencimento', 'regiao', 'filial', 'observacao'], 'safe'],
+            [[
+                'codigo_cliente', 'codigo_contrato', 'num_contrato', 'num_plano', 
+                'data_cadastro', 'data_vencimento', 'regiao', 'filial', 'observacao',
+                'nome', 'documento', 'telefone',
+            ], 'safe'],
             [['valor'], 'number'],
         ];
     }
@@ -42,10 +50,11 @@ class ContratoSearch extends Contrato
      */
     public function search($params)
     {
-        $query = Contrato::find();
+        $query = Contrato::find()
+        ->alias('con')
+        ->leftJoin('cliente cli', 'con.id_cliente = cli.id');
 
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -53,19 +62,17 @@ class ContratoSearch extends Contrato
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'id_cliente' => $this->id_cliente,
-            'valor' => $this->valor,
-            'data_cadastro' => $this->data_cadastro,
-            'data_vencimento' => $this->data_vencimento,
-            'tipo' => $this->tipo,
+            'con.id' => $this->id,
+            'con.id_cliente' => $this->id_cliente,
+            'con.valor' => $this->valor,
+            'con.data_cadastro' => $this->data_cadastro,
+            'con.data_vencimento' => $this->data_vencimento,
+            'con.tipo' => $this->tipo,
         ]);
 
         $query->andFilterWhere(['like', 'codigo_cliente', $this->codigo_cliente])
@@ -74,7 +81,10 @@ class ContratoSearch extends Contrato
             ->andFilterWhere(['like', 'num_plano', $this->num_plano])
             ->andFilterWhere(['like', 'regiao', $this->regiao])
             ->andFilterWhere(['like', 'filial', $this->filial])
-            ->andFilterWhere(['like', 'observacao', $this->observacao]);
+            ->andFilterWhere(['like', 'observacao', $this->observacao])
+            ->andFilterWhere(['like', 'cli.nome', $this->nome])
+            ->andFilterWhere(['like', 'cli.telefone', $this->telefone])
+            ->andFilterWhere(['like', 'cli.documento', $this->documento]);
 
         return $dataProvider;
     }

@@ -44,11 +44,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'class' => 'kartik\grid\ActionColumn',
                 	'hAlign'=> GridView::ALIGN_CENTER,
-                	'template' => '{update}{delete}',
+                	'template' => '{contrato}{update}{delete}',
+                    'width' => '15%',
                 	'header' => '',
                 	'buttons' => [
-                		'update' => function ($url, $model) {
-                			return Html::a('<i class="fa fa-pencil-alt"></i>', ['/cliente/update/', 'id' => $model->id], [
+    	                'contrato' => function ($url, $model) {
+                            return Html::a('<i class="fa fa-pencil-alt"></i>', ['/cliente/contrato/', 'id' => $model->id], [
+                                'class' => Util::BTN_COLOR_PURPLE,
+                                'title' => 'Contratos do Cliente',
+                                'data-toggle' => 'tooltip',
+        	                ]);
+    	                },
+    	                'update' => function ($url, $model) {
+                			return Html::a('<i class="fa fa-pencil-alt"></i>', $url, [
                 				'class' => Util::BTN_COLOR_WARNING,
                 				'title' => 'Alterar',
                 				'data-toggle' => 'tooltip',

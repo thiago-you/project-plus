@@ -18,10 +18,10 @@ use app\models\Colaborador;
 			<!-- ./row -->
 			<div class="row">
 				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">        
-            		<?= $form->field($model, 'username')->textInput(['maxlength' => true, 'autocomplete' => 'off']); ?>
+            		<?= $form->field($model, 'username')->textInput(['maxlength' => true]); ?>
             	</div>
         		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-            		<?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'autocomplete' => 'off']); ?>
+            		<?= $form->field($model, 'password')->passwordInput(['maxlength' => true]); ?>
             	</div>
         	</div>
         	<!-- ./row -->

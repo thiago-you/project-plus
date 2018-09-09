@@ -36,6 +36,11 @@ class Colaborador extends \yii\db\ActiveRecord
             [['nome'], 'string', 'max' => 250],
             [['cargo'], 'integer'],
             [['username', 'password', 'authKey'], 'string', 'max' => 30],
+            ['username', function ($attribute, $params, $validator) {
+                if (strtoupper($this->$attribute) == 'ADMIN') {
+                    $this->addError($attribute, 'O username "Admin" é reservado pelo sistema.');
+                }
+            }],
         ];
     }
 

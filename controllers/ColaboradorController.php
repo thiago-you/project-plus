@@ -84,7 +84,7 @@ class ColaboradorController extends Controller
                 return $this->redirect(['index']);
             } catch (\Exception $e) {
                 $transaction->rollBack();
-                \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+                \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
             }
         }
 
@@ -122,7 +122,7 @@ class ColaboradorController extends Controller
                 return $this->redirect(['index']);
             } catch (\Exception $e) {
                 $transaction->rollBack();
-                \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+                \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
             }
         }
 
@@ -153,7 +153,7 @@ class ColaboradorController extends Controller
             \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O colaborador foi excluído com sucesso.');
         } catch (\Exception $e) {
             $transaction->rollBack();
-            \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+            \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
         }
         
         return $this->redirect(['index']);

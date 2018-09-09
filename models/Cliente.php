@@ -63,6 +63,7 @@ class Cliente extends \yii\db\ActiveRecord
             [['salario'], 'number'],
             [['nome', 'nome_social', 'nome_conjuge', 'nome_pai', 'nome_mae', 'empresa'], 'string', 'max' => 250],
             [['rg', 'documento'], 'string'],
+            [['rg', 'documento'], 'unique'],
             [['inscricao_estadual'], 'string', 'max' => 15],
             [['profissao'], 'string', 'max' => 100],
         ];
