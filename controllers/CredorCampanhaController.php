@@ -1,15 +1,12 @@
 <?php
-
 namespace app\controllers;
 
-use Yii;
-use app\models\CredorCampanha;
-use app\models\CredorCampanhaSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\helpers\Json;
+use yii\web\Controller;
 use app\base\AjaxResponse;
+use yii\filters\VerbFilter;
+use app\models\CredorCampanha;
+use yii\web\NotFoundHttpException;
 
 /**
  * CredorCampanhaController implements the CRUD actions for CredorCampanha model.
@@ -29,21 +26,6 @@ class CredorCampanhaController extends Controller
                 ],
             ],
         ];
-    }
-
-    /**
-     * Lists all CredorCampanha models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new CredorCampanhaSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
     }
 
     /**
