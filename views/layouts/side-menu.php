@@ -5,6 +5,7 @@ use yii\helpers\Url;
 	<a href="<?= Url::to(['/cliente']); ?>"><i class="fa fa-users"></i>&nbsp; Cliente</a>
 	<a href="<?= Url::to(['/colaborador']); ?>"><i class="fa fa-user"></i>&nbsp; Colaborador</a>
 	<a href="<?= Url::to(['/credor']); ?>"><i class="fa fa-university"></i>&nbsp; Credor</a>
+	<a href="<?= Url::to(['/']); ?>"><i class="fa fa-file-upload"></i>&nbsp; Importação</a>
 </div>
 <!-- ./conteudo do side nav -->
 <footer>

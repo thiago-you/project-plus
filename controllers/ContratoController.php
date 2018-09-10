@@ -191,6 +191,16 @@ class ContratoController extends Controller
     }
     
     /**
+     * Negociacao dos contratos do cliente
+     */
+    public function actionNegociacao() 
+    {
+        return $this->render('negociacao', [
+            
+        ]);
+    }
+     
+    /**
      * Deletes an existing Contrato model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
