@@ -1,15 +1,14 @@
 <?php
 namespace app\controllers;
 
+use app\base\Util;
+use app\models\Email;
 use app\models\Cliente;
-use yii\web\UploadedFile;
+use app\models\Endereco;
+use app\models\Telefone;
 use yii\filters\VerbFilter;
 use app\models\ClienteSearch;
 use yii\web\NotFoundHttpException;
-use app\base\Util;
-use app\models\Telefone;
-use app\models\Email;
-use app\models\Endereco;
 
 /**
  * ClienteController implements the CRUD actions for Cliente model.
@@ -54,16 +53,10 @@ class ClienteController extends BaseController
         
         // realiza o filtro
         $dataProvider = $searchModel->search($params);
-        
-        // model do import file
-        $modelImport = new \yii\base\DynamicModel(['fileImport' => 'File Import']);
-        $modelImport->addRule(['fileImport'],'required');
-        $modelImport->addRule(['fileImport'], 'file', ['extensions' => 'ods,xls,xlsx']);
-        
+                
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        	'modelImport' => $modelImport
         ]);
     }
     
@@ -332,39 +325,6 @@ class ClienteController extends BaseController
         ]);
     }
 
-    /**
-     * TODO
-     * Realiza o upload e processamento de um arquivo Excel
-     */
-    public function actionUploadExcel() 
-    {
-    	// model do import file
-    	$modelImport = new \yii\base\DynamicModel(['fileImport' => 'File Import']);
-    	$modelImport->addRule(['fileImport'],'required');
-    	$modelImport->addRule(['fileImport'], 'file', ['extensions' => 'ods,xls,xlsx']);
-		
-    	$modelImport->fileImport = UploadedFile::getInstance($modelImport,'fileImport');
-    	
-    	if ($modelImport->fileImport && $modelImport->validate()) {
-    		/* $inputFileType = \PHPExcel_IOFactory::identify($modelImport->fileImport->tempName);
-    		$objReader = \PHPExcel_IOFactory::createReader($inputFileType);
-    		$objPHPExcel = $objReader->load($modelImport->fileImport->tempName);
-    		$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-    		$baseRow = 3;
-    		
-    		while (!empty($sheetData[$baseRow]['B'])) {
-    			var_dump((string)$sheetData[$baseRow]['B']);
-    			$baseRow++;
-    		} */
-    		
-    		var_dump('to aqui');
-    	} else {
-    		var_dump($modelImport->errors);
-    	}
-    	
-    	die;	
-    }
-    
     /**
      * Deleta um registro
      */

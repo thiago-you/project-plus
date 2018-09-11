@@ -4,7 +4,7 @@ namespace app\models;
 /**
  * This is the model class for table "cidade".
  *
- * @property int    $Id
+ * @property int    $id
  * @property int    $codigo
  * @property string $nome
  * @property string $uf
@@ -40,7 +40,7 @@ class Cidade extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'Id' => 'ID',
+            'id' => 'ID',
             'codigo' => 'Codigo',
             'nome' => 'Nome',
             'uf' => 'Uf',

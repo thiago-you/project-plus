@@ -24,6 +24,12 @@ class Telefone extends \yii\db\ActiveRecord
 	// flag para whatsapp e ativo
 	CONST SIM = 'S';
 	CONST NAO = 'N';
+	// consts para os tipos do telefone
+	CONST TIPO_RESIDENCIAL = '1';
+	CONST TIPO_MOVEL = '2';
+	CONST TIPO_COMERCIAL = '3';
+	CONST TIPO_FAX = '4';
+	CONST TIPO_REFERENCIA = '5';
 	
     /**
      * {@inheritdoc}
@@ -81,11 +87,11 @@ class Telefone extends \yii\db\ActiveRecord
     public static function getListaTipos()
     {
     	return [
-    		'1' => 'Residencial',
-    		'2' => 'Móvel',
-    		'3' => 'Comercial',
-    		'4' => 'Fax',
-    		'5' => 'Referência',
+    		self::TIPO_RESIDENCIAL => 'Residencial',
+            self::TIPO_MOVEL => 'Móvel',
+            self::TIPO_COMERCIAL => 'Comercial',
+            self::TIPO_FAX => 'Fax',
+            self::TIPO_REFERENCIA => 'Referência',
     	];
     }
 }

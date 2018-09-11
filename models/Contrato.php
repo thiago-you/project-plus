@@ -6,9 +6,9 @@ use Yii;
 /**
  * This is the model class for table "contrato".
  *
- * @property int $id
- * @property int $id_cliente
- * @property int $id_credor
+ * @property int    $id
+ * @property int    $id_cliente
+ * @property int    $id_credor
  * @property string $codigo_cliente
  * @property string $codigo_contrato
  * @property string $num_contrato
@@ -17,11 +17,11 @@ use Yii;
  * @property string $data_cadastro
  * @property string $data_vencimento
  * @property string $data_negociacao
- * @property int $tipo
+ * @property int    $tipo
  * @property string $regiao
  * @property string $filial
  * @property string $observacao
- * @property int $situacao
+ * @property int    $situacao
  *
  * @property Cliente $cliente
  * @property Credor $credor
@@ -53,7 +53,7 @@ class Contrato extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_cliente', 'id_credor', 'data_negociacao'], 'required'],
+            [['id_cliente',], 'required'],
             [['id_cliente', 'id_credor', 'tipo', 'situacao'], 'integer'],
             [['valor'], 'number'],
             [['data_cadastro', 'data_vencimento', 'data_negociacao'], 'safe'],
@@ -169,5 +169,16 @@ class Contrato extends \yii\db\ActiveRecord
         ContratoParcela::deleteAll();
         
         return parent::beforeDelete();
+    }
+
+    /**
+     * Retorna um tipo pelo nome
+     */
+    public static function getTipoByName($name) 
+    {
+        $listaTipos = self::getListaTipos(); 
+        $tipo = array_search(ucfirst(strtolower($name)), $listaTipos);
+        
+        return $tipo ? $tipo : 1;
     }
 }

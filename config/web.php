@@ -99,7 +99,7 @@ $config = [
                 ],
                 'toggleDataOptions' => [
                     'all' => [
-                        'icon' => 'resize-full',
+                        'icon' => 'icon-resize-full',
                         'label' => false,
                         'class' => 'btn btn-default btn-flat btn-sm',
                         'title' => 'Mostrar todos os resultados',

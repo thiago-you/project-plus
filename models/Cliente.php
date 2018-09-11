@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\base\Util;
 
 /**
  * This is the model class for table "cliente".
@@ -56,7 +57,7 @@ class Cliente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            //[['nome', 'data_cadastro'], 'required'],
+            [['nome'], 'required'],
             [['sexo', 'ativo', 'tipo'], 'string'],
             [['data_nascimento', 'data_cadastro'], 'safe'],
             [['estado_civil'], 'integer'],
@@ -182,5 +183,30 @@ class Cliente extends \yii\db\ActiveRecord
     	Endereco::deleteAll(['id_cliente' => $this->id]);
     	
     	return parent::beforeDelete();
+    }
+    
+    /**
+     * Adiciona um telefone ao cliente
+     */
+    public function addTelefone($telefone = '', $tipo = Telefone::TIPO_RESIDENCIAL) {
+        // valida e seta os numeros de telefone
+        if (isset($telefone) && !empty($telefone)) {
+            // remove a mascara do telefone
+            $telefone = Util::unmask($telefone, true);
+
+            // verifica se este telefone ja foi cadastrado
+            if (!$this->isNewRecord && !Telefone::find(['id_cliente' => $this->id, 'numero' => $telefone])) {
+                $telefone = new Telefone();
+                $telefone->id_cliente = $this->id ? $this->id : $this->getPrimaryKey();
+                $telefone->numero = $telefone;
+                $telefone->tipo = $tipo;
+                $telefone->ativo = Telefone::SIM;
+                
+                // salva a model
+                if (!$telefone->save()) {
+                    throw new \Exception(Util::renderErrors($telefone->getErrors()));
+                }
+            }
+        }
     }
 }

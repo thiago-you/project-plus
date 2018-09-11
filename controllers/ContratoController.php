@@ -94,7 +94,7 @@ class ContratoController extends Controller
                 
                 // salva as parcelas cadastrados
                 if (isset($post['Parcela']) && is_array($post['Parcela'])) {
-                    foreach ($post['Parcela'] as $parcela) {
+                    foreach ($post['Parcela'] as $key => $parcela) {
                         if (isset($parcela['vencimento']) && !empty($parcela['vencimento']) &&
                             isset($parcela['valor']) && !empty($parcela['valor'])
                         ) {
@@ -102,6 +102,7 @@ class ContratoController extends Controller
                             // seta os dados
                             $modelParcela = new ContratoParcela();
                             $modelParcela->id_contrato = $model->id ? $model->id : $model->getPrimaryKey();
+                            $modelParcela->num_parcela = ++$key;
                             $modelParcela->data_vencimento = $parcela['vencimento'];
                             $modelParcela->valor = $parcela['valor'];
                             

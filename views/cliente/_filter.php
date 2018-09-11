@@ -82,37 +82,6 @@ use kartik\typeahead\Typeahead;
                 	</div>
             	</div>
             	<!-- ./box-footer -->
-                <!-- ./box -->
-            <?php ActiveForm::end(); ?>
-            <!-- ./form -->
-        </div>
-        <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-        	<?php $form = ActiveForm::begin(['action' => Url::to('cliente/upload-excel'), 'options' => ['enctype' => 'multipart/form-data']]) ?>
-        		<div class="box-header">
-            		<h4><i class="fa fa-upload"></i>&nbsp; Upload de Arquivo Excel</h4>
-        		</div>
-        		<!-- ./box-header -->
-        		<br><br>
-        		<div class="box-body">  
-        			<div class="row">
-                		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-                        	<?= $form->field($modelImport, 'fileImport')->fileInput(); ?>
-                    	</div>
-                	</div>
-            	</div>
-            	<!-- ./box-body -->
-            	<br><br><br>
-            	<div class="box-footer">
-            		<div class="row">
-                		<div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
-            				<?= Html::submitButton('<i class="fa fa-paper-plane"></i>&nbsp; Enviar', [
-            				        'class' => Util::BTN_COLOR_PRIMARY.' btn-block',
-            				    ]);
-            				?>
-                		</div>
-                	</div>
-            	</div>
-            	<!-- ./box-footer -->
             <?php ActiveForm::end(); ?>
             <!-- ./form -->
         </div>

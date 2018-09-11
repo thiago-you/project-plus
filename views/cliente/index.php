@@ -11,7 +11,6 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="panel-body">
 		<?= $this->render('_filter', [
                 'model' => $searchModel,
-		        'modelImport' => $modelImport,
             ]);                
         ?>
 	</div>
@@ -37,10 +36,6 @@ $this->params['breadcrumbs'][] = $this->title;
 						return Util::mask($model->documento, Util::MASK_CNPJ);
 					}
 				],
-    		    [
-                    'attribute' => 'sexo',
-    		        'hAlign' => GridView::ALIGN_CENTER,
-    		    ],
                 [
                     'class' => 'kartik\grid\ActionColumn',
                 	'hAlign'=> GridView::ALIGN_CENTER,

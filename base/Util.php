@@ -53,6 +53,7 @@ class Util
     CONST DATE_END        = 'DATE_END';   // save as (Y-m-d 23:59:59), display as (d/m/Y 23:59:59)
     CONST DATE_TIMESTAMP  = 'TIMESTAMP';  // return timeStamp (mkdir)
     CONST DATE_TIME       = 'TIME';       // return only time (H:i:s)
+    CONST DATE_EXCEL      = 'EXCEL';      // change day by month
    
     /**
      * Retorna uma lista html com os erros retornados na validação da model
@@ -403,12 +404,20 @@ class Util
     public static function formatDateToSave($data, $format = null, $completeFormat = null)
     {
         // seta a data atual se nada for enviado (empty)
-        if(empty($data)) {
+        if (empty($data)) {
             $data = date('Y-m-d H:i:s');
         }
         
+        // se for uma data do excel (m/d/Y)
+        // reorganiza a data e seta o padrão default
+        if ($format == self::DATE_EXCEL) {
+            $data = explode('/', $data);
+            $data = "{$data[1]}/{$data[0]}/{$data[2]}";
+            $format = self::DATE_DEFAULT;
+        }
+        
         // seta o formato e as config da data
-        switch($format) {
+        switch ($format) {
             case self::DATE_DEFAULT:
                 $format = 'Y-m-d';
                 break;

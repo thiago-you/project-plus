@@ -42,13 +42,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'attribute' => 'credor.nome',
-                    'width' => '20%',
                     'format' => 'raw',
                     'header' => '<span class="text-primary">Credor</span>',
+                    'value' => function($modeç) {
+                        return $model->id_credor ? $model->credor->nome : '';  
+                    },
                 ],
                 [
                     'attribute' => 'codigo_contrato',
                     'label' => 'Contrato',
+                    'value' => function($modeç) {
+                    return $model->codigo_contrato ? $model->codigo_contrato : '';
+                    },
                 ],
                 [
                     'attribute' => 'atraso',
@@ -60,6 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'attribute' => 'situacao',
+                    'width' => '150px',
                     'label' => 'Estágio',
                     'value' => function($model) {
                         if ($model->situacao == Contrato::SIT_EM_ANDAMENTO) {

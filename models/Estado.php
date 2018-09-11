@@ -4,10 +4,12 @@ namespace app\models;
 /**
  * This is the model class for table "estados".
  *
- * @property int $id_estado
+ * @property int $id
  * @property string $codigo_ibge
  * @property string $sigla
  * @property string $nome
+ * 
+ * @property Cidade[] $cidades;
  */
 class Estado extends \yii\db\ActiveRecord
 {
@@ -16,7 +18,7 @@ class Estado extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'estados';
+        return 'estado';
     }
 
     /**
@@ -38,7 +40,7 @@ class Estado extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_estado' => 'Cód. Estado',
+            'id' => 'Cód. Estado',
             'codigo_ibge' => 'Código IBGE',
             'sigla' => 'Sigla',
             'nome' => 'Nome',
@@ -51,5 +53,16 @@ class Estado extends \yii\db\ActiveRecord
     public function getCidades()
     {
         return $this->hasMany(Cidade::className(), ['uf' => 'sigla']);
+    }
+    
+    /**
+     * Busca uma cidade dentro do estado pelo nome
+     */
+    public function findCidade($cidade = '') 
+    {
+        return Cidade::findOne([
+            'uf' => $this->sigla,
+            'nome' => $cidade,
+        ]);
     }
 }

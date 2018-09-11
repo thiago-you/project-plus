@@ -9,9 +9,12 @@ use Yii;
  *
  * @property int $id
  * @property int $id_contrato
+ * @property int $num_parcela
  * @property string $data_cadastro
  * @property string $data_vencimento
  * @property string $valor
+ * @property string $multa
+ * @property string $total
  *
  * @property Contrato $contrato
  */
@@ -32,9 +35,9 @@ class ContratoParcela extends \yii\db\ActiveRecord
     {
         return [
             [['id_contrato', 'data_vencimento'], 'required'],
-            [['id_contrato'], 'integer'],
+            [['id_contrato', 'num_parcela'], 'integer'],
             [['data_cadastro', 'data_vencimento'], 'safe'],
-            [['valor'], 'number'],
+            [['valor', 'multa', 'total'], 'number'],
             [['id_contrato'], 'exist', 'skipOnError' => true, 'targetClass' => Contrato::className(), 'targetAttribute' => ['id_contrato' => 'id']],
         ];
     }
@@ -47,9 +50,12 @@ class ContratoParcela extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'id_contrato' => 'Id Contrato',
+            'num_parcela' => 'N° Parcela',
             'data_cadastro' => 'Data Cadastro',
             'data_vencimento' => 'Data Vencimento',
             'valor' => 'Valor',
+            'multa' => 'Multa',
+            'total' => 'Total',
         ];
     }
 
@@ -70,6 +76,10 @@ class ContratoParcela extends \yii\db\ActiveRecord
         // seta a data de cadastro da parcela
         if (empty($this->data_cadastro)) {
             $this->data_cadastro = date('Y-m-d H:i:s');
+        }
+        // seta o total da parcela
+        if (empty($this->total)) {
+            $this->total = $this->valor + $this->multa;
         }
         
         return parent::beforeSave($insert);
