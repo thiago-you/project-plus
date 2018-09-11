@@ -76,7 +76,7 @@ CREATE TABLE `endereco` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_cliente` INT NOT NULL,
   `logradouro` VARCHAR(100) NOT NULL,
-  `numero` VARCHAR(10) NOT NULL,
+  `numero` VARCHAR(10),
   `complemento` VARCHAR(50),
   `bairro` VARCHAR(100),
   `cep` CHAR(8),
@@ -157,7 +157,7 @@ CREATE TABLE `credor_calculo` (
 CREATE TABLE `contrato` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_cliente` INT NOT NULL,
-  `id_credor` INT NOT NULL,
+  `id_credor` INT,
   `codigo_cliente` VARCHAR(50),
   `codigo_contrato` VARCHAR(50),
   `num_contrato` VARCHAR(50),
@@ -186,8 +186,11 @@ CREATE TABLE `negociacao` (
 CREATE TABLE `contrato_parcela` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_contrato` INT NOT NULL,
+  `num_parcela` INT,
   `data_cadastro` DATETIME NOT NULL,
   `data_vencimento` DATE NOT NULL,
   `valor` DECIMAL(10,2),
+  `multa` DECIMAL(10,2),
+  `total` DECIMAL(10,2),
   FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;

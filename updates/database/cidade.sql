@@ -2,7 +2,7 @@ USE `maklenrc`;
 
 -- cria a tabela
 CREATE TABLE cidade (
-  Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   codigo INT NOT NULL,
   nome VARCHAR(255) NOT NULL,
   uf CHAR(2) NOT NULL,
