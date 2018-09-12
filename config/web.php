@@ -99,14 +99,14 @@ $config = [
                 ],
                 'toggleDataOptions' => [
                     'all' => [
-                        'icon' => 'icon-resize-full',
+                        'icon' => 'glyphicon glyphicon-resize-full',
                         'label' => false,
                         'class' => 'btn btn-default btn-flat btn-sm',
                         'title' => 'Mostrar todos os resultados',
                         'data-toggle' => 'tooltip',
                     ],
                     'page' => [
-                        'icon' => 'resize-small',
+                        'icon' => 'glyphicon glyphicon-resize-small',
                         'label' => false,
                         'class' => 'btn btn-default btn-flat btn-sm',
                         'title' => 'Mostar resultados com paginação',

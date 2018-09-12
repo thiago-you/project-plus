@@ -1,9 +1,6 @@
 <?php
 namespace app\base;
 
-use Yii;
-use yii\helpers\Json;
-
 /**
  * Classe que contém métodos úteis para formatação, renderização de valores, etc.
  *
@@ -12,10 +9,10 @@ use yii\helpers\Json;
 class Util
 {
 	// BTN default para forms
-	CONST BTN_CREATE = '<i class="fa fa-save"></i>  Salvar';
-	CONST BTN_UPDATE = '<i class="fa fa-save"></i>  Salvar Alteração';
-	CONST BTN_CANCEL = '<i class="fa fa-close"></i>  Cancelar';
-	CONST BTN_RETURN = '<i class="fa fa-reply"></i>  Voltar';	
+    CONST BTN_CREATE = '<i class="fa fa-save"></i>&nbsp; <span class="hidden-xs">Salvar</span>';
+    CONST BTN_UPDATE = '<i class="fa fa-save"></i>&nbsp; <span class="hidden-xs">Alterar</span>';
+    CONST BTN_CANCEL = '<i class="fa fa-times"></i>&nbsp; <span class="hidden-xs">Cancelar</span>';
+    CONST BTN_RETURN = '<i class="fa fa-reply"></i>&nbsp; <span class="hidden-xs">Voltar</span>';	
 	CONST BTN_CREATE_FORM  = 'btn btn-success btn-flat';
 	CONST BTN_UPDATE_FORM  = 'btn btn-warning btn-flat';
 	CONST BTN_CANCEL_FORM  = 'btn btn-default btn-flat';
@@ -90,25 +87,20 @@ class Util
      * ]
      *
      */
-    public static function mask($val, $mask, $removeMask = false, $option = null)
+    public static function mask($val, $mask, array $option = [])
     {
         // force val as string
         if (!is_string($val)) {
             $val = strval($val);
         }
-       
-        // remove a mascara inicial para inserir outra
-        if ($removeMask) {
-            $val = self::unmask($val);
-        }
         
         // remove a mascara inicial para inserir outra
-        if ($removeMask) {
-            $val = self::unmask($val);
+        if (isset($option['removeMask'])) {
+            $val = self::removeMascara($val);
         }
         
         // define mask
-        switch ($mask) {
+        switch($mask) {
             case self::MASK_CNPJ:
                 $mask = '##.###.###/####-##';
                 break;
@@ -119,39 +111,95 @@ class Util
                 $mask = '#####-###';
                 break;
             case self::MASK_TELEFONE:
-            	if (strlen($val) == 11) {
+                if (strlen($val) == 11) {
                     $mask = '(##) #####-####';
-            	} else {
+                }else {
                     $mask = '(##) ####-####';
-            	}
+                }
                 break;
             case self::MASK_MONEY:
-                // $option => define decimal length
+                // $length => define default decimal length (casas decimais)
+                $length = 2;
+                
+                // prefixo do retorno
+                $prefix = 'R$ ';
+                
+                // valida o valor
                 if (!$val) {
                     $val = 0.00;
                 }
-                if ($option == 'decimalLength') {
-                    $val = floatval($val);
-                    $option = count(explode('.', $val)) == 1 ? 2 : strlen(explode('.', $val)[1]);
+                
+                // seta as options
+                if (isset($option)) {
+                    // $option['decimalLength'] => mantem o numero de casas decimais do valor passado
+                    if (isset($option['decimalLength'])) {
+                        $val = floatval($val);
+                        $length = count(explode('.', $val)) == 1 ? 2 : strlen(explode('.', $val)[1]);
+                    }
+                    // $option['precision'] => seta o numero de casas decimais
+                    if (isset($option['precision'])) {
+                        $length = intval($option['precision']);
+                    }
+                    // defines min precision
+                    if (isset($option['minPrecision'])) {
+                        $length = $length < intval($option['minPrecision']) ? intval($option['minPrecision']) : $length;
+                    }
+                    // define o prefixo do retorno
+                    if (isset($option['prefix'])) {
+                        $prefix = $option['prefix'];
+                    }
                 }
-                if (empty($option)) {
-                    $option = 2;
+                
+                // força o 0 quando o número for zero
+                if (intval(abs($val)) == 0) {
+                    $val = 0;
                 }
-                return 'R$ ' . number_format($val, $option, ',', '.');
+                
+                // formata a retorna o numero
+                return $prefix.number_format($val, $length, ',', '.');
                 break;
             case self::MASK_NUMBER:
-                // $option => define decimal length
+                // $length => define default decimal length (casas decimais)
+                $length = 2;
+                
+                // valida o valor
                 if (!$val) {
                     $val = 0.00;
                 }
-                if ($option == 'decimalLength') {
+                
+                // se nao for um numero, remove a mascara
+                if (!is_numeric($val)) {
+                    $val = Util::removeMascara($val, true);
+                }
+                
+                // $option['decimalLength'] => mantem o numero de casas decimais do valor passado
+                if (isset($option['decimalLength'])) {
                     $val = floatval($val);
-                    $option = count(explode('.', $val)) == 1 ? 2 : strlen(explode('.', $val)[1]);
+                    $length = strlen(explode('.', $val)[1]);
                 }
-                if (empty($option)) {
-                    $option = 2;
+                // $option['precision'] => seta o numero de casas decimais
+                if(isset($option['precision'])) {
+                    $length = intval($option['precision']);
                 }
-                return number_format($val, $option, ',', '.');
+                // defines min precision
+                if (isset($option['minPrecision'])) {
+                    $length = $length < intval($option['minPrecision']) ? intval($option['minPrecision']) : $length;
+                }
+                
+                // verifica se deseja fazer um round do numero
+                // por default apenas pega as casas decimais sem realizar round
+                if (isset($option['round'])) {
+                    $val = round($val, $length);
+                } else {
+                    // seta o decimal length do var
+                    $val = preg_replace('/\.(\d{'.$length.'}).*/', '.$1', $val);
+                    // valida o min length do var
+                    if (strlen(explode('.', $val)[1]) < $length) {
+                        $val = explode('.', $val);
+                        $val = $val[0].'.'.str_pad($val[1], $length, '0');
+                    }
+                }
+                return $val;
                 break;
             case self::MASK_PERCENT:
                 if (!$val) {
@@ -170,13 +218,11 @@ class Util
             $k = 0;
             for ($i = 0; $i < strlen($mask); $i++) {
                 if ($mask[$i] == '#') {
-                	if (isset($val[$k])) {
+                    if (isset($val[$k]))
                         $maskared .= $val[$k++];
-                	}
                 } else {
-                	if (isset($mask[$i])) {
+                    if (isset($mask[$i]))
                         $maskared .= $mask[$i];
-                	}
                 }
             }
         }
@@ -185,125 +231,29 @@ class Util
     }
     
     /**
-     * Format => Long name to Short custom name
-     * Paramas => [$name => String, $size => int]
+     * Formata um texto longo para um nome curto customizado
+     * 
+     * @param String  $name => texto
+     * @param integer $size => tamamho do novo texto
      */
-    public static function shortName($name, $size)
+    public static function shortName($name = '', $size, $etc = true)
     {
         $shortName = $name;
-        if($size > 0 && strlen($name) > $size) {
-            $shortName  = substr($name, 0, ($size - 4)) . ' ...';
+        if ($size > 0 && strlen($shortName) > $size) {
+            if (strlen($shortName) > 4 && $size > 4) {
+                $shortName = mb_substr($name, 0, ($size - 4), 'utf-8');
+            } else if(strlen($shortName) > 1) {
+                $shortName = mb_substr($name, 0, $size, 'utf-8');
+            }
+            
+            if ($etc && $size > 5) {
+                $shortName .= ' ...';
+            }
         }
         
         return $shortName;
     }
-    
-    /**
-     * Paramas => Unknow
-     */
-    public static function gerarListaControllers($deny = [], $termo = null, $cache = null, $combo = false, $compara = false)
-    {
-        $loop = [];
-        $_array = Json::decode(Yii::$app->listcontrollers->getList($deny, $termo, $cache));
-        
-        if(!empty($_array)) {
-            if(is_array($_array)) {
-                $nome = [];
-                $id = [];
-                $descricao = [];
-                
-                foreach($_array['list'] as $k => $_arrays) {
-                    if(!empty($_arrays)) {
-                        if(is_array($_arrays)) {
-                            foreach($_arrays as $key => $value) {
-                                if(($key % 3) == 0) {
-                                    $nome[trim($k)][] = trim($value);
-                                }else if ((($key - 1) % 3) == 0) {
-                                    $id[trim($k)][] = trim($value);
-                                }else if ((($key - 2) % 3) == 0) {
-                                    $descricao[trim($k)][] = trim($value);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        if($combo) {
-            return ['nome' => $nome, 'id' => $id, 'descr' => $descricao];
-        }
-        
-        if(!empty($nome) && !empty($id) && !empty($descricao)) {
-            foreach($nome as $k_nome => $nomes) {
-                foreach($id as $k_id => $ids) {
-                    foreach($descricao as $k_descr => $descricoes) {
-                        
-                        if($k_nome == $k_id && $k_nome == $k_descr) {
-                            if(count($ids) == count($nomes)) {
-                                $_i = 0;
-                                
-                                foreach($ids as $_muda) {
-                                    $_nome = $k_nome . ' - ' . $nomes[$_i];
-                                    $chave = base64_encode(Json::encode([
-                                        'm' => $k_nome,
-                                        'c' => $_muda,
-                                    ]));
-                                    
-                                    if($compara == true) {
-                                        $loop[$_muda][$chave] = $_nome;
-                                    }else {
-                                        $loop[$chave] = $_nome;
-                                    }
-                                    
-                                    $_i++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        return $loop;
-    }
-    
-    /**
-     * Escreve o numero por extenso
-     *
-     * @param string $value (value)
-     * @param string $moneyFormat (boolean)
-     * @return string
-     */
-    public static function numberExt($value = null, $moneyFormat = false) {
-        $_value;
-        if(!$value) {
-            $value = 0;
-        }
-        // instancia a class para formatar
-        $_formater = new \NumberFormatter('pt_br', \NumberFormatter::SPELLOUT);
-        // formata o valor conforme o param opcional 
-        if(!$moneyFormat) {
-            $_value = $_formater->format($value);
-        }else {
-            list($_number, $_decimal) = explode('.', $value);
-            $_value = $_formater->format(intval($_number)) . ' reais';
-            if(intval($_decimal)) {
-                $_value .= ' e ' . $_formater->format(intval($_decimal)) . ' centavos';
-            }
-        }
-        return ucfirst(Util::tirarAcentos($_value));
-    }
-    
-    /**
-     * Remove os acentos de uma string
-     * @param string $string
-     * @return string (sem acentos)
-     */
-    public static function tirarAcentos($string) {
-        return preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$string);
-    }
-    
+
     /**
      * Remove value mask
      * Remove: array => ['.', '-', '/', '(', ')', 'R', '$', '%', '_'];
@@ -320,8 +270,10 @@ class Util
         $remover = array_merge($remover, $extra);
         
         // check for remove empty space
-        if($removerEspaco) {
+        if ($removerEspaco) {
             $remover = array_merge($remover, [' ']);
+            // remove chars que não sejam utf-8
+            $campo = preg_replace('/[\x00-\x1F\x80-\xFF]/', ' ', $campo);
         }
         
         // fomat and return  value
@@ -338,12 +290,12 @@ class Util
     public static function formatDateToDisplay($data, $format = null, $completeFormat = null)
     {
         // seta a data atual se nada for enviado (empty)
-        if(empty($data)) {
+        if (empty($data)) {
             $data = date('Y-m-d H:i:s');
         }
         
         // seta o formato e as config da data
-        switch($format) {
+        switch ($format) {
             case self::DATE_DEFAULT:
                 $format = 'd/m/Y';
                 break;
@@ -465,5 +417,166 @@ class Util
         
         // retorna a data formatada
         return (date($format, strtotime(str_replace('/', '-', $data))));
+    }
+    
+    /**
+     * Algoritmo de validação do CNPJ
+     *
+     * @param string $cnpj => CNPJ
+     * @return boolean
+     */
+    public static function validarCPNJ($cnpj = '')
+    {
+        // deixa o CNPJ com apenas números
+        $cnpj = preg_replace('/[^\d]+/', '', $cnpj);
+        // garante que o CNPJ é uma string
+        $cnpj = (string) $cnpj;
+        
+        if (empty($cnpj) || strlen($cnpj) != 14) {
+            return false;
+        }
+        
+        // elimina CNPJs inválidos conhecidos
+        if ($cnpj == "00000000000000" ||
+            $cnpj == "11111111111111" ||
+            $cnpj == "11111111111111" ||
+            $cnpj == "22222222222222" ||
+            $cnpj == "33333333333333" ||
+            $cnpj == "44444444444444" ||
+            $cnpj == "55555555555555" ||
+            $cnpj == "66666666666666" ||
+            $cnpj == "77777777777777" ||
+            $cnpj == "88888888888888" ||
+            $cnpj == "99999999999999")
+        {
+            return false;
+        }
+        
+        // seta os primeiros 12 números do CNPJ
+        // para calcular os digitos verificadores
+        $stringCNPJ = substr($cnpj, 0, 12);
+        
+        /**
+         * Funcção Anônima Calcular CPNJ
+         * @desc seta a funcao para realizar o calculo do CNPJ
+         *
+         * @param  string $cnpj => os digitos do CNPJ
+         * @param  int    $posicoes => a posição que vai iniciar a regressão
+         *
+         * @return int => calculo do CNPJ
+         */
+        $calcularCPNJ = function($cnpj, $posicao = 5) use (&$stringCNPJ) {
+            // variável para o cálculo
+            $calculo = 0;
+            
+            // laço para percorrer os item do cnpj
+            for ($i = 0; $i < strlen($cnpj); $i++) {
+                // cálculo mais posição do CNPJ * a posição
+                $calculo += ($cnpj[$i] * $posicao--);
+                
+                // se a posição for menor que 2, ela se torna 9
+                if ($posicao < 2) {
+                    $posicao = 9;
+                }
+            }
+            
+            // se o resto da divisão entre o primeiro cálculo por 11 for menor que 2, o primeiro
+            // dígito é zero (0), caso contrário é 11 menos o resto da divisão entre o cálculo por 11
+            $calculo = ($calculo % 11) < 2 ? 0 : 11 - ($calculo % 11);
+            
+            // concatena o CPNJ com o dígito calculado
+            $stringCNPJ = "{$stringCNPJ}{$calculo}";
+        };
+        
+        // realiza o calculo do primeiro dígito verificador
+        // o primeiro calculo começa na posição 5
+        $calcularCPNJ($stringCNPJ, 5);
+        // realiza o calculo do segundo dígito verificador
+        // o segundo cálculo começa na posição 6
+        $calcularCPNJ($stringCNPJ, 6);
+        
+        // valida se o CNPJ calculado é igual ao CNPJ informado
+        if ($cnpj === $stringCNPJ) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Algoritmo de validação do CPF
+     *
+     * @param string $cpf => CFP
+     * @return boolean
+     */
+    public static function validarCPF($cpf = null)
+    {
+        // deixa o CPF com apenas números
+        $cpf = preg_replace('/[^\d]+/', '', $cpf);
+        // garante que o CPF é uma string
+        $cpf = (string) $cpf;
+        
+        if (empty($cpf) || strlen($cpf) != 11) {
+            return false;
+        }
+        
+        // elimina CPFs inválidos conhecidos
+        if ($cpf == '00000000000' ||
+            $cpf == '11111111111' ||
+            $cpf == '22222222222' ||
+            $cpf == '33333333333' ||
+            $cpf == '44444444444' ||
+            $cpf == '55555555555' ||
+            $cpf == '66666666666' ||
+            $cpf == '77777777777' ||
+            $cpf == '88888888888' ||
+            $cpf == '99999999999'
+            ) {
+                return false;
+            }
+            
+            // valida o digito verificador do CPF
+            for ($t = 9; $t < 11; $t++) {
+                for ($d = 0, $c = 0; $c < $t; $c++) {
+                    $d += $cpf{$c} * (($t + 1) - $c);
+                }
+                $d = ((10 * $d) % 11) % 10;
+                if ($cpf{$c} != $d) {
+                    return false;
+                }
+            }
+            
+            return true;
+    }
+    
+    /**
+     * Encripta/Decripta uma senha
+     */
+    public static function passwordCrypt($password, $decrypt = false)
+    {
+        // chaves e metodos de encriptação
+        $key  = 'cpn#2010';
+        $iv = '0000000005395484';
+        $method = "AES-256-CBC";
+        
+        // encripta ou decripta a senha
+        if (!$decrypt) {
+            // encripta a senha enviada
+            $encryptedPass = base64_encode(openssl_encrypt($password, $method, $key, null, $iv));
+            
+            // verifica se a senha enviada ja esta encriptada
+            // e verifica se a senha foi alterada
+            $decryptedPass = openssl_decrypt(base64_decode($password, true), $method, $key, null, $iv);
+            if ($decryptedPass ==  false) {
+                $password = $encryptedPass;
+            }
+        } else {
+            $decryptedPass = openssl_decrypt(base64_decode($password, true), $method, $key, null, $iv);
+            if ($decryptedPass) {
+                $password = $decryptedPass;
+            }
+        }
+        
+        return $password;
     }
 }
