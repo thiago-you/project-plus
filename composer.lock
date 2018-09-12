@@ -97,7 +97,8 @@
                 "mobile-first",
                 "responsive",
                 "web"
-            ]
+            ],
+            "time": "2016-07-25T15:51:55+00:00"
         },
         {
             "name": "bower-asset/inputmask",
@@ -188,7 +189,8 @@
                 "javascript",
                 "jquery",
                 "library"
-            ]
+            ],
+            "time": "2016-05-20T17:24:43+00:00"
         },
         {
             "name": "bower-asset/punycode",
@@ -216,7 +218,8 @@
                     "node_modules",
                     "package.json"
                 ]
-            }
+            },
+            "time": "2014-10-22T12:02:42+00:00"
         },
         {
             "name": "bower-asset/toastr",
@@ -244,7 +247,8 @@
             },
             "license": [
                 "MIT"
-            ]
+            ],
+            "time": "2016-07-22T17:54:47+00:00"
         },
         {
             "name": "bower-asset/yii2-pjax",
@@ -445,16 +449,16 @@
         },
         {
             "name": "composer/installers",
-            "version": "v1.5.0",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "049797d727261bf27f2690430d935067710049c2"
+                "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/049797d727261bf27f2690430d935067710049c2",
-                "reference": "049797d727261bf27f2690430d935067710049c2",
+                "url": "https://api.github.com/repos/composer/installers/zipball/cfcca6b1b60bc4974324efb5783c13dca6932b5b",
+                "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b",
                 "shasum": ""
             },
             "require": {
@@ -561,7 +565,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2017-12-29T09:13:20+00:00"
+            "time": "2018-08-27T06:10:37+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1094,12 +1098,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-grid.git",
-                "reference": "30ee1f8b519454ec5e9f0cea0cd556a0ee2e637e"
+                "reference": "951eada4f20593ace18295336c75fd16b353ded0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/30ee1f8b519454ec5e9f0cea0cd556a0ee2e637e",
-                "reference": "30ee1f8b519454ec5e9f0cea0cd556a0ee2e637e",
+                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/951eada4f20593ace18295336c75fd16b353ded0",
+                "reference": "951eada4f20593ace18295336c75fd16b353ded0",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1143,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-09-10T07:38:15+00:00"
+            "time": "2018-09-12T11:02:54+00:00"
         },
         {
             "name": "kartik-v/yii2-helpers",
@@ -1512,12 +1516,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-colorinput.git",
-                "reference": "f3530ae8300450a57d72f0696f9f431c0f018c6f"
+                "reference": "65f2c4b603ef0c26c3c85b0246a6a59f59045a43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-colorinput/zipball/f3530ae8300450a57d72f0696f9f431c0f018c6f",
-                "reference": "f3530ae8300450a57d72f0696f9f431c0f018c6f",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-colorinput/zipball/65f2c4b603ef0c26c3c85b0246a6a59f59045a43",
+                "reference": "65f2c4b603ef0c26c3c85b0246a6a59f59045a43",
                 "shasum": ""
             },
             "require": {
@@ -1558,7 +1562,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-09-06T13:23:09+00:00"
+            "time": "2018-09-12T03:12:07+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-datepicker",
@@ -2952,12 +2956,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "988341e0977940347885021e8a1b681c5e018d70"
+                "reference": "41e285e7184aee087da882477173602281f00463"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/988341e0977940347885021e8a1b681c5e018d70",
-                "reference": "988341e0977940347885021e8a1b681c5e018d70",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/41e285e7184aee087da882477173602281f00463",
+                "reference": "41e285e7184aee087da882477173602281f00463",
                 "shasum": ""
             },
             "require": {
@@ -3003,7 +3007,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2018-08-26T08:22:47+00:00"
+            "time": "2018-09-11T07:13:26+00:00"
         },
         {
             "name": "yiibr/yii2-br-validator",
@@ -3440,6 +3444,60 @@
             "time": "2017-08-30T11:04:43+00:00"
         },
         {
+            "name": "bower-asset/bootstrap3-dialog",
+            "version": "v1.35.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nakupanda/bootstrap3-dialog.git",
+                "reference": "3dd11d586f78de75356af418907ec6e3b347377c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nakupanda/bootstrap3-dialog/zipball/3dd11d586f78de75356af418907ec6e3b347377c",
+                "reference": "3dd11d586f78de75356af418907ec6e3b347377c",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/bootstrap": ">=3.1.0",
+                "bower-asset/jquery": ">=1.9.0"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "dist/less/bootstrap-dialog.less",
+                    "dist/css/bootstrap-dialog.min.css",
+                    "dist/js/bootstrap-dialog.min.js"
+                ],
+                "bower-asset-ignore": [
+                    "source",
+                    "spec",
+                    ".bowerrc",
+                    ".gitignore",
+                    ".jshintignore",
+                    ".jshintrc",
+                    "bower.json",
+                    "gruntfile.js",
+                    "package.json",
+                    "README.md"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Make use of Bootstrap Modal more monkey-friendly. http://nakupanda.github.io/bootstrap3-dialog/",
+            "keywords": [
+                "css",
+                "framework",
+                "front-end",
+                "js",
+                "less",
+                "mobile-first",
+                "responsive",
+                "web"
+            ],
+            "time": "2017-03-24T01:21:30+00:00"
+        },
+        {
             "name": "bower-asset/typeahead.js",
             "version": "v0.11.1",
             "source": {
@@ -3456,15 +3514,11 @@
             "require": {
                 "bower-asset/jquery": ">=1.7"
             },
-            "require-dev": {
-                "bower-asset/jasmine-ajax": "~1.3.1",
-                "bower-asset/jasmine-jquery": "~1.5.2",
-                "bower-asset/jquery": "~1.7"
-            },
             "type": "bower-asset-library",
             "extra": {
                 "bower-asset-main": "dist/typeahead.bundle.js"
-            }
+            },
+            "time": "2015-04-27T04:02:14+00:00"
         },
         {
             "name": "codeception/base",
@@ -5237,12 +5291,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "8c544db578c749f12e43fd22ca2486976d60d85f"
+                "reference": "8a399b4d564033dff5d463065942effc016dee55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/8c544db578c749f12e43fd22ca2486976d60d85f",
-                "reference": "8c544db578c749f12e43fd22ca2486976d60d85f",
+                "url": "https://api.github.com/repos/symfony/console/zipball/8a399b4d564033dff5d463065942effc016dee55",
+                "reference": "8a399b4d564033dff5d463065942effc016dee55",
                 "shasum": ""
             },
             "require": {
@@ -5298,7 +5352,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-09-10T07:26:34+00:00"
+            "time": "2018-09-11T17:20:18+00:00"
         },
         {
             "name": "symfony/contracts",
@@ -5480,12 +5534,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "d8eb135cc2886e01e829f4fd6be148342de39454"
+                "reference": "8e15725d4c2e080f354f93f80844cd3d7185b8e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/d8eb135cc2886e01e829f4fd6be148342de39454",
-                "reference": "d8eb135cc2886e01e829f4fd6be148342de39454",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/8e15725d4c2e080f354f93f80844cd3d7185b8e9",
+                "reference": "8e15725d4c2e080f354f93f80844cd3d7185b8e9",
                 "shasum": ""
             },
             "require": {
@@ -5536,7 +5590,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26T09:13:01+00:00"
+            "time": "2018-09-11T07:53:26+00:00"
         },
         {
             "name": "symfony/finder",
@@ -5903,12 +5957,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-gii.git",
-                "reference": "60c53d399ebf12cac9b8daa1fa9d81b8b1ee9a91"
+                "reference": "cafe77aa35eadb865cb1b6670bafdc19a1034ab2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-gii/zipball/60c53d399ebf12cac9b8daa1fa9d81b8b1ee9a91",
-                "reference": "60c53d399ebf12cac9b8daa1fa9d81b8b1ee9a91",
+                "url": "https://api.github.com/repos/yiisoft/yii2-gii/zipball/cafe77aa35eadb865cb1b6670bafdc19a1034ab2",
+                "reference": "cafe77aa35eadb865cb1b6670bafdc19a1034ab2",
                 "shasum": ""
             },
             "require": {
@@ -5944,7 +5998,7 @@
                 "gii",
                 "yii2"
             ],
-            "time": "2018-07-11T19:23:16+00:00"
+            "time": "2018-09-11T22:31:58+00:00"
         }
     ],
     "aliases": [],
