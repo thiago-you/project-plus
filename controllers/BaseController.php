@@ -5,7 +5,7 @@ use Yii;
 use yii\web\Controller;
 
 /**
- * ClienteController implements the CRUD actions for Cliente model.
+ * Base controller
  */
 class BaseController extends Controller
 {	
@@ -16,6 +16,6 @@ class BaseController extends Controller
 	public function beforeAction($action)
 	{		
 		return parent::beforeAction($action);
-	}
+	}	
 }
 ?>

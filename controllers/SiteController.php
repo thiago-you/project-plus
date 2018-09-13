@@ -18,6 +18,7 @@ use app\models\Estado;
 use app\models\Contrato;
 use app\models\ContratoParcela;
 use app\models\Email;
+use yii\web\NotFoundHttpException;
 
 class SiteController extends BaseController
 {
@@ -350,5 +351,30 @@ class SiteController extends BaseController
         return $this->render('importacao', [
             'model' => $model,
         ]);
+    }
+    
+    /**
+     * Retorna a lista de cidades do estado
+     */
+    public function actionCidades($ufId = '') 
+    {
+        // valida a requisicao
+        if (!\Yii::$app->request->isAjax || empty($ufId)) {
+            throw new NotFoundHttpException();
+        }
+        // busca todo o estado selecionado
+        if (!$estado = Estado::findOne(['id' => $ufId])) {
+            throw new NotFoundHttpException();
+        }
+        
+        // busca todas as cidades do estado
+        $options = '';
+        if ($cidades = $estado->cidades) {
+            foreach ($cidades as $cidade) {            
+                $options .= "<option value='{$cidade->id}'>{$cidade->nome}</option>";
+            }
+        }
+        
+        return $options;
     }
 }

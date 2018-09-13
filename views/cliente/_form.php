@@ -8,6 +8,10 @@ use yii\web\JqueryAsset;
 use kartik\date\DatePicker;
 use yii\widgets\ActiveForm;
 use yii\widgets\MaskedInput;
+use app\models\Cidade;
+use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
+use app\models\Estado;
 ?>
 <?php $form = ActiveForm::begin(); ?>
 	<div class="panel panel-primary panel-box">
@@ -430,21 +434,45 @@ use yii\widgets\MaskedInput;
   												])->label(false); 
 					  						?>
 				                        </td>
-					  					<td>
-					  						<?= $form->field($endereco, 'cidade_id')->textInput([
-			  										'id' => null,
-			  										'name' => "Enderecos[$endereco->id][cidade_id]",
-			  										'maxlength' => true,
-  												])->label(false); 
-					  						?>
+					  					<td class="select-cidade">
+					  						<?= $form->field($endereco, 'cidade_id')->widget(Select2::classname(), [
+			  						                'data' => $endereco->cidade_id ? ArrayHelper::map(Cidade::find()->where(['uf' => $endereco->cidade->uf])->all(), 'id', 'nome') : [],
+			  						                'name' => "Enderecos[$endereco->id][cidade_id]",
+			  						                'options' => [
+  						                                 'placeholder' => 'Selecione a cidade ...',
+    			  						                 'id' => "Enderecos-{$endereco->id}-cidade",
+			  						                ],
+                                                    'pluginOptions' => [
+                                                        'allowClear' => false,
+                                                    ],
+					  						   ])->label(false);
+                                            ?>
 				                        </td>
 					  					<td>
-					  						<?= $form->field($endereco, 'estado_id')->textInput([
-				  									'id' => null,
-			  										'name' => "Enderecos[$endereco->id][estado_id]",
-				  									'maxlength' => true,
-						  						])->label(false); 
-						  					?>
+						  					<?= $form->field($endereco, 'estado_id')->widget(Select2::classname(), [
+                                                    'data' => ArrayHelper::map(Estado::find()->all(), 'id', 'nome'),
+				  					                'name' => "Enderecos[$endereco->id][estado_id]",
+                                                    'options' => [
+                                                        'placeholder' => 'Selecione o estado ...',
+                                                        'id' => "Endereco-{$endereco->id}-estado",
+                                                    ],
+                                                    'pluginOptions' => [
+                                                        'allowClear' => false,
+                                                    ],
+                                                    'pluginEvents' => [
+                                                        "change" => "function() { 
+                                                            // pega o select de cidades
+                                                            let cidadesSelect =  $(this).closest('tr').find('td.select-cidade select');
+    
+                                                            // envia a requisicao para buscar as cidades do estado
+                                                            $.get(BASE_PATH + 'site/cidades?ufId='+$(this).find('option:selected').val(), function(response) {
+                                                                // seta as cidades encontradas para o estado
+                                                                cidadesSelect.html(response);
+                                                            });
+                                                        }",
+                                                    ],
+						  					   ])->label(false);
+                                            ?>
 					  					</td>
 					  					<td class="text-center">
 					  						<?= Html::button('<i class="fa fa-times"></i>', [
@@ -491,19 +519,45 @@ use yii\widgets\MaskedInput;
   											]); 
 					  					?>
 			                        </td>
-				  					<td>
-				  						<?= Html::textInput('Enderecos[1][cidade_id]', null, [
-			  									'maxlength' => true,
-				  								'class' => 'form-control',
-  											]); 
-					  					?>
+				  					<td class="select-cidade">
+					  					<?= Select2::widget([
+                                                'data' => [],
+		  					                    'name' => 'Enderecos[1][cidade_id]',
+		  						                'options' => [
+					                                 'placeholder' => 'Selecione a cidade ...',
+			  						                 'id' => "Enderecos-1-cidade",
+		  						                ],
+                                                'pluginOptions' => [
+                                                    'allowClear' => false,
+                                                ],
+				  						   ]);
+                                        ?>
 			                        </td>
 				  					<td>
-				  						<?= Html::textInput('Enderecos[1][estado_id]', null, [
-		  										'maxlength' => true, 
-		  										'class' => 'form-control',
-				  							]); 
-					  					?>
+					  					<?= Select2::widget([
+                                                'data' => ArrayHelper::map(Estado::find()->all(), 'id', 'nome'),
+			  					                'name' => 'Enderecos[1][estado_id]',
+                                                'options' => [
+                                                    'placeholder' => 'Selecione o estado ...',
+                                                    'id' => 'Enderecos-1-estado',
+                                                ],
+                                                'pluginOptions' => [
+                                                    'allowClear' => false,
+                                                ],
+                                                'pluginEvents' => [
+                                                    "change" => "function() { 
+                                                        // pega o select de cidades
+                                                        let cidadesSelect =  $(this).closest('tr').find('td.select-cidade select');
+
+                                                        // envia a requisicao para buscar as cidades do estado
+                                                        $.get(BASE_PATH + 'site/cidades?ufId='+$(this).find('option:selected').val(), function(response) {
+                                                            // seta as cidades encontradas para o estado
+                                                            cidadesSelect.html(response);
+                                                        });
+                                                    }",
+                                                ],
+					  					   ]);
+                                        ?>
 				  					</td>
 				  					<td class="text-center">
 				  						<?= Html::button('<i class="fa fa-times"></i>', [

@@ -4,6 +4,10 @@ use yii\helpers\Html;
 use app\models\Credor;
 use yii\widgets\ActiveForm;
 use yii\widgets\MaskedInput;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+use app\models\Estado;
+use app\models\Cidade;
 ?>
 <?php $form = ActiveForm::begin(); ?>
     <div class="panel panel-primary panel-box">
@@ -69,10 +73,33 @@ use yii\widgets\MaskedInput;
                     <?= $form->field($model, 'bairro')->textInput(['maxlength' => true]); ?>
     			</div>
     			<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
-                    <?= $form->field($model, 'cidade_id')->textInput(['maxlength' => true]); ?>
+                    <?= $form->field($model, 'cidade_id')->widget(Select2::classname(), [
+                            'data' => $model->cidade_id ? ArrayHelper::map(Cidade::find()->all(), 'id', 'nome') : [],
+                            'options' => ['placeholder' => 'Selecione a cidade ...'],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ]);
+                    ?>
     			</div>
     			<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
-                    <?= $form->field($model, 'estado_id')->textInput(['maxlength' => true]); ?>
+                    <?= $form->field($model, 'estado_id')->widget(Select2::classname(), [
+                            'data' => ArrayHelper::map(Estado::find()->all(), 'id', 'nome'),
+                            'options' => ['placeholder' => 'Selecione o estado ...'],
+                            'pluginOptions' => [
+                                'allowClear' => false,
+                            ],
+                            'pluginEvents' => [
+                                "change" => "function() { 
+                                    // envia a requisicao para buscar as cidades do estado
+                                    $.get(BASE_PATH + 'site/cidades?ufId='+$(this).find('option:selected').val(), function(response) {
+                                        // seta as cidades encontradas para o estado
+                                        $('#credor-cidade_id').html(response);
+                                    });
+                                }",
+                            ],
+                        ]);
+                    ?>
     			</div>
     		</div>
     		<!-- ./row -->
