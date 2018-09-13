@@ -6,7 +6,6 @@
 -- seta uma database default ara uso
 USE `mysql`;
 -- deleta a database antiga
-DROP DATABASE IF EXISTS `exemplo_db`;
 DROP DATABASE IF EXISTS `maklenrc`;
 --  cria a database
 -- CREATE DATABASE `autosolutions` CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`;
