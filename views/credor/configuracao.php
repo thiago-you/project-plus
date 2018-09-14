@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="form-group">
                     	<?= Html::button('<i class="fa fa-eye fa-fw"></i>', [
             	                'id' => 'btn-view-campanha',
-            	                'class' => Util::BTN_COLOR_INFO.' campanha-action-button',
+            	                'class' => Helper::BTN_COLOR_INFO.' campanha-action-button',
             	                'disabled' => $model->id_campanha ? false : true,
             	                'title' => 'Visualizar Campanha',
             	                'data-toggle' => 'tooltip',
@@ -36,14 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     	?>
                     	<?= Html::button('<i class="fa fa-plus fa-fw"></i>', [
             	                'id' => 'btn-nova-campanha',
-            	                'class' => Util::BTN_COLOR_EMERALD,
+            	                'class' => Helper::BTN_COLOR_EMERALD,
             	                'title' => 'Cadastrar Nova Campanha',
             	                'data-toggle' => 'tooltip',
                         	]); 
                     	?>
                     	<?= Html::button('<i class="fa fa-edit fa-fw"></i>', [
             	                'id' => 'btn-editar-campanha',
-            	                'class' => Util::BTN_COLOR_WARNING.' campanha-action-button',
+            	                'class' => Helper::BTN_COLOR_WARNING.' campanha-action-button',
     	                       'disabled' => $model->id_campanha ? false : true,
             	                'title' => 'Alterar Campanha',
             	                'data-toggle' => 'tooltip',
@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     	?>
                     	<?= Html::button('<i class="fa fa-times fa-fw"></i>', [
             	                'id' => 'btn-deletar-campanha',
-            	                'class' => Util::BTN_COLOR_DANGER.' campanha-action-button',
+            	                'class' => Helper::BTN_COLOR_DANGER.' campanha-action-button',
             	                'disabled' => $model->id_campanha ? false : true,
             	                'title' => 'Excluír Campanha',
             	                'data-toggle' => 'tooltip',
@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
       			<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
       				<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Nova Faixa', [
     		                'id' => 'nova-faixa', 
-    		                'class' => Util::BTN_COLOR_EMERALD.' btn-block campanha-action-button',
+    		                'class' => Helper::BTN_COLOR_EMERALD.' btn-block campanha-action-button',
                             'disabled' => $model->id_campanha ? false : true,
       				   ]); 
       				?>
@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
     			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6">
                     <div class="form-group">
                         <?= Html::submitButton('<i class="fa fa-save"></i>&nbsp; Salvar', [
-                                'class' => Util::BTN_COLOR_SUCCESS.' btn-block'
+                                'class' => Helper::BTN_COLOR_SUCCESS.' btn-block'
                             ]);
                         ?>
                     </div>
@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
     			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6 pull-right">
                     <div class="form-group">
                         <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/credor'], [
-                                'class' => Util::BTN_COLOR_DEFAULT.' btn-block',
+                                'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
                             ]);
                         ?>
                     </div>

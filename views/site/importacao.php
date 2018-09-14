@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use kartik\helpers\Html;
 use kartik\file\FileInput;
 use kartik\form\ActiveForm;
@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
         	<div class="row">
         		<div class="col-md-4 col-lg-4 col-xs-12 col-sm-4">
         			<?= Html::submitButton('<i class="fa fa-paper-plane"></i>&nbsp; Enviar', [
-        			        'class' => Util::BTN_COLOR_PRIMARY.' btn-block',
+        			        'class' => Helper::BTN_COLOR_PRIMARY.' btn-block',
         			    ]);
         			?>
         		</div>

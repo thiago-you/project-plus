@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-use app\base\Util;
+use app\base\Helper;
 
 /**
  * This is the model class for table "cliente".
@@ -57,7 +57,7 @@ class Cliente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome'], 'required'],
+            //[['nome'], 'required'],
             [['sexo', 'ativo', 'tipo'], 'string'],
             [['data_nascimento', 'data_cadastro'], 'safe'],
             [['estado_civil'], 'integer'],
@@ -192,7 +192,7 @@ class Cliente extends \yii\db\ActiveRecord
         // valida e seta os numeros de telefone
         if (isset($telefone) && !empty($telefone)) {
             // remove a mascara do telefone
-            $telefone = Util::unmask($telefone, true);
+            $telefone = Helper::unmask($telefone, true);
 
             // verifica se este telefone ja foi cadastrado
             if (!$this->isNewRecord && !Telefone::find(['id_cliente' => $this->id, 'numero' => $telefone])) {
@@ -204,7 +204,7 @@ class Cliente extends \yii\db\ActiveRecord
                 
                 // salva a model
                 if (!$telefone->save()) {
-                    throw new \Exception(Util::renderErrors($telefone->getErrors()));
+                    throw new \Exception(Helper::renderErrors($telefone->getErrors()));
                 }
             }
         }

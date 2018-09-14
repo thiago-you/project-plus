@@ -534,5 +534,14 @@ fieldset label {
 label.active-label {
 	padding-top: 15px;
 }
-
-
+/* select2 default theme select*/
+.select2-container--default span.select2-selection {
+	height: 34px !important;
+	padding: 2px 12px !important;
+	font-size: 14px !important;
+    line-height: 1.42857143 !important;
+    color: #555 !important;
+    background-color: #fff !important;
+    border-color: 1px solid #ccc !important;
+    border-radius: 4px !important;
+}

@@ -1,12 +1,14 @@
 <?php
 namespace app\controllers;
 
-use app\base\Util;
+use app\base\Helper;
 use app\models\Email;
+use app\models\Estado;
 use app\models\Cliente;
 use app\models\Endereco;
 use app\models\Telefone;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use app\models\ClienteSearch;
 use yii\web\NotFoundHttpException;
 
@@ -77,20 +79,20 @@ class ClienteController extends BaseController
 	        	// valida o tipo do cliente
 	        	if ($model->tipo == Cliente::TIPO_FISICO) {
 	        		$model->nome = $post['cliente-nome'];
-	        		$model->documento = Util::unmask($post['cliente-cpf'], true);
+	        		$model->documento = Helper::unmask($post['cliente-cpf'], true);
 	        		$model->nome_social = $post['cliente-apelido'];
 	        	} else {
 	        		$model->nome = $post['cliente-razao-social'];
-	        		$model->documento = Util::unmask($post['cliente-cnpj'], true);
+	        		$model->documento = Helper::unmask($post['cliente-cnpj'], true);
 	        		$model->nome_social = $post['cliente-fantasia'];
 	        	}
 	        	
 	        	// remove a mascara do rg
-	        	$model->rg = Util::unmask($model->rg);
+	        	$model->rg = Helper::unmask($model->rg);
 	        	
 	        	// salva o cliente
 	        	if (!$model->save()) {
-	        		throw new \Exception(Util::renderErrors($model->getErrors()));
+	        		throw new \Exception(Helper::renderErrors($model->getErrors()));
 	        	}
 	        	
 	        	// salva os telefones cadastrados
@@ -111,7 +113,7 @@ class ClienteController extends BaseController
 	        				
 	        				// salva o telefone
 	        				if (!$modelTelefone->save()) {
-	        					throw new \Exception(Util::renderErrors($modelTelefone->getErrors()));
+	        					throw new \Exception(Helper::renderErrors($modelTelefone->getErrors()));
 	        				}
 	        			}
 	        		}
@@ -131,7 +133,7 @@ class ClienteController extends BaseController
 	        				
 	        				// salva o email
 	        				if (!$modelEmail->save()) {
-	        					throw new \Exception(Util::renderErrors($modelEmail->getErrors()));
+	        					throw new \Exception(Helper::renderErrors($modelEmail->getErrors()));
 	        				}
 	        			}
 	        		}
@@ -156,7 +158,7 @@ class ClienteController extends BaseController
 	        				
 	        				// salva o endereco
 	        				if (!$modelEndereco->save()) {
-	        					throw new \Exception(Util::renderErrors($modelEndereco->getErrors()));
+	        					throw new \Exception(Helper::renderErrors($modelEndereco->getErrors()));
 	        				}
 	        			}
 	        		}
@@ -174,6 +176,7 @@ class ClienteController extends BaseController
         return $this->render('create', [
         	'model' => $model,
         	'layout' => $model->tipo && $model->tipo == Cliente::TIPO_JURIDICO ? 'J' : 'F',
+            'estados' => ArrayHelper::map(Estado::find()->all(), 'id', 'nome'),
         ]);
         
     }
@@ -195,20 +198,20 @@ class ClienteController extends BaseController
         		// valida o tipo do cliente
         		if ($model->tipo == Cliente::TIPO_FISICO) {
         			$model->nome = $post['cliente-nome'];
-        			$model->documento = Util::unmask($post['cliente-cpf'], true);
+        			$model->documento = Helper::unmask($post['cliente-cpf'], true);
         			$model->nome_social = $post['cliente-apelido'];
         		} else {
         			$model->nome = $post['cliente-razao-social'];
-        			$model->documento = Util::unmask($post['cliente-cnpj'], true);
+        			$model->documento = Helper::unmask($post['cliente-cnpj'], true);
         			$model->nome_social = $post['cliente-fantasia'];
         		}
         		
         		// remove a mascara do rg
-        		$model->rg = Util::unmask($model->rg);
+        		$model->rg = Helper::unmask($model->rg);
         		
         		// salva o cliente
         		if (!$model->save()) {
-        			throw new \Exception(Util::renderErrors($model->getErrors()));
+        			throw new \Exception(Helper::renderErrors($model->getErrors()));
         		}
         		
         		// verifica se algum telefone foi enviado
@@ -239,7 +242,7 @@ class ClienteController extends BaseController
         					
         					// salva o telefone
         					if (!$modelTelefone->save()) {
-        						throw new \Exception(Util::renderErrors($modelTelefone->getErrors()));
+        						throw new \Exception(Helper::renderErrors($modelTelefone->getErrors()));
         					}
         				}
         			}
@@ -269,7 +272,7 @@ class ClienteController extends BaseController
         					
         					// salva o email
         					if (!$modelEmail->save()) {
-        						throw new \Exception(Util::renderErrors($modelEmail->getErrors()));
+        						throw new \Exception(Helper::renderErrors($modelEmail->getErrors()));
         					}
         				}
         			}
@@ -304,7 +307,7 @@ class ClienteController extends BaseController
         					
         					// salva o endereco
         					if (!$modelEndereco->save()) {
-        						throw new \Exception(Util::renderErrors($modelEndereco->getErrors()));
+        						throw new \Exception(Helper::renderErrors($modelEndereco->getErrors()));
         					}
         				}
         			}
@@ -322,6 +325,7 @@ class ClienteController extends BaseController
         return $this->render('update', [
             'model' => $model,
         	'layout' => $model->tipo && $model->tipo == Cliente::TIPO_JURIDICO ? 'J' : 'F',
+            'estados' => ArrayHelper::map(Estado::find()->all(), 'id', 'nome'),
         ]);
     }
 
@@ -359,7 +363,7 @@ class ClienteController extends BaseController
     	$index = 'nome';
     	if (!$cliente = Cliente::find()->where(['like', 'nome', $value])->all()) {
     		// remove a mascara
-    		$value = Util::unmask($value, true);
+    		$value = Helper::unmask($value, true);
     		
     		// busca pelo busca pelo cpf/cnpj
     		$cliente = Cliente::find()->where(['like', 'documento', $value])->all();
@@ -417,11 +421,11 @@ class ClienteController extends BaseController
                 	if (isset($key['documento'])) {    
                 		$documento = $key['documento'];
                 		
-                		// verifica se é um cpf ou cpnj, se ssim formata o documento
+                		// verifica se é um cpf ou cnpj, se ssim formata o documento
                 		if (strlen($documento) == 11) {
-                			$documento = Util::mask($documento, Util::MASK_CPF);
+                			$documento = Helper::mask($documento, Helper::MASK_CPF);
                 		} elseif (strlen($documento) == 14) {
-                			$documento = Util::mask($documento, Util::MASK_CNPJ);
+                			$documento = Helper::mask($documento, Helper::MASK_CNPJ);
                 		}
                 		
                 		$data[]['value'] = $documento; 

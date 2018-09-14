@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use kartik\grid\GridView;
 
 use yii\helpers\Url;
@@ -224,7 +224,7 @@ JS;
                                 <span class="info-box-icon" style=""><i class="fa fa-dollar-sign"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Crédito Total</span>
-                                    <span class="info-box-number"><?= Util::maskBackend($model->getCreditoTotal(), Util::MASK_MONEY); ?></span>
+                                    <span class="info-box-number"><?= Helper::maskBackend($model->getCreditoTotal(), Helper::MASK_MONEY); ?></span>
                                 </div>
                             </div>
                             <!-- /.info-box -->
@@ -235,7 +235,7 @@ JS;
                                 <span class="info-box-icon "><i class="fa fa-money-bill-alt"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Crédito Usado</span>
-                                    <span class="info-box-number"><?= Util::maskBackend($model->getCreditoUsado(), Util::MASK_MONEY); ?></span>
+                                    <span class="info-box-number"><?= Helper::maskBackend($model->getCreditoUsado(), Helper::MASK_MONEY); ?></span>
                                 </div>
                             </div>
                             <!-- /.info-box -->
@@ -246,7 +246,7 @@ JS;
                                 <span class="info-box-icon "><i class="fa fa-credit-card"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Crédito Disponível</span>
-                                    <span class="info-box-number"><?= Util::maskBackend($model->getCreditoSaldo(), Util::MASK_MONEY); ?></span>
+                                    <span class="info-box-number"><?= Helper::maskBackend($model->getCreditoSaldo(), Helper::MASK_MONEY); ?></span>
                                 </div>
                             </div>
                         </div>
@@ -272,7 +272,7 @@ JS;
             				                'hAlign' => 'center',
             				                'width' => '15%',
             				                'value' => function($model) {
-            				                    return Util::formatDateToDisplay($model['data'], Util::DATE_DEFAULT, true);
+            				                    return Helper::formatDateToDisplay($model['data'], Helper::DATE_DEFAULT, true);
             				                },
             				            ],
             			    	        [
@@ -327,11 +327,11 @@ JS;
     		<div class="row">
     			<div class="col-md-4 col-sm-4 col-xs-6 col-lg-4">
             		<div class="form-group">
-                    	<?= Html::submitButton($model->isNewRecord ? Util::BTN_CREATE : Util::BTN_UPDATE, [
+                    	<?= Html::submitButton($model->isNewRecord ? Helper::BTN_CREATE : Helper::BTN_UPDATE, [
                         	    'id' => 'btnSalvar',   
                         	    'class' => $model->isNewRecord 
-                        	    ? Util::BTN_COLOR_SUCCESS.' btn-block'
-                        	    : Util::BTN_COLOR_PRIMARY.' btn-block', 
+                        	    ? Helper::BTN_COLOR_SUCCESS.' btn-block'
+                        	    : Helper::BTN_COLOR_PRIMARY.' btn-block', 
                         	]); 
                     	?>
             		</div>
@@ -339,7 +339,7 @@ JS;
         		<div class="col-md-4 col-sm-4 col-xs-6 col-lg-4 pull-right">
             		<div class="form-group">
                     	<?= Html::a('<i class="fa fa-reply"></i>&nbsp; Cancelar', ['index'], [
-                        	    'class' => Util::BTN_COLOR_DEFAULT.' btn-block',
+                        	    'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
                         	]); 
                     	?>
             		</div>

@@ -1,17 +1,16 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use app\models\Cidade;
 use app\models\Cliente;
 use app\models\Telefone;
 use yii\web\JqueryAsset;
+use kartik\select2\Select2;
 use kartik\date\DatePicker;
 use yii\widgets\ActiveForm;
 use yii\widgets\MaskedInput;
-use app\models\Cidade;
 use yii\helpers\ArrayHelper;
-use kartik\select2\Select2;
-use app\models\Estado;
 ?>
 <?php $form = ActiveForm::begin(); ?>
 	<div class="panel panel-primary panel-box">
@@ -148,7 +147,7 @@ use app\models\Estado;
 				<!-- ./tab principal -->
 			  	<div class="tab-pane" id="tab-contato">
 			  		<br>
-			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Telefone', ['id' => 'add-telefone', 'class' => Util::BTN_COLOR_EMERALD]); ?>
+			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Telefone', ['id' => 'add-telefone', 'class' => Helper::BTN_COLOR_EMERALD]); ?>
 			  		<table id="table-telefones" class="table table-bordered table-hover">
 			  			<thead>
 			  				<tr>
@@ -234,7 +233,7 @@ use app\models\Estado;
 					  					</td>
 					  					<td class="text-center">
 					  						<?= Html::button('<i class="fa fa-times"></i>', [
-			  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
+			  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 					  							]); 
 						  					?>
 					  					</td>
@@ -289,7 +288,7 @@ use app\models\Estado;
 				  					</td>
 				  					<td class="text-center">
 				  						<?= Html::button('<i class="fa fa-times"></i>', [
-		  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
+		  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 				  							]); 
 					  					?>
 				  					</td>
@@ -298,7 +297,7 @@ use app\models\Estado;
 			  			</tbody>
 			  		</table>
 			  		<!-- ./table telefone -->
-			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Email', ['id' => 'add-email', 'class' => Util::BTN_COLOR_EMERALD]); ?>
+			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Email', ['id' => 'add-email', 'class' => Helper::BTN_COLOR_EMERALD]); ?>
 			  		<table id="table-emails" class="table table-bordered table-hover">
 			  			<thead>
 			  				<tr>
@@ -334,7 +333,7 @@ use app\models\Estado;
 					  					</td>
 					  					<td class="text-center">
 					  						<?= Html::button('<i class="fa fa-times"></i>', [
-			  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
+			  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 					  							]); 
 						  					?>
 					  					</td>
@@ -358,7 +357,7 @@ use app\models\Estado;
 				  					</td>
 				  					<td class="text-center">
 				  						<?= Html::button('<i class="fa fa-times"></i>', [
-		  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
+		  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 				  							]); 
 					  					?>
 				  					</td>
@@ -371,7 +370,13 @@ use app\models\Estado;
 			  	<!-- ./tab contato -->
 			  	<div class="tab-pane" id="tab-endereco">
 			  		<br>
-			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Endereço', ['id' => 'add-endereco', 'class' => Util::BTN_COLOR_EMERALD]); ?>
+			  		<div class="hidden select-estado-options">
+			  			<?php foreach ($estados as $key => $estado): ?>
+							<?= "<option value=\"{$key}\">{$estado}</option>"; ?>
+						<?php endforeach; ?>
+			  		</div>
+		  			<!-- ./hidden select options -->
+			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Endereço', ['id' => 'add-endereco', 'class' => Helper::BTN_COLOR_EMERALD]); ?>
 			  		<table id="table-enderecos" class="table table-bordered table-hover">
 			  			<thead>
 			  				<tr>
@@ -438,8 +443,9 @@ use app\models\Estado;
 					  						<?= $form->field($endereco, 'cidade_id')->widget(Select2::classname(), [
 			  						                'data' => $endereco->cidade_id ? ArrayHelper::map(Cidade::find()->where(['uf' => $endereco->cidade->uf])->all(), 'id', 'nome') : [],
 			  						                'name' => "Enderecos[$endereco->id][cidade_id]",
+			  						                'theme' => Select2::THEME_DEFAULT,
 			  						                'options' => [
-  						                                 'placeholder' => 'Selecione a cidade ...',
+  						                                 //'placeholder' => 'Selecione a cidade ...',
     			  						                 'id' => "Enderecos-{$endereco->id}-cidade",
 			  						                ],
                                                     'pluginOptions' => [
@@ -448,35 +454,24 @@ use app\models\Estado;
 					  						   ])->label(false);
                                             ?>
 				                        </td>
-					  					<td>
+					  					<td class="select-estado">
 						  					<?= $form->field($endereco, 'estado_id')->widget(Select2::classname(), [
-                                                    'data' => ArrayHelper::map(Estado::find()->all(), 'id', 'nome'),
+				  					                'data' => $estados,
 				  					                'name' => "Enderecos[$endereco->id][estado_id]",
+				  					                'theme' => Select2::THEME_DEFAULT,
                                                     'options' => [
-                                                        'placeholder' => 'Selecione o estado ...',
+                                                        //'placeholder' => 'Selecione o estado ...',
                                                         'id' => "Endereco-{$endereco->id}-estado",
                                                     ],
                                                     'pluginOptions' => [
                                                         'allowClear' => false,
-                                                    ],
-                                                    'pluginEvents' => [
-                                                        "change" => "function() { 
-                                                            // pega o select de cidades
-                                                            let cidadesSelect =  $(this).closest('tr').find('td.select-cidade select');
-    
-                                                            // envia a requisicao para buscar as cidades do estado
-                                                            $.get(BASE_PATH + 'site/cidades?ufId='+$(this).find('option:selected').val(), function(response) {
-                                                                // seta as cidades encontradas para o estado
-                                                                cidadesSelect.html(response);
-                                                            });
-                                                        }",
                                                     ],
 						  					   ])->label(false);
                                             ?>
 					  					</td>
 					  					<td class="text-center">
 					  						<?= Html::button('<i class="fa fa-times"></i>', [
-			  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
+			  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 					  							]); 
 						  					?>
 					  					</td>
@@ -521,10 +516,11 @@ use app\models\Estado;
 			                        </td>
 				  					<td class="select-cidade">
 					  					<?= Select2::widget([
-                                                'data' => [],
+			  					                'data' => ArrayHelper::map(Cidade::find()->where(['uf' => 'AC'])->all(), 'id', 'nome'),
 		  					                    'name' => 'Enderecos[1][cidade_id]',
+			  					                'theme' => Select2::THEME_DEFAULT,
 		  						                'options' => [
-					                                 'placeholder' => 'Selecione a cidade ...',
+					                                 //'placeholder' => 'Selecione a cidade ...',
 			  						                 'id' => "Enderecos-1-cidade",
 		  						                ],
                                                 'pluginOptions' => [
@@ -533,35 +529,24 @@ use app\models\Estado;
 				  						   ]);
                                         ?>
 			                        </td>
-				  					<td>
+				  					<td class="select-estado">
 					  					<?= Select2::widget([
-                                                'data' => ArrayHelper::map(Estado::find()->all(), 'id', 'nome'),
+		  					                    'data' => $estados,
 			  					                'name' => 'Enderecos[1][estado_id]',
+			  					                'theme' => Select2::THEME_DEFAULT,
                                                 'options' => [
-                                                    'placeholder' => 'Selecione o estado ...',
+                                                    //'placeholder' => 'Selecione o estado ...',
                                                     'id' => 'Enderecos-1-estado',
                                                 ],
                                                 'pluginOptions' => [
                                                     'allowClear' => false,
-                                                ],
-                                                'pluginEvents' => [
-                                                    "change" => "function() { 
-                                                        // pega o select de cidades
-                                                        let cidadesSelect =  $(this).closest('tr').find('td.select-cidade select');
-
-                                                        // envia a requisicao para buscar as cidades do estado
-                                                        $.get(BASE_PATH + 'site/cidades?ufId='+$(this).find('option:selected').val(), function(response) {
-                                                            // seta as cidades encontradas para o estado
-                                                            cidadesSelect.html(response);
-                                                        });
-                                                    }",
                                                 ],
 					  					   ]);
                                         ?>
 				  					</td>
 				  					<td class="text-center">
 				  						<?= Html::button('<i class="fa fa-times"></i>', [
-		  										'class' => Util::BTN_COLOR_DANGER.' btn-deletar', 
+		  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 				  							]); 
 					  					?>
 				  					</td>
@@ -577,7 +562,7 @@ use app\models\Estado;
 			  		<div class="row">
 			  			<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
 			  				<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Contrato', [
-                                    'class' => Util::BTN_COLOR_EMERALD.' btn-block add-contrato',
+                                    'class' => Helper::BTN_COLOR_EMERALD.' btn-block add-contrato',
 	  				                'title' => 'Novo Contrato',
 	  				                'data-toggle' => 'tooltip',
                                 ]);
@@ -599,8 +584,8 @@ use app\models\Estado;
                     <div class="form-group">
                         <?= Html::submitButton('<i class="fa fa-save"></i>&nbsp; '. ($model->isNewRecord ? 'Cadastrar' : 'Alterar'), [
                                 'class' => $model->isNewRecord 
-                                ? Util::BTN_COLOR_SUCCESS.' btn-block' 
-                                : Util::BTN_COLOR_PRIMARY.' btn-block',
+                                ? Helper::BTN_COLOR_SUCCESS.' btn-block' 
+                                : Helper::BTN_COLOR_PRIMARY.' btn-block',
                             ]);
                         ?>
                     </div>
@@ -608,7 +593,7 @@ use app\models\Estado;
     			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6 pull-right">
                     <div class="form-group">
                         <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/cliente'], [
-                                'class' => Util::BTN_COLOR_DEFAULT.' btn-block',
+                                'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
                             ]);
                         ?>
                     </div>

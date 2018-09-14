@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use app\models\Credor;
 use app\models\Cliente;
 use kartik\helpers\Html;
@@ -130,7 +130,7 @@ use app\models\Contrato;
                 		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
                 			<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Parcela', [
                                 'id' => 'nova-parcela',
-                                'class' => Util::BTN_COLOR_EMERALD.' btn-block',
+                                'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
     			                'disabled' => $model->data_negociacao ? false : true,
                             ]);
                         ?>
@@ -160,16 +160,16 @@ use app\models\Contrato;
                 									<input name="Parcela[<?= $num; ?>][vencimento]" value="<?= $parcela->data_vencimento; ?>" class="hidden"/>
             									</td>
                 								<td>
-                									<?= Util::mask($parcela->valor, Util::MASK_MONEY); ?>
+                									<?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?>
                 									<input name="Parcela[<?= $num; ?>][valor]" value="<?= $parcela->valor; ?>" class="hidden"/>
                 								</td>
                 								<td class="text-center">
                 									<?= Html::button('<i class="fa fa-edit fa-fw"></i>', [
-        									                'class' => Util::BTN_COLOR_WARNING.' btn-xs editar-parcela',
+        									                'class' => Helper::BTN_COLOR_WARNING.' btn-xs editar-parcela',
                 									   ]); 
                 									?>
                 									<?= Html::button('<i class="fa fa-times fa-fw"></i>', [
-        									                'class' => Util::BTN_COLOR_DANGER.' btn-xs deletar-parcela',
+        									                'class' => Helper::BTN_COLOR_DANGER.' btn-xs deletar-parcela',
                 									   ]); 
                 									?>
                 								</td>
@@ -194,14 +194,14 @@ use app\models\Contrato;
     			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6">
                     <?= Html::submitButton('<i class="fa fa-save"></i>&nbsp; '. ($model->isNewRecord ? 'Cadastrar' : 'Alterar'), [
                             'class' => $model->isNewRecord 
-                            ? Util::BTN_COLOR_SUCCESS.' btn-block' 
-                            : Util::BTN_COLOR_PRIMARY.' btn-block',
+                            ? Helper::BTN_COLOR_SUCCESS.' btn-block' 
+                            : Helper::BTN_COLOR_PRIMARY.' btn-block',
                         ]);
                     ?>
     			</div>
     			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6 pull-right">
                     <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/contrato'], [
-                            'class' => Util::BTN_COLOR_DEFAULT.' btn-block',
+                            'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
                         ]);
                     ?>
     			</div>
@@ -262,13 +262,13 @@ use app\models\Contrato;
   					<div class="col-md-4 col-sm-4 col-lg-4 col-xs-6">
 						<?= Html::button('<i class="fa fa-save"></i>&nbsp; Salvar', [
 				                'id' => 'save-parcela',
-				                'class' => Util::BTN_COLOR_SUCCESS.' btn-block', 
+				                'class' => Helper::BTN_COLOR_SUCCESS.' btn-block', 
                             ]);
                         ?>
   					</div>
   					<div class="col-md-4 col-sm-4 col-lg-4 col-xs-6 pull-right">
   						<?= Html::button('<i class="fa fa-times"></i>&nbsp; Cancelar', [
-                                'class' => Util::BTN_COLOR_DEFAULT.' btn-block',
+                                'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
 				                'data-dismiss' => 'modal',
                             ]);
                         ?>

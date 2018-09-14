@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-use app\base\Util;
+use app\base\Helper;
 
 /**
  * This is the model class for table "credor".
@@ -120,9 +120,9 @@ class Credor extends \yii\db\ActiveRecord
     public function beforeSave($insert) 
     {
         // remove as mascaras
-        $this->cnpj = Util::unmask($this->cnpj);
-        $this->cep = Util::unmask($this->cep);
-        $this->telefone = Util::unmask($this->telefone);
+        $this->cnpj = Helper::unmask($this->cnpj);
+        $this->cep = Helper::unmask($this->cep);
+        $this->telefone = Helper::unmask($this->telefone);
         
         return parent::beforeSave($insert);
     }

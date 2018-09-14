@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 
@@ -27,14 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
         	'buttons' => [
         		'update' => function ($url, $model) {
         			return Html::a('<i class="fa fa-pencil-alt"></i>', $url, [
-        				'class' => Util::BTN_COLOR_WARNING,
+        				'class' => Helper::BTN_COLOR_WARNING,
         				'title' => 'Alterar',
         				'data-toggle' => 'tooltip',
         			]);
         		},
         		'delete' => function ($url, $model) {
         			return Html::a('<i class="fa fa-trash-alt"></i>', $url, [
-        				'class' => Util::BTN_COLOR_DANGER,
+        				'class' => Helper::BTN_COLOR_DANGER,
         				'title' => 'Excluír',
         				'data-toggle' => 'tooltip',
         				'data-method' => 'post',
@@ -57,8 +57,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ], */
 	    'toolbar' => [
-	        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Colaborador', ['create'], ['class' => Util::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Colaborador', 'data-toggle' => 'tooltip',])],
-	        ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Util::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
+	        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Colaborador', ['create'], ['class' => Helper::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Colaborador', 'data-toggle' => 'tooltip',])],
+	        ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Helper::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
 	        '{toggleData}',
 	    ],
 	    'bordered' => true,

@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use app\base\Util;
+use app\base\Helper;
 use app\models\Credor;
 
 $this->title = 'Credores';
@@ -40,21 +40,21 @@ $columns = [
     	'buttons' => [
             'configuracao' => function ($url, $model) {
                 return Html::a('<i class="fa fa-cogs fa-fw"></i>', ['/credor/configuracao/', 'id' => $model->id], [
-                    'class' => Util::BTN_COLOR_PURPLE.' btn-xs',
+                    'class' => Helper::BTN_COLOR_PURPLE.' btn-xs',
                     'title' => 'Configurar Cálculo',
                     'data-toggle' => 'tooltip',
                 ]);
             },
             'update' => function ($url, $model) {
     			return Html::a('<i class="fa fa-pencil-alt fa-fw"></i>', ['/credor/update/', 'id' => $model->id], [
-	                'class' => Util::BTN_COLOR_WARNING.' btn-xs',
+	                'class' => Helper::BTN_COLOR_WARNING.' btn-xs',
     				'title' => 'Alterar',
     				'data-toggle' => 'tooltip',
     			]);
     		},
     		'delete' => function ($url, $model) {
     			return Html::a('<i class="fa fa-trash-alt fa-fw"></i>', $url, [
-	                'class' => Util::BTN_COLOR_DANGER.' btn-xs',
+	                'class' => Helper::BTN_COLOR_DANGER.' btn-xs',
     				'title' => 'Excluír',
     				'data-toggle' => 'tooltip',
     				'data-method' => 'post',
@@ -77,8 +77,8 @@ echo GridView::widget([
         ],
     ], */
     'toolbar' => [
-        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Credor', ['create'], ['class' => Util::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Credor', 'data-toggle' => 'tooltip',])],
-        ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Util::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
+        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Credor', ['create'], ['class' => Helper::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Credor', 'data-toggle' => 'tooltip',])],
+        ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Helper::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
         '{toggleData}',
     ],
     'bordered' => true,

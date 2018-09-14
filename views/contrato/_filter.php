@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -75,7 +75,7 @@ use kartik\typeahead\Typeahead;
             		<div class="row">
                 		<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
             				<?= Html::submitButton('<i class="fa fa-search"></i>&nbsp; Pesquisar', [
-            				        'class' => Util::BTN_COLOR_PRIMARY.' btn-block',
+            				        'class' => Helper::BTN_COLOR_PRIMARY.' btn-block',
             				    ]);
             				?>
                 		</div>

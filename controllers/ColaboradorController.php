@@ -8,7 +8,7 @@ use app\models\ColaboradorSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\base\Util;
+use app\base\Helper;
 
 /**
  * ColaboradorController implements the CRUD actions for Colaborador model.
@@ -76,7 +76,7 @@ class ColaboradorController extends Controller
                 
                 // salva a model
                 if (!$model->save()) {
-                    throw new \Exception(Util::renderErrors($model->getErrors()));
+                    throw new \Exception(Helper::renderErrors($model->getErrors()));
                 }
                 
                 $transaction->commit();
@@ -114,7 +114,7 @@ class ColaboradorController extends Controller
                 
                 // salva a model
                 if (!$model->save()) {
-                    throw new \Exception(Util::renderErrors($model->getErrors()));
+                    throw new \Exception(Helper::renderErrors($model->getErrors()));
                 }
                 
                 $transaction->commit();

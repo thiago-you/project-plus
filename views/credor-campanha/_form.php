@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 use app\models\CredorCampanha;
@@ -80,12 +80,12 @@ use app\models\CredorCampanha;
 	<?php if (!$readonly): ?>
     	<div class="row">
     		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-                <button type="submit" class="<?= Util::BTN_COLOR_EMERALD; ?> btn-block">
+                <button type="submit" class="<?= Helper::BTN_COLOR_EMERALD; ?> btn-block">
                 	<i class="fa fa-save"></i>&nbsp; Salvar
                 </button>
             </div>
             <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 pull-right">
-                <button type="button" class="<?= Util::BTN_COLOR_DEFAULT; ?> btn-block" data-dismiss="modal">
+                <button type="button" class="<?= Helper::BTN_COLOR_DEFAULT; ?> btn-block" data-dismiss="modal">
                 	<i class="fa fa-times"></i>&nbsp; Cancelar
             	</button>
             </div>

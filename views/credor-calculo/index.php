@@ -1,6 +1,6 @@
 <?php
 use yii\helpers\Html;
-use app\base\Util;
+use app\base\Helper;
 
 $this->title = 'Credor Calculos';
 $this->params['breadcrumbs'][] = $this->title;
@@ -23,15 +23,15 @@ $this->params['breadcrumbs'][] = $this->title;
         			<tr id="<?= $calculo->id; ?>">
         				<td class="text-center"><?= ++$i; ?></td>
     					<td><?= $calculo->getAtraso(); ?></td>
-        				<td><?= Util::mask($calculo->multa, Util::MASK_MONEY); ?></td>
-        				<td><?= Util::mask($calculo->juros, Util::MASK_MONEY); ?></td>
+        				<td><?= Helper::mask($calculo->multa, Helper::MASK_MONEY); ?></td>
+        				<td><?= Helper::mask($calculo->juros, Helper::MASK_MONEY); ?></td>
         				<td class="text-center">
         					<?= Html::button('<i class="fa fa-edit fa-fw"></i>', [
-        			                'class' => Util::BTN_COLOR_WARNING.' editar-faixa'
+        			                'class' => Helper::BTN_COLOR_WARNING.' editar-faixa'
         	  				   ]); 
         	  				?>
         					<?= Html::button('<i class="fa fa-times fa-fw"></i>', [ 
-        			                'class' => Util::BTN_COLOR_DANGER.' excluir-faixa'
+        			                'class' => Helper::BTN_COLOR_DANGER.' excluir-faixa'
         	  				   ]); 
         	  				?>
         				</td>

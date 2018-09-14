@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use yii\helpers\Html;
 use app\models\Cliente;
 use kartik\grid\GridView;
@@ -31,10 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function($model) {
                         if ($model->cliente->documento) {                            
                             if ($model->cliente->tipo == Cliente::TIPO_FISICO) {
-                                return Util::mask($model->cliente->documento, Util::MASK_CPF);
+                                return Helper::mask($model->cliente->documento, Helper::MASK_CPF);
                             }
                             
-                            return Util::mask($model->cliente->documento, Util::MASK_CNPJ);
+                            return Helper::mask($model->cliente->documento, Helper::MASK_CNPJ);
                         }
                         
                         return 'Sem Documento';
@@ -84,21 +84,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 	'buttons' => [
     	                'negociacao' => function ($url, $model) {
                             return Html::a('<i class="fa fa-cog"></i>', ['/cliente/negociacao/', 'id' => $model->cliente->id], [
-                                'class' => Util::BTN_COLOR_PURPLE,
+                                'class' => Helper::BTN_COLOR_PURPLE,
                                 'title' => 'Negociação',
                                 'data-toggle' => 'tooltip',
         	                ]);
     	                },
     	                'update' => function ($url, $model) {
                 			return Html::a('<i class="fa fa-pencil-alt"></i>', $url, [
-                				'class' => Util::BTN_COLOR_WARNING,
+                				'class' => Helper::BTN_COLOR_WARNING,
                 				'title' => 'Alterar',
                 				'data-toggle' => 'tooltip',
                 			]);
                 		},
                 		'delete' => function ($url, $model) {
                 			return Html::a('<i class="fa fa-trash-alt"></i>', $url, [
-                				'class' => Util::BTN_COLOR_DANGER,
+                				'class' => Helper::BTN_COLOR_DANGER,
                 				'title' => 'Excluír',
                 				'data-toggle' => 'tooltip',
                 				'data-method' => 'post',
@@ -121,8 +121,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ], */
     		    'toolbar' => [
-    		        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Contrato', ['create'], ['class' => Util::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Contrato', 'data-toggle' => 'tooltip',])],
-    		        ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Util::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
+    		        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Contrato', ['create'], ['class' => Helper::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Contrato', 'data-toggle' => 'tooltip',])],
+    		        ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Helper::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
     		        '{toggleData}',
     		    ],
     		    'bordered' => true,

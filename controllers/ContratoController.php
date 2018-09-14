@@ -1,7 +1,7 @@
 <?php
 namespace app\controllers;
 
-use app\base\Util;
+use app\base\Helper;
 use yii\web\Controller;
 use app\models\Contrato;
 use yii\filters\VerbFilter;
@@ -89,7 +89,7 @@ class ContratoController extends Controller
                 
                 // salva a model
                 if (!$model->save()) {
-                    throw new \Exception(Util::renderErrors($model->getErrors()));
+                    throw new \Exception(Helper::renderErrors($model->getErrors()));
                 }
                 
                 // salva as parcelas cadastrados
@@ -108,7 +108,7 @@ class ContratoController extends Controller
                             
                             // salva o telefone
                             if (!$modelParcela->save()) {
-                                throw new \Exception(Util::renderErrors($modelParcela->getErrors()));
+                                throw new \Exception(Helper::renderErrors($modelParcela->getErrors()));
                             }
                         }
                     }
@@ -149,7 +149,7 @@ class ContratoController extends Controller
                 
                 // salva a model
                 if (!$model->save()) {
-                    throw new \Exception(Util::renderErrors($model->getErrors()));
+                    throw new \Exception(Helper::renderErrors($model->getErrors()));
                 }
                 
                 // salva as parcelas cadastrados
@@ -171,7 +171,7 @@ class ContratoController extends Controller
                             
                             // salva o telefone
                             if (!$modelParcela->save()) {
-                                throw new \Exception(Util::renderErrors($modelParcela->getErrors()));
+                                throw new \Exception(Helper::renderErrors($modelParcela->getErrors()));
                             }
                         }
                     }
@@ -253,7 +253,7 @@ class ContratoController extends Controller
         $index = 'nome';
         if (!$contrato = Contrato::find()->alias('con')->innerJoin('cliente cli', 'cli.id = con.id_cliente')->where($where['nome'])->all()) {
             // remove a mascara
-            $value = Util::unmask($value, true);
+            $value = Helper::unmask($value, true);
             
             // busca pelo busca pelo cpf/cnpj
             $contrato = Contrato::find()->alias('con')->innerJoin('cliente cli', 'cli.id = con.id_cliente')->where($where['documento'])->all();
@@ -308,11 +308,11 @@ class ContratoController extends Controller
                 if (isset($q['documento'])) {
                     $documento = $key['documento'];
                     
-                    // verifica se é um cpf ou cpnj, se ssim formata o documento
+                    // verifica se é um cpf ou cnpj, se ssim formata o documento
                     if (strlen($documento) == 11) {
-                        $documento = Util::mask($documento, Util::MASK_CPF);
+                        $documento = Helper::mask($documento, Helper::MASK_CPF);
                     } elseif (strlen($documento) == 14) {
-                        $documento = Util::mask($documento, Util::MASK_CNPJ);
+                        $documento = Helper::mask($documento, Helper::MASK_CNPJ);
                     }
                     
                     $data[]['value'] = $documento; 
@@ -321,11 +321,11 @@ class ContratoController extends Controller
                     if (isset($key['documento'])) {
                         $documento = $key['documento'];
                         
-                        // verifica se é um cpf ou cpnj, se ssim formata o documento
+                        // verifica se é um cpf ou cnpj, se ssim formata o documento
                         if (strlen($documento) == 11) {
-                            $documento = Util::mask($documento, Util::MASK_CPF);
+                            $documento = Helper::mask($documento, Helper::MASK_CPF);
                         } elseif (strlen($documento) == 14) {
-                            $documento = Util::mask($documento, Util::MASK_CNPJ);
+                            $documento = Helper::mask($documento, Helper::MASK_CNPJ);
                         }
                         
                         $data[]['value'] = $documento;

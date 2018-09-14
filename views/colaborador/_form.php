@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Colaborador;
@@ -33,8 +33,8 @@ use app\models\Colaborador;
                     <div class="form-group">
                         <?= Html::submitButton('<i class="fa fa-save"></i>&nbsp; '. ($model->isNewRecord ? 'Cadastrar' : 'Alterar'), [
                                 'class' => $model->isNewRecord 
-                                ? Util::BTN_COLOR_SUCCESS.' btn-block' 
-                                : Util::BTN_COLOR_PRIMARY.' btn-block',
+                                ? Helper::BTN_COLOR_SUCCESS.' btn-block' 
+                                : Helper::BTN_COLOR_PRIMARY.' btn-block',
                             ]);
                         ?>
                     </div>
@@ -42,7 +42,7 @@ use app\models\Colaborador;
     			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6 pull-right">
                     <div class="form-group">
                         <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/colaborador'], [
-                                'class' => Util::BTN_COLOR_DEFAULT.' btn-block',
+                                'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
                             ]);
                         ?>
                     </div>

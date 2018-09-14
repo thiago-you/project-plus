@@ -7,7 +7,7 @@ use app\models\CredorSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\base\Util;
+use app\base\Helper;
 use app\base\AjaxResponse;
 use yii\helpers\Json;
 
@@ -64,7 +64,7 @@ class CredorController extends Controller
                                 
                 // salva a model
                 if (!$model->save()) {
-                    throw new \Exception(Util::renderErrors($model->getErrors()));
+                    throw new \Exception(Helper::renderErrors($model->getErrors()));
                 }
                 
                 $transaction->commit();
@@ -101,7 +101,7 @@ class CredorController extends Controller
                 
                 // salva a model
                 if (!$model->save()) {
-                    throw new \Exception(Util::renderErrors($model->getErrors()));                    
+                    throw new \Exception(Helper::renderErrors($model->getErrors()));                    
                 }
 
                 $transaction->commit();

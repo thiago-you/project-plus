@@ -10,7 +10,7 @@ use yii\filters\AccessControl;
 
 use moonland\phpexcel\Excel;
 use yii\web\UploadedFile;
-use app\base\Util;
+use app\base\Helper;
 use app\models\Cliente;
 use app\models\Telefone;
 use app\models\Endereco;
@@ -173,7 +173,7 @@ class SiteController extends BaseController
                                 }
                                 
                                 // seta e remove a mascara do documento
-                                $documento = Util::unmask($data['CNPJCPF']);
+                                $documento = Helper::unmask($data['CNPJCPF']);
                                 
                                 // busca um cliente e verifica se é o mesmo que esta sendo cadastrado
                                 if ($cliente = Cliente::findOne(['documento' => $documento])) {
@@ -205,7 +205,7 @@ class SiteController extends BaseController
                                     
                                     // salva a model
                                     if (!$cliente->save()) {
-                                        throw new \Exception(Util::renderErrors($cliente->getErrors()));
+                                        throw new \Exception(Helper::renderErrors($cliente->getErrors()));
                                     }
                                     
                                     // reseta o contrato temporario
@@ -231,7 +231,7 @@ class SiteController extends BaseController
                                         
                                         // salva a model
                                         if (!$email->save()) {
-                                            throw new \Exception(Util::renderErrors($email->getErrors()));
+                                            throw new \Exception(Helper::renderErrors($email->getErrors()));
                                         }
                                     }
                                     
@@ -240,7 +240,7 @@ class SiteController extends BaseController
                                         (isset($data['CEP']) && !empty($data['CEP']))
                                     ) {
                                         // remove a mascara do cep
-                                        $cep = Util::unmask($data['CEP'], true);
+                                        $cep = Helper::unmask($data['CEP'], true);
                                         
                                         if (!Endereco::findOne([
                                                 'id_cliente' => $cliente->id,
@@ -271,7 +271,7 @@ class SiteController extends BaseController
                                             
                                             // salva a model
                                             if (!$endereco->save()) {
-                                                throw new \Exception(Util::renderErrors($endereco->getErrors()));
+                                                throw new \Exception(Helper::renderErrors($endereco->getErrors()));
                                             }
                                         }
                                     }
@@ -282,7 +282,7 @@ class SiteController extends BaseController
                                     // cria um novo contrato                              
                                     $contrato = new Contrato();
                                     $contrato->id_cliente = $cliente->id ? $cliente->id : $cliente->getPrimaryKey();
-                                    $contrato->data_cadastro = Util::formatDateToSave($data['DATA_CONTRATO'], Util::DATE_EXCEL);
+                                    $contrato->data_cadastro = Helper::formatDateToSave($data['DATA_CONTRATO'], Helper::DATE_EXCEL);
                                     $contrato->observacao = $data['OBSERVCAO_CONTRATO'];
                                     $contrato->tipo = Contrato::getTipoByName($data['PRODUTO']);
                                     $contrato->num_contrato = $data['NOCONTRATO'];
@@ -290,7 +290,7 @@ class SiteController extends BaseController
 
                                     // seta  vencimento do contrato
                                     if (empty($contrato->data_vencimento)) {
-                                        $contrato->data_vencimento = Util::formatDateToSave($data['VENCIMENTO'], Util::DATE_EXCEL);
+                                        $contrato->data_vencimento = Helper::formatDateToSave($data['VENCIMENTO'], Helper::DATE_EXCEL);
                                     }
                                 }
 
@@ -299,7 +299,7 @@ class SiteController extends BaseController
                                 
                                 // salva a model
                                 if (!$contrato->save()) {
-                                    throw new \Exception(Util::renderErrors($contrato->getErrors()));
+                                    throw new \Exception(Helper::renderErrors($contrato->getErrors()));
                                 }
                                 
                                 // se o contrato tiver mais de 1 parcela, 
@@ -317,7 +317,7 @@ class SiteController extends BaseController
                                     $parcela = new ContratoParcela();
                                     $parcela->id_contrato = $contrato->id ? $contrato->id : $contrato->getPrimaryKey();
                                     $parcela->num_parcela = $data['OBS_PARCELA'];
-                                    $parcela->data_vencimento = Util::formatDateToSave($data['VENCIMENTO'], Util::DATE_EXCEL);
+                                    $parcela->data_vencimento = Helper::formatDateToSave($data['VENCIMENTO'], Helper::DATE_EXCEL);
                                     $parcela->valor = $data['VALOR'];
                                     $parcela->multa = $data['ENCARGO'];
                                                                         
@@ -331,7 +331,7 @@ class SiteController extends BaseController
                                     
                                     // salva a model
                                     if (!$parcela->save()) {
-                                        throw new \Exception(Util::renderErrors($parcela->getErrors()));
+                                        throw new \Exception(Helper::renderErrors($parcela->getErrors()));
                                     }
                                 }
                             }

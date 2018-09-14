@@ -87,14 +87,36 @@ $(document).ready(function() {
 		linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][complemento]" maxlength="" type="text"/></td>');
 		linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][bairro]" maxlength="" type="text"/></td>');
 		linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][cep]" maxlength="" type="text"/></td>');
-		linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][cidade_id]" maxlength="" type="text"/></td>');
-		linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][estado_id]" maxlength="" type="text"/></td>');
+		linha.append('<td class="select-cidade"><select id="Enderecos-'+enderecoId+'-cidade" class="form-control js-example-basic-single" name="Enderecos['+enderecoId+'][cidade_id]"></select></td>');
+		linha.append('<td class="select-estado"><select id="Enderecos-'+enderecoId+'-estado" class="form-control" name="Enderecos['+enderecoId+'][estado_id]"></select></td>');
 		linha.append('<td class="text-center"><button class="btn btn-sm btn-danger btn-flat btn-deletar"><i class="fa fa-times"></i></button></td>');
+		
+		// ativa o plugin
+		linha.find('select:first').select2({
+			'placeholder': 'Selecione a cidade',
+		});
+		linha.find('select:last').select2({
+			'placeholder': 'Selecione o estado'
+		}).html($('.select-estado-options').html()).val('1').trigger('change.select2');
 	});
 
 	// deleta um registro
 	$('body').on('click', '.btn-deletar', function() {
 		$(this).closest('tr').remove();
+	});
+	
+	/**
+	 * Seta a lista de cidades do estado
+	 */
+	$('body').on('change.select2', '#table-enderecos td.select-estado select', function (e) {
+		// pega o select de cidades
+        let cidadesSelect =  $(this).closest('tr').find('td.select-cidade select');
+
+        // envia a requisicao para buscar as cidades do estado
+        $.get(BASE_PATH + 'site/cidades?ufId='+$(this).find('option:selected').val(), function(response) {
+            // seta as cidades encontradas para o estado
+            cidadesSelect.html(response);
+        });
 	});
 });
 

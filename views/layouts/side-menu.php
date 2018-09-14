@@ -9,7 +9,7 @@ use yii\helpers\Url;
 </div>
 <!-- ./conteudo do side nav -->
 <footer>
-	<p>&copy; Thiago You</p>
+	<p>&copy; Maklen RC</p>
 	<hr>
    	<p><?= date('Y') ?> - v<?= \Yii::$app->params['version']; ?></p>
 </footer>
