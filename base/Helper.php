@@ -2,11 +2,11 @@
 namespace app\base;
 
 /**
- * Classe que contém métodos úteis para formatação, renderização de valores, etc.
+ * Help class
  *
  * @author Thiago You <thya9o@outlook.com>
  */
-class Util
+class Helper
 {
 	// BTN default para forms
     CONST BTN_CREATE = '<i class="fa fa-save"></i>&nbsp; <span class="hidden-xs">Salvar</span>';
@@ -169,7 +169,7 @@ class Util
                 
                 // se nao for um numero, remove a mascara
                 if (!is_numeric($val)) {
-                    $val = Util::removeMascara($val, true);
+                    $val = Helper::removeMascara($val, true);
                 }
                 
                 // $option['decimalLength'] => mantem o numero de casas decimais do valor passado
@@ -425,7 +425,7 @@ class Util
      * @param string $cnpj => CNPJ
      * @return boolean
      */
-    public static function validarCPNJ($cnpj = '')
+    public static function validarCNPJ($cnpj = '')
     {
         // deixa o CNPJ com apenas números
         $cnpj = preg_replace('/[^\d]+/', '', $cnpj);
@@ -457,7 +457,7 @@ class Util
         $stringCNPJ = substr($cnpj, 0, 12);
         
         /**
-         * Funcção Anônima Calcular CPNJ
+         * Funcção Anônima Calcular CNPJ
          * @desc seta a funcao para realizar o calculo do CNPJ
          *
          * @param  string $cnpj => os digitos do CNPJ
@@ -484,16 +484,16 @@ class Util
             // dígito é zero (0), caso contrário é 11 menos o resto da divisão entre o cálculo por 11
             $calculo = ($calculo % 11) < 2 ? 0 : 11 - ($calculo % 11);
             
-            // concatena o CPNJ com o dígito calculado
+            // concatena o CNPJ com o dígito calculado
             $stringCNPJ = "{$stringCNPJ}{$calculo}";
         };
         
         // realiza o calculo do primeiro dígito verificador
         // o primeiro calculo começa na posição 5
-        $calcularCPNJ($stringCNPJ, 5);
+        $calcularCNPJ($stringCNPJ, 5);
         // realiza o calculo do segundo dígito verificador
         // o segundo cálculo começa na posição 6
-        $calcularCPNJ($stringCNPJ, 6);
+        $calcularCNPJ($stringCNPJ, 6);
         
         // valida se o CNPJ calculado é igual ao CNPJ informado
         if ($cnpj === $stringCNPJ) {
@@ -555,7 +555,7 @@ class Util
     public static function passwordCrypt($password, $decrypt = false)
     {
         // chaves e metodos de encriptação
-        $key  = 'cpn#2010';
+        $key  = 'maklen';
         $iv = '0000000005395484';
         $method = "AES-256-CBC";
         
