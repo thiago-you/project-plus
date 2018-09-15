@@ -371,33 +371,6 @@ class ClienteController extends BaseController
         
         return $this->redirect(['index']);
     }
-
-    /**
-     * Realiza a pesquisa rápida de um ou mais clientes
-     */
-    public function actionQuickSearch($value = null)
-    {    	
-    	// busca todos os clientes com o nome passado
-    	// se nao achou nenhum cliente pelo nome, tenta pesquisar pelo cpf/cnpj
-    	$index = 'nome';
-    	if (!$cliente = Cliente::find()->where(['like', 'nome', $value])->all()) {
-    		// remove a mascara
-    		$value = Helper::unmask($value, true);
-    		
-    		// busca pelo busca pelo cpf/cnpj
-    		$cliente = Cliente::find()->where(['like', 'documento', $value])->all();
-    		$index = 'documento';
-    	}
-
-    	// se achou apenas um cliente, redireciona para a página do cliente
-    	// se houver mais clientes com este nome
-    	// redireciona para a página de listagem de clientes
-    	if (!empty($value) && count($cliente) == 1) {
-    		return $this->redirect(['update', 'id' => $cliente[0]->id]);
-    	}
-    	
-    	return $this->redirect(['index', 'index' => $index, 'value' => $value]);
-    }
     
     /**
      * Busca um cliente por ajax typeahead
@@ -414,8 +387,17 @@ class ClienteController extends BaseController
         $query = Cliente::find();
         
         if (isset($q['nome'])) { $query->select('nome')->andWhere(['like', 'nome', $q['nome']])->distinct(true); }
-        if (isset($q['telefone'])) { $query->select('telefone')->andWhere(['like', 'telefone', $q['telefone']])->distinct(true); }
-        if (isset($q['documento'])) { $query->select('documento')->andWhere(['like', 'documento', $q['documento']])->distinct(true); }
+        if (isset($q['telefone'])) {
+            // remove a mascara antes de pesquisar
+            $q['telefone'] = Helper::unmask($q['telefone'], true);
+            $query->alias('cli')->innerJoin('telefone tel', 'tel.id_cliente = cli.id');
+            $query->andWhere(['like', 'tel.numero', $q['telefone']])->distinct(true); 
+        }
+        if (isset($q['documento'])) { 
+            // remove a mascara antes de pesquisar
+            $q['documento'] = Helper::unmask($q['documento'], true);
+            $query->select('documento')->andWhere(['like', 'documento', $q['documento']])->distinct(true); 
+        }
         
         // params da busca rapida
         if (isset($q['quick'])) {
@@ -434,8 +416,23 @@ class ClienteController extends BaseController
         if ($model != null) {
             foreach ($model as $key) {
                 if (isset($q['nome'])) { $data[]['value'] = $key['nome']; }
-                if (isset($q['telefone'])) { $data[]['value'] = $key['telefone']; }
-                if (isset($q['documento'])) { $data[]['value'] = $key['documento']; }
+                if (isset($q['telefone'])) { 
+                    foreach ($key->telefones as $telefone) {                        
+                        $data[]['value'] = Helper::mask($telefone->numero, Helper::MASK_TELEFONE); 
+                    }
+                }
+                if (isset($q['documento'])) { 
+                    $documento = $key['documento'];
+                    
+                    // verifica se é um cpf ou cnpj, se ssim formata o documento
+                    if (strlen($documento) == 11) {
+                        $documento = Helper::mask($documento, Helper::MASK_CPF);
+                    } elseif (strlen($documento) == 14) {
+                        $documento = Helper::mask($documento, Helper::MASK_CNPJ);
+                    }
+                    
+                    $data[]['value'] = $documento; 
+                }
                 if (isset($q['quick'])) { 
                 	if (isset($key['documento'])) {    
                 		$documento = $key['documento'];
@@ -455,7 +452,7 @@ class ClienteController extends BaseController
             }
         }
         
-        return $data;
+        return array_unique($data);
     }
     
     /**

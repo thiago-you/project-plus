@@ -274,7 +274,7 @@ class ContratoController extends Controller
     }
     
     /**
-     * Busca um cliente por ajax typeahead
+     * Busca um contrato por ajax typeahead
      */
     public function actionSearchList(array $q)
     {
@@ -288,14 +288,25 @@ class ContratoController extends Controller
         $query = Cliente::find();
         
         if (isset($q['nome'])) { $query->select('nome')->andWhere(['like', 'nome', $q['nome']])->distinct(true); }
-        if (isset($q['telefone'])) { $query->select('telefone')->andWhere(['like', 'telefone', $q['telefone']])->distinct(true); }
-        if (isset($q['documento'])) { $query->select('documento')->andWhere(['like', 'documento', $q['documento']])->distinct(true); }
+        if (isset($q['telefone'])) { 
+            // remove a mascara antes de pesquisar
+            $q['telefone'] = Helper::unmask($q['telefone'], true); 
+            $query->alias('cli')->innerJoin('telefone tel', 'tel.id_cliente = cli.id');
+            $query->andWhere(['like', 'tel.numero', $q['telefone']])->distinct(true);
+        }
+        if (isset($q['documento'])) { 
+            // remove a mascara antes de pesquisar
+            $q['documento'] = Helper::unmask($q['documento'], true);
+            $query->select('documento')->andWhere(['like', 'documento', $q['documento']])->distinct(true); 
+        }
         
         // params da busca rapida
         if (isset($q['quick'])) {
             // se enviou um numero pesquisa pelo documento
             // senao, busca pelo nome
-            if (is_numeric($q['quick'])) {
+            if (is_numeric(Helper::unmask($q['quick'], true))) {
+                // remove a mascara antes de pesquisar
+                $q['quick'] = Helper::unmask($q['quick'], true);
                 $query->select('documento')->andWhere(['like', 'documento', $q['quick']])->distinct(true);
             } else {
                 $query->select('nome')->andWhere(['like', 'nome', $q['quick']])->distinct(true);
@@ -306,8 +317,14 @@ class ContratoController extends Controller
 
         if ($model != null) {
             foreach ($model as $key) {
-                if (isset($q['nome'])) { $data[]['value'] = $key['nome']; }
-                if (isset($q['telefone'])) { $data[]['value'] = $key['telefone']; }
+                if (isset($q['nome'])) { 
+                    $data[]['value'] = $key['nome']; 
+                }
+                if (isset($q['telefone'])) {
+                    foreach ($key->telefones as $telefone) {
+                        $data[]['value'] = Helper::mask($telefone->numero, Helper::MASK_TELEFONE);
+                    }
+                }
                 if (isset($q['documento'])) {
                     $documento = $key['documento'];
                     
@@ -339,7 +356,7 @@ class ContratoController extends Controller
             }
         }
         
-        return $data;
+        return array_unique($data);
     }
     
     /**

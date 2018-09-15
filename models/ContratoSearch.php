@@ -66,9 +66,9 @@ class ContratoSearch extends Contrato
             return $dataProvider;
         }
 
-        if (!empty($this->documento)) {
-            $this->documento = Helper::unmask($this->documento, true);
-        }
+        // remove a mascara antes de pesquisar
+        $this->documento = $this->documento ? Helper::unmask($this->documento, true) : null;
+        $this->telefone = $this->telefone ? Helper::unmask($this->telefone, true) : null;
         
         // grid filtering conditions
         $query->andFilterWhere([
@@ -88,9 +88,14 @@ class ContratoSearch extends Contrato
             ->andFilterWhere(['like', 'filial', $this->filial])
             ->andFilterWhere(['like', 'observacao', $this->observacao])
             ->andFilterWhere(['like', 'cli.nome', $this->nome])
-            ->andFilterWhere(['like', 'cli.telefone', $this->telefone])
             ->andFilterWhere(['like', 'cli.documento', $this->documento]);
 
+        // filtra pela telefone
+        if ($this->telefone) {
+            $query->innerJoin('telefone tel', 'tel.id_cliente = cli.id')
+            ->andWhere(['tel.numero' => $this->telefone]);
+        }
+            
         return $dataProvider;
     }
 }

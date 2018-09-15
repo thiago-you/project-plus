@@ -18,6 +18,9 @@ use kartik\typeahead\Typeahead;
             			<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
                 			<?= $form->field($model, 'nome')->widget(Typeahead::classname(),[
                                     'pluginOptions' => ['highlight' => true],
+        			                'options' => [
+		                                'autocomplete' => 'off',
+        			                ],
                                     'dataset' => [
                                        [
                                           'display'=> 'value',
@@ -37,6 +40,10 @@ use kartik\typeahead\Typeahead;
                     	<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
                 			<?= $form->field($model, 'telefone')->widget(Typeahead::classname(),[
                                     'pluginOptions' => ['highlight' => true],
+        			                'options' => [
+		                                'value' => Helper::mask($model->telefone, Helper::MASK_TELEFONE),
+		                                'autocomplete' => 'off',
+        			                ],
                                     'dataset' => [
                                        [
                                           'display'=> 'value',
@@ -53,6 +60,10 @@ use kartik\typeahead\Typeahead;
                 		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
                 			<?= $form->field($model, 'documento')->widget(Typeahead::classname(),[
                                     'pluginOptions' => ['highlight' => true],
+        			                'options' => [
+		                                'value' => strlen($model->documento) == 11 ? Helper::mask($model->documento, Helper::MASK_CPF) : (strlen($model->documento) == 14 ? Helper::mask($model->documento, Helper::MASK_CNPJ): $model->documento),
+		                                'autocomplete' => 'off',
+        			                ],
                                     'dataset' => [
                                        [
                                           'display'=> 'value',
