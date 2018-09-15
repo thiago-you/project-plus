@@ -108,6 +108,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ];
 		
+    		// sort desc
+    		$dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+		
 		    // grid
             echo GridView::widget([
                 'dataProvider' => $dataProvider,

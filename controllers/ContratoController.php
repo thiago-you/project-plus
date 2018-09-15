@@ -75,7 +75,7 @@ class ContratoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id_cliente = null)
     {
         $model = new Contrato();
 
@@ -123,6 +123,9 @@ class ContratoController extends Controller
             }
         }
 
+        // seta o cliente se foi enviado algum id
+        $model->id_cliente = $id_cliente;
+        
         return $this->render('create', [
             'model' => $model,
         ]);
