@@ -163,45 +163,37 @@ class SiteController extends BaseController
                                 // posicao da linha
                                 ++$posicao;
                                 
-                                // valida a planilha
-                                if (!array_key_exists('CNPJCPF', $data) || !array_key_exists('NOME_RAZAO', $data)) {
-                                    throw new \Exception('O arquivo de importação não é válido.');
-                                }                                
-                                // valida se a linha esta vazia
-                                if (empty($data['CNPJCPF']) || empty($data['NOME_RAZAO'])) {
+                                // transforma o array em objeto e valida a linha
+                                // se retornar false (ou null) pula para a proxima linha
+                                if (!$data = $this->synthesizeWorksheet($data)) {
                                     continue;
                                 }
-                                
-                                // seta e remove a mascara do documento
-                                $documento = Helper::unmask($data['CNPJCPF']);
-                                
+                                                            
                                 // busca um cliente e verifica se é o mesmo que esta sendo cadastrado
-                                if ($cliente = Cliente::findOne(['documento' => $documento])) {
-                                    if (strtoupper($cliente->nome) != strtoupper($data['NOME_RAZAO'])) {
+                                if ($cliente = Cliente::findOne(['documento' => $data->documento])) {
+                                    if (strtoupper($cliente->nome) != strtoupper($data->nome)) {
                                         throw new \Exception('Não é possível cadastrar um cliente diferente usando o mesmo CPF/CNPJ.');     
                                     }
                                     
                                     // reseta o contrato temporario
-                                    if ($contratoTemp->id_cliente != $cliente->id) {
+                                    if ($contratoTemp && $contratoTemp->id_cliente != $cliente->id) {
                                         $contratoTemp = null;
                                     }
                                 } else {                                    
                                     $cliente = new Cliente();
-                                    $cliente->documento = $documento;
+                                    $cliente->documento = $data->documento;
                                     
-                                    // valida o tipo do cliente
-                                    if (strlen($documento) == 11) {
+                                    // seta o tipo do cliente
+                                    if (strlen($data->documento) == 11) {
                                         $cliente->tipo = Cliente::TIPO_FISICO;
-                                    } elseif (strlen($documento)) {
-                                        $cliente->tipo = Cliente::TIPO_JURIDICO;
                                     } else {
-                                        throw new \Exception('O CPF/CNPJ informado não é um número válido.');
+                                        $cliente->tipo = Cliente::TIPO_JURIDICO;
                                     }
                                     
                                     // seta o nome
-                                    $cliente->nome = ucwords(strtolower($data['NOME_RAZAO']));
-                                    $cliente->nome_pai = ucwords(strtolower($data['PAI']));
-                                    $cliente->nome_mae = ucwords(strtolower($data['MAE']));
+                                    $cliente->nome = $data->nome;
+                                    $cliente->nome_pai = $data->nome_pai;
+                                    $cliente->nome_mae = $data->nome_mae;
                                     
                                     // salva a model
                                     if (!$cliente->save()) {
@@ -212,21 +204,24 @@ class SiteController extends BaseController
                                     $contratoTemp = null;
                                 }
                                 
+                                // seta o id do cliente
+                                $id_cliente = $cliente->id ? $cliente->id : $cliente->getPrimaryKey();
+                                
                                 // seta os dados basicos e o contrato do cliente
                                 //                                
                                 // se ja cadastrou um contrato para este cliente
                                 // entao os dados basicos do cliente ja foram adicionados
                                 if (!$contrato = $contratoTemp) { 
                                     // adiciona os telefones do cliente
-                                    $cliente->addTelefone($data['TES_RES'], Telefone::TIPO_RESIDENCIAL);
-                                    $cliente->addTelefone($data['TES_CON'], Telefone::TIPO_COMERCIAL);
-                                    $cliente->addTelefone($data['CELULAR'], Telefone::TIPO_MOVEL);
+                                    $cliente->addTelefone($data->tel_residencial, Telefone::TIPO_RESIDENCIAL, $id_cliente);
+                                    $cliente->addTelefone($data->tel_comercial, Telefone::TIPO_COMERCIAL, $id_cliente);
+                                    $cliente->addTelefone($data->tel_celular, Telefone::TIPO_MOVEL, $id_cliente);
                                     
                                     // adiciona o email
-                                    if (isset($data['EMAIL07']) && !empty($data['EMAIL07'])) {
+                                    if (!empty($data->email)) {
                                         $email = new Email();      
-                                        $email->id_cliente = $cliente->id ? $cliente->id : $cliente->getPrimaryKey();;
-                                        $email->email = $data['EMAIL07'];
+                                        $email->id_cliente = $id_cliente;
+                                        $email->email = $data->email;
                                         $email->ativo = Email::SIM;
                                         
                                         // salva a model
@@ -236,32 +231,21 @@ class SiteController extends BaseController
                                     }
                                     
                                     // valida e seta o endereco
-                                    if ((isset($data['ENDERECO']) && !empty($data['ENDERECO'])) || 
-                                        (isset($data['CEP']) && !empty($data['CEP']))
-                                    ) {
-                                        // remove a mascara do cep
-                                        $cep = Helper::unmask($data['CEP'], true);
-                                        
-                                        if (!Endereco::findOne([
-                                                'id_cliente' => $cliente->id,
-                                                'logradouro' => $data['ENDERECO'],
-                                                'numero' => $data['NUMERO'],
-                                                'cep' => $data['CEP'],
-                                            ])
-                                        ) {
+                                    if (!empty($data->logradouro) && !empty($data->cep)) {
+                                        if (!Endereco::findEndereco($id_cliente, $data->logradouro, $data->numero, $data->cep)) {
                                             $endereco = new Endereco();
-                                            $endereco->id_cliente = $cliente->id ? $cliente->id : $cliente->getPrimaryKey();
-                                            $endereco->logradouro = $data['ENDERECO'];
-                                            $endereco->numero = (string) $data['NUMERO'];
-                                            $endereco->cep = $cep;
-                                            $endereco->bairro = $data['BAI_CLI07'] ? $data['BAI_CLI07'] : $data['BAIRRO'];
+                                            $endereco->id_cliente = $id_cliente;
+                                            $endereco->logradouro = $data->logradouro;
+                                            $endereco->numero = (string) $data->numero;
+                                            $endereco->cep = $data->cep;
+                                            $endereco->bairro = $data->bairro;
                                             
                                             // busca o estado
-                                            if (!$estado = Estado::findOne(['sigla' => $data['UF']])) {
+                                            if (!$estado = Estado::findOne(['sigla' => $data->estado])) {
                                                 throw new \Exception("Não foi possível encontrar um estado com a sigla: \"{$data['UF']}\"");
                                             }
                                             // busca a cidade
-                                            if (!$cidade = $estado->findCidade($data['CIDADE'])) {
+                                            if (!$cidade = $estado->findCidade($data->cidade)) {
                                                 throw new \Exception("Não foi possível encontrar uma cidade com o nome: \"{$data['CIDADE']}\"");
                                             }
                                             
@@ -276,26 +260,23 @@ class SiteController extends BaseController
                                         }
                                     }
                                 
-                                    // TODO
-                                    // campo DTC_CLI07 não tem conexão
-                                    
                                     // cria um novo contrato                              
                                     $contrato = new Contrato();
-                                    $contrato->id_cliente = $cliente->id ? $cliente->id : $cliente->getPrimaryKey();
-                                    $contrato->data_cadastro = Helper::formatDateToSave($data['DATA_CONTRATO'], Helper::DATE_EXCEL);
-                                    $contrato->observacao = $data['OBSERVCAO_CONTRATO'];
-                                    $contrato->tipo = Contrato::getTipoByName($data['PRODUTO']);
-                                    $contrato->num_contrato = $data['NOCONTRATO'];
-                                    $contrato->num_plano = (String) $data['PLANO'];
+                                    $contrato->id_cliente = $id_cliente;
+                                    $contrato->data_cadastro = $data->data_contrato;
+                                    $contrato->observacao = $data->obs_contrato;
+                                    $contrato->tipo = Contrato::getTipoByName($data->produto);
+                                    $contrato->num_contrato = $data->num_contrato;
+                                    $contrato->num_plano = (String) $data->plano;
 
-                                    // seta  vencimento do contrato
+                                    // seta o vencimento do contrato
                                     if (empty($contrato->data_vencimento)) {
-                                        $contrato->data_vencimento = Helper::formatDateToSave($data['VENCIMENTO'], Helper::DATE_EXCEL);
+                                        $contrato->data_vencimento = $data->data_vencimento;
                                     }
                                 }
 
                                 // soma o valor do contrato
-                                $contrato->valor = $contrato->valor + $data['VALOR'];
+                                $contrato->valor = $contrato->valor + $data->valor;
                                 
                                 // salva a model
                                 if (!$contrato->save()) {
@@ -304,30 +285,26 @@ class SiteController extends BaseController
                                 
                                 // se o contrato tiver mais de 1 parcela, 
                                 // salva o contrato temporariamente em uma variavel
-                                if (isset($data['PARCELA']) && $data['PARCELA'] > 1) {
+                                if ($data->parcela > 1) {
                                     $contratoTemp = $contrato;
                                 }
-                                
-                                if (isset($data['OBS_PARCELA'])) {
-                                    // formata os valores removendo a virgula
-                                    $data['VALOR'] = str_replace(',', '', $data['VALOR']);
-                                    $data['SALDO'] = str_replace(',', '', $data['SALDO']);
-                                    $data['SALDO'] = str_replace(',', '', $data['SALDO']);
-                                    
+
+                                // valida e seta a parcela
+                                if ($data->parcela && $data->data_vencimento && $data->valor) {
                                     $parcela = new ContratoParcela();
                                     $parcela->id_contrato = $contrato->id ? $contrato->id : $contrato->getPrimaryKey();
-                                    $parcela->num_parcela = $data['OBS_PARCELA'];
-                                    $parcela->data_vencimento = Helper::formatDateToSave($data['VENCIMENTO'], Helper::DATE_EXCEL);
-                                    $parcela->valor = $data['VALOR'];
-                                    $parcela->multa = $data['ENCARGO'];
+                                    $parcela->num_parcela = $data->obs_parcela;
+                                    $parcela->data_vencimento = $data->data_vencimento;
+                                    $parcela->valor = $data->valor;
+                                    $parcela->multa = $data->encargo;
                                                                         
                                     // valida os valores do contrato
-                                    if (strval($data['VALOR'] + $data['ENCARGO']) != strval($data['SALDO'])) {
+                                    if (strval($data->valor + $data->encargo) != strval($data->saldo)) {
                                         throw new \Exception("Não foi possível salvar o contrato na linha \"{$posicao}\", pois o saldo da parcela \"{$data['OBS_PARCELA']}\" diverge do saldo calculado.");
                                     }
                                     
                                     // seta o saldo total
-                                    $parcela->total = $data['SALDO'];
+                                    $parcela->total = $data->saldo;
                                     
                                     // salva a model
                                     if (!$parcela->save()) {
@@ -377,4 +354,100 @@ class SiteController extends BaseController
         
         return $options;
     }
+    
+    /**
+     * Faz um parse do array da planilha excel em objeto
+     */
+    private function synthesizeWorksheet($data = []) 
+    {
+        // verifica se a linha é vazia
+        if (empty($data)) {
+            return false;
+        }
+        
+        // valida a quantidade de colunas na linha
+        if (count($data) > 0 && count($data) != 27) {
+            throw new \Exception('O arquivo de importação não é válido. O número de colunas é diferente de 27.');
+        }
+        
+        // cria o objeto
+        $worksheet = new \stdClass();
+        
+        // seta as propriedades do objeto com base na posicao da coluna
+        $worksheet->documento = current($data);
+        $worksheet->nome = ucwords(strtolower(next($data)));
+        $worksheet->num_contrato = next($data);
+        $worksheet->data_contrato = next($data);
+        $worksheet->plano = next($data);
+        $worksheet->produto = next($data);
+        $worksheet->obs_contrato = next($data);
+        $worksheet->parcela = next($data);
+        $worksheet->data_vencimento = next($data);
+        $worksheet->valor = next($data);
+        $worksheet->encargo = next($data);
+        $worksheet->saldo = next($data);
+        $worksheet->obs_parcela = next($data);
+        $worksheet->tel_residencial = next($data);
+        $worksheet->tel_comercial = next($data);
+        $worksheet->tel_celular = next($data);
+        $worksheet->email = next($data);
+        $worksheet->logradouro = next($data);
+        $worksheet->numero = next($data);
+        $worksheet->bairro = next($data);
+        $worksheet->cep = next($data);
+        $worksheet->cidade = next($data);
+        $worksheet->estado = next($data);
+        $worksheet->ie_ins = next($data);
+        $worksheet->data_sem_nome = next($data);
+        $worksheet->nome_mae = ucwords(strtolower(next($data)));
+        $worksheet->nome_pai = ucwords(strtolower(next($data)));
+        
+        // valida se o documento e nome foram enviados
+        if (empty($worksheet->documento) || empty($worksheet->nome)) {
+            return false;
+        }
+
+        // remove a mascara do documento e cep
+        $worksheet->documento = Helper::unmask($worksheet->documento, true);
+        
+        // valida o documento
+        if (strlen($worksheet->documento) != 11 && strlen($worksheet->documento) != 14) {
+            throw new \Exception('O CPF/CNPJ não é um número válido.');
+        }
+        
+        // valida o nome do pai e mae
+        $worksheet->nome_mae = !empty(trim($worksheet->nome_mae)) ? $worksheet->nome_mae : null;
+        $worksheet->nome_pai = !empty(trim($worksheet->nome_pai)) ? $worksheet->nome_pai : null;
+
+        // remove a mascara do cep
+        $worksheet->cep = Helper::unmask($worksheet->cep, true);
+        
+        // valida o numero do endereco
+        $worksheet->numero = empty($worksheet->numero) ? 0 : $worksheet->numero;
+        
+        // valida a quantidade de parcela
+        $worksheet->parcela = empty($worksheet->parcela) ? 0 : $worksheet->parcela;
+        
+        // formata as datas
+        $worksheet->data_contrato = Helper::formatDateToSave($worksheet->data_contrato, Helper::DATE_EXCEL);
+        $worksheet->data_vencimento = Helper::formatDateToSave($worksheet->data_vencimento, Helper::DATE_EXCEL);
+        $worksheet->data_sem_nome = Helper::formatDateToSave($worksheet->data_sem_nome, Helper::DATE_EXCEL);
+        
+        // formata os valores removendo a virgula
+        $worksheet->valor = str_replace(',', '', $worksheet->valor);
+        $worksheet->encargo = str_replace(',', '', $worksheet->encargo);
+        $worksheet->saldo = str_replace(',', '', $worksheet->saldo);
+        
+        // valida a observacao/numero da parcela
+        $worksheet->obs_parcela = empty($worksheet->obs_parcela) ? 1 : $worksheet->obs_parcela;
+        
+        return $worksheet;
+    }
 }
+
+
+
+
+
+
+

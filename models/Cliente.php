@@ -188,23 +188,27 @@ class Cliente extends \yii\db\ActiveRecord
     /**
      * Adiciona um telefone ao cliente
      */
-    public function addTelefone($telefone = '', $tipo = Telefone::TIPO_RESIDENCIAL) {
+    public function addTelefone($telefone = '', $tipo = Telefone::TIPO_RESIDENCIAL, $id_cliente = null) 
+    {
         // valida e seta os numeros de telefone
         if (isset($telefone) && !empty($telefone)) {
             // remove a mascara do telefone
             $telefone = Helper::unmask($telefone, true);
 
+            // seta o id do cliente
+            $id_cliente = $id_cliente ? $id_cliente : ($this->id ? $this->id : $this->getPrimaryKey());
+            
             // verifica se este telefone ja foi cadastrado
-            if (!$this->isNewRecord && !Telefone::find(['id_cliente' => $this->id, 'numero' => $telefone])) {
-                $telefone = new Telefone();
-                $telefone->id_cliente = $this->id ? $this->id : $this->getPrimaryKey();
-                $telefone->numero = $telefone;
-                $telefone->tipo = $tipo;
-                $telefone->ativo = Telefone::SIM;
+            if (!Telefone::findOne(['id_cliente' => $id_cliente, 'numero' => $telefone])) {
+                $modelTelefone = new Telefone();
+                $modelTelefone->id_cliente = $id_cliente;
+                $modelTelefone->numero = $telefone;
+                $modelTelefone->tipo = $tipo;
+                $modelTelefone->ativo = Telefone::SIM;
                 
                 // salva a model
-                if (!$telefone->save()) {
-                    throw new \Exception(Helper::renderErrors($telefone->getErrors()));
+                if (!$modelTelefone->save()) {
+                    throw new \Exception(Helper::renderErrors($modelTelefone->getErrors()));
                 }
             }
         }

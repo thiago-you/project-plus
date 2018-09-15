@@ -94,4 +94,17 @@ class Endereco extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Estado::className(), ['id' => 'estado_id']);
     }
+    
+    /**
+     * Busca um endereço do cliente
+     */
+    public static function findEndereco($id_cliente, $logradouro, $numero, $cep) 
+    {
+        return Endereco::find()->where([
+            'id_cliente' => $id_cliente,
+            'logradouro' => $logradouro,
+            'numero' => $numero,
+            'cep' => $cep,
+        ])->one();
+    }
 }
