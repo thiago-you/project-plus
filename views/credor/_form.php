@@ -105,10 +105,19 @@ use app\models\Cidade;
     		<!-- ./row -->
     		<div class="row">
     			<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
-                    <?= $form->field($model, 'telefone')->textInput(['maxlength' => true]); ?>
+                    <?= $form->field($model, 'telefone')->widget(MaskedInput::className(), [
+            				'mask' => ['(99) 9999-9999', '(99) 9999-99999'],
+                            'clientOptions' => ['greedy' => false]
+                    	]);
+                    ?>
     			</div>
                 <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12">
-                    <?= $form->field($model, 'email')->textInput(['maxlength' => true]); ?>
+                    <?= $form->field($model, 'email')->widget(MaskedInput::className(), [
+            				'clientOptions' => [
+            				    'alias' => 'email', 
+            				],
+                    	]);
+                    ?>
     			</div>
     		</div>
     		<!-- ./row -->     		

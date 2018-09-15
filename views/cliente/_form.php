@@ -6,6 +6,7 @@ use app\models\Cidade;
 use app\models\Cliente;
 use app\models\Telefone;
 use yii\web\JqueryAsset;
+use kartik\money\MaskMoney;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
 use yii\widgets\ActiveForm;
@@ -136,7 +137,16 @@ use yii\helpers\ArrayHelper;
 		                        <?= $form->field($model, 'profissao')->textInput(['maxlength' => true]); ?>
 		        			</div>
 		        			<div class="col-md-2 col-sm-2 col-lg-2 col-xs-12">
-		                        <?= $form->field($model, 'salario')->textInput(['maxlength' => true]); ?>
+		                        <?= $form->field($model, 'salario')->widget(MaskMoney::className(), [
+                                        'options' => [
+                                            'maxlength' => '14',
+                                        ],
+                                        'pluginOptions' => [
+                                            'prefix' => 'R$ ',
+                                            'precision' => 2
+                                        ],
+                                    ]);
+                                ?>
 		        			</div>
 		        		</div>
 		        		<!-- ./row -->
