@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 	'header' => '',
                 	'buttons' => [
     	                'contrato' => function ($url, $model) {
-                            return Html::a('<i class="fa fa-cog"></i>', $url, [
+                            return Html::a('<i class="fa fa-file-invoice-dollar"></i>', $url, [
                                 'class' => Helper::BTN_COLOR_PURPLE,
                                 'title' => 'Contratos do Cliente',
                                 'data-toggle' => 'tooltip',
@@ -68,6 +68,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 	],
                 ],
             ];
+		
+            // sort desc
+            $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
 		
 		    // grid
             echo GridView::widget([

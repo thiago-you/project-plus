@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use app\models\ClienteSearch;
 use yii\web\NotFoundHttpException;
+use app\models\Contrato;
 
 /**
  * ClienteController implements the CRUD actions for Cliente model.
@@ -329,6 +330,24 @@ class ClienteController extends BaseController
         ]);
     }
 
+    /**
+     * Busca todos os contratos do clente/cadastra um contrato
+     */
+    public function actionContrato($id)
+    {
+        // busca a model
+        $model = $this->findModel($id);
+        
+        // verifica se o cliente ja possui contratos
+        // se sim, lista os contratos do cliente
+        if (Contrato::findAll(['id_cliente' => $id])) {
+            return $this->redirect(['/contrato', 'index' => 'id_cliente', 'value' => $id]);
+        }
+        
+        // se nao achou nenhum contrato redireciona para a tela de cadastro do contrato
+        return $this->redirect(['/contrato/create', 'id_cliente' => $id]);
+    }
+    
     /**
      * Deleta um registro
      */

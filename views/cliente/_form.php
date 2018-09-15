@@ -20,7 +20,6 @@ use yii\helpers\ArrayHelper;
 					<li class="active"><a href="#tab-principal" data-toggle="tab">Principal</a></li>
 					<li><a href="#tab-contato" data-toggle="tab">Contato</a></li>
 					<li><a href="#tab-endereco" data-toggle="tab">Endereço</a></li>
-					<li><a href="#tab-contrato" data-toggle="tab">Contrato</a></li>
 				</ul>
 			</div>
 			<!-- ./tabs -->
@@ -557,25 +556,8 @@ use yii\helpers\ArrayHelper;
 			  		<!-- ./table telefone -->
 			  	</div>
 			  	<!-- ./tab endereco -->
-			  	<div class="tab-pane" id="tab-contrato">
-			  		<br>
-			  		<div class="row">
-			  			<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-			  				<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Contrato', [
-                                    'class' => Helper::BTN_COLOR_EMERALD.' btn-block add-contrato',
-	  				                'title' => 'Novo Contrato',
-	  				                'data-toggle' => 'tooltip',
-                                ]);
-                            ?>
-			  			</div>
-			  		</div>
-			  		<!-- ./row -->
-			  		<hr>
-			  		<div id="lista-contratos"></div>
-			  		<!-- ./lista de contratos -->
-			  	</div>
-			  	<!-- ./tab contrato -->
 			</div>
+			<!-- ./tab content -->
         </div>
         <!-- ./painel-body -->
         <div class="panel-footer">
