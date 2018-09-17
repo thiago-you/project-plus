@@ -124,6 +124,11 @@ class Credor extends \yii\db\ActiveRecord
         $this->cep = Helper::unmask($this->cep);
         $this->telefone = Helper::unmask($this->telefone);
         
+        // seta a razao social igual ao nome quando estiver vazia
+        if (empty($this->razao_social)) {
+            $this->razao_social = $this->nome;
+        }
+        
         return parent::beforeSave($insert);
     }
     

@@ -116,12 +116,12 @@ CREATE TABLE `referencia` (
 -- cria a tabela de credor
 CREATE TABLE `credor` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `id_campanha` INT NOT NULL,
+  `id_campanha` INT,
   `nome` VARCHAR(250) NOT NULL,
   `tipo` TINYINT(1) DEFAULT '1',
   `tipo_cobranca` TINYINT(1) DEFAULT '1',
   `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
-  `razao_social` DECIMAL(10,2),
+  `razao_social` VARCHAR(250),
   `cnpj` VARCHAR(14) NOT NULL,
   `telefone` VARCHAR(15) NOT NULL,
   `email` VARCHAR(100) NOT NULL,
