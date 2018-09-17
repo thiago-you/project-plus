@@ -104,7 +104,7 @@ class ClienteController extends BaseController
 	        				// seta os dados
 	        				$modelTelefone = new Telefone();
 	        				$modelTelefone->id_cliente = $model->id ? $model->id : $model->getPrimaryKey();
-	        				$modelTelefone->numero     = $telefone['numero'];
+	        				$modelTelefone->numero     = Helper::unmask($telefone['numero'], true);
 	        				$modelTelefone->ramal      = $telefone['ramal'];
 	        				$modelTelefone->tipo       = $telefone['tipo'];
 	        				$modelTelefone->contato    = $telefone['contato'];
@@ -152,7 +152,7 @@ class ClienteController extends BaseController
 	        				$modelEndereco->numero      = $endereco['numero'];
 	        				$modelEndereco->complemento = $endereco['complemento'];
 	        				$modelEndereco->bairro      = $endereco['bairro'];
-	        				$modelEndereco->cep         = $endereco['cep'];
+	        				$modelEndereco->cep         = Helper::unmask($endereco['cep'], true);
 	        				$modelEndereco->cidade_id   = $endereco['cidade_id'];
 	        				$modelEndereco->estado_id   = $endereco['estado_id'];
 	        				
@@ -233,7 +233,7 @@ class ClienteController extends BaseController
         					
         					// seta os dados
         					$modelTelefone->id_cliente = $model->id;
-        					$modelTelefone->numero     = $telefone['numero'];
+        					$modelTelefone->numero     = Helper::unmask($telefone['numero'], true);
         					$modelTelefone->ramal      = $telefone['ramal'];
         					$modelTelefone->tipo       = $telefone['tipo'];
         					$modelTelefone->contato    = $telefone['contato'];
@@ -301,10 +301,9 @@ class ClienteController extends BaseController
         					$modelEndereco->numero      = $endereco['numero'];
         					$modelEndereco->complemento = $endereco['complemento'];
         					$modelEndereco->bairro      = $endereco['bairro'];
-        					$modelEndereco->cep         = $endereco['cep'];
+        					$modelEndereco->cep         = Helper::unmask($endereco['cep'], true);
         					$modelEndereco->cidade_id   = $endereco['cidade_id'];
         					$modelEndereco->estado_id   = $endereco['estado_id'];
-        					
         					
         					// salva o endereco
         					if (!$modelEndereco->save()) {

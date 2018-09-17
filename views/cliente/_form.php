@@ -181,17 +181,17 @@ use yii\helpers\ArrayHelper;
 				  					<tr data-id="<?= $telefone->id; ?>">
 					  					<td>
 					  						<?= $form->field($telefone, 'numero')->textInput([
-		  											'id' => null,
-		  											'name' => "Telefones[$telefone->id][numero]",
-			  										'maxlength' => true,
-					  							])->label(false); 
+			  										'id' => null,
+			  										'name' => "Telefones[$telefone->id][numero]",
+			  										'class' => 'form-control input-numero',
+  												])->label(false); 
 					  						?>
 				  						</td>
 					  					<td>
 					  						<?= $form->field($telefone, 'ramal')->textInput([
 			  										'id' => null,
 			  										'name' => "Telefones[$telefone->id][ramal]",
-			  										'maxlength' => true,
+			  										'maxlength' => 5,
   												])->label(false); 
 					  						?>
 				  						</td>
@@ -251,15 +251,16 @@ use yii\helpers\ArrayHelper;
 			  				<?php else: ?>
 			  					<tr data-id="1">
 				  					<td>
-				  						<?= Html::textInput('Telefones[1][numero]', null, [
-		  										'maxlength' => true,
-				  								'class' => 'form-control',
-				  							]); 
-				  						?>
+				  						<?= MaskedInput::widget([
+		  						                'name' => 'Telefones[1][numero]',
+                                				'mask' => ['(99) 9999-9999', '(99) 9999-99999'],
+                                                'clientOptions' => ['greedy' => false]
+                                        	]);
+                                        ?>
 			  						</td>
 				  					<td>
 				  						<?= Html::textInput('Telefones[1][ramal]', null, [
-			  									'maxlength' => true,
+			  									'maxlength' => 5,
 				  								'class' => 'form-control',
   											]); 
 					  					?>
@@ -325,12 +326,13 @@ use yii\helpers\ArrayHelper;
 				  					<!-- ./hidden id -->
 				  					<tr data-id="<?= $email->id; ?>">
 					  					<td>
-					  						<?= $form->field($email, 'email')->textInput([
-		  											'id' => null,
+                                            <?= $form->field($email, 'email')->textInput([
+				  									'id' => null,
 					  								'name' => "Emails[$email->id][email]",
-			  										'maxlength' => true,
-					  							])->label(false); 
-					  						?>
+                                                    'class' => 'form-control input-email',
+				  									'maxlength' => true,
+						  						])->label(false); 
+						  					?>
 				  						</td>
 					  					<td>
 					  						<?= $form->field($email, 'observacao')->textInput([
@@ -351,11 +353,13 @@ use yii\helpers\ArrayHelper;
 			  				<?php else: ?>
 			  					<tr data-id="1">
 				  					<td>
-				  						<?= Html::textInput('Emails[1][email]', null, [
-		  										'maxlength' => true,
-				  								'class' => 'form-control',
-				  							]); 
-				  						?>
+				  						<?= MaskedInput::widget([
+		  						                'name' => 'Emails[1][email]',
+                                				'clientOptions' => [
+                                				    'alias' => 'email', 
+                                				],
+                                        	]);
+                                        ?>
 			  						</td>
 				  					<td>
 				  						<?= Html::textInput('Emails[1][observacao]', null, [
@@ -441,20 +445,20 @@ use yii\helpers\ArrayHelper;
 					  						?>
 				                        </td>
 					  					<td>
-					  						<?= $form->field($endereco, 'cep')->textInput([
+                                            <?= $form->field($endereco, 'cep')->textInput([
 			  										'id' => null,
 			  										'name' => "Enderecos[$endereco->id][cep]",
-			  										'maxlength' => true,
+                                                    'class' => 'form-control input-cep',
   												])->label(false); 
 					  						?>
 				                        </td>
 					  					<td class="select-cidade">
 					  						<?= $form->field($endereco, 'cidade_id')->widget(Select2::classname(), [
-			  						                'data' => $endereco->cidade_id ? ArrayHelper::map(Cidade::find()->where(['uf' => $endereco->cidade->uf])->all(), 'id', 'nome') : [],
-			  						                'name' => "Enderecos[$endereco->id][cidade_id]",
+			  						                'data' => $endereco->estado_id ? ArrayHelper::map(Cidade::find()->where(['uf' => $endereco->cidade->uf])->all(), 'id', 'nome') : [],
 			  						                'theme' => Select2::THEME_DEFAULT,
 			  						                'options' => [
   						                                 //'placeholder' => 'Selecione a cidade ...',
+    			  						                'name' => "Enderecos[$endereco->id][cidade_id]",
     			  						                 'id' => "Enderecos-{$endereco->id}-cidade",
 			  						                ],
                                                     'pluginOptions' => [
@@ -466,10 +470,10 @@ use yii\helpers\ArrayHelper;
 					  					<td class="select-estado">
 						  					<?= $form->field($endereco, 'estado_id')->widget(Select2::classname(), [
 				  					                'data' => $estados,
-				  					                'name' => "Enderecos[$endereco->id][estado_id]",
 				  					                'theme' => Select2::THEME_DEFAULT,
                                                     'options' => [
                                                         //'placeholder' => 'Selecione o estado ...',
+    				  					                'name' => "Enderecos[$endereco->id][estado_id]",
                                                         'id' => "Endereco-{$endereco->id}-estado",
                                                     ],
                                                     'pluginOptions' => [
@@ -517,11 +521,12 @@ use yii\helpers\ArrayHelper;
 					  					?>
 			                        </td>
 				  					<td>
-				  						<?= Html::textInput('Enderecos[1][cep]', null, [
-			  									'maxlength' => true,
-				  								'class' => 'form-control',
-  											]); 
-					  					?>
+					  					<?= MaskedInput::widget([
+                                				'mask' => '99999-999',
+			  					                'name' => 'Enderecos[1][cep]',
+                                                'clientOptions' => ['greedy' => false]
+                                        	]);
+                                        ?>
 			                        </td>
 				  					<td class="select-cidade">
 					  					<?= Select2::widget([
@@ -599,7 +604,8 @@ use yii\helpers\ArrayHelper;
 <?php ActiveForm::end(); ?>
 <!-- ./form -->
 <?php 
-$this->registerJsFile(Url::home().'/app/js/cliente.js', ['depends' => [JqueryAsset::className()]]);
+// JS
+$this->registerJsFile(Url::home().'app/js/cliente.js', ['depends' => [JqueryAsset::className()]]);
 ?>
 
 

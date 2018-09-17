@@ -45,7 +45,7 @@ class Endereco extends \yii\db\ActiveRecord
             [['logradouro', 'bairro'], 'string', 'max' => 100],
             [['numero'], 'string', 'max' => 10],
             [['complemento'], 'string', 'max' => 50],
-            [['cep'], 'string', 'max' => 8],
+            [['cep'], 'string', 'max' => 9],
             [['observacao'], 'string', 'max' => 250],
             [['id_cliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['id_cliente' => 'id']],
         ];

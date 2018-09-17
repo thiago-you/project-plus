@@ -16,6 +16,11 @@ $(document).ready(function() {
 		}
 	});
 
+	// insere as mascaras dos plugins
+	Inputmask({'mask': '(99) 9999-9999[9]', 'greedy': false}).mask($('.input-numero'));
+	Inputmask({'mask': '99999-999', 'greedy': false}).mask($('.input-cep'));
+	Inputmask({'alias': 'email'}).mask($('.input-email'));
+	
 	// adiciona um novo telefone na lista
 	$('body').on('click', '#add-telefone', function() {
 		// busca a tabela e o ultimo id
@@ -41,6 +46,9 @@ $(document).ready(function() {
 		linha.append('<td><select class="form-control" name="Telefones['+telefoneId+'][ativo]"><option value="S">Sim</option><option value="N">Não</option></select></td>');
 		linha.append('<td><input class="form-control" name="Telefones['+telefoneId+'][observacao]" maxlength="" type="text"/></td>');
 		linha.append('<td class="text-center"><button class="btn btn-sm btn-danger btn-flat btn-deletar"><i class="fa fa-times"></i></button></td>');
+		
+		// insere a mascara de telefone
+		Inputmask({'mask': '(99) 9999-9999[9]', 'greedy': false}).mask(linha.find('td:first input'));		
 	});
 
 	// adiciona um novo email na lista
@@ -63,6 +71,9 @@ $(document).ready(function() {
 		linha.append('<td><input class="form-control" name="Emails['+emailId+'][email]" maxlength="" type="text"/></td>');
 		linha.append('<td><input class="form-control" name="Emails['+emailId+'][observacao]" maxlength="" type="text"/></td>');
 		linha.append('<td class="text-center"><button class="btn btn-sm btn-danger btn-flat btn-deletar"><i class="fa fa-times"></i></button></td>');
+		
+		// insere a mascara de CEP
+		Inputmask({'alias': 'email'}).mask(linha.find('td:first input'));
 	});
 
 	// adiciona um novo endereco na lista
@@ -86,10 +97,13 @@ $(document).ready(function() {
 		linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][numero]" maxlength="" type="text"/></td>');
 		linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][complemento]" maxlength="" type="text"/></td>');
 		linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][bairro]" maxlength="" type="text"/></td>');
-		linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][cep]" maxlength="" type="text"/></td>');
+		linha.append('<td class="linha-cep"><input class="form-control" name="Enderecos['+enderecoId+'][cep]" maxlength="" type="text"/></td>');
 		linha.append('<td class="select-cidade"><select id="Enderecos-'+enderecoId+'-cidade" class="form-control js-example-basic-single" name="Enderecos['+enderecoId+'][cidade_id]"></select></td>');
 		linha.append('<td class="select-estado"><select id="Enderecos-'+enderecoId+'-estado" class="form-control" name="Enderecos['+enderecoId+'][estado_id]"></select></td>');
 		linha.append('<td class="text-center"><button class="btn btn-sm btn-danger btn-flat btn-deletar"><i class="fa fa-times"></i></button></td>');
+		
+		// insere a mascara de CEP
+		Inputmask({'mask': '99999-999', 'greedy': false}).mask(linha.find('td.linha-cep input'));
 		
 		// ativa o plugin
 		linha.find('select:first').select2({
