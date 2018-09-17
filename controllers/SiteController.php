@@ -264,6 +264,7 @@ class SiteController extends BaseController
                                     $contrato = new Contrato();
                                     $contrato->id_cliente = $id_cliente;
                                     $contrato->data_cadastro = $data->data_contrato;
+                                    $contrato->data_negociacao = $data->data_contrato;
                                     $contrato->observacao = $data->obs_contrato;
                                     $contrato->tipo = Contrato::getTipoByName($data->produto);
                                     $contrato->num_contrato = $data->num_contrato;
