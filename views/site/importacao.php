@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'showUpload' => false,
                                 'browseLabel' => 'Procurar...',
                                 'removeLabel' => '',
+        	                    'maxFileSize' => 10000 // 10mb
         	                ]
                     	])->label('Arquivo Excel'); 
                 	?>
