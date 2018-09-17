@@ -109,9 +109,10 @@ $(document).ready(function() {
 		linha.find('select:first').select2({
 			'placeholder': 'Selecione a cidade',
 		});
+		// ativa o plugin e insere a lista de estados (const no main.js)
 		linha.find('select:last').select2({
 			'placeholder': 'Selecione o estado'
-		}).html($('.select-estado-options').html()).val('1').trigger('change.select2');
+		}).html(listaEstados).val('1').trigger('change.select2');
 	});
 
 	// deleta um registro

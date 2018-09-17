@@ -383,12 +383,6 @@ use yii\helpers\ArrayHelper;
 			  	<!-- ./tab contato -->
 			  	<div class="tab-pane" id="tab-endereco">
 			  		<br>
-			  		<div class="hidden select-estado-options">
-			  			<?php foreach ($estados as $key => $estado): ?>
-							<?= "<option value=\"{$key}\">{$estado}</option>"; ?>
-						<?php endforeach; ?>
-			  		</div>
-		  			<!-- ./hidden select options -->
 			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Endereço', ['id' => 'add-endereco', 'class' => Helper::BTN_COLOR_EMERALD]); ?>
 			  		<table id="table-enderecos" class="table table-bordered table-hover">
 			  			<thead>
