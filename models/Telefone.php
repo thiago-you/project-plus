@@ -94,4 +94,31 @@ class Telefone extends \yii\db\ActiveRecord
             self::TIPO_REFERENCIA => 'Referência',
     	];
     }
+
+    /**
+     * Retorna a descricao do tipo
+     */
+    public function getTipoDescricao() 
+    {
+        switch ($this->tipo) {
+            case self::TIPO_RESIDENCIAL:
+                return 'Residencial';
+                break;
+            case self::TIPO_MOVEL:
+                return 'Móvel';
+                break;
+            case self::TIPO_COMERCIAL:
+                return 'Comercial';
+                break;
+            case self::TIPO_FAX:
+                return 'Fax';
+                break;
+            case self::TIPO_REFERENCIA:
+                return 'Referência';
+                break;
+        }
+    }
 }
+
+
+

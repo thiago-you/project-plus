@@ -168,6 +168,10 @@ class Cliente extends \yii\db\ActiveRecord
     		$this->data_cadastro = date('Y-m-d H:i:s');
     	}
     	
+    	// formata o nome da mae e pai
+    	$this->nome_mae = ucwords(strtolower($this->nome_mae));
+    	$this->nome_pai = ucwords(strtolower($this->nome_pai));
+    	
     	return parent::beforeSave($insert);
     }
     
@@ -211,6 +215,46 @@ class Cliente extends \yii\db\ActiveRecord
                     throw new \Exception(Helper::renderErrors($modelTelefone->getErrors()));
                 }
             }
+        }
+    }
+    
+    /*
+     * Retorna formatado o primeiro endereço ativo do cliente
+     */
+    public function getEnderecoCompleto() 
+    {
+        $endereco = '';
+        $enderecoModel = Endereco::find()->where([
+            'id_cliente' => $this->id,
+            'ativo' => Endereco::ATIVO,
+        ])->orderBy(['id' => SORT_ASC])->one();
+        
+        // valida se encontrou algum endereço
+        if ($enderecoModel) {
+            $endereco = $enderecoModel->getEnderecoCompleto();
+        }
+        
+        return $endereco;        
+    }
+    
+    /**
+     * Retorna a descricao do estado civil
+     */
+    public function getEstadoCivilDescricao() 
+    {
+        switch ($this->estado_civil) {
+            case '1':
+                return 'Solteiro(a)';
+                break;
+            case '2':
+                return 'Casado(a)';
+                break;
+            case '3':
+                return 'Divorciado(a)';
+                break;
+            case '4':
+                return 'Viuvo(a)';
+                break;
         }
     }
 }

@@ -391,16 +391,16 @@ class SiteController extends BaseController
         $worksheet->tel_comercial = next($data);
         $worksheet->tel_celular = next($data);
         $worksheet->email = next($data);
-        $worksheet->logradouro = next($data);
+        $worksheet->logradouro = ucwords(strtolower(next($data)));
         $worksheet->numero = next($data);
-        $worksheet->bairro = next($data);
+        $worksheet->bairro = ucwords(strtolower(next($data)));
         $worksheet->cep = next($data);
         $worksheet->cidade = next($data);
         $worksheet->estado = next($data);
         $worksheet->ie_ins = next($data);
         $worksheet->data_sem_nome = next($data);
-        $worksheet->nome_mae = ucwords(strtolower(next($data)));
-        $worksheet->nome_pai = ucwords(strtolower(next($data)));
+        $worksheet->nome_mae = next($data);
+        $worksheet->nome_pai = next($data);
         
         // valida se o documento e nome foram enviados
         if (empty($worksheet->documento) || empty($worksheet->nome)) {

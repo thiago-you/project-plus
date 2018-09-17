@@ -197,10 +197,15 @@ class ContratoController extends Controller
     /**
      * Negociacao dos contratos do cliente
      */
-    public function actionNegociacao() 
+    public function actionNegociacao($id) 
     {
+        // busca o contrato
+        $contrato = $this->findModel($id);
+        $cliente = $contrato->cliente;
+        
         return $this->render('negociacao', [
-            
+            'contrato' => $contrato,
+            'cliente' => $cliente,
         ]);
     }
      

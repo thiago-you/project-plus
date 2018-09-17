@@ -25,6 +25,10 @@ use Yii;
  */
 class Endereco extends \yii\db\ActiveRecord
 {
+    // const para validar se o endereço esta ativo
+    CONST ATIVO = 'S';
+    CONST NAO_ATIVO = 'N';
+    
     /**
      * {@inheritdoc}
      */
@@ -106,5 +110,35 @@ class Endereco extends \yii\db\ActiveRecord
             'numero' => $numero,
             'cep' => $cep,
         ])->one();
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
+    public function beforeSave($insert) 
+    {
+        // formata o logradouro, complemento e bairro
+        $this->logradouro = ucwords(strtolower($this->logradouro));
+        $this->complemento = ucwords(strtolower($this->complemento));
+        $this->bairro = ucwords(strtolower($this->bairro));
+        
+        return parent::beforeSave($insert);
+    }
+    
+    /*
+     * Retorna formatado o endereço
+     */
+    public function getEnderecoCompleto()
+    {
+        $endereco = '';
+        $endereco .= "{$this->logradouro}, ";
+        $endereco .= ($this->numero ? $this->numero : 'x'). ' - ';
+        $endereco .= $this->bairro ? "{$this->bairro}, " : '';
+        $endereco .= $this->cidade_id ? "{$this->cidade->nome} - " : '';
+        $endereco .= $this->estado_id ? strtoupper($this->estado->sigla) : 'X';
+        $endereco .= $this->cep ? ", {$this->cep}" : '';
+        
+        return $endereco;
     }
 }

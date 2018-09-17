@@ -1,0 +1,234 @@
+<?php
+use app\base\Helper;
+use yii\helpers\Html;
+use app\models\Cliente;
+use kartik\grid\GridView;
+use app\models\Contrato;
+use app\models\Telefone;
+use yii\helpers\Url;
+use yii\bootstrap\BootstrapAsset;
+
+$this->title = 'Negociação';
+$this->params['breadcrumbs'][] = $this->title;
+
+/* @var $cliente app\models\Cliente */
+/* @var $contrato app\models\Contrato */
+?>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+    	<h2 class="font18"><?= $cliente->nome; ?></h2>
+    </div>
+    <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+    	<small>
+        	<?php if (strlen($cliente->documento) == 11) {
+        	       echo '<b>CPF:</b>&nbsp; '.Helper::mask($cliente->documento, Helper::MASK_CPF);
+            	} else {            	    
+            	    echo '<b>CNPJ:</b>&nbsp; '.Helper::mask($cliente->documento, Helper::MASK_CNPJ); 
+            	}
+        	?>
+    	</small>
+    </div>
+    <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+    	<small><b>Data de Nasc.</b>&nbsp; <?= Helper::formatDateToDisplay($cliente->data_nascimento, Helper::DATE_DEFAULT); ?></small>
+    </div>
+    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+    	<small><b>Endereço:</b>&nbsp; <?= $cliente->getEnderecoCompleto(); ?></small>
+    </div>
+</div>
+<!-- ./dados do cliente -->
+<div class="row">
+    <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
+        <div class="panel panel-primary panel-box panel-dados-cliente">
+        	<div class="panel-body">
+        		<div class="nav-tabs-custom">
+            		<ul class="nav nav-tabs">
+    					<li class="active"><a href="#tab-telefone" data-toggle="tab">Telefones</a></li>
+    					<li><a href="#tab-endereco" data-toggle="tab">Endereços</a></li>
+    					<li><a href="#tab-email" data-toggle="tab">Emails</a></li>
+    					<li><a href="#tab-dados" data-toggle="tab">Dados</a></li>
+    				</ul>
+    			</div>
+    			<div class="tab-content">
+    				<div class="tab-pane active" id="tab-telefone">
+    					<table id="table-telefones" class="table table-bordered table-hover">
+    			  			<thead>
+    			  				<tr>
+    			  					<th>Telefone</th>
+    			  					<th>Tipo</th>
+    			  					<th>Observação</th>
+    			  					<th></th>
+    			  				</tr>
+    			  			</thead>
+    			  			<tbody>
+    			  				<?php if (is_array($cliente->telefones) && !empty($cliente->telefones)): ?>
+    			  					<?php foreach ($cliente->telefones as $telefone): ?>
+    				  					<tr>
+    					  					<td>
+    					  						<?= Helper::mask($telefone->numero, Helper::MASK_TELEFONE); ?>
+    				  						</td>
+    					  					<td>
+    					  						<?= $telefone->getTipoDescricao(); ?>
+    				  						</td>
+    					  					<td>
+    					  						<?= $telefone->observacao; ?>
+    					  					</td>
+    					  					<td class="text-center">
+    					  					</td>
+    					  				</tr>
+    				  				<?php endforeach; ?>
+				  				<?php endif; ?>
+    			  			</tbody>
+    			  		</table>
+    			  		<!-- ./table telefone -->
+    				</div>
+    				<!-- ./tab telefone -->
+    				<div class="tab-pane" id="tab-endereco">
+    					<table id="table-enderecos" class="table table-bordered table-hover">
+    			  			<thead>
+    			  				<tr>
+    			  					<th>Endereço</th>
+    			  					<th width="10%"></th>
+    			  				</tr>
+    			  			</thead>
+    			  			<tbody>
+    			  				<?php if (is_array($cliente->enderecos) && !empty($cliente->enderecos)): ?>
+    			  					<?php foreach ($cliente->enderecos as $endereco): ?>
+    				  					<tr>
+    					  					<td>
+    					  						<?= $endereco->getEnderecoCompleto(); ?>
+    				  						</td>
+    					  					<td class="text-center">
+    					  					</td>
+    					  				</tr>
+    				  				<?php endforeach; ?>
+    			  				<?php endif; ?>
+    			  			</tbody>
+    			  		</table>
+    			  		<!-- ./table telefone -->
+    				</div>
+    				<!-- ./tab endereco -->
+    				<div class="tab-pane" id="tab-email">
+    					<table id="table-emails" class="table table-bordered table-hover">
+    			  			<thead>
+    			  				<tr>
+    			  					<th>Email</th>
+    			  					<th>Observação</th>
+    			  					<th></th>
+    			  				</tr>
+    			  			</thead>
+    			  			<tbody>
+    			  				<?php if (is_array($cliente->emails) && !empty($cliente->emails)): ?>
+    			  					<?php foreach ($cliente->emails as $email): ?>
+    				  					<tr>
+    					  					<td>
+                                                <?= $email->email; ?>
+    				  						</td>
+    					  					<td>
+    					  						<?= $email->observacao; ?>
+    					  					</td>
+    					  					<td class="text-center">
+    					  					</td>
+    					  				</tr>
+    				  				<?php endforeach; ?>
+    			  				<?php endif; ?>
+    			  			</tbody>
+    			  		</table>
+    			  		<!-- ./table email -->
+    				</div>
+    				<!-- ./tab email -->
+    				<div class="tab-pane" id="tab-dados">
+        				<table id="table-dados" class="table table-bordered table-hover">
+    			  			<tbody>
+    		  					<tr>
+    			  					<td>RG</td>
+    			  					<td><?= $cliente->rg; ?></td>
+    			  				</tr>
+    		  					<tr>
+    			  					<td>Data de Nascimento</td>
+    			  					<td><?= Helper::formatDateToDisplay($cliente->data_nascimento, Helper::DATE_DEFAULT); ?></td>
+    			  				</tr>
+    		  					<tr>
+    			  					<td>Nome do Pai</td>
+    			  					<td><?= $cliente->nome_pai; ?></td>
+    			  				</tr>
+    		  					<tr>
+    			  					<td>Nome da Mãe</td>
+    			  					<td><?= $cliente->nome_mae; ?></td>
+    			  				</tr>
+    			  				<tr>
+    			  					<td>Nome do Conjuge</td>
+    			  					<td><?= $cliente->nome_conjuge; ?></td>
+    			  				</tr>
+    		  					<tr>
+    			  					<td>Profissão</td>
+    			  					<td><?= $cliente->profissao; ?></td>
+    			  				</tr>
+    		  					<tr>
+    			  					<td>Empresa</td>
+    			  					<td><?= $cliente->empresa; ?></td>
+    			  				</tr>
+    		  					<tr>
+    			  					<td>Salário</td>
+    			  					<td><?= Helper::mask($cliente->salario, Helper::MASK_MONEY); ?></td>
+    			  				</tr>
+    		  					<tr>
+    			  					<td>Sexo</td>
+    			  					<td><?= $cliente->sexo == Cliente::SEXO_MASC ? 'Masculino' : 'Feminino'; ?></td>
+    			  				</tr>
+    			  				<tr>
+    			  					<td>Estado Civil</td>
+    			  					<td><?= $cliente->getEstadoCivilDescricao(); ?></td>
+    			  				</tr>
+    			  			</tbody>
+    			  		</table>
+    			  		<!-- ./table dados -->
+    				</div>
+    				<!-- ./tab dados -->
+				</div>
+    			<!-- ./tabs -->
+            </div>
+            <!-- ./panel-body - dados do cliente -->
+    	</div>
+    	<!-- ./panel dados do cliente-->
+    	<div class="panel panel-primary panel-box panel-contratos">
+    		<div class="panel-heading">
+    			<div class="row">
+                	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
+                		<h3>Contratos</h3>
+                	</div>
+                	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4 text-center">
+                		<h3 class="text-danger">Total em Aberto: R$ 0,00</h3>
+                	</div>
+                	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4 pull-right text-right">
+                		<?= Html::button('<i class="fa fa-calculator"></i>&nbsp; Cálculo', [
+        		                'class' => Helper::BTN_COLOR_EMERALD,
+                    		]); 
+                		?>
+                	</div>
+            	</div>
+            	<!-- ./row -->
+            </div>
+            <!-- ./panel heading -->
+        	<div class="panel-body">
+        	</div>
+        	<!-- ./panel heading -->
+    	</div>
+    	<!-- ./panel contratos -->
+	</div>
+	<!-- ./contrato -->
+	<div class="col-md-5 col-sm-5 col-lg-5 col-xs-12">
+		<div class="panel panel-primary panel-box">
+        	<div class="panel-body">
+        		
+            </div>
+            <!-- ./panel-body -->
+    	</div>
+    	<!-- ./panel -->
+	</div>
+	<!-- ./ acionamentos -->
+</div>
+<!-- ./row -->
+<?php 
+// CSS
+$this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [BootstrapAsset::className()]]);
+?>

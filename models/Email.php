@@ -65,4 +65,19 @@ class Email extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Cliente::className(), ['id' => 'id_cliente']);
     }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
+    public function beforeSave($insert) 
+    {
+        // formata o email
+        $this->email = strtolower($this->email);
+        
+        return parent::beforeSave($insert);
+    }
 }
+
+
+

@@ -1,0 +1,30 @@
+.main-content {
+	margin-top: 40px !important;
+}
+.panel-dados-cliente {	
+    padding-top: 5px;	
+    padding-bottom: 20px;
+}
+.panel-dados-cliente .panel-body {
+    height: 200px;
+    overflow-y: auto;
+}
+.panel-contratos, .panel-contratos .panel-heading,
+.panel-contratos .panel-heading .row div {
+	padding: 0px;
+}
+.panel-contratos .panel-heading {
+    background-color: inherit;
+    color: inherit;
+    border-bottom: none;
+    padding: 2px 10px;
+}
+.panel-contratos .panel-heading .row div h3 {
+    font-size: 16px;
+    position: relative;
+    bottom: 8px;
+}
+.panel-contratos .panel-heading .row div button {
+	font-size: 14px;
+	margin-top: 2px;
+}

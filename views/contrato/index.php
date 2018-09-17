@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 	'header' => '',
                 	'buttons' => [
     	                'negociacao' => function ($url, $model) {
-                            return Html::a('<i class="fa fa-cog"></i>', ['/cliente/negociacao/', 'id' => $model->cliente->id], [
+                            return Html::a('<i class="fa fa-cog"></i>', ['/contrato/negociacao/', 'id' => $model->id], [
                                 'class' => Helper::BTN_COLOR_PURPLE,
                                 'title' => 'Negociação',
                                 'data-toggle' => 'tooltip',
@@ -138,4 +138,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
        ?>
     </div>
+    <!-- ./panel-body -->
 </div>
+<!-- ./panel -->
+
+
+
