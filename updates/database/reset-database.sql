@@ -172,7 +172,7 @@ CREATE TABLE `contrato` (
   `valor` DECIMAL(10,2),
   `data_cadastro` DATE NOT NULL,
   `data_vencimento` DATE,
-  `data_negociacao` DATE NOT NULL,
+  `data_negociacao` DATE,
   `tipo` TINYINT(1) DEFAULT '1',
   `regiao` VARCHAR(50),
   `filial` VARCHAR(50),

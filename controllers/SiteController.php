@@ -242,11 +242,11 @@ class SiteController extends BaseController
                                             
                                             // busca o estado
                                             if (!$estado = Estado::findOne(['sigla' => $data->estado])) {
-                                                throw new \Exception("Não foi possível encontrar um estado com a sigla: \"{$data['UF']}\"");
+                                                throw new \Exception("Não foi possível encontrar um estado com a sigla: \"{$data->estado}\"");
                                             }
                                             // busca a cidade
                                             if (!$cidade = $estado->findCidade($data->cidade)) {
-                                                throw new \Exception("Não foi possível encontrar uma cidade com o nome: \"{$data['CIDADE']}\"");
+                                                throw new \Exception("Não foi possível encontrar uma cidade com o nome: \"{$data->cidade}\"");
                                             }
                                             
                                             // seta a cidade e o estado
@@ -301,7 +301,7 @@ class SiteController extends BaseController
                                                                         
                                     // valida os valores do contrato
                                     if (strval($data->valor + $data->encargo) != strval($data->saldo)) {
-                                        throw new \Exception("Não foi possível salvar o contrato na linha \"{$posicao}\", pois o saldo da parcela \"{$data['OBS_PARCELA']}\" diverge do saldo calculado.");
+                                        throw new \Exception("Não foi possível salvar o contrato na linha \"{$posicao}\", pois o saldo da parcela \"{$data->obs_parcela}\" diverge do saldo calculado.");
                                     }
                                     
                                     // seta o saldo total
