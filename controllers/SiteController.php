@@ -301,7 +301,7 @@ class SiteController extends BaseController
                                                                         
                                     // valida os valores do contrato
                                     if (strval($data->valor + $data->encargo) != strval($data->saldo)) {
-                                        throw new \Exception("Não foi possível salvar o contrato na linha \"{$posicao}\", pois o saldo da parcela \"{$data->obs_parcela}\" diverge do saldo calculado.");
+                                        throw new \Exception("O saldo da parcela \"{$data->obs_parcela}\" diverge do saldo calculado.");
                                     }
                                     
                                     // seta o saldo total
