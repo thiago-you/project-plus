@@ -197,7 +197,7 @@ CREATE TABLE `contrato_parcela` (
   `data_cadastro` DATETIME NOT NULL,
   `data_vencimento` DATE NOT NULL,
   `valor` DECIMAL(10,2),
-  `multa` DECIMAL(10,2),
-  `total` DECIMAL(10,2),
+  `observacao` VARCHAR(250),
+  `status` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar as situacoes possiveis',
   FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
