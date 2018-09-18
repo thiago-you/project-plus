@@ -297,15 +297,6 @@ class SiteController extends BaseController
                                     $parcela->num_parcela = $data->obs_parcela;
                                     $parcela->data_vencimento = $data->data_vencimento;
                                     $parcela->valor = $data->valor;
-                                    $parcela->multa = $data->encargo;
-                                                                        
-                                    // valida os valores do contrato
-                                    if (strval($data->valor + $data->encargo) != strval($data->saldo)) {
-                                        throw new \Exception("O saldo da parcela \"{$data->obs_parcela}\" diverge do saldo calculado.");
-                                    }
-                                    
-                                    // seta o saldo total
-                                    $parcela->total = $data->saldo;
                                     
                                     // salva a model
                                     if (!$parcela->save()) {

@@ -13,8 +13,8 @@ use Yii;
  * @property string $data_cadastro
  * @property string $data_vencimento
  * @property string $valor
- * @property string $multa
- * @property string $total
+ * @property string $observacao
+ * @property string $status
  *
  * @property Contrato $contrato
  */
@@ -36,8 +36,8 @@ class ContratoParcela extends \yii\db\ActiveRecord
         return [
             [['id_contrato', 'data_vencimento'], 'required'],
             [['id_contrato', 'num_parcela'], 'integer'],
-            [['data_cadastro', 'data_vencimento'], 'safe'],
-            [['valor', 'multa', 'total'], 'number'],
+            [['data_cadastro', 'data_vencimento', 'observacao', 'status'], 'safe'],
+            [['valor'], 'number'],
             [['id_contrato'], 'exist', 'skipOnError' => true, 'targetClass' => Contrato::className(), 'targetAttribute' => ['id_contrato' => 'id']],
         ];
     }
@@ -48,14 +48,14 @@ class ContratoParcela extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'id_contrato' => 'Id Contrato',
+            'id' => 'Cód.',
+            'id_contrato' => 'Cód. Contrato',
             'num_parcela' => 'N° Parcela',
-            'data_cadastro' => 'Data Cadastro',
-            'data_vencimento' => 'Data Vencimento',
+            'data_cadastro' => 'Data de Cadastro',
+            'data_vencimento' => 'Data de Vencimento',
             'valor' => 'Valor',
-            'multa' => 'Multa',
-            'total' => 'Total',
+            'observacao' => 'Observação',
+            'status' => 'Status',
         ];
     }
 
@@ -77,11 +77,34 @@ class ContratoParcela extends \yii\db\ActiveRecord
         if (empty($this->data_cadastro)) {
             $this->data_cadastro = date('Y-m-d H:i:s');
         }
-        // seta o total da parcela
-        if (empty($this->total)) {
-            $this->total = $this->valor + $this->multa;
-        }
         
         return parent::beforeSave($insert);
     }
+    
+    /**
+     * Retorna o numero de dias em atraso apartir da data de vencimento
+     */
+    public function getAtraso() 
+    {
+        $dataAtual = time();
+        $vencimento = strtotime($this->data_vencimento);
+        $diferenca = $dataAtual - $vencimento;
+        
+        return round($diferenca / (60 * 60 * 24));
+    }
+    
+    /**
+     * Retorna a descricao do tipo
+     */
+    public function getStatusDescricao() 
+    {
+        switch ($this->status) {
+            case 1:
+                return 'Sem Neg.';
+                break;
+        }
+    }
 }
+
+
+

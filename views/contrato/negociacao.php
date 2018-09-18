@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
     	</small>
     </div>
     <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-    	<small><b>Data de Nasc.</b>&nbsp; <?= Helper::formatDateToDisplay($cliente->data_nascimento, Helper::DATE_DEFAULT); ?></small>
+    	<small><b>Data de Nasc.:</b>&nbsp; <?= Helper::formatDateToDisplay($cliente->data_nascimento, Helper::DATE_DEFAULT); ?></small>
     </div>
     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
     	<small><b>Endereço:</b>&nbsp; <?= $cliente->getEnderecoCompleto(); ?></small>
@@ -210,16 +210,73 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <!-- ./panel heading -->
         	<div class="panel-body">
+            	<?php if (is_array($cliente->contratos) && !empty($cliente->contratos)): ?>
+  					<?php foreach ($cliente->contratos as $clienteContrato): ?>
+  						<div class="row">
+  							<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+  								<i class="fa fa-file-invoice-dollar"></i>
+  								<?= $clienteContrato->num_contrato ? $clienteContrato->num_contrato : 'Sem Número'; ?>
+							</div>
+							<!-- ./col -->
+    		  				<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+        		  				<?php if (is_array($clienteContrato->contratoParcelas) && !empty($clienteContrato->contratoParcelas)): ?>
+        		  					<?php $numParcelas = count($clienteContrato->contratoParcelas); ?>
+        		  					<?php foreach ($clienteContrato->contratoParcelas as $parcela): ?>
+                                    	<table class="table table-bordered table-hover table-parcelas">
+                        		  			<thead>
+                        		  				<tr>
+                        		  					<th>Núm.</th>
+                        		  					<th>Vencimento</th>
+                        		  					<th>Valor</th>
+                        		  					<th>Atraso</th>
+                        		  					<th>Status</th>
+                        		  					<th>Observação</th>
+                        		  				</tr>
+                        		  			</thead>
+                        		  			<tbody>
+                			  					<tr>
+                				  					<td class="text-center">
+                                                        <?= "{$parcela->num_parcela}/{$numParcelas}"; ?>
+                			  						</td>
+                			  						<td>
+                                                        <?= Helper::formatDateToDisplay($parcela->data_vencimento, Helper::DATE_DEFAULT); ?>
+                			  						</td>
+                			  						<td>
+                                                        <?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?>
+                			  						</td>
+                			  						<td>
+                                                        <?= $parcela->getAtraso(); ?>
+                			  						</td>
+                			  						<td>
+                                                        <?= $parcela->getStatusDescricao(); ?>
+                			  						</td>
+                			  						<td>
+                                                        <?= $parcela->observacao; ?>
+                			  						</td>
+                				  				</tr>
+                        		  			</tbody>
+                        		  		</table>
+                        	  		   <!-- ./table contratos -->
+        			  				<?php endforeach; ?>
+        		  				<?php endif; ?>
+    		  				</div>
+    		  				<!-- ./col -->
+		  				</div>
+		  				<!-- ./row -->
+					<?php endforeach; ?>
+				<?php endif; ?>
         	</div>
-        	<!-- ./panel heading -->
+        	<!-- ./panel body -->
     	</div>
     	<!-- ./panel contratos -->
 	</div>
 	<!-- ./contrato -->
 	<div class="col-md-5 col-sm-5 col-lg-5 col-xs-12">
 		<div class="panel panel-primary panel-box">
+        	<div class="panel-heading">
+        	</div>
+        	<!-- ./panel heading -->
         	<div class="panel-body">
-        		
             </div>
             <!-- ./panel-body -->
     	</div>
