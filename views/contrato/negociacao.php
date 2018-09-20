@@ -285,6 +285,16 @@ $this->params['breadcrumbs'][] = $this->title;
 	<!-- ./ acionamentos -->
 </div>
 <!-- ./row -->
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+        <div class="panel panel-primary panel-box panel-calculo no-margin">
+        	<div class="panel-body">
+        		<?= $this->render('contrato-calculo'); ?>
+        	</div>
+    	</div>
+	</div>
+</div>
+<!-- ./row calculo -->
 <?php 
 // CSS
 $this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [BootstrapAsset::className()]]);

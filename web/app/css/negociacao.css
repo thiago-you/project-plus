@@ -28,3 +28,12 @@
 	font-size: 14px;
 	margin-top: 2px;
 }
+.table-parcela thead tr:first-child,
+.table-parcela thead tr:first-child th {
+	background-color: #f5f5f5;
+}
+.panel-valores .panel-heading {
+	padding: 8px;
+	line-height: 1.42857143;
+	font-weight: bold;
+}
