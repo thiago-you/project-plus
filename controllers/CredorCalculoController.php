@@ -7,6 +7,7 @@ use app\base\AjaxResponse;
 use yii\filters\VerbFilter;
 use app\models\CredorCalculo;
 use yii\web\NotFoundHttpException;
+use app\base\Helper;
 
 /**
  * CredorCalculoController implements the CRUD actions for CredorCalculo model.
@@ -63,6 +64,11 @@ class CredorCalculoController extends Controller
                 $retorno = new AjaxResponse();
                 $model->load($post);
                 
+                // seta os valores direto do plugin
+                $model->multa = Helper::unmask($post['credorcalculo-multa-disp'], true);
+                $model->juros = Helper::unmask($post['credorcalculo-juros-disp'], true);
+                $model->honorario = Helper::unmask($post['credorcalculo-honorario-disp'], true);
+                
                 if (!$model->save()) {
                     throw new \Exception();
                 }
@@ -101,6 +107,11 @@ class CredorCalculoController extends Controller
                 // cria o retorno e carrega os dados da model
                 $retorno = new AjaxResponse();
                 $model->load($post);
+                
+                // seta os valores direto do plugin
+                $model->multa = Helper::unmask($post['credorcalculo-multa-disp'], true);
+                $model->juros = Helper::unmask($post['credorcalculo-juros-disp'], true);
+                $model->honorario = Helper::unmask($post['credorcalculo-honorario-disp'], true);
                 
                 if (!$model->save()) {
                     throw new \Exception();

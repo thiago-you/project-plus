@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				<th>Atraso</th>
 				<th>Multa</th>
 				<th>Juros</th>
+				<th>Honorários</th>
 				<th class="text-center"></th>
 			</tr>
 		</thead>
@@ -23,8 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
         			<tr id="<?= $calculo->id; ?>">
         				<td class="text-center"><?= ++$i; ?></td>
     					<td><?= $calculo->getAtraso(); ?></td>
-        				<td><?= Helper::mask($calculo->multa, Helper::MASK_MONEY); ?></td>
-        				<td><?= Helper::mask($calculo->juros, Helper::MASK_MONEY); ?></td>
+        				<td><?= Helper::mask($calculo->multa, Helper::MASK_PERCENT, ['precision' => 4]); ?></td>
+        				<td><?= Helper::mask($calculo->juros, Helper::MASK_PERCENT, ['precision' => 4]); ?></td>
+        				<td><?= Helper::mask($calculo->honorario, Helper::MASK_PERCENT, ['precision' => 4]); ?></td>
         				<td class="text-center">
         					<?= Html::button('<i class="fa fa-edit fa-fw"></i>', [
         			                'class' => Helper::BTN_COLOR_WARNING.' editar-faixa'
