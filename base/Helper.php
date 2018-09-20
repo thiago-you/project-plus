@@ -205,7 +205,11 @@ class Helper
                 if (!$val) {
                     $val = 0.00;
                 }
-                return number_format($val, 2, ',', '.') . ' %';
+                $length = 2;
+                if (isset($option['precision']) && !empty($option['precision'])) {
+                    $length = $option['precision'];
+                }
+                return number_format($val, $length, ',', '.').'%';
                 break;
             default:
                 throw new \Exception('Tipo de máscara não definida. Utilize os tipos disponíveis na classe.');

@@ -13,6 +13,7 @@ use Yii;
  * @property string $atraso_fim
  * @property string $multa
  * @property string $juros
+ * @property string $honorario
  * @property int    $parcela_num Numero da parcela qunado o tipo for parcelado
  * 
  * @property CredorCampanha $credorCampanha
@@ -35,7 +36,7 @@ class CredorCalculo extends \yii\db\ActiveRecord
         return [
             [['id_campanha'], 'required'],
             [['id_campanha', 'parcela_num'], 'integer'],
-            [['multa', 'juros'], 'number'],
+            [['multa', 'juros', 'honorario'], 'number'],
             [['atraso_inicio', 'atraso_fim'], 'string', 'max' => 3],
             [['id_campanha'], 'exist', 'skipOnError' => true, 'targetClass' => CredorCampanha::className(), 'targetAttribute' => ['id_campanha' => 'id']],
         ];
@@ -53,6 +54,7 @@ class CredorCalculo extends \yii\db\ActiveRecord
             'atraso_fim' => 'Fim do Atraso',
             'multa' => 'Multa',
             'juros' => 'Juros',
+            'honorario' => 'Honorários',           
             'parcela_num' => 'N° Parcela',
         ];
     }
