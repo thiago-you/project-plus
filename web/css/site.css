@@ -171,6 +171,14 @@ a[id$='-togdata-page'] { border-radius: 0px !important; }
 .font26 { font-size: 26px; }
 .font28 { font-size: 28px; }
 .font30 { font-size: 30px; }
+/* top */
+.top10 { top: 10px !important; }
+.top13 { top: 13px !important; }
+.top15 { top: 15px !important; }
+.top20 { top: 20px !important; }
+.top23 { top: 23px !important; }
+.top24 { top: 24px !important; }
+.top25 { top: 25px !important; }
 /* novas cores para buttons */
 /* emerald */
 .btn-emerald { background-color: #2ecc71; border-color: #2ecc71; color: #fff;}
@@ -544,4 +552,21 @@ label.active-label {
     background-color: #fff !important;
     border-color: 1px solid #ccc !important;
     border-radius: 4px !important;
+}
+/*btn circle*/
+.btn-circle {
+	border-radius: 10em !important;
+}
+/* tabela de layout da importação */
+.table-info-import {
+	font-size: 12px;
+}
+.table-info-import tbody tr td {
+	font-weight: bold;
+}
+.table-info-import tbody tr td:first-child {
+    text-align: center;
+}
+.table-info-import tbody tr td:last-child {
+    font-weight: normal;
 }
