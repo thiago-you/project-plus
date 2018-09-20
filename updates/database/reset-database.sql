@@ -155,8 +155,9 @@ CREATE TABLE `credor_calculo` (
   `id_campanha` INT NOT NULL,
   `atraso_inicio` VARCHAR(3),
   `atraso_fim` VARCHAR(3),
-  `multa` DECIMAL(10,2) DEFAULT 0.00,
-  `juros` DECIMAL(10,2) DEFAULT 0.00,
+  `multa` DECIMAL(7,4) DEFAULT 0.0000,
+  `juros` DECIMAL(7,4) DEFAULT 0.0000,
+  `honorario` DECIMAL(7,4) DEFAULT 0.0000,
   `parcela_num` INT COMMENT 'Numero da parcela qunado o tipo for parcelado',
   FOREIGN KEY (`id_campanha`) REFERENCES `credor_campanha`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
