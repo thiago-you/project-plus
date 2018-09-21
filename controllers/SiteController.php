@@ -8,20 +8,19 @@ use app\models\LoginForm;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
-use moonland\phpexcel\Excel;
-use yii\web\UploadedFile;
 use app\base\Helper;
+use app\models\Email;
+use app\models\Estado;
 use app\models\Cliente;
 use app\models\Telefone;
+use yii\base\Controller;
 use app\models\Endereco;
-use app\models\Estado;
 use app\models\Contrato;
+use yii\web\UploadedFile;
+use moonland\phpexcel\Excel;
 use app\models\ContratoParcela;
-use app\models\Email;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
-use yii\base\Controller;
-use yii\web\BadRequestHttpException;
 
 class SiteController extends Controller
 {
@@ -147,12 +146,17 @@ class SiteController extends Controller
                 $title = 'Não Encontrado';
                 $label = 'info';
                 $message = 'Oops... Parece que não encontramos a página que está procurando.';
-            }  elseif ($exception instanceof BadRequestHttpException) {
-                $title = 'Problema com a Conexão';
-                $label = 'danger';
-                $message = 'Oops... Parece que houve um problema com a base de dados.';
             }
             
+            // se for ajax nao renderiza a página, apenas devolve o erro
+            if (\Yii::$app->request->isAjax) {
+                return [
+                    'message' => $message,
+                    'exception' => $exception,
+                ];                
+            }
+            
+            // renderiza a página de erro
             return $this->render('error', [
                 'message'   => $message,
                 'exception' => $exception,
@@ -371,6 +375,9 @@ class SiteController extends Controller
      */
     public function actionCidades($ufId = '') 
     {
+        // seta o uf id
+        $ufId = !empty($ufId) ? $ufId : $_GET['ufId'];
+        
         // valida a requisicao
         if (!\Yii::$app->request->isAjax || empty($ufId)) {
             throw new NotFoundHttpException();

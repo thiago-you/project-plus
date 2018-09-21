@@ -63,11 +63,30 @@ $config = [
    			'class' => 'yii\web\UrlManager',
    			'showScriptName' => false,
    			'enablePrettyUrl' => true,
-   			'rules' => array(
+   			/* 'rules' => array(
 				'<controller:\w+>/<id:\d+>' => '<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-  			),
+  			), */
+            /* 'rules'           => [
+                '<controller:[a-z-]+>/<id:\d+>'                                                   => '<controller>/view',
+                '<controller:[a-z-]+>/<action:[a-z-]+>/<id:\d+>'                                  => '<controller>/<action>',
+                '<controller:[a-z-]+>/<action:[a-z-]+>/<id:\d+>/<param:[a-z-]+>'                  => '<controller>/<action>',
+                '<controller:[a-z-]+>/<action:[a-z-]+>'                                           => '<controller>/<action>',
+            ], */
+            'rules' => [
+                '/' => '/site',
+                '<controller:\w+>/<id:\d+>'             => '<controller>/view',
+                '<controller:\w+>/<action>/<id:\d+>'    => '<controller>/<action>',
+                '<controller:[\w-]+>/<action>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>'         => '<controller>/<action>',
+                '<controller:[\w-]+>/update/<id:\d+>'   => '<controller>/update',
+                '<controller:[\w-]+>/delete/<id:\d+>'   => '<controller>/delete',
+                '<controller:[\w-]+>/<id:\d+>'          => '<controller>/view',
+                '<controller:[\w-]+>/<id:\d+>'          => '<controller>/detail',
+                '<controller:[\w-]+>/<id:\d+>'          => '<controller>/download',
+                '<controller:[\w-]+>/<id:\d+>'          => '<controller>/processar',
+            ],
     	],
     ],
     'params' => $params,
