@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use Yii;
@@ -18,8 +17,8 @@ class NegociacaoSearch extends Negociacao
     public function rules()
     {
         return [
-            [['id', 'id_contrato'], 'integer'],
-            [['data_negociacao', 'data_cadastro'], 'safe'],
+            [['id', 'id_contrato', 'id_credor', 'id_campanha'], 'integer'],
+            [['data_negociacao', 'data_cadastro', 'subtotal', 'desconto', 'receita', 'total'], 'safe'],
         ];
     }
 
