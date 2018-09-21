@@ -181,8 +181,14 @@ CREATE TABLE `contrato` (
 CREATE TABLE `negociacao` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_contrato` INT NOT NULL,
+  `id_campanha` INT NOT NULL,
+  `id_credor` INT NOT NULL,
   `data_negociacao` DATE NOT NULL,
   `data_cadastro` DATETIME NOT NULL,
+  `subtotal` DECIMAL(10,2) DEFAULT 0.00,
+  `desconto` DECIMAL(10,2) DEFAULT 0.00,
+  `receita` DECIMAL(10,2) DEFAULT 0.00,
+  `total` DECIMAL(10,2) DEFAULT 0.00,
   FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de parcela do contrato
