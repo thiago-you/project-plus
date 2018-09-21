@@ -19,8 +19,11 @@ use app\models\Contrato;
 use app\models\ContratoParcela;
 use app\models\Email;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
+use yii\base\Controller;
+use yii\web\BadRequestHttpException;
 
-class SiteController extends BaseController
+class SiteController extends Controller
 {
     /**
      * @inheritdoc
@@ -54,9 +57,6 @@ class SiteController extends BaseController
     public function actions()
     {
         return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
@@ -114,9 +114,53 @@ class SiteController extends BaseController
      */
     public function actionLogout()
     {
-        Yii::$app->user->logout();
+        \Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+    
+    /**
+     * Exibe a tela de erro do sistema
+     */
+    public function actionError()
+    {
+        if (\Yii::$app->user->isGuest) {
+            return $this->redirect(['site/login'])->send();
+        } else {
+            $this->layout = '@app/views/layouts/main';
+        }
+        
+        $exception = \Yii::$app->errorHandler->exception;
+        
+        // vars do erro da exception
+        $title = 'Erro Inesperado';
+        $label = 'danger';
+        $message = method_exists($exception, 'getMessage') ? $exception->getMessage() : 'Ocorreu um erro inesperado.';
+
+        if ($exception !== null) {
+            // mensagens de erro personalizadas para not found e forbidden
+            if ($exception instanceof ForbiddenHttpException) {
+                $title = 'Não Permitido';
+                $label = 'info';
+                $message = 'Oops... Parece que você não está autorizado a realizar esta ação.';
+            } elseif ($exception instanceof NotFoundHttpException) {
+                $title = 'Não Encontrado';
+                $label = 'info';
+                $message = 'Oops... Parece que não encontramos a página que está procurando.';
+            }  elseif ($exception instanceof BadRequestHttpException) {
+                $title = 'Problema com a Conexão';
+                $label = 'danger';
+                $message = 'Oops... Parece que houve um problema com a base de dados.';
+            }
+            
+            return $this->render('error', [
+                'message'   => $message,
+                'exception' => $exception,
+                'title'     => $title,
+                'label'     => $label,
+                'tipo'      => $tipo,
+            ]);
+        }
     }
     
     /**
@@ -358,7 +402,7 @@ class SiteController extends BaseController
         }
         
         // valida a quantidade de colunas na linha
-        if (count($data) > 0 && count($data) != 27) {
+        if (count($data) > 0 && count($data) < 27) {
             throw new \Exception('O arquivo de importação não é válido. O número de colunas é diferente de 27.');
         }
         
