@@ -158,6 +158,9 @@ CREATE TABLE `credor_calculo` (
   `multa` DECIMAL(7,4) DEFAULT 0.0000,
   `juros` DECIMAL(7,4) DEFAULT 0.0000,
   `honorario` DECIMAL(7,4) DEFAULT 0.0000,
+  `desc_encargos_max` DECIMAL(7,4) DEFAULT 0.0000 COMMENT 'desconto máximo permitido dos encargos',
+  `desc_principal_max` DECIMAL(7,4) DEFAULT 0.0000 COMMENT 'desconto máximo permitido do valor principal',
+  `desc_honorario_max` DECIMAL(7,4) DEFAULT 0.0000 COMMENT 'desconto máximo permitido dos honorarios',
   `parcela_num` INT COMMENT 'Numero da parcela qunado o tipo for parcelado',
   FOREIGN KEY (`id_campanha`) REFERENCES `credor_campanha`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
