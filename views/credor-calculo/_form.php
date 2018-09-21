@@ -66,6 +66,48 @@ use yii\widgets\MaskedInput;
         </div>
 	</div>
 	<!-- ./row -->
+	<div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
+            <?= $form->field($model, 'desc_encargos_max')->widget(MaskMoney::className(), [
+                    'options' => [
+                        'maxlength' => 9,
+                    ],
+	                'pluginOptions' => [
+                        'suffix' => '%',
+                        'precision' => 4,
+                        'decimal' => ',',
+                    ],
+                ]);
+            ?>
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
+        	<?= $form->field($model, 'desc_principal_max')->widget(MaskMoney::className(), [
+	                'options' => [
+                        'maxlength' => 9,
+	                ],
+                    'pluginOptions' => [
+                        'suffix' => '%',
+                        'precision' => 4,
+                        'decimal' => ',',
+                    ],
+                ]);
+        	?>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
+        	<?= $form->field($model, 'desc_honorario_max')->widget(MaskMoney::className(), [
+	                'options' => [
+                        'maxlength' => 9,
+	                ],
+                    'pluginOptions' => [
+                        'suffix' => '%',
+                        'precision' => 4,
+                        'decimal' => ',',
+                    ],
+                ]);
+        	?>
+        </div>
+	</div>
+	<!-- ./row -->
 	<hr>
 	<!-- ./divisor  -->
     <div class="row">

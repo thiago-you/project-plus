@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 
+
+
 /**
  * This is the model class for table "credor_calculo".
  *
@@ -14,6 +16,9 @@ use Yii;
  * @property string $multa
  * @property string $juros
  * @property string $honorario
+ * @property string $desc_encargos_max
+ * @property string $desc_principal_max
+ * @property string $desc_honorario_max
  * @property int    $parcela_num Numero da parcela qunado o tipo for parcelado
  * 
  * @property CredorCampanha $credorCampanha
@@ -36,7 +41,7 @@ class CredorCalculo extends \yii\db\ActiveRecord
         return [
             [['id_campanha'], 'required'],
             [['id_campanha', 'parcela_num'], 'integer'],
-            [['multa', 'juros', 'honorario'], 'number'],
+            [['multa', 'juros', 'honorario', 'desc_encargos_max', 'desc_principal_max', 'desc_honorario_max'], 'number'],
             [['atraso_inicio', 'atraso_fim'], 'string', 'max' => 3],
             [['id_campanha'], 'exist', 'skipOnError' => true, 'targetClass' => CredorCampanha::className(), 'targetAttribute' => ['id_campanha' => 'id']],
         ];
@@ -56,6 +61,9 @@ class CredorCalculo extends \yii\db\ActiveRecord
             'juros' => 'Juros',
             'honorario' => 'Honorários',           
             'parcela_num' => 'N° Parcela',
+            'desc_encargos_max' => 'Desconto Máximo dos Encargos',
+            'desc_principal_max' => 'Desconto Máximo Principal',
+            'desc_honorario_max' => 'Desconto Máximo dos Honorários',
         ];
     }
 
