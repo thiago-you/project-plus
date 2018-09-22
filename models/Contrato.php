@@ -2,6 +2,7 @@
 namespace app\models;
 
 use Yii;
+use app\base\Helper;
 
 /**
  * This is the model class for table "contrato".
@@ -26,7 +27,7 @@ use Yii;
  * @property Cliente $cliente
  * @property Credor $credor
  * @property ContratoParcela[] $contratoParcelas
- * @property Negociacao[] $negociacaos
+ * @property Negociacao $negociacao
  */
 class Contrato extends \yii\db\ActiveRecord
 {
@@ -115,9 +116,9 @@ class Contrato extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNegociacaos()
+    public function getNegociacao()
     {
-        return $this->hasMany(Negociacao::className(), ['id_contrato' => 'id']);
+        return $this->hasOne(Negociacao::className(), ['id_contrato' => 'id']);
     }
     
     /**
@@ -180,5 +181,26 @@ class Contrato extends \yii\db\ActiveRecord
         $tipo = array_search(ucfirst(strtolower($name)), $listaTipos);
         
         return $tipo ? $tipo : 1;
+    }
+    
+    /**
+     * Calcula o valor total do contrato
+     */
+    public function getValorTotal() 
+    {
+        $total = 0;
+        foreach ($this->contratoParcelas as $parcela) {
+            // seta o valor total
+            $total += $parcela->valor;
+            
+            // busca a faixa e calcula os encargos
+            if ($faixaCalculo = CredorCalculo::findFaixa($this->credor->id_campanha, $parcela->getAtraso())) {                
+                $total += $parcela->valor * ($faixaCalculo->multa / 100);
+                $total += $parcela->valor * ($faixaCalculo->juros / 100);
+                $total += $parcela->valor * ($faixaCalculo->honorario / 100);
+            }
+        }
+        
+        return $total;
     }
 }

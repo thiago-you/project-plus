@@ -96,4 +96,22 @@ class CredorCalculo extends \yii\db\ActiveRecord
         
         return parent::beforeSave($insert);    
     }
+    
+    /**
+     * Busca uma faixa de cálculo no período de atraso
+     */
+    public static function findFaixa($campanhaId, $atraso) 
+    {
+        return CredorCalculo::find()->where(['id_campanha' => $campanhaId])->andWhere([
+            '<=', 'atraso_inicio', $atraso
+        ])->andWhere([
+            '>=', 'atraso_fim', $atraso
+        ])->one();
+    }
 }
+
+
+
+
+
+

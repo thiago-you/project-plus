@@ -9,6 +9,8 @@ use app\models\ContratoSearch;
 use app\models\ContratoParcela;
 use yii\web\NotFoundHttpException;
 use app\models\Cliente;
+use app\models\Negociacao;
+use yii\base\UserException;
 
 /**
  * ContratoController implements the CRUD actions for Contrato model.
@@ -203,9 +205,34 @@ class ContratoController extends Controller
         $contrato = $this->findModel($id);
         $cliente = $contrato->cliente;
         
+        // valida se o contrato possui um credor
+        if (empty($contrato->id_credor)) {
+            throw new UserException('Não foi encontrador o credor do contrato.');
+        }
+        
+        // pega a negociacao do contrato ou cria uma nova
+        if (!$negociacao = $contrato->negociacao) {
+            $negociacao = new Negociacao();
+            $negociacao->id_contrato = $contrato->id;
+            $negociacao->id_credor = $contrato->id_credor;
+            $negociacao->id_campanha = $contrato->credor->id_campanha;
+            $negociacao->subtotal = $contrato->getValorTotal();
+            $negociacao->total = $negociacao->subtotal;
+        }
+        
+        // pega todos os contratos do cliente
+        if ($contratos = $cliente->contratos) {
+            foreach ($contratos as $contratoTemp) {
+                $totalContratos += $contratoTemp->getValorTotal();
+            }
+        }
+        
         return $this->render('negociacao', [
             'contrato' => $contrato,
             'cliente' => $cliente,
+            'negociacao' => $negociacao,
+            'contratos' => $contratos,
+            'totalContratos' => $totalContratos,
         ]);
     }
      

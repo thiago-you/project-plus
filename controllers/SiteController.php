@@ -341,7 +341,7 @@ class SiteController extends BaseController
                                 if ($data->parcela && $data->data_vencimento && $data->valor) {
                                     $parcela = new ContratoParcela();
                                     $parcela->id_contrato = $contrato->id ? $contrato->id : $contrato->getPrimaryKey();
-                                    $parcela->num_parcela = $data->obs_parcela;
+                                    $parcela->num_parcela = $data->obs_parcela ? $data->obs_parcela : 1;
                                     $parcela->data_vencimento = $data->data_vencimento;
                                     $parcela->valor = $data->valor;
                                     

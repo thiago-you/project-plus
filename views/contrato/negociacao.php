@@ -196,28 +196,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
                 		<h3>Contratos</h3>
                 	</div>
-                	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4 text-center">
-                		<h3 class="text-danger">Total em Aberto: R$ 0,00</h3>
-                	</div>
-                	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4 pull-right text-right">
-                		<?= Html::button('<i class="fa fa-calculator"></i>&nbsp; Cálculo', [
-        		                'class' => Helper::BTN_COLOR_EMERALD,
-                    		]); 
-                		?>
+                	<div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 text-right">
+                		<h3 class="text-danger">Total em Aberto: <?= Helper::mask($totalContratos, Helper::MASK_MONEY); ?></h3>
                 	</div>
             	</div>
             	<!-- ./row -->
             </div>
             <!-- ./panel heading -->
         	<div class="panel-body">
-            	<?php if (is_array($cliente->contratos) && !empty($cliente->contratos)): ?>
-  					<?php foreach ($cliente->contratos as $clienteContrato): ?>
+            	<?php if (is_array($contratos) && !empty($contratos)): ?>
+  					<?php foreach ($contratos as $clienteContrato): ?>
   						<div class="row">
-  							<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+  							<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
   								<i class="fa fa-file-invoice-dollar"></i>
   								<?= $clienteContrato->num_contrato ? $clienteContrato->num_contrato : 'Sem Número'; ?>
 							</div>
-							<!-- ./col -->
+							<!-- ./num do contrato -->
+							<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 text-right">
+								<?= Helper::mask($clienteContrato->getValorTotal(), Helper::MASK_MONEY); ?>
+							</div>
+							<!-- ./valor do contrato -->
     		  				<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         		  				<?php if (is_array($clienteContrato->contratoParcelas) && !empty($clienteContrato->contratoParcelas)): ?>
         		  					<?php $numParcelas = count($clienteContrato->contratoParcelas); ?>
@@ -289,7 +287,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         <div class="panel panel-primary panel-box panel-calculo">
         	<div class="panel-body">
-        		<?= $this->render('contrato-calculo'); ?>
+        		<?= $this->render('contrato-calculo', [
+                        'contrato' => $contrato,
+	                    'negociacao' => $negociacao,
+            		]); 
+        		?>
         	</div>
     	</div>
 	</div>

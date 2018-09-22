@@ -13,15 +13,24 @@ use Yii;
  * @property int $id_campanha
  * @property string $data_negociacao
  * @property string $data_cadastro
+ * @property string $desconto_encargos
+ * @property string $desconto_principal
+ * @property string $desconto_honorarios
+ * @property string $desconto_total
  * @property string $subtotal
  * @property string $desconto
  * @property string $receita
  * @property string $total
+ * @property string $tipo Flag que valida se a negociacao é a vista ou parcelado
  * 
  * @property Contrato $contrato
  */
 class Negociacao extends \yii\db\ActiveRecord
 {
+    // const para o tipo da negociacao
+    CONST A_VISTA = 'V';
+    CONST PARCELADO = 'P';
+    
     /**
      * {@inheritdoc}
      */
@@ -38,8 +47,11 @@ class Negociacao extends \yii\db\ActiveRecord
         return [
             [['data_negociacao', 'data_cadastro'], 'required'],
             [['id_contrato', 'id_credor', 'id_campanha'], 'integer'],
-            [['subtotal', 'desconto', 'receita', 'total'], 'number'],
-            [['data_negociacao', 'data_cadastro'], 'safe'],
+            [[
+                'subtotal', 'desconto', 'receita', 'total', 'desconto_encargos',
+                'desconto_principal', 'desconto_honorarios', 'desconto_total'           
+            ], 'number'],
+            [['data_negociacao', 'data_cadastro', 'tipo'], 'safe'],
             [['id_contrato'], 'exist', 'skipOnError' => true, 'targetClass' => Contrato::className(), 'targetAttribute' => ['id_contrato' => 'id']],
         ];
     }
@@ -60,6 +72,11 @@ class Negociacao extends \yii\db\ActiveRecord
             'desconto' => 'Desconto',
             'receita' => 'Receita',
             'total' => 'Total',
+            'desconto_encargos' => 'Desconto dos Encargos',
+            'desconto_principal' => 'Desconto Principal',
+            'desconto_honorarios' => 'Desconto dos Honorários',
+            'desconto_total' => 'Desconto Total',
+            'tipo' => 'Tipo de Pagamento',
         ];
     }
 
