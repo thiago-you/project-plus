@@ -37,3 +37,9 @@
 	line-height: 1.42857143;
 	font-weight: bold;
 }
+.panel-calculo .panel-body {
+	padding: 5px;
+}
+.panel-calculo .panel-body div label {
+    margin-top: 10px;
+}
