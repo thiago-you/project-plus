@@ -193,6 +193,7 @@ CREATE TABLE `negociacao` (
   `desconto` DECIMAL(10,2) DEFAULT 0.00,
   `receita` DECIMAL(10,2) DEFAULT 0.00,
   `total` DECIMAL(10,2) DEFAULT 0.00,
+  `tipo` ENUM('V', 'P') NOT NULL DEFAULT 'V' COMMENT 'Tipo da negociacao => V: A vista / P: Parcelado',
   FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de parcela do contrato
