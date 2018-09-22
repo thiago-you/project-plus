@@ -13,7 +13,6 @@ use app\models\Email;
 use app\models\Estado;
 use app\models\Cliente;
 use app\models\Telefone;
-use yii\base\Controller;
 use app\models\Endereco;
 use app\models\Contrato;
 use yii\web\UploadedFile;
@@ -22,7 +21,7 @@ use app\models\ContratoParcela;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 
-class SiteController extends Controller
+class SiteController extends BaseController
 {
     /**
      * @inheritdoc
