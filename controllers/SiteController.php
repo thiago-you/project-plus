@@ -134,7 +134,7 @@ class SiteController extends BaseController
         $title = 'Erro Inesperado';
         $label = 'danger';
         $message = method_exists($exception, 'getMessage') ? $exception->getMessage() : 'Ocorreu um erro inesperado.';
-
+        
         if ($exception !== null) {
             // mensagens de erro personalizadas para not found e forbidden
             if ($exception instanceof ForbiddenHttpException) {
