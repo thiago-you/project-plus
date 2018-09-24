@@ -20,6 +20,8 @@ use moonland\phpexcel\Excel;
 use app\models\ContratoParcela;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
+use app\models\Credor;
+use yii\helpers\ArrayHelper;
 
 class SiteController extends BaseController
 {
@@ -310,6 +312,7 @@ class SiteController extends BaseController
                                     // cria um novo contrato                              
                                     $contrato = new Contrato();
                                     $contrato->id_cliente = $id_cliente;
+                                    $contrato->id_credor = $post['credor'];
                                     $contrato->data_cadastro = $data->data_contrato;
                                     $contrato->data_negociacao = $data->data_contrato;
                                     $contrato->observacao = $data->obs_contrato;
@@ -366,6 +369,7 @@ class SiteController extends BaseController
         // importacao
         return $this->render('importacao', [
             'model' => $model,
+            'credores' => ArrayHelper::map(Credor::find()->all(), 'id', 'nome'),
         ]);
     }
     
