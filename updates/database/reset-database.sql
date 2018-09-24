@@ -153,8 +153,8 @@ CREATE TABLE `credor_campanha` (
 CREATE TABLE `credor_calculo` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_campanha` INT NOT NULL,
-  `atraso_inicio` VARCHAR(3),
-  `atraso_fim` VARCHAR(3),
+  `atraso_inicio` VARCHAR(5),
+  `atraso_fim` VARCHAR(5),
   `multa` DECIMAL(7,4) DEFAULT 0.0000,
   `juros` DECIMAL(7,4) DEFAULT 0.0000,
   `honorario` DECIMAL(7,4) DEFAULT 0.0000,
