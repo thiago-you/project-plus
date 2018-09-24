@@ -216,8 +216,9 @@ class ContratoController extends Controller
             $negociacao->id_contrato = $contrato->id;
             $negociacao->id_credor = $contrato->id_credor;
             $negociacao->id_campanha = $contrato->credor->id_campanha;
-            $negociacao->subtotal = $contrato->getValorTotal();
-            $negociacao->total = $negociacao->subtotal;
+            
+            // calcula os valores da negociacao
+            $negociacao->calcularValores($contrato);
         }
         
         // pega todos os contratos do cliente

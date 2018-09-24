@@ -87,4 +87,39 @@ class Negociacao extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Contrato::className(), ['id' => 'id_contrato']);
     }
+    
+    /**
+     * Calcula os valores da negociacao
+     */
+    public function calcularValores($contrato = null)
+    {
+        // busca o contrato
+        if (!$contrato) {
+            $contrato = Contrato::findOne(['id' => $this->id_contrato]);
+        }
+        
+        // busca as parcelas do contrato
+        if (!empty($contrato->contratoParcelas) && is_array($contrato->contratoParcelas)) {
+            $this->subtotal = 0;
+            $this->receita = 0;
+            foreach ($contrato->contratoParcelas as $parcela) {                
+                // busca a faixa de calculo
+                // e calcula o subtotal e a receita
+                if ($faixaCalculo = CredorCalculo::findFaixa($this->id_campanha, $parcela->getAtraso())) {
+                    $this->subtotal += $parcela->valor;
+                    $this->subtotal += $parcela->valor * ($faixaCalculo->multa / 100);
+                    $this->subtotal += $parcela->valor * ($faixaCalculo->juros / 100);
+                    $this->subtotal += $parcela->valor * ($faixaCalculo->honorario / 100);
+                    $this->receita += $parcela->valor * ($faixaCalculo->honorario / 100);
+                }
+            }
+            
+            // seta o valor total
+            $this->total = $this->subtotal;
+        }        
+    }
 }
+
+
+
+

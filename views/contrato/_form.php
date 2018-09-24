@@ -21,7 +21,7 @@ use app\models\Contrato;
                                     'removeButton' => false,
                                     'pluginOptions' => [
                     					'autoclose' => true,
-                    					'format' => 'yyyy-mm-dd'
+                    					'format' => 'dd/mm/yyyy'
                     				],
                             	]);
                             ?>
@@ -31,7 +31,7 @@ use app\models\Contrato;
                                     'removeButton' => false,
                                     'pluginOptions' => [
                     					'autoclose' => true,
-                    					'format' => 'yyyy-mm-dd'
+                    					'format' => 'dd/mm/yyyy'
                     				],
                             	]);
                             ?>
@@ -119,7 +119,7 @@ use app\models\Contrato;
                                     'removeButton' => false,
                                     'pluginOptions' => [
                     					'autoclose' => true,
-                    					'format' => 'yyyy-mm-dd'
+                    					'format' => 'dd/mm/yyyy'
                     				],
                             	]);
                             ?>
@@ -233,7 +233,7 @@ use app\models\Contrato;
     			                'removeButton' => false,
     			                'pluginOptions' => [
                                     'autoclose' => true,
-                                    'format' => 'yyyy-mm-dd'
+                                    'format' => 'dd/mm/yyyy'
     			                ],
     					   ]); 
     					?>
@@ -248,7 +248,8 @@ use app\models\Contrato;
                                 ],
             	                'pluginOptions' => [
                                     'prefix' => 'R$ ',
-                                    'precision' => 2
+                                    'precision' => 2,
+	                                'decimal' => ',',
                                 ],
                             ]);
                         ?>

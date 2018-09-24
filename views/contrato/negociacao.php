@@ -1,11 +1,7 @@
 <?php
-use app\base\Helper;
-use yii\helpers\Html;
-use app\models\Cliente;
-use kartik\grid\GridView;
-use app\models\Contrato;
-use app\models\Telefone;
 use yii\helpers\Url;
+use app\base\Helper;
+use app\models\Cliente;
 use yii\bootstrap\BootstrapAsset;
 
 $this->title = 'Negociação';

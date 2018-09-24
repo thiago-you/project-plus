@@ -18,6 +18,18 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-body">  
         	<div class="row">
         		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+        			<?= Html::label('Credor', 'credor'); ?>
+        			<?= Html::dropDownList('credor', null, $credores, [
+                            'id' => 'credor',
+			                'prompt' => 'Selecione o credor para a importação ...',
+			                'class' => 'form-control',
+            			]); 
+        			?>
+        		</div>
+    		</div>
+    		<br>
+        	<div class="row">
+        		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
                 	<?= $form->field($model, 'fileImport')->widget(FileInput::className(), [
         	                'pluginOptions' => [
                                 'showPreview' => false,

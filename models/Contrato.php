@@ -33,7 +33,7 @@ class Contrato extends \yii\db\ActiveRecord
 {
     // consts para a situacao
     CONST SIT_EM_ANDAMENTO = '1';
-    CONST SIT_FECADO = '2';
+    CONST SIT_FECHADO = '2';
     
     /**
      * @var string
@@ -154,10 +154,28 @@ class Contrato extends \yii\db\ActiveRecord
     {
         // seta a data de cadastro
         if (empty($this->data_cadastro)) {
-            $this->data_cadastro = date('Y-m-d H:i:s');
+            $this->data_cadastro = date('Y-m-d');
+        } else {
+            $this->data_cadastro = Helper::formatDateToSave($this->data_cadastro, Helper::DATE_DEFAULT);
         }
         
+        // formata as datas para salvar
+        $this->data_vencimento = Helper::formatDateToSave($this->data_vencimento, Helper::DATE_DEFAULT);
+        $this->data_negociacao = Helper::formatDateToSave($this->data_negociacao, Helper::DATE_DEFAULT);
+        
         return parent::beforeSave($insert);        
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::afterFind()
+     */
+    public function afterFind()
+    {
+        // formata a data para ser exibida
+        $this->data_cadastro = Helper::formatDateToDisplay($this->data_cadastro, Helper::DATE_DEFAULT);
+        $this->data_vencimento = Helper::formatDateToDisplay($this->data_vencimento, Helper::DATE_DEFAULT);
+        $this->data_negociacao = Helper::formatDateToDisplay($this->data_negociacao, Helper::DATE_DEFAULT);
     }
     
     /**

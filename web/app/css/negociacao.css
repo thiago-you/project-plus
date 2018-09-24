@@ -43,3 +43,9 @@
 .panel-calculo .panel-body div label {
     margin-top: 10px;
 }
+.panel-valores .panel-body {
+	font-size: 12px;
+}
+.panel-calculo .panel-body:first-child {
+	padding-bottom: 20px;
+}

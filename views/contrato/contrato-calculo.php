@@ -1,10 +1,8 @@
 <?php
 use app\base\Helper;
-use yii\widgets\ActiveForm;
-use kartik\money\MaskMoney;
-use yii\widgets\MaskedInput;
-use kartik\select2\Select2;
 use kartik\helpers\Html;
+use kartik\money\MaskMoney;
+use kartik\select2\Select2;
 use kartik\date\DatePicker;
 ?>
 <div class="row">
@@ -15,10 +13,11 @@ use kartik\date\DatePicker;
         		<?= DatePicker::widget([
                         'name' => 'Negociacao[data]',
                         'id' => 'negociacao-data',
+		                'value' => $negociacao->data_negociacao ? $negociacao->data_negociacao : date('Y-m-d'),
                         'removeButton' => false,
                         'pluginOptions' => [
                             'autoclose' => true,
-                            'format' => 'yyyy-mm-dd'
+                            'format' => 'dd/mm/yyyy'
                         ],
         		   ]); 
         		?>
@@ -29,12 +28,22 @@ use kartik\date\DatePicker;
         			    'name' => 'Negociacao[pagamento]',
         			    'id' => 'negociacao-pagamento',
         			    'hideSearch' => true,
-        			    'options' => ['placeholder' => 'Selecione'],
         			    'data' => [
                             0 => 'À Vista', 
                             1 => 'Parcela'
         			    ]
                     ]);
+        		?>
+        	</div>
+        	<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12 pull-right text-center">
+        		<?= Html::label('Situação'); ?>
+        		<br>
+        		<?php 
+                    if ($negociacao->isNewRecord) {
+                        echo '<span class="label label-warning">Sem Negociação</span>';
+            		} else {
+            		    echo '<span class="label label-success">Em Negociação</span>';
+            		}
         		?>
         	</div>
         </div>
@@ -49,10 +58,9 @@ use kartik\date\DatePicker;
         		<table class="table table-stripped table-bordered table-parcela">
         			<thead>
         				<tr>
-        					<th colspan="9">Parcelas</th>
+        					<th colspan="8">Parcelas</th>
         				</tr>
         				<tr>
-        					<th>Contrato</th>
         					<th>Núm.</th>
         					<th>Vencimento</th>
         					<th>Valor</th>
@@ -65,7 +73,26 @@ use kartik\date\DatePicker;
         			</thead>
         			<!-- ./thead -->
         			<tbody>
-        				
+        				<?php if (!empty($contrato->contratoParcelas) && is_array($contrato->contratoParcelas)): ?>
+        					<?php foreach ($contrato->contratoParcelas as $parcela): ?>
+    							<?php $parcela->calcularValores($negociacao->id_campanha); ?>
+    							<!-- ./calcula os valores totais -->
+        						<tr>
+        							<?php 
+        							 /* @var $parcela app\models\ContratoParcela */
+        							?>
+                					<td><?= $parcela->num_parcela; ?></td>
+                					<td><?= Helper::formatDateToDisplay($parcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
+                					<td><?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?></td>
+                					<td><?= $parcela->getAtraso(); ?></td>
+                					<td><?= Helper::mask($parcela->multa, Helper::MASK_MONEY); ?></td>
+                					<td><?= Helper::mask($parcela->juros, Helper::MASK_MONEY); ?></td>
+                					<td><?= Helper::mask($parcela->honorarios, Helper::MASK_MONEY); ?></td>
+                					<td><?= Helper::mask($parcela->total, Helper::MASK_MONEY); ?></td>
+                				</tr>
+            					<!-- ./dados da parcela -->
+        					<?php endforeach; ?>
+        				<?php endif; ?>
         			</tbody>
         			<!-- ./tbody -->
         		</table>
@@ -73,16 +100,16 @@ use kartik\date\DatePicker;
     		</div>
     		<!-- ./table -->
     		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-				<b>Subtotal:</b> R$ 0,00    			
+				<b>Subtotal:</b> <?= Helper::mask($negociacao->subtotal, Helper::MASK_MONEY); ?>			
     		</div>
     		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-    			<b>Desconto:</b> R$ 0,00
+    			<b>Desconto:</b> <?= Helper::mask($negociacao->desconto, Helper::MASK_MONEY); ?>
     		</div>
     		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-    			<b>Honorários:</b> R$ 0,00
+    			<b>Honorários:</b> <?= Helper::mask($negociacao->receita, Helper::MASK_MONEY); ?>
     		</div>
     		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-    			<b>Total:</b> R$ 0,00
+    			<b>Total:</b> <?= Helper::mask($negociacao->total, Helper::MASK_MONEY); ?>
     		</div>
         	<!-- ./totais -->
     	</div>
@@ -104,6 +131,7 @@ use kartik\date\DatePicker;
 				                'options' => [
 	                                'id' => 'desconto_encargos',
 	                                'maxlength' => 9,
+	                                'class' => 'form-control input-sm',
 				                ],
 				                'pluginOptions' => [
 	                                'suffix' => '%',
@@ -120,6 +148,7 @@ use kartik\date\DatePicker;
 				                'options' => [
 	                                'id' => 'desconto_principal',
 	                                'maxlength' => 9,
+	                                'class' => 'form-control input-sm',
 				                ],
 				                'pluginOptions' => [
 	                                'suffix' => '%',
@@ -136,6 +165,7 @@ use kartik\date\DatePicker;
 				                'options' => [
 	                                'id' => 'desconto_honorarios',
 	                                'maxlength' => 9,
+	                                'class' => 'form-control input-sm',
 				                ],
 				                'pluginOptions' => [
 	                                'suffix' => '%',
@@ -152,6 +182,7 @@ use kartik\date\DatePicker;
 				                'options' => [
 	                                'id' => 'desconto_total',
 	                                'maxlength' => 14,
+	                                'class' => 'form-control input-sm',  
 				                ],
 				                'pluginOptions' => [
 	                                'prefix' => 'R$ ',
@@ -184,7 +215,6 @@ use kartik\date\DatePicker;
 	</div> 
 </div>
 <!-- ./row -->
-
 
 
 
