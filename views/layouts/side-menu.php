@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 ?>
 <div class="sidenav-content">
+	<a href="<?= Url::to(['/contrato']); ?>"><i class="fa fa-file-invoice-dollar"></i>&nbsp; Contrato</a>
 	<a href="<?= Url::to(['/cliente']); ?>"><i class="fa fa-users"></i>&nbsp; Cliente</a>
 	<a href="<?= Url::to(['/colaborador']); ?>"><i class="fa fa-user"></i>&nbsp; Colaborador</a>
 	<a href="<?= Url::to(['/credor']); ?>"><i class="fa fa-university"></i>&nbsp; Credor</a>
