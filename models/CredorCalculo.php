@@ -42,7 +42,7 @@ class CredorCalculo extends \yii\db\ActiveRecord
             [['id_campanha'], 'required'],
             [['id_campanha', 'parcela_num'], 'integer'],
             [['multa', 'juros', 'honorario', 'desc_encargos_max', 'desc_principal_max', 'desc_honorario_max'], 'number'],
-            [['atraso_inicio', 'atraso_fim'], 'string', 'max' => 3],
+            [['atraso_inicio', 'atraso_fim'], 'string', 'max' => 5],
             [['id_campanha'], 'exist', 'skipOnError' => true, 'targetClass' => CredorCampanha::className(), 'targetAttribute' => ['id_campanha' => 'id']],
         ];
     }
@@ -91,7 +91,7 @@ class CredorCalculo extends \yii\db\ActiveRecord
     {
         // valida a data final de atraso
         if (empty($this->atraso_fim)) {
-            $this->atraso_fim = 999;
+            $this->atraso_fim = 99999;
         }
         
         return parent::beforeSave($insert);    
