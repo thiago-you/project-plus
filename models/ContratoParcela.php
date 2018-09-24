@@ -139,7 +139,7 @@ class ContratoParcela extends \yii\db\ActiveRecord
         if ($faixaCalculo = CredorCalculo::findFaixa($id_campanha, $this->getAtraso())) {            
             $this->multa = $this->valor * ($faixaCalculo->multa / 100);
             $this->juros = $this->valor * ($faixaCalculo->juros / 100);
-            $this->honorarios = $this->valor * ($faixaCalculo->honorario / 100);
+            $this->honorarios = ($this->valor + $this->juros + $this->multa) * ($faixaCalculo->honorario / 100);
             $this->total = $this->valor + $this->multa + $this->juros + $this->honorarios;
         }
     }

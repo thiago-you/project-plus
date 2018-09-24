@@ -318,7 +318,7 @@ $(document).ready(function() {
         
         let parcelaNum = linha.attr('id').replace('linha-', '');
         let vencimento = linha.find('td:nth-child(2)').find('input').val();
-        let valor = linha.find('td:nth-child(3)').text().trim().replace(',', '.');
+        let valor = linha.find('td:nth-child(3)').text().trim();
 
         // busca a modal
         let modalParcela = $('#modal-parcela');        

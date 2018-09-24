@@ -216,19 +216,19 @@ $this->params['breadcrumbs'][] = $this->title;
     		  				<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         		  				<?php if (is_array($clienteContrato->contratoParcelas) && !empty($clienteContrato->contratoParcelas)): ?>
         		  					<?php $numParcelas = count($clienteContrato->contratoParcelas); ?>
-        		  					<?php foreach ($clienteContrato->contratoParcelas as $parcela): ?>
-                                    	<table class="table table-bordered table-hover table-parcelas">
-                        		  			<thead>
-                        		  				<tr>
-                        		  					<th>Núm.</th>
-                        		  					<th>Vencimento</th>
-                        		  					<th>Valor</th>
-                        		  					<th>Atraso</th>
-                        		  					<th>Status</th>
-                        		  					<th>Observação</th>
-                        		  				</tr>
-                        		  			</thead>
-                        		  			<tbody>
+                                	<table class="table table-bordered table-hover table-parcelas">
+                    		  			<thead>
+                    		  				<tr>
+                    		  					<th>Núm.</th>
+                    		  					<th>Vencimento</th>
+                    		  					<th>Valor</th>
+                    		  					<th>Atraso</th>
+                    		  					<th>Status</th>
+                    		  					<th>Observação</th>
+                    		  				</tr>
+                    		  			</thead>
+                    		  			<tbody>
+        		  							<?php foreach ($clienteContrato->contratoParcelas as $parcela): ?>
                 			  					<tr>
                 				  					<td class="text-center">
                                                         <?= "{$parcela->num_parcela}/{$numParcelas}"; ?>
@@ -249,11 +249,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         <?= $parcela->observacao; ?>
                 			  						</td>
                 				  				</tr>
-                        		  			</tbody>
-                        		  		</table>
-                        	  		   <!-- ./table contratos -->
-        			  				<?php endforeach; ?>
-        		  				<?php endif; ?>
+                			  				<?php endforeach; ?>
+                		  				<?php endif; ?>
+                		  			</tbody>
+                		  		</table>
+                	  		   <!-- ./table contratos -->
     		  				</div>
     		  				<!-- ./col -->
 		  				</div>

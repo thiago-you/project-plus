@@ -106,11 +106,13 @@ class Negociacao extends \yii\db\ActiveRecord
                 // busca a faixa de calculo
                 // e calcula o subtotal e a receita
                 if ($faixaCalculo = CredorCalculo::findFaixa($this->id_campanha, $parcela->getAtraso())) {
-                    $this->subtotal += $parcela->valor;
-                    $this->subtotal += $parcela->valor * ($faixaCalculo->multa / 100);
-                    $this->subtotal += $parcela->valor * ($faixaCalculo->juros / 100);
-                    $this->subtotal += $parcela->valor * ($faixaCalculo->honorario / 100);
-                    $this->receita += $parcela->valor * ($faixaCalculo->honorario / 100);
+                    // calcula os valores da parcela
+                    $multa = $parcela->valor * ($faixaCalculo->multa / 100);
+                    $juros = $parcela->valor * ($faixaCalculo->juros / 100);
+                    $honorarios = ($parcela->valor + $multa + $juros) * ($faixaCalculo->honorario / 100);
+                    
+                    $this->subtotal += $parcela->valor + $multa + $juros + $honorarios;
+                    $this->receita += $honorarios;
                 }
             }
             
