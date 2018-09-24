@@ -24,6 +24,7 @@ class AppAsset extends AssetBundle
     public $js = [
         'plugins/jquery-confirm/jquery-confirm.js?v=1.0',
         'plugins/fontawesome-5.3.1/js/all.min.js',
+        'plugins/accounting/accounting.js',
         'plugins/toastr/toastr.min.js',
         'app/js/main.js?v=1.0',
     ];

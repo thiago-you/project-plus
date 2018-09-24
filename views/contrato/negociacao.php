@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 use app\base\Helper;
 use app\models\Cliente;
+use yii\web\JqueryAsset;
 use yii\bootstrap\BootstrapAsset;
 
 $this->title = 'Negociação';
@@ -296,4 +297,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 // CSS
 $this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [BootstrapAsset::className()]]);
+// JS
+$this->registerJsFile(Url::home().'app/js/negociacao.js', ['depends' => [JqueryAsset::className()]]);
 ?>
