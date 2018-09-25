@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\base\Helper;
 
 /**
  * This is the model class for table "endereco".
@@ -137,7 +138,7 @@ class Endereco extends \yii\db\ActiveRecord
         $endereco .= $this->bairro ? "{$this->bairro}, " : '';
         $endereco .= $this->cidade_id ? "{$this->cidade->nome} - " : '';
         $endereco .= $this->estado_id ? strtoupper($this->estado->sigla) : 'X';
-        $endereco .= $this->cep ? ", {$this->cep}" : '';
+        $endereco .= $this->cep ? ', '. Helper::mask($this->cep, Helper::MASK_CEP) : '';
         
         return $endereco;
     }
