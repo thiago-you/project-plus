@@ -8,6 +8,10 @@ use app\models\NegociacaoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
+use app\base\AjaxResponse;
+use app\base\Helper;
+use yii\base\UserException;
 
 /**
  * NegociacaoController implements the CRUD actions for Negociacao model.
@@ -58,21 +62,44 @@ class NegociacaoController extends Controller
     }
 
     /**
-     * Creates a new Negociacao model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Salva a negociação
      */
-    public function actionCreate()
+    public function actionSalvar()
     {
-        $model = new Negociacao();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        // valida a requisicao
+        if (!$post = \Yii::$app->request->post()) {
+            throw new NotFoundHttpException();
         }
+        
+        // cria o objeto de retorno
+        $retorno = new AjaxResponse();
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        if ($post['Negociacao']['id'] != null) {
+            $model = $this->findModel($post['Negociacao']['id']);
+        } else {            
+            $model = new Negociacao();
+        }
+        
+        // carrega os dados enviados
+        $model->load($post);
+        
+        try {
+            $transaction = \Yii::$app->db->beginTransaction();
+            
+            // salva a negociacao
+            if (!$model->save()) {
+                throw new UserException(Helper::renderErrors($model->getErrors()));
+            }
+            
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            $retorno->success = false;
+            $retorno->message = $e->getMessage();
+        }
+        
+        
+        return Json::encode($retorno);
     }
 
     /**

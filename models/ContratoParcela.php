@@ -21,6 +21,10 @@ use app\base\Helper;
  */
 class ContratoParcela extends \yii\db\ActiveRecord
 {
+    // const para a flag de status
+    CONST SEM_NEGOCIACAO = 1;
+    CONST EM_NEGOCIACAO = 2;
+    
     /**
      * Valores da parcela
      */
@@ -28,6 +32,16 @@ class ContratoParcela extends \yii\db\ActiveRecord
     public $juros = 0;
     public $honorarios = 0;
     public $total = 0;
+    
+    /**
+     * Salva a porcentagem de calculo dos honorarios
+     */
+    public $honorariosCalculo;
+    
+    /**
+     * @var $atraso int => atraso da parcela em dias
+     */
+    public $atraso;
     
     /**
      * {@inheritdoc}
@@ -108,11 +122,18 @@ class ContratoParcela extends \yii\db\ActiveRecord
      */
     public function getAtraso() 
     {
-        $dataAtual = time();
-        $vencimento = strtotime(Helper::formatDateToSave($this->data_vencimento, Helper::DATE_DEFAULT));
-        $diferenca = $dataAtual - $vencimento;
+        // verifica se o atras ja foi calculado
+        if (!$this->atraso) {            
+            $dataAtual = time();
+            $vencimento = strtotime(Helper::formatDateToSave($this->data_vencimento, Helper::DATE_DEFAULT));
+            $diferenca = $dataAtual - $vencimento;
+
+            // calcula o atraso e
+            // não considera o dia do vencimento
+            $this->atraso = round($diferenca / (60 * 60 * 24)) - 1;
+        }
         
-        return round($diferenca / (60 * 60 * 24));
+        return $this->atraso;
     }
     
     /**
@@ -121,11 +142,11 @@ class ContratoParcela extends \yii\db\ActiveRecord
     public function getStatusDescricao() 
     {
         switch ($this->status) {
-            case 1:
+            case self::SEM_NEGOCIACAO:
                 return '<span class="label label-warning">Sem Neg.</span>';
                 break;
-            case 2:
-                return '<span class="label label-success">Em Neg.</span>';
+            case self::EM_NEGOCIACAO:
+                return '<span class="label label-info">Em Neg.</span>';
                 break;
         }
     }
@@ -137,10 +158,13 @@ class ContratoParcela extends \yii\db\ActiveRecord
     {
         // busca a faixa de calculo
         if ($faixaCalculo = CredorCalculo::findFaixa($id_campanha, $this->getAtraso())) {            
-            $this->multa = $this->valor * ($faixaCalculo->multa / 100);
-            $this->juros = $this->valor * ($faixaCalculo->juros / 100);
-            $this->honorarios = ($this->valor + $this->juros + $this->multa) * ($faixaCalculo->honorario / 100);
+            $this->multa = floor(($this->valor * ($faixaCalculo->multa / 100)) * 100) / 100;
+            $this->juros = floor(($this->valor * (($faixaCalculo->juros / 30 * $this->getAtraso()) / 100)) * 100) / 100;
+            $this->honorarios = floor((($this->valor + $this->juros + $this->multa) * ($faixaCalculo->honorario / 100)) * 100) / 100;
             $this->total = $this->valor + $this->multa + $this->juros + $this->honorarios;
+            
+            // seta a taxa de calculo dos honorarios
+            $this->honorariosCalculo = $faixaCalculo->honorario;
         }
     }
 }

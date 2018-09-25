@@ -5,6 +5,11 @@ use kartik\money\MaskMoney;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
 ?>
+<input id="negociacao-id" class="hidden" value="<?= $negociacao->isNewRecord ? null : $negociacao->id; ?>"/>
+<input id="negociacao-contrato" class="hidden" value="<?= $negociacao->id_contrato; ?>"/>
+<input id="negociacao-credor" class="hidden" value="<?= $negociacao->id_credor; ?>"/>
+<input id="negociacao-campanha" class="hidden" value="<?= $negociacao->id_campanha; ?>"/>
+<!-- ./hidden values da negociacao -->
 <div class="row">
 	<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         <div class="row">
@@ -23,10 +28,10 @@ use kartik\date\DatePicker;
         		?>
         	</div>
         	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-        		<?= Html::label('Pagamento', 'negociacao-pagamento'); ?>
+        		<?= Html::label('Pagamento', 'negociacao-tipo'); ?>
         		<?= Select2::widget([
-        			    'name' => 'Negociacao[pagamento]',
-        			    'id' => 'negociacao-pagamento',
+        			    'name' => 'Negociacao[tipo]',
+        			    'id' => 'negociacao-tipo',
         			    'hideSearch' => true,
         			    'data' => [
                             0 => 'À Vista', 
@@ -40,9 +45,9 @@ use kartik\date\DatePicker;
         		<br>
         		<?php 
                     if ($negociacao->isNewRecord) {
-                        echo '<span class="label label-warning">Sem Negociação</span>';
+                        echo '<span class="negociacao-status label label-warning">Sem Negociação</span>';
             		} else {
-            		    echo '<span class="label label-success">Em Negociação</span>';
+            		    echo '<span class="negociacao-status label label-info">Em Negociação</span>';
             		}
         		?>
         	</div>
@@ -78,38 +83,57 @@ use kartik\date\DatePicker;
     							<?php $parcela->calcularValores($negociacao->id_campanha); ?>
     							<!-- ./calcula os valores totais -->
         						<tr>
-        							<?php 
-        							 /* @var $parcela app\models\ContratoParcela */
-        							?>
                 					<td><?= $parcela->num_parcela; ?></td>
                 					<td><?= Helper::formatDateToDisplay($parcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
                 					<td><?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?></td>
-                					<td><?= $parcela->getAtraso(); ?></td>
+                					<td><?= $parcela->atraso; ?></td>
                 					<td><?= Helper::mask($parcela->multa, Helper::MASK_MONEY); ?></td>
                 					<td><?= Helper::mask($parcela->juros, Helper::MASK_MONEY); ?></td>
-                					<td><?= Helper::mask($parcela->honorarios, Helper::MASK_MONEY); ?></td>
+                					<td class="taxa-honorario" data-value="<?= $parcela->honorariosCalculo; ?>"><?= Helper::mask($parcela->honorarios, Helper::MASK_MONEY); ?></td>
                 					<td><?= Helper::mask($parcela->total, Helper::MASK_MONEY); ?></td>
+                					<?php 
+                					    // soma os valores da parcela
+                                        $valor += $parcela->valor;
+                                        $atraso += $parcela->atraso;
+                                        $multa += $parcela->multa;
+                                        $juros += $parcela->juros;
+                                        $honorarios += $parcela->honorarios;
+                                        $total += $parcela->total;
+                					?>
                 				</tr>
-            					<!-- ./dados da parcela -->
         					<?php endforeach; ?>
+        					<!-- ./dados da parcela -->
+        					<tr>
+            					<td colspan="2" class="text-center"><b>Totais:</b></td>
+            					<td class="parcelas-subtotal" data-value="<?= $valor; ?>"><b><?= Helper::mask($valor, Helper::MASK_MONEY); ?></b></td>
+            					<td><b><?= $atraso; ?></b></td>
+            					<td class="parcelas-multa" data-value="<?= $multa; ?>"><b><?= Helper::mask($multa, Helper::MASK_MONEY); ?></b></td>
+            					<td class="parcelas-juros" data-value="<?= $juros; ?>"><b><?= Helper::mask($juros, Helper::MASK_MONEY); ?></b></td>
+            					<td class="parcelas-honorarios" data-value="<?= $honorarios; ?>"><b><?= Helper::mask($honorarios, Helper::MASK_MONEY); ?></b></td>
+            					<td class="parcelas-total" data-value="<?= $total; ?>"><b><?= Helper::mask($total, Helper::MASK_MONEY); ?></b></td>
+            				</tr>
+            				<!-- ./totais -->
         				<?php endif; ?>
         			</tbody>
         			<!-- ./tbody -->
         		</table>
         		<!-- ./table -->
     		</div>
-    		<!-- ./table -->
+		</div>
+		<!-- ./table -->
+		<br>
+		<div class="row">
     		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-				<b>Subtotal:</b> <?= Helper::mask($negociacao->subtotal, Helper::MASK_MONEY); ?>			
+				<b>Subtotal:</b> <span id="negociacao-subtotal" data-value="<?= $negociacao->subtotal; ?>"><?= Helper::mask($negociacao->subtotal, Helper::MASK_MONEY); ?></span>			
     		</div>
     		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-    			<b>Desconto:</b> <?= Helper::mask($negociacao->desconto, Helper::MASK_MONEY); ?>
+    			<b>Desconto:</b> <span id="negociacao-desconto" data-value="<?= $negociacao->desconto; ?>"><?= Helper::mask($negociacao->desconto, Helper::MASK_MONEY); ?></span>
     		</div>
     		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-    			<b>Honorários:</b> <?= Helper::mask($negociacao->receita, Helper::MASK_MONEY); ?>
+    			<b>Honorários:</b> <span id="negociacao-receita" data-value="<?= $negociacao->receita; ?>"><?= Helper::mask($negociacao->receita, Helper::MASK_MONEY); ?></span>
     		</div>
     		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-    			<b>Total:</b> <?= Helper::mask($negociacao->total, Helper::MASK_MONEY); ?>
+    			<b>Total:</b> <span id="negociacao-total" data-value="<?= $negociacao->total; ?>"><?= Helper::mask($negociacao->total, Helper::MASK_MONEY); ?></span>
     		</div>
         	<!-- ./totais -->
     	</div>
@@ -127,16 +151,16 @@ use kartik\date\DatePicker;
 					<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
 						<?= Html::label('Encargos', 'desconto_encargos'); ?>
         				<?= MaskMoney::widget([
-            				   'name' => 'Negociacao[desconto_encargos]',        
+            				    'name' => 'Negociacao[desconto_encargos]',    
+				                'value' => $negociacao->desconto_encargos,
 				                'options' => [
 	                                'id' => 'desconto_encargos',
 	                                'maxlength' => 9,
-	                                'class' => 'form-control input-sm',
+	                                'class' => 'form-control input-sm negociacao-descontos',
 				                ],
 				                'pluginOptions' => [
 	                                'suffix' => '%',
 	                                'precision' => 4,
-	                                'decimal' => ',',
 				                ],
             				]); 
         				?>
@@ -144,16 +168,16 @@ use kartik\date\DatePicker;
     				<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
     					<?= Html::label('Principal', 'desconto_principal'); ?>
         				<?= MaskMoney::widget([
-            				   'name' => 'Negociacao[desconto_principal]',
+            				    'name' => 'Negociacao[desconto_principal]',
+			                    'value' => $negociacao->desconto_principal,
 				                'options' => [
 	                                'id' => 'desconto_principal',
 	                                'maxlength' => 9,
-	                                'class' => 'form-control input-sm',
+	                                'class' => 'form-control input-sm negociacao-descontos',
 				                ],
 				                'pluginOptions' => [
 	                                'suffix' => '%',
 	                                'precision' => 4,
-	                                'decimal' => ',',
 				                ],
             				]); 
         				?>
@@ -161,16 +185,16 @@ use kartik\date\DatePicker;
     				<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
     					<?= Html::label('Honorários', 'desconto_honorarios'); ?>
         				<?= MaskMoney::widget([
-            				   'name' => 'Negociacao[desconto_honorarios]',       
+            				    'name' => 'Negociacao[desconto_honorarios]',   
+				                'value' => $negociacao->desconto_honorarios,
 				                'options' => [
 	                                'id' => 'desconto_honorarios',
 	                                'maxlength' => 9,
-	                                'class' => 'form-control input-sm',
+	                                'class' => 'form-control input-sm negociacao-descontos',
 				                ],
 				                'pluginOptions' => [
 	                                'suffix' => '%',
 	                                'precision' => 4,
-	                                'decimal' => ',',
 				                ],
             				]); 
         				?>
@@ -178,16 +202,16 @@ use kartik\date\DatePicker;
     				<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
     					<?= Html::label('Total', 'desconto_total'); ?>
         				<?= MaskMoney::widget([
-            				   'name' => 'Negociacao[desconto_total]',				                
+                                'name' => 'Negociacao[desconto_total]',
+				                'value' => $negociacao->desconto_total,
 				                'options' => [
 	                                'id' => 'desconto_total',
 	                                'maxlength' => 14,
-	                                'class' => 'form-control input-sm',  
+	                                'class' => 'form-control input-sm negociacao-descontos',  
 				                ],
 				                'pluginOptions' => [
 	                                'prefix' => 'R$ ',
 	                                'precision' => 2,
-	                                'decimal' => ',',
 				                ],
             				]); 
         				?>
@@ -198,12 +222,22 @@ use kartik\date\DatePicker;
 		</div>
 	</div>
 	<!-- ./tabela de calculo -->
+	<div class="col-md-9 col-sm-9 col-lg-9 col-xs-12">
+		<?= Html::label('Observação:', 'negociacao-observacao'); ?>
+		<?= Html::textarea('Negociacao[Observacao]', '', [
+    		    'id' => 'negociacao-observacao',                
+                'class' => 'form-control',
+    		]); 
+		?>
+	</div>
 </div>
 <!-- ./row -->
+<br><br>
 <div class="row">
 	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">	
 		<?= Html::button('<i class="fa fa-save"></i>&nbsp; Salvar a Negociação', [
                 'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
+                'id' => 'salvar-negociacao',
     		]);
 		?>
 	</div>

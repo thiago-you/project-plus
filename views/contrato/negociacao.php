@@ -242,7 +242,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 			  						<td>
                                                         <?= $parcela->getAtraso(); ?>
                 			  						</td>
-                			  						<td>
+                			  						<td class="text-center">
                                                         <?= $parcela->getStatusDescricao(); ?>
                 			  						</td>
                 			  						<td>
@@ -300,3 +300,7 @@ $this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [Boot
 // JS
 $this->registerJsFile(Url::home().'app/js/negociacao.js', ['depends' => [JqueryAsset::className()]]);
 ?>
+
+
+
+
