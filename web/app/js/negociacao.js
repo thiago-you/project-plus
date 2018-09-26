@@ -78,36 +78,86 @@ function Negociacao(context) {
 			toastr.warning('O desconto total é superior ao limite permitido.');
 			return false;
 		}
-
-		// seta o valor total
-		self.total = self.subtotal;
+		
+		return true;
+	}
+	
+	// recalcula a negociacao
+	self.calcularNegociacao = () => {
+		// reseta os valores da negociacao
+		self.subtotal = 0;
+		self.total = 0;
 		self.desconto = 0;
-		self.receita = $('.parcelas-honorarios', context).data('value');
+		self.receita = 0;
 		
-		// calcula o desconto dos encargos
-		if (self.desconto_encargos > 0) {
-			let encargos = $('.parcelas-multa', context).data('value') + $('.parcelas-juros', context).data('value');
-			self.desconto += encargos * (self.desconto_encargos / 100);
-			self.total -= encargos * (self.desconto_encargos / 100);;
-		}
-		// calcula o desconto principal
-		if (self.desconto_principal > 0) {
-			self.desconto += $('.parcelas-subtotal', context).data('value') * (self.desconto_principal / 100);
-			self.total -= $('.parcelas-subtotal', context).data('value') * (self.desconto_principal / 100);;
-		}
+		// atualiza cada parcela do contrato
+		$('.panel-calculo .contrato-parcela').each(function() {
+			// variaveis de controle dos valores da parcela
+			let [total, receita, encargos, principal] = [0, 0, 0, 0];
+			
+			// variaveis de controle dos descontos
+			let [encargosDesconto, principalDesconto] = [0, 0];
+			
+			// soma o total
+			principal = Number($(this).find('td.principal').data('value'));
+			
+			// soma os encargos
+			encargos += Number($(this).find('td.multa').data('value'));
+			encargos += Number($(this).find('td.juros').data('value'));
 		
-		
+			// calcula o desconto dos encargos
+			if (self.desconto_encargos > 0) {
+				self.desconto += Number(encargos * (self.desconto_encargos / 100));
+				encargosDesconto = Number(encargos * (self.desconto_encargos / 100));
+			}
+			// calcula o desconto principal
+			if (self.desconto_principal > 0) {
+				self.desconto += Number(principal * (self.desconto_principal / 100));
+				principalDesconto = Number(principal * (self.desconto_principal / 100));
+			}
+			// calcula os honorarios
+			if (self.desconto_honorarios > 0) {
+				/*self.desconto += self.receita * (self.desconto_honorarios / 100);
+				self.receita = self.receita - (self.receita * (self.desconto_honorarios / 100));*/
+			}
+			
+			let taxaHonorario = Number($(this).find('td.honorario').data('value'));		
+			receita = ((principal - principalDesconto) + (encargos - encargosDesconto)) * (taxaHonorario / 100);
+			
+			// calcula o total da parcela
+			total = Math.floor((principal + encargos + receita) * 100) / 100;
+			
+			// arredonda a receita para baixo
+			receita = Math.floor(receita * 100) / 100;
+			
+			// atualiza os valores na listagem
+			$(this).find('td.honorario').text(accounting.formatMoney(receita, 'R$ ', 2, '.', ','));
+			$(this).find('td.total').text(accounting.formatMoney(total, 'R$ ', 2, '.', ','));
+			
+			// seta o total da negociacao
+			self.receita += receita;
+			self.subtotal += total;
+			self.desconto += encargosDesconto + principalDesconto;
+		});
 		
 		// calcula o total
-		if (self.desconto_total > 0) {			
+		/*if (self.desconto_total > 0) {			
 			self.total -= self.desconto_total;
 			self.desconto += self.desconto_total;
-		}
-		// calcula os honorarios
-		if (self.desconto_honorarios > 0) {
-			self.desconto += self.receita * (self.desconto_honorarios / 100);
-			self.receita = self.receita - (self.receita * (self.desconto_honorarios / 100));
-		}
+		}*/
+		
+		// atualiza os totais da parcela
+		$('.panel-calculo .parcelas-total-honorarios').data('value', self.receita).html(`<b>${accounting.formatMoney(self.receita, 'R$ ', 2, '.', ',')}</b>`);
+		$('.panel-calculo .parcelas-total-total').data('value', self.subtotal).html(`<b>${accounting.formatMoney(self.subtotal, 'R$ ', 2, '.', ',')}</b>`);
+		
+		// calcula o total
+		self.total = Math.floor((self.subtotal - self.desconto) * 100) / 100;
+		
+		// atualiza os valores da self
+		$('#negociacao-subtotal').data('value', self.subtotal).text(accounting.formatMoney(self.subtotal, 'R$ ', 2, '.', ','));
+		$('#negociacao-desconto').data('value', self.desconto).text(accounting.formatMoney(self.desconto, 'R$ ', 2, '.', ','));
+		$('#negociacao-receita').data('value', self.receita).text(accounting.formatMoney(self.receita, 'R$ ', 2, '.', ','));
+		$('#negociacao-total').data('value', self.total).text(accounting.formatMoney(self.total, 'R$ ', 2, '.', ','));
 		
 		return true;
 	}
@@ -120,6 +170,8 @@ $(document).ready(function() {
 	
 	// carrega os dados na negociacao
 	negociacao.load();
+	// calcula os descontos
+	negociacao.calcularNegociacao();
 	
 	// salva a negociacao
 	$('body').on('click', '#salvar-negociacao', function() {
@@ -127,7 +179,7 @@ $(document).ready(function() {
 		negociacao.load();
 		
 		// calcula e valida o desconto antes de enviar a requisicao
-		if (negociacao.validarDesconto()) {
+		if (negociacao.validarDesconto() && negociacao.calcularNegociacao()) {
 			// envia a requisicao para salvar a negociacao
 			$.post(BASE_PATH + 'negociacao/salvar', {Negociacao: negociacao}, function(response) {
 				let retorno = JSON.parse(response);
@@ -148,13 +200,10 @@ $(document).ready(function() {
 	$('body').on('change', '.negociacao-descontos', function() {
 		// carrega os dados de desconto
 		negociacao.loadDesconto();
-		// calcula e valida os descontos
+		// valida os descontos
 		negociacao.validarDesconto();
-		
-		// atualiza os valores da negociacao
-		$('#negociacao-desconto').data('value', negociacao.desconto).text(accounting.formatMoney(negociacao.desconto, 'R$ ', 2, '.', ','));
-		$('#negociacao-receita').data('value', negociacao.receita).text(accounting.formatMoney(negociacao.receita, 'R$ ', 2, '.', ','));
-		$('#negociacao-total').data('value', negociacao.total).text(accounting.formatMoney(negociacao.total, 'R$ ', 2, '.', ','));
+		// calcula os descontos
+		negociacao.calcularNegociacao();
 	});
 });
 

@@ -175,6 +175,11 @@ class ContratoController extends Controller
                             $modelParcela->valor = $parcela['valor'];
                             $modelParcela->num_parcela = ++$key;
                             
+                            // seta o status da parcela
+                            if ($model->negociacao) {
+                                $modelParcela->status = ContratoParcela::EM_NEGOCIACAO;
+                            }
+                            
                             // salva o telefone
                             if (!$modelParcela->save()) {
                                 throw new \Exception(Helper::renderErrors($modelParcela->getErrors()));

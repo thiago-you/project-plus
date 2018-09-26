@@ -66,10 +66,10 @@ use kartik\date\DatePicker;
         					<th colspan="8">Parcelas</th>
         				</tr>
         				<tr>
-        					<th>Núm.</th>
+        					<th class="text-center">Núm.</th>
         					<th>Vencimento</th>
-        					<th>Valor</th>
         					<th>Atraso</th>
+        					<th>Valor</th>
         					<th>Multa</th>
         					<th>Juros</th>
         					<th>Honorário</th>
@@ -82,15 +82,15 @@ use kartik\date\DatePicker;
         					<?php foreach ($contrato->contratoParcelas as $parcela): ?>
     							<?php $parcela->calcularValores($negociacao->id_campanha); ?>
     							<!-- ./calcula os valores totais -->
-        						<tr>
-                					<td><?= $parcela->num_parcela; ?></td>
+        						<tr class="contrato-parcela">
+                					<td class="text-center"><?= $parcela->num_parcela; ?></td>
                 					<td><?= Helper::formatDateToDisplay($parcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
-                					<td><?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?></td>
                 					<td><?= $parcela->atraso; ?></td>
-                					<td><?= Helper::mask($parcela->multa, Helper::MASK_MONEY); ?></td>
-                					<td><?= Helper::mask($parcela->juros, Helper::MASK_MONEY); ?></td>
-                					<td class="taxa-honorario" data-value="<?= $parcela->honorariosCalculo; ?>"><?= Helper::mask($parcela->honorarios, Helper::MASK_MONEY); ?></td>
-                					<td><?= Helper::mask($parcela->total, Helper::MASK_MONEY); ?></td>
+                					<td class="principal" data-value="<?= $parcela->valor; ?>"><?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?></td>
+                					<td class="multa" data-value="<?= $parcela->multa; ?>"><?= Helper::mask($parcela->multa, Helper::MASK_MONEY); ?></td>
+                					<td class="juros" data-value="<?= $parcela->juros; ?>"><?= Helper::mask($parcela->juros, Helper::MASK_MONEY); ?></td>
+                					<td class="honorario" data-value="<?= $parcela->honorariosCalculo; ?>"><?= Helper::mask($parcela->honorarios, Helper::MASK_MONEY); ?></td>
+                					<td class="total"><?= Helper::mask($parcela->total, Helper::MASK_MONEY); ?></td>
                 					<?php 
                 					    // soma os valores da parcela
                                         $valor += $parcela->valor;
@@ -104,13 +104,16 @@ use kartik\date\DatePicker;
         					<?php endforeach; ?>
         					<!-- ./dados da parcela -->
         					<tr>
+        						<td colspan="7"></td>
+        					</tr>
+        					<tr>
             					<td colspan="2" class="text-center"><b>Totais:</b></td>
-            					<td class="parcelas-subtotal" data-value="<?= $valor; ?>"><b><?= Helper::mask($valor, Helper::MASK_MONEY); ?></b></td>
             					<td><b><?= $atraso; ?></b></td>
-            					<td class="parcelas-multa" data-value="<?= $multa; ?>"><b><?= Helper::mask($multa, Helper::MASK_MONEY); ?></b></td>
-            					<td class="parcelas-juros" data-value="<?= $juros; ?>"><b><?= Helper::mask($juros, Helper::MASK_MONEY); ?></b></td>
-            					<td class="parcelas-honorarios" data-value="<?= $honorarios; ?>"><b><?= Helper::mask($honorarios, Helper::MASK_MONEY); ?></b></td>
-            					<td class="parcelas-total" data-value="<?= $total; ?>"><b><?= Helper::mask($total, Helper::MASK_MONEY); ?></b></td>
+            					<td class="parcelas-total-principal" data-value="<?= $valor; ?>"><b><?= Helper::mask($valor, Helper::MASK_MONEY); ?></b></td>
+            					<td class="parcelas-total-multa" data-value="<?= $multa; ?>"><b><?= Helper::mask($multa, Helper::MASK_MONEY); ?></b></td>
+            					<td class="parcelas-total-juros" data-value="<?= $juros; ?>"><b><?= Helper::mask($juros, Helper::MASK_MONEY); ?></b></td>
+            					<td class="parcelas-total-honorarios" data-value="<?= $honorarios; ?>"><b><?= Helper::mask($honorarios, Helper::MASK_MONEY); ?></b></td>
+            					<td class="parcelas-total-total" data-value="<?= $total; ?>"><b><?= Helper::mask($total, Helper::MASK_MONEY); ?></b></td>
             				</tr>
             				<!-- ./totais -->
         				<?php endif; ?>
