@@ -79,7 +79,8 @@ use yii\helpers\ArrayHelper;
                                         'removeButton' => false,
                                         'pluginOptions' => [
                         					'autoclose' => true,
-                        					'format' => 'dd/mm/yyyy'
+                        					'format' => 'dd/mm/yyyy',
+                                            'orientation' => 'bottom',
                         				],
 		                        	]);
 		                        ?>

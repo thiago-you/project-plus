@@ -107,20 +107,14 @@ function Negociacao(context) {
 		
 			// calcula o desconto dos encargos
 			if (self.desconto_encargos > 0) {
-				self.desconto += Number(encargos * (self.desconto_encargos / 100));
 				encargosDesconto = Number(encargos * (self.desconto_encargos / 100));
+				console.log(encargosDesconto);
 			}
 			// calcula o desconto principal
 			if (self.desconto_principal > 0) {
-				self.desconto += Number(principal * (self.desconto_principal / 100));
 				principalDesconto = Number(principal * (self.desconto_principal / 100));
 			}
-			// calcula os honorarios
-			if (self.desconto_honorarios > 0) {
-				/*self.desconto += self.receita * (self.desconto_honorarios / 100);
-				self.receita = self.receita - (self.receita * (self.desconto_honorarios / 100));*/
-			}
-			
+			// calcula a receita da parcela
 			let taxaHonorario = Number($(this).find('td.honorario').data('value'));		
 			receita = ((principal - principalDesconto) + (encargos - encargosDesconto)) * (taxaHonorario / 100);
 			
@@ -139,6 +133,12 @@ function Negociacao(context) {
 			self.subtotal += total;
 			self.desconto += encargosDesconto + principalDesconto;
 		});
+		
+		// calcula o desconto da receita
+		if (self.desconto_honorarios > 0) {
+			self.desconto += Math.floor((self.receita * (self.desconto_honorarios / 100)) * 100) / 100;
+			self.receita -= Math.floor((self.receita * (self.desconto_honorarios / 100)) * 100) / 100;
+		}
 		
 		// calcula o total
 		/*if (self.desconto_total > 0) {			
