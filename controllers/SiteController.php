@@ -347,6 +347,117 @@ class SiteController extends BaseController
         return $options;
     }
     
+    public function actionTeste() 
+    {
+        $endpoint = 'https://isscuritiba.curitiba.pr.gov.br/Iss.NfseWebService/nfsews.asmx?WSDL';
+        
+        echo 'tenta abrir o arquivo:';
+        $teste = openssl_pkey_get_private(\Yii::$app->params['config']['certificados'] . '_priKEY.pem');
+        var_dump($teste);
+        var_dump(openssl_error_string());
+        
+        echo 'teste se o arquivo existe:';
+        var_dump(is_file(\Yii::$app->params['config']['certificados'] . 'teste1.pem'));
+        var_dump(file_exists(\Yii::$app->params['config']['certificados'] . 'teste1.pem'));
+        var_dump(is_readable(\Yii::$app->params['config']['certificados'] . 'teste1.pem'));
+        //die;
+        // monta o xml de consulta
+        $consulta = $this->gerarConsultaXML($empresa, $protocolo);
+        
+        //open connection
+        $ch = curl_init();
+        
+        // cur modificado
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 2);
+        
+        curl_setopt($ch, CURLOPT_CAPATH, '/etc/pki/tls');
+        curl_setopt($ch, CURLOPT_CAINFO, '/etc/pki/tls/cacert.pem');
+        curl_setopt($ch, CURLOPT_CERTINFO, true);
+        
+        //curl_setopt($ch, CURLOPT_SSLCERT, \Yii::$app->params['config']['certificados'] . 'eCNPJ GEOPARANA - 24.06.19 - 13884056_out.pfx');
+        //curl_setopt($ch, CURLOPT_SSLCERT, \Yii::$app->params['config']['certificados'] . 'geo.cer');
+        //curl_setopt($ch, CURLOPT_SSLCERT, \Yii::$app->params['config']['certificados'] . 'geo.pem');
+        //curl_setopt($ch, CURLOPT_SSLCERT, \Yii::$app->params['config']['certificados'] . 'csr.pem');
+        //curl_setopt($ch, CURLOPT_SSLCERT, \Yii::$app->params['config']['certificados'] . 'server.crt');
+        curl_setopt($ch, CURLOPT_SSLCERT, \Yii::$app->params['config']['certificados'] . '_cert.pem');
+        curl_setopt($ch, CURLOPT_SSLKEY, \Yii::$app->params['config']['certificados'] . '_priKEY.pem');
+        //curl_setopt($ch, CURLOPT_SSLKEY, \Yii::$app->params['config']['certificados'] . 'key.pem');
+        //curl_setopt($ch, CURLOPT_KEYPASSWD, '123456');
+        
+        //curl_setopt($ch, CURLOPT_SSH_PRIVATE_KEYFILE, \Yii::$app->params['config']['certificados'] . '_priKEY.pem');
+        //curl_setopt($curl, CURLOPT_USERPWD, "geoparana:geo3007");
+        
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $consulta['xml']);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $consulta['headers']);
+        
+        //execute post
+        $result = curl_exec($ch);
+        
+        if ($result == false) {
+            $erronr = curl_errno($ch);
+            $error  = curl_error($ch);
+            var_dump($erronr, $error);
+        }
+        
+        // close connection
+        curl_close($ch);
+        
+        // remove as tagas soap
+        $clean_xml = str_ireplace(['SOAP-ENV:', 'SOAP:'], '', $result);
+        
+        // encode da string
+        if (!mb_detect_encoding($clean_xml, 'UTF-8', true)) {
+            $clean_xml = utf8_encode($clean_xml);
+        }
+        
+        // transforma o xml em array
+        $xmlr = json_decode(json_encode(simplexml_load_string($clean_xml)), true);
+        
+        // verifica se a resposta veio em xml
+        if (is_array($xmlr['Body']['ConsultarSituacaoLoteRpsResponse'])) {
+            foreach ($xmlr['Body']['ConsultarSituacaoLoteRpsResponse'] as $key => $value) {
+                if ($key == 'ConsultarSituacaoLoteRpsResult') {
+                    if (isset($value['ListaMensagemRetorno']['MensagemRetorno'])) {
+                        if (count($value['ListaMensagemRetorno']['MensagemRetorno']) > 1 && isset($value['ListaMensagemRetorno']['MensagemRetorno'][0])) {
+                            $mensagem = '';
+                            foreach ($value['ListaMensagemRetorno']['MensagemRetorno'] as $msgError) {
+                                $mensagem .= "<b>Código: {$msgError['Codigo']}</b> - Error: {$msgError['Mensagem']}<br>{$msgError['Correcao']}<br>";
+                                $mensagemRetorno = $value['ListaMensagemRetorno'];
+                            }
+                        } else {
+                            $mensagem = "Código: {$value['ListaMensagemRetorno']['MensagemRetorno']['Codigo']} - Error: {$value['ListaMensagemRetorno']['MensagemRetorno']['Mensagem']}<br>{$value['ListaMensagemRetorno']['MensagemRetorno']['Correcao']}";
+                            $mensagemRetorno = $value['ListaMensagemRetorno'];
+                        }
+                    }
+                    
+                    $r = $value;
+                }
+            }
+        }
+        
+        // verifica se a resposta veio em html
+        if (is_array($xmlr['body']['div'][1]['div']['fieldset'])) {
+            $r = [];
+            $mensagemRetorno = '';
+            
+            $h2 = $xmlr['body']['div'][1]['div']['fieldset']['h2'];
+            $h3 = $xmlr['body']['div'][1]['div']['fieldset']['h3'];
+            
+            if (isset($h2) && isset($h3)) {
+                $mensagemRetorno = "<b>{$h2}</b><br>{$h3}";
+            }
+        }
+        
+        var_dump($mensagemRetorno);
+        
+        return true;
+    }
+    
     /**
      * Faz um parse do array da planilha excel em objeto
      */
