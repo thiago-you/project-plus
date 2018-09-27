@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?php $columns = [
                 [
                     'attribute' => 'id',
+                    'width' => '80px',
                     'hAlign' => GridView::ALIGN_CENTER,
                 ],
                 [

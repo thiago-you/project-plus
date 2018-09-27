@@ -20,7 +20,7 @@ use app\models\CredorCampanha;
                     'disabled' => $readonly,
     				'pluginOptions' => [
     					'autoclose' => true,
-    					'format' => 'yyyy-mm-dd',
+    					'format' => 'dd/mm/yyyy',
     				],
             	]);
             ?>
@@ -31,7 +31,7 @@ use app\models\CredorCampanha;
                     'disabled' => $readonly,
                     'pluginOptions' => [
     					'autoclose' => true,
-    					'format' => 'yyyy-mm-dd'
+    					'format' => 'dd/mm/yyyy'
     				],
             	]);
             ?>

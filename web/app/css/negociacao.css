@@ -37,3 +37,28 @@
 	line-height: 1.42857143;
 	font-weight: bold;
 }
+.panel-calculo .panel-body {
+	padding: 5px;
+}
+.panel-calculo .panel-body div label {
+    margin-top: 10px;
+}
+.table-parcelas, 
+.panel-valores .panel-body {
+	font-size: 12px;
+}
+.panel-calculo .panel-body:first-child {
+	padding-bottom: 20px;
+}
+.panel-calculo textarea {
+	resize: vertical;
+	min-height: 100px;
+}
+.panel-calculo .negociacao-status {
+	width: 150px;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

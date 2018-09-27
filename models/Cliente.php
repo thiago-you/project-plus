@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use Yii;
@@ -168,11 +167,24 @@ class Cliente extends \yii\db\ActiveRecord
     		$this->data_cadastro = date('Y-m-d H:i:s');
     	}
     	
+    	// formata a data para salvar
+    	$this->data_nascimento = Helper::formatDateToSave($this->data_nascimento, Helper::DATE_DEFAULT);
+    	
     	// formata o nome da mae e pai
     	$this->nome_mae = ucwords(strtolower($this->nome_mae));
     	$this->nome_pai = ucwords(strtolower($this->nome_pai));
     	
     	return parent::beforeSave($insert);
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::afterFind()
+     */
+    public function afterFind() 
+    {
+        // formata a data para ser exibida
+        $this->data_nascimento = Helper::formatDateToDisplay($this->data_nascimento, Helper::DATE_DEFAULT);        
     }
     
     /**

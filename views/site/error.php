@@ -1,27 +1,19 @@
 <?php
-
-/* @var $this yii\web\View */
-/* @var $name string */
-/* @var $message string */
-/* @var $exception Exception */
-
-use yii\helpers\Html;
-
-$this->title = $name;
+$this->title = $title ? $title : 'Erro Inesperado';
 ?>
 <div class="site-error">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <div class="alert alert-danger">
-        <?= nl2br(Html::encode($message)) ?>
+    <h1><?= $this->title; ?></h1>
+	<!-- ./titulo do erro -->
+	<br>
+    <div class="alert alert-<?= $label ? $label : 'danger'; ?> font16">
+        <br>
+        <?= $message; ?>
+        <br><br>
     </div>
-
-    <p>
-        The above error occurred while the Web server was processing your request.
+    <br><br>
+    <!-- ./mensagem de erro -->
+    <p class="text-center font16">
+        <i class="fa fa-wrench"></i>&nbsp; A aplicação ainda esta em desenvolvimento e pode apresentar instabilidade e erros inesperados.
     </p>
-    <p>
-        Please contact us if you think this is a server error. Thank you.
-    </p>
-
+    <!-- ./mensagem do ambiente de dev -->
 </div>

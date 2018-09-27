@@ -11,14 +11,14 @@ use yii\widgets\MaskedInput;
 		<div class="col-md-6 col-sm-6 col-xs-12 col-lg-6">
     		<?= $form->field($model, 'atraso_inicio')->widget(MaskedInput::className(), [
                     'mask' => '9',
-	                'clientOptions' => ['greedy' => false, 'repeat' => 3],
+	                'clientOptions' => ['greedy' => false, 'repeat' => 5],
                 ]); 
     		?>
 		</div>
 		<div class="col-md-6 col-sm-6 col-xs-12 col-lg-6">
     		<?= $form->field($model, 'atraso_fim')->widget(MaskedInput::className(), [
                     'mask' => '9',
-	                'clientOptions' => ['greedy' => false, 'repeat' => 3],
+	                'clientOptions' => ['greedy' => false, 'repeat' => 5],
                 ]);
     		?>
 		</div>
@@ -55,6 +55,48 @@ use yii\widgets\MaskedInput;
         	<?= $form->field($model, 'honorario')->widget(MaskMoney::className(), [
 	                'options' => [
                         'maxlength' => 9,
+	                ],
+                    'pluginOptions' => [
+                        'suffix' => '%',
+                        'precision' => 4,
+                        'decimal' => ',',
+                    ],
+                ]);
+        	?>
+        </div>
+	</div>
+	<!-- ./row -->
+	<div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
+            <?= $form->field($model, 'desc_encargos_max')->widget(MaskMoney::className(), [
+                    'options' => [
+                        'maxlength' => 8,
+                    ],
+	                'pluginOptions' => [
+                        'suffix' => '%',
+                        'precision' => 4,
+                        'decimal' => ',',
+                    ],
+                ]);
+            ?>
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
+        	<?= $form->field($model, 'desc_principal_max')->widget(MaskMoney::className(), [
+	                'options' => [
+                        'maxlength' => 8,
+	                ],
+                    'pluginOptions' => [
+                        'suffix' => '%',
+                        'precision' => 4,
+                        'decimal' => ',',
+                    ],
+                ]);
+        	?>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
+        	<?= $form->field($model, 'desc_honorario_max')->widget(MaskMoney::className(), [
+	                'options' => [
+                        'maxlength' => 8,
 	                ],
                     'pluginOptions' => [
                         'suffix' => '%',

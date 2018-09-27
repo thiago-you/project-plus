@@ -153,11 +153,14 @@ CREATE TABLE `credor_campanha` (
 CREATE TABLE `credor_calculo` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_campanha` INT NOT NULL,
-  `atraso_inicio` VARCHAR(3),
-  `atraso_fim` VARCHAR(3),
+  `atraso_inicio` VARCHAR(5),
+  `atraso_fim` VARCHAR(5),
   `multa` DECIMAL(7,4) DEFAULT 0.0000,
   `juros` DECIMAL(7,4) DEFAULT 0.0000,
   `honorario` DECIMAL(7,4) DEFAULT 0.0000,
+  `desc_encargos_max` DECIMAL(7,4) DEFAULT 0.0000 COMMENT 'desconto máximo permitido dos encargos',
+  `desc_principal_max` DECIMAL(7,4) DEFAULT 0.0000 COMMENT 'desconto máximo permitido do valor principal',
+  `desc_honorario_max` DECIMAL(7,4) DEFAULT 0.0000 COMMENT 'desconto máximo permitido dos honorarios',
   `parcela_num` INT COMMENT 'Numero da parcela qunado o tipo for parcelado',
   FOREIGN KEY (`id_campanha`) REFERENCES `credor_campanha`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
@@ -186,8 +189,20 @@ CREATE TABLE `contrato` (
 CREATE TABLE `negociacao` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_contrato` INT NOT NULL,
+  `id_campanha` INT NOT NULL,
+  `id_credor` INT NOT NULL,
   `data_negociacao` DATE NOT NULL,
   `data_cadastro` DATETIME NOT NULL,
+  `desconto_encargos` DECIMAL(7,4) DEFAULT 0.0000,
+  `desconto_principal` DECIMAL(7,4) DEFAULT 0.0000,
+  `desconto_honorarios` DECIMAL(7,4) DEFAULT 0.0000,
+  `desconto_total` DECIMAL(10,2) DEFAULT 0.00,
+  `subtotal` DECIMAL(10,2) DEFAULT 0.00,
+  `desconto` DECIMAL(10,2) DEFAULT 0.00,
+  `receita` DECIMAL(10,2) DEFAULT 0.00,
+  `total` DECIMAL(10,2) DEFAULT 0.00,
+  `tipo` ENUM('V', 'P') NOT NULL DEFAULT 'V' COMMENT 'Tipo do calculo => V: A vista / P: Parcelado',
+  `observacao` VARCHAR(250),
   FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de parcela do contrato

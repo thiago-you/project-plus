@@ -9,6 +9,8 @@ use app\models\ContratoSearch;
 use app\models\ContratoParcela;
 use yii\web\NotFoundHttpException;
 use app\models\Cliente;
+use app\models\Negociacao;
+use yii\base\UserException;
 
 /**
  * ContratoController implements the CRUD actions for Contrato model.
@@ -161,7 +163,7 @@ class ContratoController extends Controller
                     ContratoParcela::deleteAll();
                     
                     // cadastra/recadastra as parcelas
-                    foreach ($post['Parcela'] as $parcela) {
+                    foreach ($post['Parcela'] as $key => $parcela) {
                         if (isset($parcela['vencimento']) && !empty($parcela['vencimento']) &&
                             isset($parcela['valor']) && !empty($parcela['valor'])
                         ) {
@@ -171,6 +173,12 @@ class ContratoController extends Controller
                             $modelParcela->id_contrato = $model->id ? $model->id : $model->getPrimaryKey();
                             $modelParcela->data_vencimento = $parcela['vencimento'];
                             $modelParcela->valor = $parcela['valor'];
+                            $modelParcela->num_parcela = ++$key;
+                            
+                            // seta o status da parcela
+                            if ($model->negociacao) {
+                                $modelParcela->status = ContratoParcela::EM_NEGOCIACAO;
+                            }
                             
                             // salva o telefone
                             if (!$modelParcela->save()) {
@@ -203,9 +211,35 @@ class ContratoController extends Controller
         $contrato = $this->findModel($id);
         $cliente = $contrato->cliente;
         
+        // valida se o contrato possui um credor
+        if (empty($contrato->id_credor)) {
+            throw new UserException('Não foi encontrador o credor do contrato.');
+        }
+        
+        // pega a negociacao do contrato ou cria uma nova
+        if (!$negociacao = $contrato->negociacao) {
+            $negociacao = new Negociacao();
+            $negociacao->id_contrato = $contrato->id;
+            $negociacao->id_credor = $contrato->id_credor;
+            $negociacao->id_campanha = $contrato->credor->id_campanha;
+            
+            // calcula os valores da negociacao
+            $negociacao->calcularValores($contrato);
+        }
+        
+        // pega todos os contratos do cliente
+        if ($contratos = $cliente->contratos) {
+            foreach ($contratos as $contratoTemp) {
+                $totalContratos += $contratoTemp->getValorTotal();
+            }
+        }
+        
         return $this->render('negociacao', [
             'contrato' => $contrato,
             'cliente' => $cliente,
+            'negociacao' => $negociacao,
+            'contratos' => $contratos,
+            'totalContratos' => $totalContratos,
         ]);
     }
      

@@ -8,17 +8,20 @@ use app\models\LoginForm;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
-use moonland\phpexcel\Excel;
-use yii\web\UploadedFile;
 use app\base\Helper;
+use app\models\Email;
+use app\models\Estado;
 use app\models\Cliente;
 use app\models\Telefone;
 use app\models\Endereco;
-use app\models\Estado;
 use app\models\Contrato;
+use yii\web\UploadedFile;
+use moonland\phpexcel\Excel;
 use app\models\ContratoParcela;
-use app\models\Email;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
+use app\models\Credor;
+use yii\helpers\ArrayHelper;
 
 class SiteController extends BaseController
 {
@@ -54,9 +57,6 @@ class SiteController extends BaseController
     public function actions()
     {
         return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
@@ -114,9 +114,58 @@ class SiteController extends BaseController
      */
     public function actionLogout()
     {
-        Yii::$app->user->logout();
+        \Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+    
+    /**
+     * Exibe a tela de erro do sistema
+     */
+    public function actionError()
+    {
+        if (\Yii::$app->user->isGuest) {
+            return $this->redirect(['site/login'])->send();
+        } else {
+            $this->layout = '@app/views/layouts/main';
+        }
+        
+        $exception = \Yii::$app->errorHandler->exception;
+        
+        // vars do erro da exception
+        $title = 'Erro Inesperado';
+        $label = 'danger';
+        $message = method_exists($exception, 'getMessage') ? $exception->getMessage() : 'Ocorreu um erro inesperado.';
+        
+        if ($exception !== null) {
+            // mensagens de erro personalizadas para not found e forbidden
+            if ($exception instanceof ForbiddenHttpException) {
+                $title = 'Não Permitido';
+                $label = 'info';
+                $message = 'Oops... Parece que você não está autorizado a realizar esta ação.';
+            } elseif ($exception instanceof NotFoundHttpException) {
+                $title = 'Não Encontrado';
+                $label = 'info';
+                $message = 'Oops... Parece que não encontramos a página que está procurando.';
+            }
+            
+            // se for ajax nao renderiza a página, apenas devolve o erro
+            if (\Yii::$app->request->isAjax) {
+                return [
+                    'message' => $message,
+                    'exception' => $exception,
+                ];                
+            }
+            
+            // renderiza a página de erro
+            return $this->render('error', [
+                'message'   => $message,
+                'exception' => $exception,
+                'title'     => $title,
+                'label'     => $label,
+                'tipo'      => $tipo,
+            ]);
+        }
     }
     
     /**
@@ -263,6 +312,7 @@ class SiteController extends BaseController
                                     // cria um novo contrato                              
                                     $contrato = new Contrato();
                                     $contrato->id_cliente = $id_cliente;
+                                    $contrato->id_credor = $post['credor'];
                                     $contrato->data_cadastro = $data->data_contrato;
                                     $contrato->data_negociacao = $data->data_contrato;
                                     $contrato->observacao = $data->obs_contrato;
@@ -294,7 +344,7 @@ class SiteController extends BaseController
                                 if ($data->parcela && $data->data_vencimento && $data->valor) {
                                     $parcela = new ContratoParcela();
                                     $parcela->id_contrato = $contrato->id ? $contrato->id : $contrato->getPrimaryKey();
-                                    $parcela->num_parcela = $data->obs_parcela;
+                                    $parcela->num_parcela = $data->obs_parcela ? $data->obs_parcela : 1;
                                     $parcela->data_vencimento = $data->data_vencimento;
                                     $parcela->valor = $data->valor;
                                     
@@ -319,6 +369,7 @@ class SiteController extends BaseController
         // importacao
         return $this->render('importacao', [
             'model' => $model,
+            'credores' => ArrayHelper::map(Credor::find()->all(), 'id', 'nome'),
         ]);
     }
     
@@ -327,6 +378,9 @@ class SiteController extends BaseController
      */
     public function actionCidades($ufId = '') 
     {
+        // seta o uf id
+        $ufId = !empty($ufId) ? $ufId : $_GET['ufId'];
+        
         // valida a requisicao
         if (!\Yii::$app->request->isAjax || empty($ufId)) {
             throw new NotFoundHttpException();
@@ -469,7 +523,7 @@ class SiteController extends BaseController
         }
         
         // valida a quantidade de colunas na linha
-        if (count($data) > 0 && count($data) != 27) {
+        if (count($data) > 0 && count($data) < 27) {
             throw new \Exception('O arquivo de importação não é válido. O número de colunas é diferente de 27.');
         }
         

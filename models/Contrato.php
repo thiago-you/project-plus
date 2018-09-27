@@ -2,6 +2,7 @@
 namespace app\models;
 
 use Yii;
+use app\base\Helper;
 
 /**
  * This is the model class for table "contrato".
@@ -26,13 +27,13 @@ use Yii;
  * @property Cliente $cliente
  * @property Credor $credor
  * @property ContratoParcela[] $contratoParcelas
- * @property Negociacao[] $negociacaos
+ * @property Negociacao $negociacao
  */
 class Contrato extends \yii\db\ActiveRecord
 {
     // consts para a situacao
     CONST SIT_EM_ANDAMENTO = '1';
-    CONST SIT_FECADO = '2';
+    CONST SIT_FECHADO = '2';
     
     /**
      * @var string
@@ -115,9 +116,9 @@ class Contrato extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNegociacaos()
+    public function getNegociacao()
     {
-        return $this->hasMany(Negociacao::className(), ['id_contrato' => 'id']);
+        return $this->hasOne(Negociacao::className(), ['id_contrato' => 'id']);
     }
     
     /**
@@ -153,10 +154,28 @@ class Contrato extends \yii\db\ActiveRecord
     {
         // seta a data de cadastro
         if (empty($this->data_cadastro)) {
-            $this->data_cadastro = date('Y-m-d H:i:s');
+            $this->data_cadastro = date('Y-m-d');
+        } else {
+            $this->data_cadastro = Helper::formatDateToSave($this->data_cadastro, Helper::DATE_DEFAULT);
         }
         
+        // formata as datas para salvar
+        $this->data_vencimento = Helper::formatDateToSave($this->data_vencimento, Helper::DATE_DEFAULT);
+        $this->data_negociacao = Helper::formatDateToSave($this->data_negociacao, Helper::DATE_DEFAULT);
+        
         return parent::beforeSave($insert);        
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::afterFind()
+     */
+    public function afterFind()
+    {
+        // formata a data para ser exibida
+        $this->data_cadastro = Helper::formatDateToDisplay($this->data_cadastro, Helper::DATE_DEFAULT);
+        $this->data_vencimento = Helper::formatDateToDisplay($this->data_vencimento, Helper::DATE_DEFAULT);
+        $this->data_negociacao = Helper::formatDateToDisplay($this->data_negociacao, Helper::DATE_DEFAULT);
     }
     
     /**
@@ -180,5 +199,26 @@ class Contrato extends \yii\db\ActiveRecord
         $tipo = array_search(ucfirst(strtolower($name)), $listaTipos);
         
         return $tipo ? $tipo : 1;
+    }
+    
+    /**
+     * Calcula o valor total do contrato
+     */
+    public function getValorTotal() 
+    {
+        $total = 0;
+        foreach ($this->contratoParcelas as $parcela) {
+            // seta o valor total
+            $total += $parcela->valor;
+            
+            // busca a faixa e calcula os encargos
+            if ($faixaCalculo = CredorCalculo::findFaixa($this->credor->id_campanha, $parcela->getAtraso())) {                
+                $total += $parcela->valor * ($faixaCalculo->multa / 100);
+                $total += $parcela->valor * ($faixaCalculo->juros / 100);
+                $total += $parcela->valor * ($faixaCalculo->honorario / 100);
+            }
+        }
+        
+        return $total;
     }
 }

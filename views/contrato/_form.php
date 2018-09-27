@@ -21,7 +21,7 @@ use app\models\Contrato;
                                     'removeButton' => false,
                                     'pluginOptions' => [
                     					'autoclose' => true,
-                    					'format' => 'yyyy-mm-dd'
+                    					'format' => 'dd/mm/yyyy'
                     				],
                             	]);
                             ?>
@@ -31,7 +31,7 @@ use app\models\Contrato;
                                     'removeButton' => false,
                                     'pluginOptions' => [
                     					'autoclose' => true,
-                    					'format' => 'yyyy-mm-dd'
+                    					'format' => 'dd/mm/yyyy'
                     				],
                             	]);
                             ?>
@@ -119,7 +119,7 @@ use app\models\Contrato;
                                     'removeButton' => false,
                                     'pluginOptions' => [
                     					'autoclose' => true,
-                    					'format' => 'yyyy-mm-dd'
+                    					'format' => 'dd/mm/yyyy'
                     				],
                             	]);
                             ?>
@@ -233,7 +233,7 @@ use app\models\Contrato;
     			                'removeButton' => false,
     			                'pluginOptions' => [
                                     'autoclose' => true,
-                                    'format' => 'yyyy-mm-dd'
+                                    'format' => 'dd/mm/yyyy'
     			                ],
     					   ]); 
     					?>
@@ -248,7 +248,8 @@ use app\models\Contrato;
                                 ],
             	                'pluginOptions' => [
                                     'prefix' => 'R$ ',
-                                    'precision' => 2
+                                    'precision' => 2,
+	                                'decimal' => ',',
                                 ],
                             ]);
                         ?>
@@ -317,7 +318,7 @@ $(document).ready(function() {
         
         let parcelaNum = linha.attr('id').replace('linha-', '');
         let vencimento = linha.find('td:nth-child(2)').find('input').val();
-        let valor = linha.find('td:nth-child(3)').text().trim().replace(',', '.');
+        let valor = linha.find('td:nth-child(3)').text().trim();
 
         // busca a modal
         let modalParcela = $('#modal-parcela');        

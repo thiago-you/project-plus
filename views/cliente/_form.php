@@ -79,7 +79,7 @@ use yii\helpers\ArrayHelper;
                                         'removeButton' => false,
                                         'pluginOptions' => [
                         					'autoclose' => true,
-                        					'format' => 'yyyy-mm-dd'
+                        					'format' => 'dd/mm/yyyy'
                         				],
 		                        	]);
 		                        ?>

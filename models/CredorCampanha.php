@@ -1,8 +1,8 @@
 <?php
-
 namespace app\models;
 
 use Yii;
+use app\base\Helper;
 
 /**
  * This is the model class for table "credor_campanha".
@@ -95,5 +95,29 @@ class CredorCampanha extends \yii\db\ActiveRecord
         CredorCalculo::deleteAll(['id_campanha' => $this->id]);
         
         return parent::beforeDelete(); 
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
+    public function beforeSave($insert) 
+    {
+        // formata a data para salvar
+        $this->vigencia_inicial = Helper::formatDateToSave($this->vigencia_inicial, Helper::DATE_DEFAULT);
+        $this->vigencia_final = Helper::formatDateToSave($this->vigencia_final, Helper::DATE_DEFAULT);
+        
+        return parent::beforeSave($insert);    
+    }
+    
+    /**
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::afterFind()
+     */
+    public function afterFind()
+    {
+        // formata a data para ser exibida
+        $this->vigencia_inicial = Helper::formatDateToDisplay($this->vigencia_inicial, Helper::DATE_DEFAULT);
+        $this->vigencia_final = Helper::formatDateToDisplay($this->vigencia_final, Helper::DATE_DEFAULT);
     }
 }
