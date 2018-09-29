@@ -99,6 +99,7 @@ use kartik\date\DatePicker;
                                         $juros += $parcela->juros;
                                         $honorarios += $parcela->honorarios;
                                         $total += $parcela->total;
+                                        $taxa = $parcela->honorariosCalculo;
                 					?>
                 				</tr>
         					<?php endforeach; ?>
@@ -112,7 +113,7 @@ use kartik\date\DatePicker;
             					<td class="parcelas-total-principal" data-value="<?= $valor; ?>"><b><?= Helper::mask($valor, Helper::MASK_MONEY); ?></b></td>
             					<td class="parcelas-total-multa" data-value="<?= $multa; ?>"><b><?= Helper::mask($multa, Helper::MASK_MONEY); ?></b></td>
             					<td class="parcelas-total-juros" data-value="<?= $juros; ?>"><b><?= Helper::mask($juros, Helper::MASK_MONEY); ?></b></td>
-            					<td class="parcelas-total-honorarios" data-value="<?= $honorarios; ?>"><b><?= Helper::mask($honorarios, Helper::MASK_MONEY); ?></b></td>
+            					<td class="parcelas-total-honorarios" data-value="<?= $honorarios; ?>" data-taxa="<?= $taxa; ?>"><b><?= Helper::mask($honorarios, Helper::MASK_MONEY); ?></b></td>
             					<td class="parcelas-total-total" data-value="<?= $total; ?>"><b><?= Helper::mask($total, Helper::MASK_MONEY); ?></b></td>
             				</tr>
             				<!-- ./totais -->
