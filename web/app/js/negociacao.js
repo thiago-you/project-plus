@@ -136,49 +136,28 @@ function Negociacao(context) {
 						$('#desconto_honorarios-disp', context).val(accounting.formatMoney(self.desconto_honorarios, '', 4, '.', '.') + '%');
 					}
 				} else {
+					// desconto total dos encargos
+					self.desconto_encargos = 100;
 					
+					// seta os descontos nos inputs
+					$('#desconto_encargos-disp', context).val('0.0000%');
+					$('#desconto_principal-disp', context).val('0.0000%');
+					$('#desconto_honorarios-disp', context).val('0.0000%');
+					
+					// se o valor desejado for maior que o principal, entao calcula o desconto dos honorarios
+					if (self.desconto_total > principal) {
+						let principalTemp = principal + (principal * (honorarioTaxa / 100));
+						self.desconto_encargos = ((self.desconto_total - principalTemp) / encargos) * 100;
+						
+						// seta os descontos dos honorarios
+						$('#desconto_encargos-disp', context).val(accounting.formatMoney(self.desconto_encargos, '', 4, '.', '.') + '%');
+					}
 				}
-				
-				// reseta os descontos normais
-				/*self.desconto_encargos = 0;
-				self.desconto_honorarios = 0;
-				self.desconto_principal = 0;
-				
-				// atualiza cada parcela do contrato
-				// resetando para os valores originais
-				self.calcularParcelas();
-				
-				// calcula os novos descontos com base no desconto total
-				let descontoEncargos = $('.table-parcela .parcelas-total-juros').data('value') + $('.table-parcela .parcelas-total-juros').data('value');
-				descontoEncargos = (descontoEncargos / self.subtotal) * 100;
-				
-				let descontoPrincipal = $('.table-parcela .parcelas-total-principal').data('value');
-				descontoPrincipal = (descontoPrincipal / self.subtotal) * 100;
-				
-				let descontoHonorarios = $('.table-parcela .parcelas-total-honorarios').data('value');
-				descontoHonorarios = (descontoHonorarios / self.subtotal) * 100;
-				
-				// 30%
-				total = (total - (total - ((total * (50 / 100))))) * (30 / 100);
-				
-				// formula
-				total = (descontoEncargos + descontoPrincipal) + ((descontoPrincipal + descontoPrincipal) * (descontoHonorarios / 100));*/
 			}	
 		}
 		
 		// atualiza cada parcela do contrato
 		self.calcularParcelas();
-		
-		// calcula o total
-		/*if (self.desconto_total > 0) {			
-			self.total = self.desconto_total;
-			self.desconto_total = self.subtotal - self.desconto_total;
-			
-			// reseta os descontos normais
-			self.desconto_encargos = 0;
-			self.desconto_honorarios = 0;
-			self.desconto_principal = 0;
-		}*/
 		
 		// calcula o desconto da receita
 		if (self.receita > 0 && self.desconto_honorarios > 0) {
