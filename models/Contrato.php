@@ -209,13 +209,17 @@ class Contrato extends \yii\db\ActiveRecord
         $total = 0;
         foreach ($this->contratoParcelas as $parcela) {
             // seta o valor total
-            $total += $parcela->valor;
+            $totalTemp = $parcela->valor;
             
             // busca a faixa e calcula os encargos
             if ($faixaCalculo = CredorCalculo::findFaixa($this->credor->id_campanha, $parcela->getAtraso())) {                
-                $total += $parcela->valor * ($faixaCalculo->multa / 100);
-                $total += $parcela->valor * ($faixaCalculo->juros / 100);
-                $total += $parcela->valor * ($faixaCalculo->honorario / 100);
+                // soma o total da parcela
+                $totalTemp += floor(($parcela->valor * ($faixaCalculo->multa / 100)) * 100) / 100;
+                $totalTemp += floor(($parcela->valor * (($faixaCalculo->juros / 30 * $parcela->getAtraso()) / 100)) * 100) / 100;
+                $totalTemp += floor(($totalTemp * ($faixaCalculo->honorario / 100)) * 100) / 100;
+                
+                // soma o total do contrato
+                $total += $totalTemp;
             }
         }
         

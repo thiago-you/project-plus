@@ -113,6 +113,7 @@ function Negociacao(context) {
 				// seta o desconto principal
 				$('#desconto_principal-disp', context).val(accounting.formatMoney(self.desconto_principal, '', 4, '.', '.') + '%');
 			} else {
+				// calcula o valor principal - encargos
 				let principalTemp = principal + (principal * (honorarioTaxa / 100));
 
 				// verifica se o total desejado é menor que o total + honorarios
@@ -129,8 +130,8 @@ function Negociacao(context) {
 					
 					// se o valor desejado for maior que o principal, entao calcula o desconto dos honorarios
 					if (self.desconto_total > principal) {
-						let principalTemp = principal * (honorarioTaxa / 100);
-						self.desconto_honorarios = ((self.desconto_total - principal) / principalTemp) * 100;
+						let honorariosTemp = principal * (honorarioTaxa / 100);
+						self.desconto_honorarios = ((principalTemp - self.desconto_total) / honorariosTemp) * 100;
 						
 						// seta os descontos dos honorarios
 						$('#desconto_honorarios-disp', context).val(accounting.formatMoney(self.desconto_honorarios, '', 4, '.', '.') + '%');
@@ -146,8 +147,9 @@ function Negociacao(context) {
 					
 					// se o valor desejado for maior que o principal, entao calcula o desconto dos honorarios
 					if (self.desconto_total > principal) {
-						let principalTemp = principal + (principal * (honorarioTaxa / 100));
-						self.desconto_encargos = ((self.desconto_total - principalTemp) / encargos) * 100;
+						let encargosTemp = encargos - (encargos * (honorarioTaxa / 100));
+						self.desconto_total = (self.desconto_total - principalTemp);
+						self.desconto_encargos = (self.desconto_total / encargosTemp) * 100;
 						
 						// seta os descontos dos honorarios
 						$('#desconto_encargos-disp', context).val(accounting.formatMoney(self.desconto_encargos, '', 4, '.', '.') + '%');
