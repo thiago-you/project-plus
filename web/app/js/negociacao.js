@@ -147,9 +147,16 @@ function Negociacao(context) {
 					
 					// se o valor desejado for maior que o principal, entao calcula o desconto dos honorarios
 					if (self.desconto_total > principal) {
-						let encargosTemp = encargos - (encargos * (honorarioTaxa / 100));
-						self.desconto_total = (self.desconto_total - principalTemp);
-						self.desconto_encargos = (self.desconto_total / encargosTemp) * 100;
+						// calcula o total removendo os honorarios
+						let totalTemp = Math.floor(((principal + encargos) + ((principal + encargos) * (honorarioTaxa / 100))) * 100) / 100;
+						totalTemp = Math.floor((totalTemp - (totalTemp * (honorarioTaxa / 100))) * 100) / 100;
+						
+						// calcula o desconto total dos encargos 
+						self.desconto_total = self.desconto_total - (self.desconto_total * (honorarioTaxa / 100));
+						self.desconto_total = Math.floor((totalTemp - self.desconto_total) * 100) / 100;
+						
+						// calcula o desconto dos encargos
+						self.desconto_encargos = Math.floor((100 - ((self.desconto_total / encargos) * 100)) * 100) / 100;
 						
 						// seta os descontos dos honorarios
 						$('#desconto_encargos-disp', context).val(accounting.formatMoney(self.desconto_encargos, '', 4, '.', '.') + '%');
