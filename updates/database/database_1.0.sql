@@ -64,6 +64,7 @@ CREATE TABLE `acionamento` (
   `titulo` VARCHAR(100) NOT NULL,
   `descricao` VARCHAR(250),
   `data` DATETIME,
+  `hora` VARCHAR(5),
   `telefone` VARCHAR(15),
   `tipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os tipos possiveis',
   `subtipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os subtipos possiveis',
