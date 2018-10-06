@@ -8,6 +8,9 @@ use app\models\AcionamentoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
+use app\base\AjaxResponse;
+use app\base\Helper;
 
 /**
  * AcionamentoController implements the CRUD actions for Acionamento model.
@@ -58,21 +61,39 @@ class AcionamentoController extends Controller
     }
 
     /**
-     * Creates a new Acionamento model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Cadastra um acionamento por Ajax
      */
     public function actionCreate()
     {
-        $model = new Acionamento();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        // valida a requisicao
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        
+        $retorno = new AjaxResponse(false);
+        
+        // receb o post
+        if ($post = \Yii::$app->request->post()) {
+            $model = new Acionamento();
+            
+            // seta os dados da model
+            $model->tipo = $post['tipo'];
+            $model->data = $post['data'];
+            $model->descricao = $post['descricao'];
+            $model->colaborador_id = \Yii::$app->user->id;
+            $model->id_cliente = $post['cliente'];
+            $model->hora = isset($post['hora']) ? $post['hora'] : null;
+            
+            // salva a model
+            if (!$model->save()) {
+                $retorno->message = Helper::renderErrors($model->getErrors());
+            } else {
+                $retorno->success = true;                
+            }
+        }
+        
+        // retorna o array conevrtido
+        return Json::encode($retorno);
     }
 
     /**
@@ -96,11 +117,7 @@ class AcionamentoController extends Controller
     }
 
     /**
-     * Deletes an existing Acionamento model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * Deleta a model
      */
     public function actionDelete($id)
     {
@@ -110,11 +127,7 @@ class AcionamentoController extends Controller
     }
 
     /**
-     * Finds the Acionamento model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Acionamento the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * Busca a model
      */
     protected function findModel($id)
     {
@@ -122,6 +135,6 @@ class AcionamentoController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException();
     }
 }

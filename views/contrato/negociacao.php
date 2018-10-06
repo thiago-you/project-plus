@@ -4,6 +4,12 @@ use app\base\Helper;
 use app\models\Cliente;
 use yii\web\JqueryAsset;
 use yii\bootstrap\BootstrapAsset;
+use kartik\helpers\Html;
+use yii\bootstrap\Modal;
+use kartik\select2\Select2;
+use app\models\Acionamento;
+use kartik\datetime\DateTimePicker;
+use kartik\time\TimePicker;
 
 $this->title = 'Negociação';
 $this->params['breadcrumbs'][] = $this->title;
@@ -13,7 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-    	<h2 class="font18"><?= $cliente->nome; ?></h2>
+    	<h2 class="font18">
+    		<span id="id-cliente" data-id="<?= $cliente->id; ?>"><?= $cliente->id; ?></span>
+    		&nbsp;-&nbsp;
+    		<?= $cliente->nome; ?>
+    	</h2>
     </div>
     <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
     	<small>
@@ -267,8 +277,19 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>
 	<!-- ./contrato -->
 	<div class="col-md-5 col-sm-5 col-lg-5 col-xs-12">
-		<div class="panel panel-primary panel-box">
+		<div class="panel panel-primary panel-box panel-acionamento">
         	<div class="panel-heading">
+        		<div class="row">
+        			<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+        				<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Acionamento', [
+				                'id' => 'add-acionamento',
+				                'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
+				                'title' => 'Novo acionamento',
+				                'data-toggle' => 'tooltip',
+            				]); 
+        				?>
+        			</div>
+        		</div>
         	</div>
         	<!-- ./panel heading -->
         	<div class="panel-body">
@@ -294,6 +315,96 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>
 </div>
 <!-- ./row calculo -->
+<?php Modal::begin([
+    'id' => 'modal-acionamento',
+    'header' => '<h4 class="modal-title text-primary"><i class="fa fa-plus"></i>&nbsp; Acionamento</h4>',
+]); ?>
+    <div class="modal-body">
+    	<div class="row">
+    		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+    			<div class="form-group"> 	
+        			<?= Html::label('Acionamento', 'acionamento-tipo'); ?>
+        			<?= Select2::widget([
+                            'name' => 'acionamento-tipo',
+        	                'id' => 'acionamento-tipo',
+        	                'data' => Acionamento::getTipos(),
+            			]); 
+        			?>
+    			</div>
+    		</div>
+  		</div>
+  		<!-- ./row -->
+  		<div class="row">
+  			<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+    			<div class="form-group"> 	
+        			<?= Html::label('Data do Acionametno', 'acionamento-data'); ?>
+        			<?= DateTimePicker::widget([
+                            'name' => 'acionamento-data',
+        	                'id' => 'acionamento-data',
+			                'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
+			                'removeButton' => ['title' => 'Remover Data', 'data-toggle' => 'tooltip'],
+    		                'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => 'dd/mm/yyyy hh:ii',
+                                'orientation' => 'bottom',
+    		                ],
+            			]); 
+        			?>
+    			</div>
+    		</div>
+    		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+    			<div class="form-group"> 	
+        			<?= Html::label('Hora', 'acionamento-hoar'); ?>
+        			<?= TimePicker::widget([
+                            'name' => 'acionamento-hora',
+        	                'id' => 'acionamento-hora',
+       		                'value' => date('H:i'),
+			                'pluginOptions' => [    	                                
+    			                'showMeridian' => false,
+			                ],
+            			]); 
+        			?>
+    			</div>
+    		</div>
+  		</div>
+  		<!-- ./row -->
+  		<div class="row">
+    		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+        		<div class="form-group"> 	
+    				<?= Html::label('Descrição', 'acionamento-desc'); ?>
+        			<?= Html::textarea('acionamento-desc', '', [
+        	                'id' => 'acionamento-desc',
+                            'class' => 'form-control',
+			                'rows' => 4, 
+			                'style' => ['resize' => 'none'],
+            			]); 
+        			?>
+    			</div>
+    		</div>
+    	</div>
+    	<!-- ./row -->
+    </div>
+    <!-- ./modal-body -->
+    <div class="modal-footer">
+    	<div class="row">
+    		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+    			<?= Html::button(Helper::BTN_CREATE, [
+		                'id' => 'save-acionamento',
+		                'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
+        			]); 
+    			?>
+    		</div>
+    		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 pull-right">
+    			<?= Html::button(Helper::BTN_CANCEL, [
+		                'data-dismiss' => 'modal',
+		                'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
+        			]); 
+    			?>
+    		</div>
+    	</div>
+    	<!-- ./row -->
+    </div>
+<?php Modal::end(); ?>
 <?php 
 // CSS
 $this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [BootstrapAsset::className()]]);

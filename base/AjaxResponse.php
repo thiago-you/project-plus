@@ -17,6 +17,6 @@ class AjaxResponse extends \stdClass  {
      */
     public function __construct($success = true) 
     {
-        $this->success = true;
+        $this->success = $success;
     }
 }

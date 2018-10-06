@@ -289,6 +289,43 @@ $(document).ready(function() {
 			negociacao.calcularNegociacao();
 		}
 	});
+	
+	// abre a modal de acionamentos
+	$('body').on('click', '#add-acionamento', function() {
+		$('#modal-acionamento').modal('show');
+	});
+	
+	// salva o acionamento
+	$('body').on('click', '#save-acionamento', function() {
+		// seta os dados enviados por post
+		const post = {
+			cliente: $('#id-cliente').data('id'),
+			tipo: $('#acionamento-tipo').val(),
+			data: $('#acionamento-data').val(),
+			hora: $('#acionamento-hora').val(),
+			descricao: $('#acionamento-desc').val(),
+		};
+	
+		// valida os dados necessários
+		if (!post.cliente || !post.tipo || !post.data || !post.descricao) {
+			toastr.warning('Por favor, preencha todos os dados obrigatórios. (Tipo, Data, Descrição)');
+		}
+	
+		// envia a requisicao
+		$.post(BASE_PATH + 'acionamento/create', post, function(response) {
+			const retorno = JSON.parse(response);
+			
+			if (retorno.success == 1) {
+				// fecha a modal
+				$('#modal-acionamento').modal('hide');
+				// mensagem de sucesso
+				toastr.success('Acionamento salvo com sucesso.');
+			} else {
+				// mensagem de sucesso
+				toastr.error(retorno.message);
+			}
+		});
+	});
 });
 
 
