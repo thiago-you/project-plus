@@ -293,6 +293,10 @@ $this->params['breadcrumbs'][] = $this->title;
         	</div>
         	<!-- ./panel heading -->
         	<div class="panel-body">
+        		<hr>
+        		<?php foreach ([] as $acionamento): ?>
+        		
+        		<?php endforeach; ?>
             </div>
             <!-- ./panel-body -->
     	</div>

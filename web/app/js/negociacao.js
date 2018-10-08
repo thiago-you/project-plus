@@ -85,6 +85,9 @@ function Negociacao(context) {
 	self.calcularNegociacao = () => {
 		// calcula o total
 		if (self.desconto_total > 0) {			
+			// mensagem de aviso
+			toastr.warning('Funcionalidade ainda em desenvolvimento.');
+
 			// pega o valor principal das parcelas
 			let principal = $('.table-parcela .parcelas-total-principal').data('value');
 			let honorarioTaxa = $('.table-parcela .parcelas-total-honorarios').data('taxa');

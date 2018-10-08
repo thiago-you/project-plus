@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\base\Helper;
 
 /**
  * This is the model class for table "acionamento".
@@ -36,16 +37,23 @@ class Acionamento extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [
-            [['id_cliente', 'colaborador_id', 'tipo'], 'required'],
+        $rules = [
+            [['id_cliente', 'tipo'], 'required'],
             [['id_cliente', 'colaborador_id', 'tipo', 'subtipo'], 'integer'],
             [['data', 'hora'], 'safe'],
             [['titulo'], 'string', 'max' => 100],
             [['descricao'], 'string', 'max' => 250],
             [['telefone'], 'string', 'max' => 15],
             [['id_cliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['id_cliente' => 'id']],
-            //[['colaborador_id'], 'exist', 'skipOnError' => true, 'targetClass' => Colaborador::className(), 'targetAttribute' => ['colaborador_id' => 'id']],
         ];
+        
+        // valisa se o usuairo logado é admin
+        if (\Yii::$app->user->id > 0) {
+            $rules[] = [['colaborador_id'], 'required'];
+            $rules[] = [['colaborador_id'], 'exist', 'skipOnError' => true, 'targetClass' => Colaborador::className(), 'targetAttribute' => ['colaborador_id' => 'id']];
+        }
+        
+        return $rules;
     }
 
     /**
@@ -93,6 +101,21 @@ class Acionamento extends \yii\db\ActiveRecord
             '2' => 'Contato com o cliente',
             '3' => 'Outros',
         ];        
+    }
+    
+    /** 
+     * @inheritDoc
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
+    public function beforeSave($insert) 
+    {
+        if (!empty($this->data)) {
+            $this->data = Helper::formatDateToSave($this->data, true);
+        } else {
+            $this->data = date('Y-m-d H:i:s');
+        }
+        
+        return parent::beforeSave($insert);
     }
 }
 
