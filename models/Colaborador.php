@@ -18,6 +18,8 @@ class Colaborador extends \yii\db\ActiveRecord
     CONST CARGO_OPERADOR = '2';
     CONST CARGO_CLIENTE = '3';
     
+    public $teste = '';
+    
     /**
      * {@inheritdoc}
      */
@@ -69,5 +71,17 @@ class Colaborador extends \yii\db\ActiveRecord
             self::CARGO_OPERADOR => 'Operador',
             self::CARGO_CLIENTE => 'Cliente',
         ];
+    }
+    
+    /**
+     * Retorna a descrição do cargo
+     */
+    public function getCargo() 
+    {
+        // monta a lista de cargos
+        $cargos = Colaborador::getListaCargos();
+
+        // retorna o cargo
+        return $cargos[$this->cargo];
     }
 }
