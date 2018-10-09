@@ -26,6 +26,7 @@ use app\base\Helper;
  *
  * @property Cliente $cliente
  * @property Credor $credor
+ * @property Acionamento[] $acionamentos
  * @property ContratoParcela[] $contratoParcelas
  * @property Negociacao $negociacao
  */
@@ -105,6 +106,14 @@ class Contrato extends \yii\db\ActiveRecord
         return $this->hasOne(Credor::className(), ['id' => 'id_credor']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAcionamentos()
+    {
+        return $this->hasMany(Acionamento::className(), ['id_contrato' => 'id'])->orderBy(['id' => SORT_DESC]);
+    }
+    
     /**
      * @return \yii\db\ActiveQuery
      */

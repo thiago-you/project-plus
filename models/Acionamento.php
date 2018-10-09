@@ -10,6 +10,7 @@ use app\base\Helper;
  *
  * @property int $id
  * @property int $id_cliente
+ * @property int $id_contrato
  * @property int $colaborador_id
  * @property string $titulo
  * @property string $descricao
@@ -21,6 +22,7 @@ use app\base\Helper;
  *
  * @property Cliente $cliente
  * @property Colaborador $colaborador
+ * @property Contrato $contrato
  */
 class Acionamento extends \yii\db\ActiveRecord
 {
@@ -39,12 +41,13 @@ class Acionamento extends \yii\db\ActiveRecord
     {
         $rules = [
             [['id_cliente', 'tipo'], 'required'],
-            [['id_cliente', 'colaborador_id', 'tipo', 'subtipo'], 'integer'],
+            [['id_cliente', 'id_contrato', 'colaborador_id', 'tipo', 'subtipo'], 'integer'],
             [['data', 'hora'], 'safe'],
             [['titulo'], 'string', 'max' => 100],
             [['descricao'], 'string', 'max' => 250],
             [['telefone'], 'string', 'max' => 15],
             [['id_cliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['id_cliente' => 'id']],
+            [['id_contrato'], 'exist', 'skipOnError' => true, 'targetClass' => Contrato::className(), 'targetAttribute' => ['id_contrato' => 'id']],
         ];
         
         // valisa se o usuairo logado é admin
@@ -62,8 +65,9 @@ class Acionamento extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => 'Cód.',
             'id_cliente' => 'Id Cliente',
+            'id_contrato' => 'Id Contrato',
             'colaborador_id' => 'Colaborador ID',
             'titulo' => 'Titulo',
             'descricao' => 'Descricao',
@@ -86,6 +90,14 @@ class Acionamento extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getContrato()
+    {
+        return $this->hasOne(Contrato::className(), ['id' => 'id_contrato']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getColaborador()
     {
         return $this->hasOne(Colaborador::className(), ['id' => 'colaborador_id']);
@@ -101,6 +113,18 @@ class Acionamento extends \yii\db\ActiveRecord
             '2' => 'Contato com o cliente',
             '3' => 'Outros',
         ];        
+    }
+    
+    /**
+     * Retorna os tipos de acionamento
+     */
+    public function getTipo()
+    {
+        // busca a lista de tipos
+        $tipos = Acionamento::getTipos();
+        
+        // retorna a descrição do tipo atual
+        return $tipos[$this->tipo];
     }
     
     /** 

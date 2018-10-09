@@ -303,15 +303,17 @@ $(document).ready(function() {
 		// seta os dados enviados por post
 		const post = {
 			cliente: $('#id-cliente').data('id'),
+			contrato: $('#id-contrato').val(),
 			tipo: $('#acionamento-tipo').val(),
+			titulo: $('#acionamento-titulo').val(),
 			data: $('#acionamento-data').val(),
 			hora: $('#acionamento-hora').val(),
 			descricao: $('#acionamento-desc').val(),
 		};
 	
 		// valida os dados necessários
-		if (!post.cliente || !post.tipo || !post.data || !post.descricao) {
-			toastr.warning('Por favor, preencha todos os dados obrigatórios. (Tipo, Data, Descrição)');
+		if (!post.cliente || !post.contrato || !post.tipo || !post.titulo || !post.data || !post.descricao) {
+			toastr.warning('Por favor, preencha todos os dados obrigatórios. (Tipo, Título, Data, Descrição)');
 		}
 	
 		// envia a requisicao
@@ -323,11 +325,52 @@ $(document).ready(function() {
 				$('#modal-acionamento').modal('hide');
 				// mensagem de sucesso
 				toastr.success('Acionamento salvo com sucesso.');
+				
+				// reseta o form
+				$('#acionamento-tipo').val('');
+				$('#acionamento-titulo').val('');
+				$('#acionamento-data').val('').trigger('change');
+				$('#acionamento-hora').val('').trigger('change');
+				$('#acionamento-desc').val('');
+				
+				// atualiza a lista de acionamentos
+				$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+post.contrato);
 			} else {
 				// mensagem de sucesso
 				toastr.error(retorno.message);
 			}
 		});
+	});
+	
+	// exlui um acionamento
+	$('body').on('click', '.delete-acionamento', function() {
+		const id = $(this).data('id');
+		
+		// mensagem de confirmação
+        $.confirm({
+            content: 'Você deseja mesmo exclúir este item?',
+            backgroundDismiss: true,
+            buttons: {
+				ok: { 
+					action: function() {
+						// envia a requisição para excluir
+						$.post(BASE_PATH+'acionamento/delete?id='+id, function(response) {
+							const retorno = JSON.parse(response);
+							
+							if (retorno.success == true) {
+								// mensagem de sucesso
+								toastr.success('O acionamento foi excluído com sucesso.');
+								// atualiza a lista de acionamentos
+								$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());	
+							} else {
+								// mensagem de erro
+								toastr.error('Não foi possível excluír o acionamento.');
+							}
+						});
+                    },
+				},
+			},
+        });
 	});
 });
 

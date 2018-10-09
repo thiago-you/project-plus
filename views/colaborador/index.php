@@ -18,11 +18,15 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'attribute' => 'cargo',
+            'value' => function($model) {
+                return $model->getCargo();
+            },
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
         	'hAlign'=> GridView::ALIGN_CENTER,
         	'template' => '{update}{delete}',
+            'width' => '100px',
         	'header' => '',
         	'buttons' => [
         		'update' => function ($url, $model) {
@@ -52,13 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'columns' => $columns,
-        /* 'pjax' => true,
-        'pjaxSettings' => [
-            'options' => [
-                'id' => 'grid-colaborador',
-                'enablePushState'=>false
-            ],
-        ], */
 	    'toolbar' => [
 	        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Colaborador', ['create'], ['class' => Helper::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Colaborador', 'data-toggle' => 'tooltip',])],
 	        ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Helper::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],

@@ -75,10 +75,19 @@
     min-height: 400px;
     overflow-y: auto;
     padding-top: 5px;
+    padding-right: 0px;
+    padding-left: 0px;
 }
 .panel-acionamento .panel-body hr {
 	padding-top: 0px;
 	padding-bottom: 0px;
 	margin-top: 0px;
 	margin-bottom: 0px;
+}
+.acionamento-box {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;	
+}
+.acionamento-box .acionamento-footer {
+    margin-bottom: 3px;
 }

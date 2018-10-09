@@ -4,13 +4,13 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Acionamento;
-use app\models\AcionamentoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use app\base\AjaxResponse;
 use app\base\Helper;
+use app\models\Contrato;
 
 /**
  * AcionamentoController implements the CRUD actions for Acionamento model.
@@ -33,18 +33,22 @@ class AcionamentoController extends Controller
     }
 
     /**
-     * Lists all Acionamento models.
+     * Retorna uma lista de acionamentos 
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($contrato = null)
     {
-        $searchModel = new AcionamentoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        // valida a requisicao
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
+        }
+        
+        // busca os acionamentos
+        $acionamentos = Contrato::findOne(['id' => $contrato])->acionamentos;
+        
+        return $this->renderAjax('index', [
+            'acionamentos' => $acionamentos,
+        ]);                
     }
 
     /**
@@ -80,8 +84,10 @@ class AcionamentoController extends Controller
             $model->tipo = $post['tipo'];
             $model->data = $post['data'];
             $model->descricao = $post['descricao'];
+            $model->titulo = $post['titulo'];
             $model->colaborador_id = \Yii::$app->user->id;
             $model->id_cliente = $post['cliente'];
+            $model->id_contrato = $post['contrato'];
             $model->hora = isset($post['hora']) ? $post['hora'] : null;
             
             // salva a model
@@ -121,9 +127,18 @@ class AcionamentoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        // valida a requisicao
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
+        }
+        
+        $retorno = new AjaxResponse(false);
+        
+        if ($this->findModel($id)->delete()) {
+            $retorno->success = true;
+        }
 
-        return $this->redirect(['index']);
+        return Json::encode($retorno);
     }
 
     /**

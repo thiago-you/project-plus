@@ -17,6 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 /* @var $cliente app\models\Cliente */
 /* @var $contrato app\models\Contrato */
 ?>
+<input id="id-contrato" class="hidden" value="<?= $contrato->id; ?>"/>
+<!-- ./hidden id contrato -->
 <div class="row">
     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
     	<h2 class="font18">
@@ -294,9 +296,10 @@ $this->params['breadcrumbs'][] = $this->title;
         	<!-- ./panel heading -->
         	<div class="panel-body">
         		<hr>
-        		<?php foreach ([] as $acionamento): ?>
-        		
-        		<?php endforeach; ?>
+        		<?= $this->renderAjax('/acionamento/index', [
+		                'acionamentos' => $acionamentos,
+            		]);
+        		?>
             </div>
             <!-- ./panel-body -->
     	</div>
@@ -339,6 +342,19 @@ $this->params['breadcrumbs'][] = $this->title;
   		</div>
   		<!-- ./row -->
   		<div class="row">
+    		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+        		<div class="form-group"> 	
+    				<?= Html::label('Título', 'acionamento-titulo'); ?>
+        			<?= Html::textInput('acionamento-titulo', '', [
+        	                'id' => 'acionamento-titulo',
+                            'class' => 'form-control',
+            			]); 
+        			?>
+    			</div>
+    		</div>
+    	</div>
+    	<!-- ./row -->
+  		<div class="row">
   			<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
     			<div class="form-group"> 	
         			<?= Html::label('Data do Acionametno', 'acionamento-data'); ?>
@@ -356,9 +372,9 @@ $this->params['breadcrumbs'][] = $this->title;
         			?>
     			</div>
     		</div>
-    		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+    		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12 hidden">
     			<div class="form-group"> 	
-        			<?= Html::label('Hora', 'acionamento-hoar'); ?>
+        			<?= Html::label('Hora', 'acionamento-hora'); ?>
         			<?= TimePicker::widget([
                             'name' => 'acionamento-hora',
         	                'id' => 'acionamento-hora',

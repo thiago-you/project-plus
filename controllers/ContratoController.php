@@ -237,6 +237,7 @@ class ContratoController extends Controller
         return $this->render('negociacao', [
             'contrato' => $contrato,
             'cliente' => $cliente,
+            'acionamentos' => $contrato->acionamentos,
             'negociacao' => $negociacao,
             'contratos' => $contratos,
             'totalContratos' => $totalContratos,
