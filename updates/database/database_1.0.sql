@@ -209,6 +209,5 @@ CREATE TABLE `acionamento` (
   `tipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os tipos possiveis',
   `subtipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os subtipos possiveis',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`),
-  FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`),
-  FOREIGN KEY (`colaborador_id`) REFERENCES `colaborador`(`id`)
+  FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
 );
