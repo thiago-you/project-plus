@@ -13,9 +13,6 @@ $this->title = 'Home';
 		<!-- ./card -->
 	</section>
 	<!-- ./container -->
-    <div class='jumbotron'>
-        <h3><i class='fa fa-cog fa-spin'></i>&nbsp; Aplicação ainda em desenvolvimento ...</h3>
-    </div>
 </div>
 <?php
 $js = <<< JS
