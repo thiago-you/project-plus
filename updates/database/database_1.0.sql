@@ -56,23 +56,6 @@ CREATE TABLE `telefone` (
   `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
 );
--- cria a tabela de eventos
-CREATE TABLE `acionamento` (
-  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `id_cliente` INT NOT NULL,
-  `id_contrato` INT NOT NULL,
-  `colaborador_id` INT NOT NULL,
-  `titulo` VARCHAR(100) NOT NULL,
-  `descricao` VARCHAR(250),
-  `data` DATETIME,
-  `hora` VARCHAR(5),
-  `telefone` VARCHAR(15),
-  `tipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os tipos possiveis',
-  `subtipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os subtipos possiveis',
-  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`),
-  FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`),
-  FOREIGN KEY (`colaborador_id`) REFERENCES `colaborador`(`id`)
-);
 -- cria a tabela de endereco
 CREATE TABLE `endereco` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -212,3 +195,20 @@ CREATE TABLE `contrato_parcela` (
   `status` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar as situacoes possiveis',
   FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- cria a tabela de acionamentos
+CREATE TABLE `acionamento` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_cliente` INT NOT NULL,
+  `id_contrato` INT NOT NULL,
+  `colaborador_id` INT NOT NULL,
+  `titulo` VARCHAR(100) NOT NULL,
+  `descricao` VARCHAR(250),
+  `data` DATETIME,
+  `hora` VARCHAR(5),
+  `telefone` VARCHAR(15),
+  `tipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os tipos possiveis',
+  `subtipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os subtipos possiveis',
+  FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`),
+  FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`),
+  FOREIGN KEY (`colaborador_id`) REFERENCES `colaborador`(`id`)
+);
