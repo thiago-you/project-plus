@@ -68,6 +68,7 @@ CREATE TABLE `telefone` (
 CREATE TABLE `acionamento` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_cliente` INT NOT NULL,
+  `id_contrato` INT NOT NULL,
   `colaborador_id` INT NOT NULL,
   `titulo` VARCHAR(100) NOT NULL,
   `descricao` VARCHAR(250),
@@ -77,6 +78,7 @@ CREATE TABLE `acionamento` (
   `tipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os tipos possiveis',
   `subtipo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os subtipos possiveis',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`),
+  FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`),
   FOREIGN KEY (`colaborador_id`) REFERENCES `colaborador`(`id`)
 );
 -- cria a tabela de endereco
