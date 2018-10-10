@@ -91,3 +91,26 @@
 .acionamento-box .acionamento-footer {
     margin-bottom: 3px;
 }
+/* pane de contratos */
+.panel-contratos .panel-body .contratos-collapse div {
+    background-color: #2196F3;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    color: #f9f9f9;
+    border-bottom: 1px solid #f9f9f9;
+}
+.panel-contratos .panel-body div.collapse {
+	
+}
+/* pane de negociacao */
+#tab-negociacao .box .box-heading {
+	margin-top: 30px;
+}
+#tab-negociacao .box .box-content {
+    border: 1px solid #cecece;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 200px;  
+    min-height: 100px;  
+}

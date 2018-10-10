@@ -180,6 +180,7 @@ CREATE TABLE `negociacao` (
   `receita` DECIMAL(10,2) DEFAULT 0.00,
   `total` DECIMAL(10,2) DEFAULT 0.00,
   `tipo` ENUM('V', 'P') NOT NULL DEFAULT 'V' COMMENT 'Tipo da negociacao => V: A vista / P: Parcelado',
+  `status` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Consultar model para checar os status possiveis',
   `observacao` VARCHAR(250),
   FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;

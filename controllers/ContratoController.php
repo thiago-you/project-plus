@@ -11,6 +11,8 @@ use yii\web\NotFoundHttpException;
 use app\models\Cliente;
 use app\models\Negociacao;
 use yii\base\UserException;
+use app\base\AjaxResponse;
+use yii\helpers\Json;
 
 /**
  * ContratoController implements the CRUD actions for Contrato model.
@@ -234,7 +236,22 @@ class ContratoController extends Controller
             }
         }
         
-        return $this->render('negociacao', [
+        // valida se a requisicao é ajax
+        if (\Yii::$app->request->isAjax) {
+            $retorno = new AjaxResponse();
+            $retorno->content = $this->renderAjax('contrato-negociacao', [
+                'contrato' => $contrato,
+                'cliente' => $cliente,
+                'acionamentos' => $contrato->acionamentos,
+                'negociacao' => $negociacao,
+                'contratos' => $contratos,
+                'totalContratos' => $totalContratos,
+            ]);
+            
+            return Json::encode($retorno);
+        }
+        
+        return $this->render('contrato-negociacao', [
             'contrato' => $contrato,
             'cliente' => $cliente,
             'acionamentos' => $contrato->acionamentos,

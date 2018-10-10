@@ -264,18 +264,29 @@ $(document).ready(function() {
 		
 		// calcula e valida o desconto antes de enviar a requisicao
 		if (negociacao.validarDesconto() && negociacao.calcularNegociacao()) {
+			// salva o html da negociacao
+			const negociacaoContent = $('.panel-calculo .panel-body').html();
+			
+			// seta a mensagem de loading
+			$('.panel-calculo .panel-body').html('<br><br><br><h2 class="text-primary text-center"><i class="fa fa-spinner fa-pulse"></i>&nbsp; Carregando ...</h2><br><br><br>');
+			
 			// envia a requisicao para salvar a negociacao
 			$.post(BASE_PATH + 'negociacao/salvar', {Negociacao: negociacao}, function(response) {
 				let retorno = JSON.parse(response);
 				
 				if (retorno.success == true) {
+					// mensagem de sucesso
 					toastr.success('A negociação foi salva com sucesso.');
-					
-					// altera o status da negociacao
-					$('.negociacao-status').removeClass('label-warning').addClass('label-info').text('Em Negociação');
+					// seta o id da negociacao
+					$('#negociacao-id').val(retorno.id);
+					// seta o conteudo da negociacao
+					$('.panel-calculo .panel-body').html(retorno.content);
 				} else {
+					// mensagem de erro
 					toastr.error('Houve um erro interno ao tentar salvar a negociação.');
 				}
+			}).fail(function() {
+				$('.panel-calculo .panel-body').html(negociacaoContent);
 			});
 		}		
 	});
@@ -372,6 +383,63 @@ $(document).ready(function() {
 			},
         });
 	});
+	
+	// altera o status da negociação
+	$('body').on('click', '#alterar-negociacao', function() {
+		// salva o html da negociacao
+		const negociacaoContent = $('.panel-calculo .panel-body').html();
+		const idNegociacao = $('#negociacao-id').val();
+		
+		// verifica se a negociacao existe
+		if (!idNegociacao) {
+			toastr.warning('A negociação não foi encontrada.');
+			return false;
+		}
+		
+		// seta a mensagem de loading
+		$('.panel-calculo .panel-body').html('<br><br><br><h2 class="text-primary text-center"><i class="fa fa-spinner fa-pulse"></i>&nbsp; Carregando ...</h2><br><br><br>');
+		
+		// envia a requisicao para alterar o status da negociação
+		$.get(BASE_PATH+'negociacao/alterar?id='+idNegociacao, function(response) {
+			const retorno = JSON.parse(response);
+			
+			// verifica se houve erro
+			if (retorno.success != true) {
+				toastr.warning(retorno.message);
+			}
+			
+			// seta o conteudo da negociacao
+			$('.panel-calculo .panel-body').html(retorno.content);
+		}).fail(function() {
+			$('.panel-calculo .panel-body').html(negociacaoContent);
+		});
+	});
+	
+	// abre o contrato para negociacao
+	$('body').on('click', '.set-contrato', function() {
+		const idContrato = $(this).data('id'); 
+		
+		// valida se o cotrato já esta aberto
+		if (idContrato == $('#id-contrato').val()) {
+			toastr.info('Este contrato já esta aberto.');
+			return false;
+		}
+		
+		// mensagem de loading
+		toastr.clear();
+		toastr.info('<i class="fa fa-spinner fa-pulse"></i>&nbsp; Carregando Contrato ...');
+		
+		// envia a requisição
+		$.get(BASE_PATH+'contrato/negociacao/'+idContrato, function(response) {
+			const retorno = JSON.parse(response);
+			
+			// seta o conteudo
+			if (retorno.success == true) {				
+				$('section.main-content').html(retorno.content);
+			}
+		}).fail(function() {
+			toastr.error('Não foi possível abrir o contrato.');
+		});
+	});
 });
-
 

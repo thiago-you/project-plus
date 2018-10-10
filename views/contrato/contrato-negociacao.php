@@ -216,18 +216,29 @@ $this->params['breadcrumbs'][] = $this->title;
             	<?php if (is_array($contratos) && !empty($contratos)): ?>
   					<?php foreach ($contratos as $clienteContrato): ?>
   						<div class="row">
-  							<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
-  								<i class="fa fa-file-invoice-dollar"></i>
-  								<?= $clienteContrato->num_contrato ? $clienteContrato->num_contrato : 'Sem Número'; ?>
-							</div>
-							<!-- ./num do contrato -->
-							<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 text-right">
-								<?= Helper::mask($clienteContrato->getValorTotal(), Helper::MASK_MONEY); ?>
-							</div>
-							<!-- ./valor do contrato -->
-    		  				<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+  							<div class="contratos-collapse" data-toggle="collapse" data-target="#contrato-<?= $clienteContrato->id; ?>">
+  								<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
+      								<i class="fa fa-file-invoice-dollar"></i>&nbsp;
+      								N° <?= $clienteContrato->num_contrato ? $clienteContrato->num_contrato : 'Sem Número'; ?>
+    							</div>
+    							<!-- ./num do contrato -->
+    							<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 text-right">
+    								<?= Helper::mask($clienteContrato->getValorTotal(), Helper::MASK_MONEY); ?>
+    							</div>
+    							<!-- ./valor do contrato -->
+  							</div>
+  							<!-- ./colpase bar -->
+    		  				<div id="contrato-<?= $clienteContrato->id; ?>" class="collapse col-md-12 col-sm-12 col-lg-12 col-xs-12 <?= $clienteContrato->id == $contrato->id ? 'in' : ''; ?>">
+        		  				<br>
         		  				<?php if (is_array($clienteContrato->contratoParcelas) && !empty($clienteContrato->contratoParcelas)): ?>
         		  					<?php $numParcelas = count($clienteContrato->contratoParcelas); ?>
+        		  					
+                                	<?= Html::button('<i class="fa fa-file-signature"></i>&nbsp; Abrir Contrato', [
+                        	                'class' => Helper::BTN_COLOR_PURPLE.' btn-sm set-contrato pull-right',
+                    	                    'data-id' => $clienteContrato->id,
+                                    	]);
+                                	?>
+        		  					<!-- ./row -->
                                 	<table class="table table-bordered table-hover table-parcelas">
                     		  			<thead>
                     		  				<tr>
@@ -312,7 +323,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         <div class="panel panel-primary panel-box panel-calculo">
         	<div class="panel-body">
-        		<?= $this->render('contrato-calculo', [
+        		<?= $this->render('/negociacao/negociacao', [
                         'contrato' => $contrato,
 	                    'negociacao' => $negociacao,
             		]); 

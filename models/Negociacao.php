@@ -24,6 +24,7 @@ use app\base\Helper;
  * @property string $total
  * @property string $tipo Flag que valida se a negociacao é a vista ou parcelado
  * @property string $observacao
+ * @property integer $status
  * 
  * @property Contrato $contrato
  */
@@ -32,6 +33,9 @@ class Negociacao extends \yii\db\ActiveRecord
     // const para o tipo da negociacao
     CONST A_VISTA = 'V';
     CONST PARCELADO = 'P';
+    // status da negociacao
+    CONST STATUS_ABERTA = 0;
+    CONST STATUS_FECHADA = 1;
     
     /**
      * {@inheritdoc}
@@ -48,7 +52,7 @@ class Negociacao extends \yii\db\ActiveRecord
     {
         return [
             [['data_negociacao', 'id_contrato', 'id_credor', 'id_campanha'], 'required'],
-            [['id_contrato', 'id_credor', 'id_campanha'], 'integer'],
+            [['id_contrato', 'id_credor', 'id_campanha', 'status'], 'integer'],
             [[
                 'subtotal', 'desconto', 'receita', 'total', 'desconto_encargos',
                 'desconto_principal', 'desconto_honorarios', 'desconto_total'           
@@ -81,6 +85,7 @@ class Negociacao extends \yii\db\ActiveRecord
             'desconto_total' => 'Desconto Total',
             'tipo' => 'Tipo de Pagamento',
             'observacao' => 'Observação',
+            'status' => 'Status da Negociação',
         ];
     }
 
@@ -132,7 +137,7 @@ class Negociacao extends \yii\db\ActiveRecord
     public function beforeSave($insert) 
     {
         if (empty($this->data_cadastro)) {
-            $this->data_cadastro = date('Y-m-d');
+            $this->data_cadastro = date('Y-m-d H:i:s');
         }
         
         // formata a data antes de salvar
@@ -146,6 +151,14 @@ class Negociacao extends \yii\db\ActiveRecord
                     $parcela->save(false);
                 }
             }
+            
+            // seta o status inicial
+            $this->status = Negociacao::STATUS_ABERTA;
+        }
+        
+        // converte os \n da string em html <br/> e remove line breaks extras
+        if (!empty($this->observacao)) {
+            $this->observacao = trim(preg_replace('/\s+/', ' ', preg_replace('/\n/', '<br/>',  $this->observacao)));
         }
         
         return parent::beforeSave($insert);       

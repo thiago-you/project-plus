@@ -1,6 +1,7 @@
 <?php
 use app\base\Helper;
 use kartik\helpers\Html;
+use app\models\Negociacao;
 use kartik\money\MaskMoney;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
@@ -32,9 +33,8 @@ use kartik\date\DatePicker;
             	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 text-center">
             		<?= Html::label('Situação'); ?>
             		<br>
-            		<?php 
-                        if ($negociacao->isNewRecord) {
-                            echo '<span class="negociacao-status label label-warning">Sem Negociação</span>';
+            		<?php if ($negociacao->status == Negociacao::STATUS_FECHADA) {
+                            echo '<span class="negociacao-status label label-emerald">Negociação Fechada</span>';
                 		} else {
                 		    echo '<span class="negociacao-status label label-info">Em Negociação</span>';
                 		}
@@ -44,7 +44,7 @@ use kartik\date\DatePicker;
         	<!-- ./row -->
         	<br><br>
         	<div class="row">
-    			<div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1 col-xs-12">
+    			<div class="col-totais col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1 col-xs-12">
             		<div class="row">
                 		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
             				<b>Subtotal:</b> <span id="negociacao-subtotal" data-value="<?= $negociacao->subtotal; ?>"><?= Helper::mask($negociacao->subtotal, Helper::MASK_MONEY); ?></span>			
@@ -65,10 +65,24 @@ use kartik\date\DatePicker;
         	</div>
         	<!-- ./row -->
         	<div class="row">
+        		<div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1 col-xs-12">
+        			<div class="box">
+        				<div class="box-heading">
+							<b>Observação:</b>
+        				</div>
+        				<div class="box-content">
+            				<p><?= $negociacao->observacao; ?></p>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        	<!-- ./row -->
+        	<br><br><br>
+        	<div class="row">
         		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">	
-            		<?= Html::button('<i class="fa fa-save"></i>&nbsp; Salvar a Negociação', [
-                            'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
-                            'id' => 'salvar-negociacao',
+            		<?= Html::button('<i class="fa fa-briefcase"></i>&nbsp; '.($negociacao->status == Negociacao::STATUS_FECHADA ? 'Abrir Negociação' : 'Fechar Negociação'), [
+                            'class' => Helper::BTN_COLOR_PRIMARY.' btn-block',
+                            'id' => 'alterar-negociacao',
                 		]);
             		?>
             	</div>
@@ -94,6 +108,7 @@ use kartik\date\DatePicker;
                                 'id' => 'negociacao-data',
         		                'value' => $negociacao->data_negociacao ? $negociacao->data_negociacao : date('Y-m-d'),
                                 'removeButton' => false,
+        		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
                                 'pluginOptions' => [
                                     'autoclose' => true,
                                     'format' => 'dd/mm/yyyy'
@@ -107,6 +122,7 @@ use kartik\date\DatePicker;
                 			    'name' => 'Negociacao[tipo]',
                 			    'id' => 'negociacao-tipo',
                 			    'hideSearch' => true,
+        		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
                 			    'data' => [
                                     0 => 'À Vista', 
                                     1 => 'Parcela'
@@ -118,8 +134,10 @@ use kartik\date\DatePicker;
                 		<?= Html::label('Situação'); ?>
                 		<br>
                 		<?php 
-                            if ($negociacao->isNewRecord) {
-                                echo '<span class="negociacao-status label label-warning">Sem Negociação</span>';
+                    		if ($negociacao->isNewRecord) {
+                    		    echo '<span class="negociacao-status label label-warning">Sem Negociação</span>';
+                    		} elseif ($negociacao->status == Negociacao::STATUS_FECHADA) {
+                    		    echo '<span class="negociacao-status label label-emerald">Negociação Fechada</span>';
                     		} else {
                     		    echo '<span class="negociacao-status label label-info">Em Negociação</span>';
                     		}
@@ -231,6 +249,7 @@ use kartik\date\DatePicker;
                 				<?= MaskMoney::widget([
                     				    'name' => 'Negociacao[desconto_encargos]',    
         				                'value' => $negociacao->desconto_encargos,
+        				                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
         				                'options' => [
         	                                'id' => 'desconto_encargos',
         	                                'maxlength' => 9,
@@ -248,6 +267,7 @@ use kartik\date\DatePicker;
                 				<?= MaskMoney::widget([
                     				    'name' => 'Negociacao[desconto_principal]',
         			                    'value' => $negociacao->desconto_principal,
+        				                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
         				                'options' => [
         	                                'id' => 'desconto_principal',
         	                                'maxlength' => 9,
@@ -265,6 +285,7 @@ use kartik\date\DatePicker;
                 				<?= MaskMoney::widget([
                     				    'name' => 'Negociacao[desconto_honorarios]',   
         				                'value' => $negociacao->desconto_honorarios,
+        				                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
         				                'options' => [
         	                                'id' => 'desconto_honorarios',
         	                                'maxlength' => 9,
@@ -282,6 +303,7 @@ use kartik\date\DatePicker;
                 				<?= MaskMoney::widget([
                                         'name' => 'Negociacao[desconto_total]',
         				                'value' => $negociacao->desconto_total,
+        				                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
         				                'options' => [
         	                                'id' => 'desconto_total',
         	                                'maxlength' => 14,
@@ -302,9 +324,10 @@ use kartik\date\DatePicker;
         	<!-- ./tabela de calculo -->
         	<div class="col-md-9 col-sm-9 col-lg-9 col-xs-12">
         		<?= Html::label('Observação:', 'negociacao-observacao'); ?>
-        		<?= Html::textarea('Negociacao[Observacao]', '', [
-            		    'id' => 'negociacao-observacao',                
+        		<?= Html::textarea('Negociacao[Observacao]', str_replace(['<br/>', '<br />', '<br>'], "\n", $negociacao->observacao), [
+            		    'id' => 'negociacao-observacao',     
                         'class' => 'form-control',
+	                    'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
             		]); 
         		?>
         	</div>
@@ -316,12 +339,14 @@ use kartik\date\DatePicker;
         		<?= Html::button('<i class="fa fa-save"></i>&nbsp; Salvar a Negociação', [
                         'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
                         'id' => 'salvar-negociacao',
+		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
             		]);
         		?>
         	</div>
         	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 pull-right">	
         		<?= Html::button(helper::BTN_CANCEL, [
                         'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
+		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
             		]);
         		?>
         	</div> 

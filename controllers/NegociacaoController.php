@@ -91,6 +91,7 @@ class NegociacaoController extends Controller
                 throw new UserException(Helper::renderErrors($model->getErrors()));
             }
             
+            $retorno->id = $model->id ? $model->id : $model->getPrimaryKey();
             $transaction->commit();
         } catch (\Exception $e) {
             $transaction->rollBack();
@@ -98,28 +99,50 @@ class NegociacaoController extends Controller
             $retorno->message = $e->getMessage();
         }
         
+        // seta o conteudo da negociacao
+        $retorno->content = $this->renderAjax('negociacao', [
+            'contrato' => $model->contrato,
+            'negociacao' => $model,
+        ]);
         
         return Json::encode($retorno);
     }
 
     /**
-     * Updates an existing Negociacao model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * Altera uma negociacao
      */
-    public function actionUpdate($id)
+    public function actionAlterar($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        // valida a requisição
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
         }
 
-        return $this->render('update', [
-            'model' => $model,
+        $retorno = new AjaxResponse();
+        
+        // busca a model
+        $model = $this->findModel($id);
+
+        // altera o status da negociacao
+        if ($model->status == Negociacao::STATUS_ABERTA) {
+            $model->status = Negociacao::STATUS_FECHADA;
+        } elseif ($model->status == Negociacao::STATUS_FECHADA) {
+            $model->status = Negociacao::STATUS_ABERTA;
+        }
+
+        // salva a negociacao
+        if (!$model->save()) {
+            $retorno->success = false;
+            $retorno->message = 'Não foi possível alterar a negociação.';
+        }
+        
+        // renderiza o html da página
+        $retorno->content = $this->renderAjax('negociacao', [
+            'contrato' => $model->contrato,
+            'negociacao' => $model,
         ]);
+        
+        return Json::encode($retorno);
     }
 
     /**
