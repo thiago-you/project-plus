@@ -189,6 +189,7 @@ CREATE TABLE `negociacao` (
   `total` DECIMAL(10,2) DEFAULT 0.00,
   `tipo` ENUM('V', 'P') NOT NULL DEFAULT 'V' COMMENT 'Tipo do calculo => V: A vista / P: Parcelado',
   `observacao` VARCHAR(250),
+  `status` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Consultar model para checar os status possiveis',
   FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de parcela do contrato
