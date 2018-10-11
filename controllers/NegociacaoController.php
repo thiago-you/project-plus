@@ -12,6 +12,7 @@ use yii\helpers\Json;
 use app\base\AjaxResponse;
 use app\base\Helper;
 use yii\base\UserException;
+use app\models\Acionamento;
 
 /**
  * NegociacaoController implements the CRUD actions for Negociacao model.
@@ -91,6 +92,15 @@ class NegociacaoController extends Controller
                 throw new UserException(Helper::renderErrors($model->getErrors()));
             }
             
+            // registra o acionamento
+            Acionamento::setAcionamento([
+                'id_cliente' => $model->contrato->id_cliente,
+                'id_contrato' => $model->id_contrato,
+                'tipo' => Acionamento::TIPO_SISTEMA,
+                'titulo' => 'Alteração na Negociação',
+                'descricao' => 'Alteração dos cálculos da negociação.',
+            ]);
+            
             $retorno->id = $model->id ? $model->id : $model->getPrimaryKey();
             $transaction->commit();
         } catch (\Exception $e) {
@@ -126,8 +136,26 @@ class NegociacaoController extends Controller
         // altera o status da negociacao
         if ($model->status == Negociacao::STATUS_ABERTA) {
             $model->status = Negociacao::STATUS_FECHADA;
+            
+            // registra o acionamento
+            Acionamento::setAcionamento([
+                'id_cliente' => $model->contrato->id_cliente,
+                'id_contrato' => $model->id_contrato,
+                'tipo' => Acionamento::TIPO_SISTEMA,
+                'titulo' => 'Alteração na Negociação',
+                'descricao' => 'Alteração da situação da negociação de "aberta" para "fechada".',
+            ]);
         } elseif ($model->status == Negociacao::STATUS_FECHADA) {
             $model->status = Negociacao::STATUS_ABERTA;
+
+            // registra o acionamento
+            Acionamento::setAcionamento([
+                'id_cliente' => $model->contrato->id_cliente,
+                'id_contrato' => $model->id_contrato,
+                'tipo' => Acionamento::TIPO_SISTEMA,
+                'titulo' => 'Alteração na Negociação',
+                'descricao' => 'Alteração da situação da negociação de "fechada" para "aberta".',
+            ]);
         }
 
         // salva a negociacao

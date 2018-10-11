@@ -373,7 +373,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'name' => 'acionamento-data',
         	                'id' => 'acionamento-data',
 			                'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
+			                'value' => date('d/m/Y H:i'),
 			                'removeButton' => ['title' => 'Remover Data', 'data-toggle' => 'tooltip'],
+			                'options' => [
+                                'data-value' => date('d/m/Y H:i'),
+			                ],
     		                'pluginOptions' => [
                                 'autoclose' => true,
                                 'format' => 'dd/mm/yyyy hh:ii',
@@ -440,7 +444,7 @@ $this->params['breadcrumbs'][] = $this->title;
 // CSS
 $this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [BootstrapAsset::className()]]);
 // JS
-$this->registerJsFile(Url::home().'app/js/negociacao.js', ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile(Url::home().'app/js/negociacao.js?d=201810102242', ['depends' => [JqueryAsset::className()]]);
 ?>
 
 

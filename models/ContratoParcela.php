@@ -44,6 +44,11 @@ class ContratoParcela extends \yii\db\ActiveRecord
     public $atraso;
     
     /**
+     * Guarda a faixa de calculo da parcela
+     */
+    public $faixaCalculo;
+    
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -157,14 +162,14 @@ class ContratoParcela extends \yii\db\ActiveRecord
     public function calcularValores($id_campanha)
     {
         // busca a faixa de calculo
-        if ($faixaCalculo = CredorCalculo::findFaixa($id_campanha, $this->getAtraso())) {            
-            $this->multa = floor(($this->valor * ($faixaCalculo->multa / 100)) * 100) / 100;
-            $this->juros = floor(($this->valor * (($faixaCalculo->juros / 30 * $this->getAtraso()) / 100)) * 100) / 100;
-            $this->honorarios = floor((($this->valor + $this->juros + $this->multa) * ($faixaCalculo->honorario / 100)) * 100) / 100;
+        if ($this->faixaCalculo = CredorCalculo::findFaixa($id_campanha, $this->getAtraso())) {            
+            $this->multa = floor(($this->valor * ($this->faixaCalculo->multa / 100)) * 100) / 100;
+            $this->juros = floor(($this->valor * (($this->faixaCalculo->juros / 30 * $this->getAtraso()) / 100)) * 100) / 100;
+            $this->honorarios = floor((($this->valor + $this->juros + $this->multa) * ($this->faixaCalculo->honorario / 100)) * 100) / 100;
             $this->total = $this->valor + $this->multa + $this->juros + $this->honorarios;
             
             // seta a taxa de calculo dos honorarios
-            $this->honorariosCalculo = $faixaCalculo->honorario;
+            $this->honorariosCalculo = $this->faixaCalculo->honorario;
         }
     }
 }

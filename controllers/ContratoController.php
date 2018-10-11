@@ -2,17 +2,17 @@
 namespace app\controllers;
 
 use app\base\Helper;
+use yii\helpers\Json;
 use yii\web\Controller;
+use app\models\Cliente;
 use app\models\Contrato;
+use app\base\AjaxResponse;
+use app\models\Negociacao;
+use yii\base\UserException;
 use yii\filters\VerbFilter;
 use app\models\ContratoSearch;
 use app\models\ContratoParcela;
 use yii\web\NotFoundHttpException;
-use app\models\Cliente;
-use app\models\Negociacao;
-use yii\base\UserException;
-use app\base\AjaxResponse;
-use yii\helpers\Json;
 
 /**
  * ContratoController implements the CRUD actions for Contrato model.

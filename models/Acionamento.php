@@ -26,6 +26,9 @@ use app\base\Helper;
  */
 class Acionamento extends \yii\db\ActiveRecord
 {
+    // const para o tipo de acionamento do sistema
+    CONST TIPO_SISTEMA = '0';
+    
     /**
      * {@inheritdoc}
      */
@@ -100,6 +103,11 @@ class Acionamento extends \yii\db\ActiveRecord
      */
     public function getColaborador()
     {
+        // valida o colaborador
+        if ($this->colaborador_id == 0) {
+            return Colaborador::getAdminUser();            
+        }
+        
         return $this->hasOne(Colaborador::className(), ['id' => 'colaborador_id']);
     }
     
@@ -122,6 +130,9 @@ class Acionamento extends \yii\db\ActiveRecord
     {
         // busca a lista de tipos
         $tipos = Acionamento::getTipos();
+ 
+        // adiciona o tipo de sistema
+        $tipos[0] = 'Sistema';
         
         // retorna a descrição do tipo atual
         return $tipos[$this->tipo];
@@ -140,6 +151,28 @@ class Acionamento extends \yii\db\ActiveRecord
         }
         
         return parent::beforeSave($insert);
+    }
+    
+    /**
+     * Seta um acionamento automatico
+     */
+    public static function setAcionamento($params = []) 
+    {
+        // cria o novo acionamento
+        $acionamento = new Acionamento();
+        
+        // seta os dados do acionamento
+        $acionamento->id_cliente = $params['id_cliente'];
+        $acionamento->id_contrato = $params['id_contrato'];
+        $acionamento->colaborador_id = \Yii::$app->user->id;
+        $acionamento->titulo = $params['titulo'];
+        $acionamento->descricao = $params['descricao'];
+        $acionamento->tipo = $params['tipo'];
+        $acionamento->subtipo = isset($params['subtipo']) ? $params['subtipo'] : 0;
+        $acionamento->hora = isset($params['hora']) ? $params['hora'] : '';
+        
+        // salva o acionamento
+        return $acionamento->save();
     }
 }
 

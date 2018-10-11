@@ -18,8 +18,6 @@ class Colaborador extends \yii\db\ActiveRecord
     CONST CARGO_OPERADOR = '2';
     CONST CARGO_CLIENTE = '3';
     
-    public $teste = '';
-    
     /**
      * {@inheritdoc}
      */
@@ -83,5 +81,19 @@ class Colaborador extends \yii\db\ActiveRecord
 
         // retorna o cargo
         return $cargos[$this->cargo];
+    }
+    
+    /**
+     * Retorna uma instancia do usuario Admin
+     */
+    public static function getAdminUser() 
+    {
+        $admin = new Colaborador();
+        $admin->id = 0;
+        $admin->cargo = self::CARGO_ADMINISTRADOR;
+        $admin->nome = 'Admin';
+        $admin->isNewRecord = false;
+        
+        return $admin;
     }
 }

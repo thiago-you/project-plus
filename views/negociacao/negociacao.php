@@ -171,6 +171,11 @@ use kartik\date\DatePicker;
                 			<!-- ./thead -->
                 			<tbody>
                 				<?php if (!empty($contrato->contratoParcelas) && is_array($contrato->contratoParcelas)): ?>
+                					<?php 
+                    					$descEncargosMax = 100;
+                    					$descHonorariosMax = 100;
+                    					$descPrincipalMax = 100;
+                					?>
                 					<?php foreach ($contrato->contratoParcelas as $parcela): ?>
             							<?php $parcela->calcularValores($negociacao->id_campanha); ?>
             							<!-- ./calcula os valores totais -->
@@ -192,6 +197,17 @@ use kartik\date\DatePicker;
                                                 $honorarios += $parcela->honorarios;
                                                 $total += $parcela->total;
                                                 $taxa = $parcela->honorariosCalculo;
+                                                
+                                                // seta o menor desconto máximo como limite
+                                                if ($descEncargosMax > $parcela->faixaCalculo->desc_encargos_max) {                                                    
+                                                    $descEncargosMax = $parcela->faixaCalculo->desc_encargos_max;
+                                                }
+                                                if ($descHonorariosMax > $parcela->faixaCalculo->desc_honorario_max) {                                                    
+                                                    $descHonorariosMax = $parcela->faixaCalculo->desc_honorario_max;
+                                                }
+                                                if ($descPrincipalMax > $parcela->faixaCalculo->desc_principal_max) {                                                    
+                                                    $descPrincipalMax = $parcela->faixaCalculo->desc_principal_max;
+                                                }
                         					?>
                         				</tr>
                 					<?php endforeach; ?>
@@ -209,6 +225,13 @@ use kartik\date\DatePicker;
                     					<td class="parcelas-total-total" data-value="<?= $total; ?>"><b><?= Helper::mask($total, Helper::MASK_MONEY); ?></b></td>
                     				</tr>
                     				<!-- ./totais -->
+                    				<tr class="hidden">
+                    					<td>
+                    						<input id="desc-encargos-max" value="<?= $descEncargosMax; ?>"/>
+                    						<input id="desc-honorario-max" value="<?= $descHonorariosMax; ?>"/>
+                    						<input id="desc-principal-max" value="<?= $descPrincipalMax; ?>"/>
+                    					</td>
+                    				</tr>
                 				<?php endif; ?>
                 			</tbody>
                 			<!-- ./tbody -->

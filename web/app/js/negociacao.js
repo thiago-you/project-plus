@@ -48,10 +48,17 @@ function Negociacao(context) {
 	
 	// carrega os valores de desconto
 	self.loadDesconto = () => {
+		// seta os descontos
 		self.desconto_encargos = $('#desconto_encargos-disp', context).val() || 0;
 		self.desconto_principal = $('#desconto_principal-disp', context).val() || 0;
 		self.desconto_honorarios = $('#desconto_honorarios-disp', context).val() || 0;
 		self.desconto_total = $('#desconto_total-disp', context).val() || 0;
+		
+		// seta os descontos máximos
+		self.desconto_max_encargos = $('#desc-encargos-max').val();
+		self.desconto_max_honorarios = $('#desc-honorario-max').val();
+		self.desconto_max_principal = $('#desc-principal-max').val();
+		
 		// remove a mascara dos descontos
 		self.desconto_encargos = accounting.unformat(self.desconto_encargos, '.');
 		self.desconto_principal = accounting.unformat(self.desconto_principal, '.');
@@ -61,6 +68,10 @@ function Negociacao(context) {
 	
 	// valida o limite de desconto concedido
 	self.validarDesconto = () => {
+		// limpa as mensagens de aviso
+		toastr.clear();
+		
+		// valida o desconto máximo
 		if (self.desconto_encargos > 0 && self.desconto_encargos > self.desconto_max_encargos) {
 			toastr.warning('O desconto dos encargos é superior ao limite permitido.');
 			return false;
@@ -281,6 +292,8 @@ $(document).ready(function() {
 					$('#negociacao-id').val(retorno.id);
 					// seta o conteudo da negociacao
 					$('.panel-calculo .panel-body').html(retorno.content);
+					// atualiza a lista de acionamentos
+					$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
 				} else {
 					// mensagem de erro
 					toastr.error('Houve um erro interno ao tentar salvar a negociação.');
@@ -340,7 +353,7 @@ $(document).ready(function() {
 				// reseta o form
 				$('#acionamento-tipo').val('');
 				$('#acionamento-titulo').val('');
-				$('#acionamento-data').val('').trigger('change');
+				$('#acionamento-data').val($('#acionamento-data').data('value')).trigger('change');
 				$('#acionamento-hora').val('').trigger('change');
 				$('#acionamento-desc').val('');
 				
@@ -410,6 +423,8 @@ $(document).ready(function() {
 			
 			// seta o conteudo da negociacao
 			$('.panel-calculo .panel-body').html(retorno.content);
+			// atualiza a lista de acionamentos
+			$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
 		}).fail(function() {
 			$('.panel-calculo .panel-body').html(negociacaoContent);
 		});
