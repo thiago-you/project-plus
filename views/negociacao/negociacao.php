@@ -40,6 +40,16 @@ use kartik\date\DatePicker;
                 		}
             		?>
             	</div>
+            	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 text-center pull-right">
+            		<?= Html::label('Forma de Pagamento'); ?>
+            		<br>
+            		<?php if ($negociacao->tipo == Negociacao::A_VISTA) {
+                            echo '<span class="negociacao-status label label-emerald">A Vista</span>';
+                		} else {
+                		    echo '<span class="negociacao-status label label-info">Parcelado</span>';
+                		}
+            		?>
+            	</div>
         	</div>
         	<!-- ./row -->
         	<br><br>
@@ -47,16 +57,16 @@ use kartik\date\DatePicker;
     			<div class="col-totais col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1 col-xs-12">
             		<div class="row">
                 		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-            				<b>Subtotal:</b> <span id="negociacao-subtotal" data-value="<?= $negociacao->subtotal; ?>"><?= Helper::mask($negociacao->subtotal, Helper::MASK_MONEY); ?></span>			
+            				<b>Subtotal:</b>&nbsp; <?= Helper::mask($negociacao->subtotal, Helper::MASK_MONEY); ?>			
                 		</div>
                 		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-                			<b>Desconto:</b> <span id="negociacao-desconto" data-value="<?= $negociacao->desconto; ?>"><?= Helper::mask($negociacao->desconto, Helper::MASK_MONEY); ?></span>
+                			<b>Desconto:</b>&nbsp; <?= Helper::mask($negociacao->desconto, Helper::MASK_MONEY); ?>
                 		</div>
                 		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-                			<b>Honorários:</b> <span id="negociacao-receita" data-value="<?= $negociacao->receita; ?>"><?= Helper::mask($negociacao->receita, Helper::MASK_MONEY); ?></span>
+                			<b>Honorários:</b>&nbsp; <?= Helper::mask($negociacao->receita, Helper::MASK_MONEY); ?>
                 		</div>
                 		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-6">
-                			<b>Total:</b> <span id="negociacao-total" data-value="<?= $negociacao->total; ?>"><?= Helper::mask($negociacao->total, Helper::MASK_MONEY); ?></span>
+                			<b>Total:</b>&nbsp; <?= Helper::mask($negociacao->total, Helper::MASK_MONEY); ?>
                 		</div>
                     	<!-- ./totais -->
                 	</div>
@@ -64,6 +74,47 @@ use kartik\date\DatePicker;
             	</div>
         	</div>
         	<!-- ./row -->
+        	<?php if($negociacao->tipo == Negociacao::PARCELADO): ?>
+        		<div class="row">
+        			<div class="col-totais col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1 col-xs-12">
+        				<br><hr><br>
+        			</div>
+    			</div>
+    			<!-- ./row -->
+        		<div class="row">
+					<div class="col-md-4 col-md-offset-1 col-sm-4 col-sm-offset-1 col-lg-4 col-lg-offset-1 col-xs-12">
+						<p><b>Valor de Entrada:</b> <?= Helper::mask($negociacao->valor_entrada, Helper::MASK_MONEY); ?></p>
+    					<p><b>Taxa:</b> 15,00% am</p>
+    					<p><b>Valor da Taxa:</b> <?= Helper::mask($negociacao->taxa_parcelado, Helper::MASK_MONEY); ?></p>
+    				</div>
+        			<div class="negociacao-view-parcelas-table col-md-6 col-sm-6 col-lg-6 col-xs-12">
+            			<table class="table table-stripped table-bordered">
+            				<thead>
+            					<tr>
+            						<th class="text-center">Núm.</th>
+            						<th>Vencimento</th>
+            						<th>Valor</th>
+            					</tr>
+            				</thead>
+            				<!-- ./thead -->
+            				<tbody>
+            					<?php if($negociacao->parcelas): ?>
+            						<?php foreach($negociacao->parcelas as $negociacaoParcela): ?>
+            							<tr>
+            								<td class="text-center"><?= $negociacaoParcela->num_parcela; ?></td>
+            								<td><?= Helper::formatDateToDisplay($negociacaoParcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
+            								<td><?= Helper::mask($negociacaoParcela->valor, Helper::MASK_MONEY); ?></td>
+            							</tr>
+            						<?php endforeach; ?>
+            					<?php endif; ?>
+            				</tbody>
+            				<!-- ./tbody -->
+            			</table>
+                		<!-- ./table das parcelas -->
+        			</div>
+        		</div>
+        	<?php endif; ?>
+        	<!-- ./parcelas -->
         	<div class="row">
         		<div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1 col-xs-12">
         			<div class="box">
@@ -121,11 +172,12 @@ use kartik\date\DatePicker;
                 		<?= Select2::widget([
                 			    'name' => 'Negociacao[tipo]',
                 			    'id' => 'negociacao-tipo',
+        		                'value' => $negociacao->tipo,
                 			    'hideSearch' => true,
         		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
                 			    'data' => [
-                                    0 => 'À Vista', 
-                                    1 => 'Parcela'
+                                    Negociacao::A_VISTA => 'À Vista', 
+                                    Negociacao::PARCELADO => 'Parcela'
                 			    ]
                             ]);
                 		?>
@@ -152,91 +204,178 @@ use kartik\date\DatePicker;
         	<div class="col-md-9 col-sm-9 col-lg-9 col-xs-12">
         		<div class="row">
         			<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-                		<table class="table table-stripped table-bordered table-parcela">
-                			<thead>
-                				<tr>
-                					<th colspan="8">Parcelas</th>
-                				</tr>
-                				<tr>
-                					<th class="text-center">Núm.</th>
-                					<th>Vencimento</th>
-                					<th>Atraso</th>
-                					<th>Valor</th>
-                					<th>Multa</th>
-                					<th>Juros</th>
-                					<th>Honorário</th>
-                					<th>Total</th>
-                				</tr>
-                			</thead>
-                			<!-- ./thead -->
-                			<tbody>
-                				<?php if (!empty($contrato->contratoParcelas) && is_array($contrato->contratoParcelas)): ?>
-                					<?php 
-                    					$descEncargosMax = 100;
-                    					$descHonorariosMax = 100;
-                    					$descPrincipalMax = 100;
-                					?>
-                					<?php foreach ($contrato->contratoParcelas as $parcela): ?>
-            							<?php $parcela->calcularValores($negociacao->id_campanha); ?>
-            							<!-- ./calcula os valores totais -->
-                						<tr class="contrato-parcela">
-                        					<td class="text-center"><?= $parcela->num_parcela; ?></td>
-                        					<td><?= Helper::formatDateToDisplay($parcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
-                        					<td><?= $parcela->atraso; ?></td>
-                        					<td class="principal" data-value="<?= $parcela->valor; ?>"><?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?></td>
-                        					<td class="multa" data-value="<?= $parcela->multa; ?>"><?= Helper::mask($parcela->multa, Helper::MASK_MONEY); ?></td>
-                        					<td class="juros" data-value="<?= $parcela->juros; ?>"><?= Helper::mask($parcela->juros, Helper::MASK_MONEY); ?></td>
-                        					<td class="honorario" data-value="<?= $parcela->honorariosCalculo; ?>"><?= Helper::mask($parcela->honorarios, Helper::MASK_MONEY); ?></td>
-                        					<td class="total"><?= Helper::mask($parcela->total, Helper::MASK_MONEY); ?></td>
-                        					<?php 
-                        					    // soma os valores da parcela
-                                                $valor += $parcela->valor;
-                                                $atraso += $parcela->atraso;
-                                                $multa += $parcela->multa;
-                                                $juros += $parcela->juros;
-                                                $honorarios += $parcela->honorarios;
-                                                $total += $parcela->total;
-                                                $taxa = $parcela->honorariosCalculo;
-                                                
-                                                // seta o menor desconto máximo como limite
-                                                if ($descEncargosMax > $parcela->faixaCalculo->desc_encargos_max) {                                                    
-                                                    $descEncargosMax = $parcela->faixaCalculo->desc_encargos_max;
-                                                }
-                                                if ($descHonorariosMax > $parcela->faixaCalculo->desc_honorario_max) {                                                    
-                                                    $descHonorariosMax = $parcela->faixaCalculo->desc_honorario_max;
-                                                }
-                                                if ($descPrincipalMax > $parcela->faixaCalculo->desc_principal_max) {                                                    
-                                                    $descPrincipalMax = $parcela->faixaCalculo->desc_principal_max;
-                                                }
-                        					?>
+        				<div class="negociacao-a-vista" style="<?= $negociacao->tipo == Negociacao::A_VISTA ? '' : 'display: none;'; ?>">
+                    		<table class="table table-stripped table-bordered table-parcela">
+                    			<thead>
+                    				<tr>
+                    					<th colspan="8">A Vista</th>
+                    				</tr>
+                    				<tr>
+                    					<th class="text-center">Núm.</th>
+                    					<th>Vencimento</th>
+                    					<th>Atraso</th>
+                    					<th>Valor</th>
+                    					<th>Multa</th>
+                    					<th>Juros</th>
+                    					<th>Honorário</th>
+                    					<th>Total</th>
+                    				</tr>
+                    			</thead>
+                    			<!-- ./thead -->
+                    			<tbody>
+                    				<?php if (!empty($contrato->contratoParcelas) && is_array($contrato->contratoParcelas)): ?>
+                    					<?php 
+                        					$descEncargosMax = 100;
+                        					$descHonorariosMax = 100;
+                        					$descPrincipalMax = 100;
+                    					?>
+                    					<?php foreach ($contrato->contratoParcelas as $parcela): ?>
+                							<?php $parcela->calcularValores($negociacao->id_campanha); ?>
+                							<!-- ./calcula os valores totais -->
+                    						<tr class="contrato-parcela">
+                            					<td class="text-center"><?= $parcela->num_parcela; ?></td>
+                            					<td><?= Helper::formatDateToDisplay($parcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
+                            					<td><?= $parcela->atraso; ?></td>
+                            					<td class="principal" data-value="<?= $parcela->valor; ?>"><?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?></td>
+                            					<td class="multa" data-value="<?= $parcela->multa; ?>"><?= Helper::mask($parcela->multa, Helper::MASK_MONEY); ?></td>
+                            					<td class="juros" data-value="<?= $parcela->juros; ?>"><?= Helper::mask($parcela->juros, Helper::MASK_MONEY); ?></td>
+                            					<td class="honorario" data-value="<?= $parcela->honorariosCalculo; ?>"><?= Helper::mask($parcela->honorarios, Helper::MASK_MONEY); ?></td>
+                            					<td class="total"><?= Helper::mask($parcela->total, Helper::MASK_MONEY); ?></td>
+                            					<?php 
+                            					    // soma os valores da parcela
+                                                    $valor += $parcela->valor;
+                                                    $atraso += $parcela->atraso;
+                                                    $multa += $parcela->multa;
+                                                    $juros += $parcela->juros;
+                                                    $honorarios += $parcela->honorarios;
+                                                    $total += $parcela->total;
+                                                    $taxa = $parcela->honorariosCalculo;
+                                                    
+                                                    // seta o menor desconto máximo como limite
+                                                    if ($descEncargosMax > $parcela->faixaCalculo->desc_encargos_max) {                                                    
+                                                        $descEncargosMax = $parcela->faixaCalculo->desc_encargos_max;
+                                                    }
+                                                    if ($descHonorariosMax > $parcela->faixaCalculo->desc_honorario_max) {                                                    
+                                                        $descHonorariosMax = $parcela->faixaCalculo->desc_honorario_max;
+                                                    }
+                                                    if ($descPrincipalMax > $parcela->faixaCalculo->desc_principal_max) {                                                    
+                                                        $descPrincipalMax = $parcela->faixaCalculo->desc_principal_max;
+                                                    }
+                            					?>
+                            				</tr>
+                    					<?php endforeach; ?>
+                    					<!-- ./dados da parcela -->
+                    					<tr>
+                    						<td colspan="7"></td>
+                    					</tr>
+                    					<tr>
+                        					<td colspan="2" class="text-center"><b>Totais:</b></td>
+                        					<td><b><?= $atraso; ?></b></td>
+                        					<td class="parcelas-total-principal" data-value="<?= $valor; ?>"><b><?= Helper::mask($valor, Helper::MASK_MONEY); ?></b></td>
+                        					<td class="parcelas-total-multa" data-value="<?= $multa; ?>"><b><?= Helper::mask($multa, Helper::MASK_MONEY); ?></b></td>
+                        					<td class="parcelas-total-juros" data-value="<?= $juros; ?>"><b><?= Helper::mask($juros, Helper::MASK_MONEY); ?></b></td>
+                        					<td class="parcelas-total-honorarios" data-value="<?= $honorarios; ?>" data-taxa="<?= $taxa; ?>"><b><?= Helper::mask($honorarios, Helper::MASK_MONEY); ?></b></td>
+                        					<td class="parcelas-total-total" data-value="<?= $total; ?>"><b><?= Helper::mask($total, Helper::MASK_MONEY); ?></b></td>
                         				</tr>
-                					<?php endforeach; ?>
-                					<!-- ./dados da parcela -->
-                					<tr>
-                						<td colspan="7"></td>
-                					</tr>
-                					<tr>
-                    					<td colspan="2" class="text-center"><b>Totais:</b></td>
-                    					<td><b><?= $atraso; ?></b></td>
-                    					<td class="parcelas-total-principal" data-value="<?= $valor; ?>"><b><?= Helper::mask($valor, Helper::MASK_MONEY); ?></b></td>
-                    					<td class="parcelas-total-multa" data-value="<?= $multa; ?>"><b><?= Helper::mask($multa, Helper::MASK_MONEY); ?></b></td>
-                    					<td class="parcelas-total-juros" data-value="<?= $juros; ?>"><b><?= Helper::mask($juros, Helper::MASK_MONEY); ?></b></td>
-                    					<td class="parcelas-total-honorarios" data-value="<?= $honorarios; ?>" data-taxa="<?= $taxa; ?>"><b><?= Helper::mask($honorarios, Helper::MASK_MONEY); ?></b></td>
-                    					<td class="parcelas-total-total" data-value="<?= $total; ?>"><b><?= Helper::mask($total, Helper::MASK_MONEY); ?></b></td>
-                    				</tr>
-                    				<!-- ./totais -->
-                    				<tr class="hidden">
-                    					<td>
-                    						<input id="desc-encargos-max" value="<?= $descEncargosMax; ?>"/>
-                    						<input id="desc-honorario-max" value="<?= $descHonorariosMax; ?>"/>
-                    						<input id="desc-principal-max" value="<?= $descPrincipalMax; ?>"/>
-                    					</td>
-                    				</tr>
-                				<?php endif; ?>
-                			</tbody>
-                			<!-- ./tbody -->
-                		</table>
-                		<!-- ./table -->
+                        				<!-- ./totais -->
+                        				<tr class="hidden">
+                        					<td>
+                        						<input id="desc-encargos-max" value="<?= $descEncargosMax; ?>"/>
+                        						<input id="desc-honorario-max" value="<?= $descHonorariosMax; ?>"/>
+                        						<input id="desc-principal-max" value="<?= $descPrincipalMax; ?>"/>
+                        					</td>
+                        				</tr>
+                    				<?php endif; ?>
+                    			</tbody>
+                    			<!-- ./tbody -->
+                    		</table>
+                		</div>
+                		<!-- ./negociacao a vista -->
+                		<div class="panel panel-default negociacao-parcelado" style="<?= $negociacao->tipo == Negociacao::PARCELADO ? '' : 'display: none;'; ?>">
+                			<div class="panel-heading">
+                				Parcelado
+                			</div>
+                			<!-- ./panel-heading -->
+                			<div class="panel-body">
+                				<div class="row">
+                					<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+                						<div class="row">
+                							<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+        										<?= Html::label('Valor de Entrada', 'valor-entrada'); ?>
+                                				<?= MaskMoney::widget([
+                                    				    'name' => 'valor-entrada',    
+                        				                'value' => $negociacao->valor_entrada,
+                        				                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+                        				                'options' => [
+                        	                                'id' => 'valor-entrada',
+                        	                                'maxlength' => 16,
+                        	                                'class' => 'form-control input-sm',
+                        				                ],
+                        				                'pluginOptions' => [
+                        	                                'prefix' => 'R$ ',
+                        	                                'precision' => 2,
+                        				                ],
+                                    				]); 
+                                				?>      
+                            				</div>
+                            				<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+                                				<br>
+                            					<p><b>Taxa:</b> 15,00% am</p>
+                            					<p><b>Valor da Taxa:</b> <span id="parcelado-valor-taxa" data-value="<?= $negociacao->taxa_parcelado; ?>"><?= Helper::mask($negociacao->taxa_parcelado, Helper::MASK_MONEY); ?></span></p>
+                            				</div>
+                        				</div>
+                        				<!-- ./row -->       					
+            						</div>
+                					<div class="col-md-8 col-sm-8 col-lg-8s col-xs-12">
+                						<?= Html::label('Quantidade de Parcelas', 'quant-parcelas'); ?>
+                        				<?= Select2::widget([
+                                			    'name' => 'quant-parcelas',
+                                			    'id' => 'quant-parcelas',
+                        		                'value' => count($negociacao->parcelas),
+                                			    'hideSearch' => true,
+                        		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+                                			    'data' => Negociacao::getQuantidadeParcelas(),
+                				                'pluginOptions' => [
+                                                    'allowClear' => true,
+                				                ],
+                				                'options' => [
+    				                                'placeholder' => 'Selecione ...',
+                				                ],
+                                            ]);
+                                		?>
+                                		<!-- ./quantidade de parcelas -->
+                                		<div id="negociacao-lista-parcelas">
+                                			<table class="table table-stripped table-bordered">
+                                				<thead>
+                                					<tr>
+                                						<th class="text-center">Núm.</th>
+                                						<th>Vencimento</th>
+                                						<th>Valor</th>
+                                					</tr>
+                                				</thead>
+                                				<!-- ./thead -->
+                                				<tbody id="tbody-lista-parcelas">
+                                					<?php if($negociacao->parcelas): ?>
+                                						<?php foreach($negociacao->parcelas as $negociacaoParcela): ?>
+                                							<tr>
+                                								<td class="text-center"><?= $negociacaoParcela->num_parcela; ?></td>
+                                								<td><?= Helper::formatDateToDisplay($negociacaoParcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
+                                								<td><?= Helper::mask($negociacaoParcela->valor, Helper::MASK_MONEY); ?></td>
+                                							</tr>
+                                						<?php endforeach; ?>
+                                					<?php endif; ?>
+                                				</tbody>
+                                				<!-- ./tbody -->
+                                			</table>
+                                		</div>
+                                		<!-- ./lista das parcelas -->
+                					</div>
+                				</div>
+                				<!-- ./row -->
+                			</div>
+                			<!-- ./panel-body -->
+                		</div>
+                		<!-- ./negociacao parcelada -->
             		</div>
         		</div>
         		<!-- ./table -->
@@ -346,6 +485,7 @@ use kartik\date\DatePicker;
         	</div>
         	<!-- ./tabela de calculo -->
         	<div class="col-md-9 col-sm-9 col-lg-9 col-xs-12">
+        		<br>
         		<?= Html::label('Observação:', 'negociacao-observacao'); ?>
         		<?= Html::textarea('Negociacao[Observacao]', str_replace(['<br/>', '<br />', '<br>'], "\n", $negociacao->observacao), [
             		    'id' => 'negociacao-observacao',     

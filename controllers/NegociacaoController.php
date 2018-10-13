@@ -13,6 +13,7 @@ use app\base\AjaxResponse;
 use app\base\Helper;
 use yii\base\UserException;
 use app\models\Acionamento;
+use app\models\NegociacaoParcela;
 
 /**
  * NegociacaoController implements the CRUD actions for Negociacao model.
@@ -90,6 +91,27 @@ class NegociacaoController extends Controller
             // salva a negociacao
             if (!$model->save()) {
                 throw new UserException(Helper::renderErrors($model->getErrors()));
+            }
+            
+            // deleta todas as parcelas existentes da negociacao
+            NegociacaoParcela::deleteAll(['id_negociacao' => $model->id ? $model->id : $model->getPrimaryKey()]);
+            
+            // seta as parcelas da negociacao
+            if ($model->tipo == Negociacao::PARCELADO) {                
+                if (isset($post['Negociacao']['parcelas']) && is_array($post['Negociacao']['parcelas'])) {
+                    foreach ($post['Negociacao']['parcelas'] as $key => $parcela) {
+                        $modelParcela = new NegociacaoParcela();
+                        $modelParcela->id_negociacao = $model->id ? $model->id : $model->getPrimaryKey();
+                        $modelParcela->num_parcela = $parcela['num'];
+                        $modelParcela->data_vencimento = Helper::formatDateToSave($parcela['vencimento'], Helper::DATE_DEFAULT);
+                        $modelParcela->valor = $parcela['valor'];
+                        
+                        // salva a parcela da negociacao
+                        if (!$modelParcela->save()) {
+                            throw new UserException(Helper::renderErrors($modelParcela->getErrors()));
+                        }
+                    }
+                }
             }
             
             // registra o acionamento

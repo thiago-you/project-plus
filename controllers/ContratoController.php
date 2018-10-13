@@ -224,6 +224,7 @@ class ContratoController extends Controller
             $negociacao->id_contrato = $contrato->id;
             $negociacao->id_credor = $contrato->id_credor;
             $negociacao->id_campanha = $contrato->credor->id_campanha;
+            $negociacao->tipo = Negociacao::A_VISTA;
             
             // calcula os valores da negociacao
             $negociacao->calcularValores($contrato);

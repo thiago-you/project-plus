@@ -1,9 +1,7 @@
 // objeto da negociacao
-function Negociacao(context) {
+function Negociacao() {
 	// armazena o contexto
-	var self = this;
-	// seta o contexto
-	var context = context;
+	const self = this;
 	
 	// atributos do objeto
 	self.id = null;
@@ -21,6 +19,11 @@ function Negociacao(context) {
 	self.desconto_honorarios = 0;
 	self.desconto_total = 0;
 	self.observacao = '';
+	self.valor_entrada = '';
+	self.taxa_parcelado = '';
+	
+	// array com a lista de parcelas da negociacao
+	self.parcelas = [];
 	
 	// configura o máximo de desconto permitido
 	self.desconto_max_encargos = 100;
@@ -30,17 +33,19 @@ function Negociacao(context) {
 	
 	// carrega os dados no objeto
 	self.load = () => {
-		self.id = $('#negociacao-id', context).val() || null;
-		self.id_contrato = $('#negociacao-contrato', context).val() || null;
-		self.id_credor = $('#negociacao-credor', context).val() || null;
-		self.id_campanha = $('#negociacao-campanha', context).val() || null;
-		self.data_negociacao = $('#negociacao-data', context).val() || '';
-		self.tipo = $('#negociacao-tipo', context).val() || 0;
-		self.subtotal = $('#negociacao-subtotal', context).data('value') || 0;
-		self.desconto = $('#negociacao-desconto', context).data('value') || 0;
-		self.receita = $('#negociacao-receita', context).data('value') || 0;
-		self.total = $('#negociacao-total', context).data('value') || 0;
-		self.observacao = $('#negociacao-observacao', context).val() || '';
+		self.id = $('#negociacao-id').val() || null;
+		self.id_contrato = $('#negociacao-contrato').val() || null;
+		self.id_credor = $('#negociacao-credor').val() || null;
+		self.id_campanha = $('#negociacao-campanha').val() || null;
+		self.data_negociacao = $('#negociacao-data').val() || '';
+		self.tipo = $('#negociacao-tipo').val() || 'V';
+		self.subtotal = $('#negociacao-subtotal').data('value') || 0;
+		self.desconto = $('#negociacao-desconto').data('value') || 0;
+		self.receita = $('#negociacao-receita').data('value') || 0;
+		self.total = $('#negociacao-total').data('value') || 0;
+		self.observacao = $('#negociacao-observacao').val() || '';
+		self.valor_entrada = $('#valor-entrada').val() || 0;
+		self.taxa_parcelado = $('#parcelado-valor-taxa').data('valor') || '';
 		
 		// atualiza os valores de desconto
 		self.loadDesconto();
@@ -49,10 +54,10 @@ function Negociacao(context) {
 	// carrega os valores de desconto
 	self.loadDesconto = () => {
 		// seta os descontos
-		self.desconto_encargos = $('#desconto_encargos-disp', context).val() || 0;
-		self.desconto_principal = $('#desconto_principal-disp', context).val() || 0;
-		self.desconto_honorarios = $('#desconto_honorarios-disp', context).val() || 0;
-		self.desconto_total = $('#desconto_total-disp', context).val() || 0;
+		self.desconto_encargos = $('#desconto_encargos-disp').val() || 0;
+		self.desconto_principal = $('#desconto_principal-disp').val() || 0;
+		self.desconto_honorarios = $('#desconto_honorarios-disp').val() || 0;
+		self.desconto_total = $('#desconto_total-disp').val() || 0;
 		
 		// seta os descontos máximos
 		self.desconto_max_encargos = $('#desc-encargos-max').val();
@@ -113,9 +118,9 @@ function Negociacao(context) {
 				self.desconto_honorarios = 100;
 				
 				// seta os descontos nos inputs
-				$('#desconto_encargos-disp', context).val('100.0000%');
-				$('#desconto_principal-disp', context).val('0.0000%');
-				$('#desconto_honorarios-disp', context).val('100.0000%');
+				$('#desconto_encargos-disp').val('100.0000%');
+				$('#desconto_principal-disp').val('0.0000%');
+				$('#desconto_honorarios-disp').val('100.0000%');
 				
 				// atualiza cada parcela do contrato
 				// removendo todos os descontos
@@ -125,7 +130,7 @@ function Negociacao(context) {
 				self.desconto_principal = (Math.abs(principal - self.desconto_total) / principal) * 100;
 				
 				// seta o desconto principal
-				$('#desconto_principal-disp', context).val(accounting.formatMoney(self.desconto_principal, '', 4, '.', '.') + '%');
+				$('#desconto_principal-disp').val(accounting.formatMoney(self.desconto_principal, '', 4, '.', '.') + '%');
 			} else {
 				// calcula o valor principal - encargos
 				let principalTemp = principal + (principal * (honorarioTaxa / 100));
@@ -138,9 +143,9 @@ function Negociacao(context) {
 					self.desconto_encargos = 100;
 					
 					// seta os descontos nos inputs
-					$('#desconto_encargos-disp', context).val('100.0000%');
-					$('#desconto_principal-disp', context).val('0.0000%');
-					$('#desconto_honorarios-disp', context).val('0.0000%');
+					$('#desconto_encargos-disp').val('100.0000%');
+					$('#desconto_principal-disp').val('0.0000%');
+					$('#desconto_honorarios-disp').val('0.0000%');
 					
 					// se o valor desejado for maior que o principal, entao calcula o desconto dos honorarios
 					if (self.desconto_total > principal) {
@@ -148,16 +153,16 @@ function Negociacao(context) {
 						self.desconto_honorarios = ((principalTemp - self.desconto_total) / honorariosTemp) * 100;
 						
 						// seta os descontos dos honorarios
-						$('#desconto_honorarios-disp', context).val(accounting.formatMoney(self.desconto_honorarios, '', 4, '.', '.') + '%');
+						$('#desconto_honorarios-disp').val(accounting.formatMoney(self.desconto_honorarios, '', 4, '.', '.') + '%');
 					}
 				} else {
 					// desconto total dos encargos
 					self.desconto_encargos = 100;
 					
 					// seta os descontos nos inputs
-					$('#desconto_encargos-disp', context).val('0.0000%');
-					$('#desconto_principal-disp', context).val('0.0000%');
-					$('#desconto_honorarios-disp', context).val('0.0000%');
+					$('#desconto_encargos-disp').val('0.0000%');
+					$('#desconto_principal-disp').val('0.0000%');
+					$('#desconto_honorarios-disp').val('0.0000%');
 					
 					// se o valor desejado for maior que o principal, entao calcula o desconto dos honorarios
 					if (self.desconto_total > principal) {
@@ -173,7 +178,7 @@ function Negociacao(context) {
 						self.desconto_encargos = Math.floor((100 - ((self.desconto_total / encargos) * 100)) * 100) / 100;
 						
 						// seta os descontos dos honorarios
-						$('#desconto_encargos-disp', context).val(accounting.formatMoney(self.desconto_encargos, '', 4, '.', '.') + '%');
+						$('#desconto_encargos-disp').val(accounting.formatMoney(self.desconto_encargos, '', 4, '.', '.') + '%');
 					}
 				}
 			}	
@@ -201,6 +206,12 @@ function Negociacao(context) {
 		$('#negociacao-receita').data('value', self.receita).text(accounting.formatMoney(self.receita, 'R$ ', 2, '.', ','));
 		$('#negociacao-total').data('value', self.total).text(accounting.formatMoney(self.total, 'R$ ', 2, '.', ','));
 		
+		// calcula o valor das parcelas
+		// se o tipo da negociacao for parcelado
+		if (self.tipo == 'P') {		
+			self.calcularValorParcela($('#quant-parcelas').val());
+		}
+
 		return true;
 	}
 	
@@ -256,6 +267,93 @@ function Negociacao(context) {
 			self.desconto += encargosDesconto + principalDesconto;
 		});
 	}
+	
+	// calcula o valor de vada parcela da negociacao
+	self.calcularValorParcela = quantParcelas => {
+		self.parcelas = [];
+		self.taxa_parcelado = 0;
+		let taxa = 0;
+		
+		// valida o valor de entrada
+		if (self.valor_entrada == undefined || isNaN(self.valor_entrada)) {
+			self.valor_entrada = 0;
+		}
+		// valida q quantidade de parcelas
+		if (quantParcelas == undefined || !quantParcelas) {
+			quantParcelas = 0;
+		}
+				
+		// calcula o valor das parcelas
+		let valorParcela = (self.total - self.valor_entrada);
+		
+		// calcula a taxa de juros de cada parcela
+		if (quantParcelas > 0) {			
+			// calcula a taxa de juros da parcela
+			taxa = (valorParcela * 0.15) * quantParcelas;
+			taxa = taxa / (self.valor_entrada > 0 ? quantParcelas - 1 : quantParcelas); 
+		
+			// calcula a taxa de juros total
+			self.taxa_parcelado = Math.floor((taxa * (self.valor_entrada > 0 ? quantParcelas - 1 : quantParcelas)) * 100) / 100;
+		}
+		
+		// divide o valor das parcelas
+		valorParcela = self.valor_entrada > 0 ? (valorParcela / (quantParcelas - 1)) : (valorParcela / quantParcelas);
+		valorParcela = Math.floor(valorParcela * 100) / 100;
+		
+		// soma a taxa de juros no valor da parcela
+		valorParcela = Math.floor((valorParcela + taxa) * 100) / 100;
+		
+		// calcula o vencimento da primeira parcela
+		let vencimento = new Date();
+		let dd = vencimento.getDate();
+		let mm = vencimento.getMonth() + 1;
+		let yyyy = vencimento.getFullYear();
+
+		// formata o dia e mes
+		if (dd < 10) {
+		    dd = '0'+dd
+		} 
+		if (mm < 10) {
+		    mm = '0'+mm
+		} 
+
+		// seta a primeira parcela (valor de entrada quando houver)
+		self.parcelas.push({
+			num: 1,
+			vencimento: `${dd}/${mm}/${yyyy}`,
+			valor: self.valor_entrada > 0 ? self.valor_entrada : valorParcela,
+		});
+		
+		// seta cada parcela
+		for (let i = 1; i < quantParcelas; i++) {
+			// calcula o vencimento
+			vencimento.setMonth(vencimento.getMonth() + 1);
+			dd = vencimento.getDate();
+			mm = vencimento.getMonth() + 1;
+			yyyy = vencimento.getFullYear();
+
+			// formata o dia e mes
+			if (dd < 10) {
+			    dd = '0'+dd
+			} 
+			if (mm < 10) {
+			    mm = '0'+mm
+			}
+			
+			self.parcelas.push({
+				num: i + 1,
+				vencimento: `${dd}/${mm}/${yyyy}`,
+				valor: valorParcela,
+			});
+		}
+		
+		// adiciona o valor total de taxa
+		$('#parcelado-valor-taxa').data('value', self.taxa_parcelado).text(accounting.formatMoney(self.taxa_parcelado, 'R$ ', 2, '.', ','));
+
+		// seta o novo valor total
+		self.total = self.total + self.taxa_parcelado;
+		$('#negociacao-total').data('value', 100).text(accounting.formatMoney(self.total, 'R$ ', 2, '.', ','));
+	}
 };
 
 // eventos da página
@@ -267,6 +365,26 @@ $(document).ready(function() {
 	negociacao.load();
 	// calcula os descontos
 	negociacao.calcularNegociacao();
+	
+	// altera a forma de negociacao
+	$('body').on('change', '#negociacao-tipo', function() {
+		// seta o tipo da negociacao
+		negociacao.tipo = this.value;
+		// calcula a negociacao e o valor das parcelas
+		negociacao.calcularNegociacao();
+		
+		// p => Parcelado
+		// v => A Vista
+		if (this.value == 'P') {
+			$('.negociacao-a-vista').slideUp(function() {
+				$('.negociacao-parcelado').slideDown();
+			});
+		} else {
+			$('.negociacao-parcelado').slideUp(function() {				
+				$('.negociacao-a-vista').slideDown();
+			});
+		}
+	});
 	
 	// salva a negociacao
 	$('body').on('click', '#salvar-negociacao', function() {
@@ -294,6 +412,11 @@ $(document).ready(function() {
 					$('.panel-calculo .panel-body').html(retorno.content);
 					// atualiza a lista de acionamentos
 					$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
+					
+					// carrega os dados na negociacao
+					negociacao.load();
+					// calcula os descontos
+					negociacao.calcularNegociacao();
 				} else {
 					// mensagem de erro
 					toastr.error('Houve um erro interno ao tentar salvar a negociação.');
@@ -314,6 +437,9 @@ $(document).ready(function() {
 			negociacao.validarDesconto();
 			// calcula os descontos
 			negociacao.calcularNegociacao();
+
+			// ativa o evento de change para recalcular as parcelas
+			$('#quant-parcelas').trigger('change');
 		}
 	});
 	
@@ -455,6 +581,63 @@ $(document).ready(function() {
 		}).fail(function() {
 			toastr.error('Não foi possível abrir o contrato.');
 		});
+	});
+	
+	// recalcula o valor das parcelas da negociacao
+	$('body').on('change', '#valor-entrada', function() {
+		// valida o valor do contrato e o valor de entrada
+		if (negociacao.total == 0) {
+			toastr.warning('O valor do contrato já está zerado.');
+			return false;
+		}
+		if (this.value >= negociacao.total) {
+			toastr.warning('O valor da entrada não pode ser maior ou igual o valor total do contrato.');
+			$('#valor-entrada-disp').val('R$ 0,00').trigger('change');
+			return false;
+		}
+		
+		// adiciona o valor de entrada no objeto de negociacao
+		negociacao.valor_entrada = this.value;
+		// ativa o evento de change para recalcular as parcelas
+		$('#quant-parcelas').trigger('change');
+	});
+	
+	// calcula as parcelas da negociacao
+	$('body').on('change', '#quant-parcelas', function() {
+		const listaParcelas = document.getElementById('tbody-lista-parcelas');
+		
+		// limpa a lista de parcelas
+		listaParcelas.innerHTML = '';
+		
+		// calcula a negociacao e o valor das parcelas
+		negociacao.calcularNegociacao();
+
+		// verifica se há parcelas
+		if (this.value != undefined && this.value > 0) {	
+			// cria as parcelas
+			if (negociacao.parcelas != undefined && negociacao.parcelas.length > 0) {
+				negociacao.parcelas.forEach(function(parcela) {					
+					const tr = document.createElement('tr');		        
+					
+					// cria os colunas da linha
+					const tdNum = document.createElement('td');
+					const tdVencimento = document.createElement('td');
+					const tdValor = document.createElement('td');
+					
+					// adiciona os valores de cada coluna
+					tdNum.textContent = parcela.num;
+					tdNum.classList = 'text-center';
+					tdVencimento.textContent = parcela.vencimento;
+					tdValor.textContent = accounting.formatMoney(parcela.valor, 'R$ ', 2, '.', ',');
+					
+					// adiciona os valores na linha e a linha na tabela
+					tr.appendChild(tdNum);
+					tr.appendChild(tdVencimento);
+					tr.appendChild(tdValor);
+					listaParcelas.appendChild(tr);	
+				});
+			}
+		}
 	});
 });
 

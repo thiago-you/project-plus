@@ -22,11 +22,14 @@ use app\base\Helper;
  * @property string $desconto
  * @property string $receita
  * @property string $total
+ * @property string $valor_entrada
+ * @property string $taxa_parcelado
  * @property string $tipo Flag que valida se a negociacao é a vista ou parcelado
  * @property string $observacao
  * @property integer $status
  * 
  * @property Contrato $contrato
+ * @property NegociacaoParcela $parcelas
  */
 class Negociacao extends \yii\db\ActiveRecord
 {
@@ -54,10 +57,12 @@ class Negociacao extends \yii\db\ActiveRecord
             [['data_negociacao', 'id_contrato', 'id_credor', 'id_campanha'], 'required'],
             [['id_contrato', 'id_credor', 'id_campanha', 'status'], 'integer'],
             [[
-                'subtotal', 'desconto', 'receita', 'total', 'desconto_encargos',
-                'desconto_principal', 'desconto_honorarios', 'desconto_total'           
+                'subtotal', 'desconto', 'receita', 'total', 'desconto_encargos', 'taxa_parcelado',
+                'desconto_principal', 'desconto_honorarios', 'desconto_total', 'valor_entrada'           
             ], 'number'],
-            [['data_negociacao', 'data_cadastro', 'tipo'], 'safe'],
+            [['data_negociacao', 'data_cadastro'], 'safe'],
+            [['tipo'], 'string'],
+            [['tipo'], 'in', 'range' => [self::A_VISTA, self::PARCELADO]],
             [['observacao'], 'string', 'max' => 250],
             [['id_contrato'], 'exist', 'skipOnError' => true, 'targetClass' => Contrato::className(), 'targetAttribute' => ['id_contrato' => 'id']],
         ];
@@ -86,6 +91,8 @@ class Negociacao extends \yii\db\ActiveRecord
             'tipo' => 'Tipo de Pagamento',
             'observacao' => 'Observação',
             'status' => 'Status da Negociação',
+            'valor_entrada' => 'Valor de Entrada',
+            'taxa_parcelado' => 'Taxa',
         ];
     }
 
@@ -95,6 +102,14 @@ class Negociacao extends \yii\db\ActiveRecord
     public function getContrato()
     {
         return $this->hasOne(Contrato::className(), ['id' => 'id_contrato']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParcelas()
+    {
+        return $this->hasMany(NegociacaoParcela::className(), ['id_negociacao' => 'id']);
     }
     
     /**
@@ -172,6 +187,29 @@ class Negociacao extends \yii\db\ActiveRecord
     {
         // formata a data para exibicao
         $this->data_negociacao = Helper::formatDateToDisplay($this->data_negociacao, Helper::DATE_DEFAULT);
+    }
+    
+    /**
+     * Retorna a quantidade de parcelas disponíveis para o contrato
+     */
+    public static function getQuantidadeParcelas() 
+    {
+        return [
+            2 => '2x',
+            3 => '3x',
+            4 => '4x',
+            5 => '5x',
+            6 => '6x',
+            7 => '7x',
+            8 => '8x',
+            9 => '9x',
+            10 => '10x',
+            11 => '11x',
+            12 => '12x',
+            13 => '13x',
+            14 => '14x',
+            15 => '15x',
+        ];        
     }
 }
 
