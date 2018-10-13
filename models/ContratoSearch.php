@@ -14,8 +14,8 @@ class ContratoSearch extends Contrato
      * @var string => atributos do cliente
      */
     public $nome;
-    public $documento;
     public $telefone;
+    public $documento;
     
     /**
      * {@inheritdoc}
@@ -23,7 +23,7 @@ class ContratoSearch extends Contrato
     public function rules()
     {
         return [
-            [['id', 'id_cliente', 'tipo'], 'integer'],
+            [['id', 'id_cliente', 'tipo', 'id_credor'], 'integer'],
             [[
                 'codigo_cliente', 'codigo_contrato', 'num_contrato', 'num_plano', 
                 'data_cadastro', 'data_vencimento', 'regiao', 'filial', 'observacao',
@@ -74,6 +74,7 @@ class ContratoSearch extends Contrato
         $query->andFilterWhere([
             'con.id' => $this->id,
             'con.id_cliente' => $this->id_cliente,
+            'con.id_credor' => $this->id_credor,
             'con.valor' => $this->valor,
             'con.data_cadastro' => $this->data_cadastro,
             'con.data_vencimento' => $this->data_vencimento,

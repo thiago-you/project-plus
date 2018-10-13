@@ -4,10 +4,13 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\typeahead\Typeahead;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+use app\models\Credor;
 ?>
 <div class="box">
 	<div class="row">
-		<div class="col-md-8 col-sm-8 col-lg-8 col-xs-12">
+		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
             <?php $form = ActiveForm::begin(['id' => 'form-filtro', 'method' => 'post']); ?>
             	<div class="box-header">
             		<h4><i class="fa fa-filter"></i>&nbsp; Opções de Filtro</h4>
@@ -15,7 +18,7 @@ use kartik\typeahead\Typeahead;
             	<!-- ./box-header -->
                	<div class="box-body">       	
                 	<div class="row">
-            			<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+            			<div class="col-md-8 col-sm-8 col-lg-8 col-xs-12">
                 			<?= $form->field($model, 'nome')->widget(Typeahead::classname(),[
                                     'pluginOptions' => ['highlight' => true],
         			                'options' => [
@@ -37,7 +40,7 @@ use kartik\typeahead\Typeahead;
             		</div>
             		<!-- ./row -->
             		<div class="row">
-                    	<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+                    	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
                 			<?= $form->field($model, 'telefone')->widget(Typeahead::classname(), [
                                     'pluginOptions' => ['highlight' => true],
         			                'options' => [
@@ -57,7 +60,7 @@ use kartik\typeahead\Typeahead;
                                 ]);
                             ?>	
                 		</div>
-                		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+                		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
                 			<?= $form->field($model, 'documento')->widget(Typeahead::classname(),[
                                     'pluginOptions' => ['highlight' => true],
         			                'options' => [
@@ -75,6 +78,15 @@ use kartik\typeahead\Typeahead;
                                        ]
                                     ]
                                 ]);
+                            ?>	
+                		</div>
+                		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+                			<?= $form->field($model, 'id_credor')->widget(Select2::className(), [
+                    			   'data' => ArrayHelper::map(Credor::find()->all(), 'id', 'nome'),
+        			                'options' => [
+		                                'placeholder' => 'Selecione ...',
+        			                ],
+                    			]);
                             ?>	
                 		</div>
             		</div>
