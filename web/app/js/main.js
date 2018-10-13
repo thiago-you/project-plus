@@ -53,6 +53,6 @@ $(document).ready(function() {
 		};
 		
 		// inicializa o tooltip
-		  $('[data-toggle="tooltip"]').tooltip();
+		$('[data-toggle="tooltip"]').tooltip();
 	});
 });

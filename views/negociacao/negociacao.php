@@ -5,6 +5,7 @@ use app\models\Negociacao;
 use kartik\money\MaskMoney;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
+use app\models\NegociacaoParcela;
 ?>
 <input id="negociacao-id" class="hidden" value="<?= $negociacao->isNewRecord ? null : $negociacao->id; ?>"/>
 <input id="negociacao-contrato" class="hidden" value="<?= $negociacao->id_contrato; ?>"/>
@@ -94,6 +95,8 @@ use kartik\date\DatePicker;
             						<th class="text-center">Núm.</th>
             						<th>Vencimento</th>
             						<th>Valor</th>
+            						<th class="text-center">Status</th>
+            						<td></td>
             					</tr>
             				</thead>
             				<!-- ./thead -->
@@ -104,6 +107,23 @@ use kartik\date\DatePicker;
             								<td class="text-center"><?= $negociacaoParcela->num_parcela; ?></td>
             								<td><?= Helper::formatDateToDisplay($negociacaoParcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
             								<td><?= Helper::mask($negociacaoParcela->valor, Helper::MASK_MONEY); ?></td>
+        									<td>
+            									<?php if($negociacaoParcela->status == NegociacaoParcela::STATUS_ABERTA): ?>
+            										<span class="label label-warning">ABERTA</span>
+            									<?php else: ?>
+            										<span class="label label-emerald">FATURADA</span>
+            									<?php endif; ?>
+            								</td>
+            								<td class="text-center">
+            									<?= Html::button('<i class="fa fa-dollar-sign"></i>', [
+                                                        'class' => Helper::BTN_COLOR_INFO.' faturar-parcela btn-sm',
+    									                'title' => $negociacaoParcela->status == NegociacaoParcela::STATUS_ABERTA ? 'Faturar parcela' : 'Estornar parcela',
+    									                'data-id' => $negociacaoParcela->id,
+    									                'data-status' => $negociacaoParcela->status,
+    									                'disabled' => $negociacao->status == Negociacao::STATUS_ABERTA ? true : false,
+                                                    ]);
+            									?>
+        									</td>
             							</tr>
             						<?php endforeach; ?>
             					<?php endif; ?>
@@ -134,12 +154,16 @@ use kartik\date\DatePicker;
             		<?= Html::button('<i class="fa fa-briefcase"></i>&nbsp; '.($negociacao->status == Negociacao::STATUS_FECHADA ? 'Abrir Negociação' : 'Fechar Negociação'), [
                             'class' => Helper::BTN_COLOR_PRIMARY.' btn-block',
                             'id' => 'alterar-negociacao',
+    		                'disabled' => $negociacao->status == Negociacao::STATUS_FATURADA ? true : false,
                 		]);
             		?>
             	</div>
             	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 pull-right">	
-            		<?= Html::button(helper::BTN_CANCEL, [
-                            'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
+            		<?= Html::button('<i class="fa fa-hand-holding-usd"></i>&nbsp; ' .($negociacao->status == Negociacao::STATUS_FECHADA ? 'Faturar Contrato' : 'Estornar Contrato'), [
+    		                'id' => 'faturar-contrato',
+    		                'data-status' => $negociacao->status,
+                            'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
+    		                'disabled' => $negociacao->status == Negociacao::STATUS_ABERTA ? true : false,
                 		]);
             		?>
             	</div> 
@@ -508,6 +532,7 @@ use kartik\date\DatePicker;
         	</div>
         	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 pull-right">	
         		<?= Html::button(helper::BTN_CANCEL, [
+		                'id' => 'cancelar-alteracao',
                         'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
 		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
             		]);

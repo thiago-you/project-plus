@@ -156,3 +156,7 @@
     font-size: 13px;
     padding: 5px 5px;
 }
+.negociacao-view-parcelas-table .table tbody td span.label {
+	display: inline-block;
+	width: 100%;
+}

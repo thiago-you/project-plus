@@ -20,6 +20,10 @@ use Yii;
  */
 class NegociacaoParcela extends \yii\db\ActiveRecord
 {
+    // status da parcela
+    CONST STATUS_ABERTA = 0;
+    CONST STATUS_FATURADA = 1;
+    
     /**
      * {@inheritdoc}
      */
@@ -39,6 +43,7 @@ class NegociacaoParcela extends \yii\db\ActiveRecord
             [['data_cadastro', 'data_vencimento'], 'safe'],
             [['valor'], 'number'],
             [['observacao'], 'string', 'max' => 250],
+            [['status'], 'in', 'range' => [self::STATUS_ABERTA, self::STATUS_FATURADA]],
             [['id_negociacao'], 'exist', 'skipOnError' => true, 'targetClass' => Negociacao::className(), 'targetAttribute' => ['id_negociacao' => 'id']],
         ];
     }

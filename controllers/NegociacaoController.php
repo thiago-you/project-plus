@@ -1,19 +1,17 @@
 <?php
-
 namespace app\controllers;
 
-use Yii;
-use app\models\Negociacao;
-use app\models\NegociacaoSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\helpers\Json;
-use app\base\AjaxResponse;
 use app\base\Helper;
+use yii\helpers\Json;
+use yii\web\Controller;
+use app\models\Contrato;
+use app\models\Negociacao;
+use app\base\AjaxResponse;
+use yii\filters\VerbFilter;
 use yii\base\UserException;
 use app\models\Acionamento;
 use app\models\NegociacaoParcela;
+use yii\web\NotFoundHttpException;
 
 /**
  * NegociacaoController implements the CRUD actions for Negociacao model.
@@ -36,18 +34,47 @@ class NegociacaoController extends Controller
     }
 
     /**
-     * Lists all Negociacao models.
-     * @return mixed
+     * Retorna a negociacao do contrato
      */
-    public function actionIndex()
+    public function actionIndex($id, $contratoId = null)
     {
-        $searchModel = new NegociacaoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        // valida a rquisicao
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
+        }
+        
+        $retorno = new AjaxResponse();
+        
+        // tenta encontrar a model
+        if (!$model = Negociacao::find()->where(['id' => $id])->one()) {
+            // busca o contrato
+            if (!$contrato = Contrato::findOne(['id' => $contratoId])) {
+                throw new NotFoundHttpException();
+            }
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            // cria a model
+            $model = new Negociacao();       
+            
+            // seta os dados do contrato
+            $model->id_contrato = $contrato->id;
+            $model->id_credor = $contrato->id_credor;
+            $model->id_campanha = $contrato->credor->id_campanha;
+            $model->tipo = Negociacao::A_VISTA;
+            
+            // calcula os valores da negociacao
+            $model->calcularValores($contrato);
+        }
+        
+        // seta o id da negociacao
+        $retorno->id = $model->id ? $model->id : $model->getPrimaryKey();
+        
+        // seta o conteudo da negociacao
+        $retorno->content = $this->renderAjax('negociacao', [
+            'contrato' => $model->contrato,
+            'negociacao' => $model,
         ]);
+        
+        return Json::encode($retorno);
     }
 
     /**
@@ -195,6 +222,92 @@ class NegociacaoController extends Controller
         return Json::encode($retorno);
     }
 
+    /**
+     * Fatura uma negociacao
+     */
+    public function actionFaturar($id)
+    {
+        // valida a requisição
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
+        }
+        
+        $retorno = new AjaxResponse();
+        
+        // busca a model
+        $model = $this->findModel($id);
+        
+        // altera o status da negociacao
+        try {
+            // verifica se a negociacao ja esta fechada
+            if ($model->status == Negociacao::STATUS_ABERTA) {
+                throw new UserException('A negociação não pode ser faturada pois ainda esta aberta.');
+            }
+            
+            if ($model->status == Negociacao::STATUS_FECHADA) {
+                $model->status = Negociacao::STATUS_FATURADA;
+                
+                // fatura todas as parcelas da negociacao
+                if ($model->tipo == Negociacao::PARCELADO) {                    
+                    foreach ($model->parcelas as $parcela) {
+                         $parcela->status = NegociacaoParcela::STATUS_FATURADA;
+                         // salva a parcela
+                         if (!$parcela->save()) {
+                             throw new UserException('Não foi possível faturar as parcelas da negociação.');
+                         }
+                    }
+                }
+                
+                // registra o acionamento
+                Acionamento::setAcionamento([
+                    'id_cliente' => $model->contrato->id_cliente,
+                    'id_contrato' => $model->id_contrato,
+                    'tipo' => Acionamento::TIPO_SISTEMA,
+                    'titulo' => 'Alteração na Negociação',
+                    'descricao' => 'A negociação foi faturada.',
+                ]);
+            } elseif ($model->status == Negociacao::STATUS_FATURADA) {
+                $model->status = Negociacao::STATUS_FECHADA;
+                
+                // estorna todas as parcelas da negociacao
+                if ($model->tipo == Negociacao::PARCELADO) {
+                    foreach ($model->parcelas as $parcela) {
+                        $parcela->status = NegociacaoParcela::STATUS_ABERTA;
+                        // salva a parcela
+                        if (!$parcela->save()) {
+                            throw new UserException('Não foi possível estornar as parcelas da negociação.');
+                        }
+                    }
+                }
+                
+                // registra o acionamento
+                Acionamento::setAcionamento([
+                    'id_cliente' => $model->contrato->id_cliente,
+                    'id_contrato' => $model->id_contrato,
+                    'tipo' => Acionamento::TIPO_SISTEMA,
+                    'titulo' => 'Alteração na Negociação',
+                    'descricao' => 'Estorno da negociação e alteração da situação da negociação de "faturada" para "fechada".',
+                ]);
+            }
+            
+            // salva a negociacao
+            if (!$model->save()) {
+                throw new UserException('Não foi possível alterar a negociação.');
+            }
+        } catch (\Exception $e) {
+            $retorno->success = false;
+            $retorno->message = $e->getMessage();
+        }
+        
+        // renderiza o html da página
+        $retorno->content = $this->renderAjax('negociacao', [
+            'contrato' => $model->contrato,
+            'negociacao' => $model,
+        ]);
+        
+        return Json::encode($retorno);
+    }
+    
     /**
      * Deletes an existing Negociacao model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

@@ -39,6 +39,7 @@ class Negociacao extends \yii\db\ActiveRecord
     // status da negociacao
     CONST STATUS_ABERTA = 0;
     CONST STATUS_FECHADA = 1;
+    CONST STATUS_FATURADA = 2;
     
     /**
      * {@inheritdoc}
@@ -63,6 +64,7 @@ class Negociacao extends \yii\db\ActiveRecord
             [['data_negociacao', 'data_cadastro'], 'safe'],
             [['tipo'], 'string'],
             [['tipo'], 'in', 'range' => [self::A_VISTA, self::PARCELADO]],
+            [['status'], 'in', 'range' => [self::STATUS_ABERTA, self::STATUS_FECHADA, self::STATUS_FATURADA]],
             [['observacao'], 'string', 'max' => 250],
             [['id_contrato'], 'exist', 'skipOnError' => true, 'targetClass' => Contrato::className(), 'targetAttribute' => ['id_contrato' => 'id']],
         ];
@@ -188,7 +190,7 @@ class Negociacao extends \yii\db\ActiveRecord
         // formata a data para exibicao
         $this->data_negociacao = Helper::formatDateToDisplay($this->data_negociacao, Helper::DATE_DEFAULT);
     }
-    
+
     /**
      * Retorna a quantidade de parcelas disponíveis para o contrato
      */
