@@ -7,6 +7,7 @@
 USE `maklenrc`;
 -- ----------------------------------------------------------------------------------------------------------------
 -- dropa todas as tables recriaveis
+DROP TABLE IF EXISTS `negociacao_parcela`;
 DROP TABLE IF EXISTS `negociacao`;
 DROP TABLE IF EXISTS `acionamento`;
 DROP TABLE IF EXISTS `telefone`;
@@ -186,11 +187,25 @@ CREATE TABLE `negociacao` (
   `subtotal` DECIMAL(10,2) DEFAULT 0.00,
   `desconto` DECIMAL(10,2) DEFAULT 0.00,
   `receita` DECIMAL(10,2) DEFAULT 0.00,
+  `taxa_parcelado` DECIMAL(10,2) DEFAULT 0.00,
   `total` DECIMAL(10,2) DEFAULT 0.00,
+  `valor_entrada` DECIMAL(10,2) DEFAULT 0.00,
   `tipo` ENUM('V', 'P') NOT NULL DEFAULT 'V' COMMENT 'Tipo do calculo => V: A vista / P: Parcelado',
   `observacao` VARCHAR(250),
   `status` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Consultar model para checar os status possiveis',
   FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- cria a tabela de parcelas da negociacao
+CREATE TABLE `negociacao_parcela` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_negociacao` INT NOT NULL,
+  `num_parcela` INT,
+  `data_cadastro` DATETIME NOT NULL,
+  `data_vencimento` DATE NOT NULL,
+  `valor` DECIMAL(10,2),
+  `observacao` VARCHAR(250),
+  `status` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar as situacoes possiveis',
+  FOREIGN KEY (`id_negociacao`) REFERENCES `negociacao`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de parcela do contrato
 CREATE TABLE `contrato_parcela` (
