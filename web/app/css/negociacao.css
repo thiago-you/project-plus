@@ -47,6 +47,9 @@
 .panel-valores .panel-body {
 	font-size: 12px;
 }
+.panel-valores .panel-body {
+	margin-bottom: 15px;
+}
 .panel-calculo .panel-body:first-child {
 	padding-bottom: 20px;
 }
@@ -72,7 +75,8 @@
     padding-right: 0px !important;
 }
 .panel-acionamento .panel-body {
-    min-height: 400px;
+    min-height: 300px;
+    max-height: 580px;
     overflow-y: auto;
     padding-top: 5px;
     padding-right: 0px;
@@ -113,4 +117,42 @@
     overflow-y: auto;
     max-height: 200px;  
     min-height: 100px;  
+}
+/* css do contrato parcelado */
+.negociacao-parcelado .panel-heading {
+	padding: 9px 15px;
+}
+.negociacao-parcelado div label {
+    font-size: 14px;
+}
+.negociacao-parcelado div p {
+	font-size: 13px;
+	margin-bottom: 7px;
+}
+.negociacao-parcelado .select2-container {
+	width: 200px !important;
+}
+#negociacao-lista-parcelas {
+	border: 1px solid #cecece;
+    overflow-y: auto;
+    max-height: 200px;  
+    min-height: 100px; 
+    margin-top: 10px; 
+    margin-bottom: 20px;
+}
+#tab-negociacao .negociacao-view-parcelas-table {
+	border: 1px solid #cecece;
+	overflow-y: auto;
+    max-height: 250px;  
+    min-height: 100px; 
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.negociacao-view-parcelas-table .table thead th { 
+	font-size: 12px;
+	padding: 5px 5px;
+}
+.negociacao-view-parcelas-table .table tbody td { 
+    font-size: 13px;
+    padding: 5px 5px;
 }
