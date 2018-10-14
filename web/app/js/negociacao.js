@@ -628,8 +628,6 @@ $(document).ready(function() {
 								$('.panel-calculo .panel-body').html(retorno.content);
 								// atualiza a lista de acionamentos
 								$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
-								// adiciona o tooltip nas parcelas novamente
-								$('.faturar-parcela').tooltip();
 							}).fail(function() {
 								$('.panel-calculo .panel-body').html(negociacaoContent);
 							});
@@ -657,8 +655,6 @@ $(document).ready(function() {
 				$('.panel-calculo .panel-body').html(retorno.content);
 				// atualiza a lista de acionamentos
 				$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
-				// adiciona o tooltip nas parcelas novamente
-				$('.faturar-parcela').tooltip();
 			}).fail(function() {
 				$('.panel-calculo .panel-body').html(negociacaoContent);
 			});
@@ -713,8 +709,6 @@ $(document).ready(function() {
 								$('.panel-calculo .panel-body').html(retorno.content);
 								// atualiza a lista de acionamentos
 								$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
-								// adiciona o tooltip nas parcelas novamente
-								$('.faturar-parcela').tooltip();
 							}).fail(function() {
 								$('.panel-calculo .panel-body').html(negociacaoContent);
 							});
@@ -742,8 +736,6 @@ $(document).ready(function() {
 				$('.panel-calculo .panel-body').html(retorno.content);
 				// atualiza a lista de acionamentos
 				$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
-				// adiciona o tooltip nas parcelas novamente
-				$('.faturar-parcela').tooltip();
 			}).fail(function() {
 				$('.panel-calculo .panel-body').html(negociacaoContent);
 			});
