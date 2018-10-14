@@ -3,13 +3,20 @@ $(document).ready(function() {
 	$('body').on('change', '#cliente-tipo', function() {
 		if (this.value == 'F') {
 			if (!$('.cliente-fisico').is(':visible')) {
+				// esconde os dados de cliente juridico
+				// e mostra os dados de cliente fisico
 				$('.cliente-juridico').hide(function() {
+					$('#cliente-nome').siblings('label').text('Nome');
 					$('.cliente-fisico').show();
 				});
 			}
 		} else {
 			if (!$('.cliente-juridico').is(':visible')) {
+				// esconde os dados de cliente fisico 
+				// e mostra os dados de cliente juridico
 				$('.cliente-fisico').hide(function() {
+					// altera a label do nome
+					$('#cliente-nome').siblings('label').text('Razão Social');
 					$('.cliente-juridico').show();
 				});
 			}

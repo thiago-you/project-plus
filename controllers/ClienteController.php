@@ -76,21 +76,17 @@ class ClienteController extends BaseController
         		
         		// carrega os dados da model
         		$model->load($post);
-	        	
+        		
 	        	// valida o tipo do cliente
 	        	if ($model->tipo == Cliente::TIPO_FISICO) {
-	        		$model->nome = $post['cliente-nome'];
 	        		$model->documento = Helper::unmask($post['cliente-cpf'], true);
 	        		$model->nome_social = $post['cliente-apelido'];
+    	        	$model->rg = Helper::unmask($model->rg);
 	        	} else {
-	        		$model->nome = $post['cliente-razao-social'];
 	        		$model->documento = Helper::unmask($post['cliente-cnpj'], true);
 	        		$model->nome_social = $post['cliente-fantasia'];
 	        	}
-	        	
-	        	// remove a mascara do rg
-	        	$model->rg = Helper::unmask($model->rg);
-	        	
+	        		        	
 	        	// salva o cliente
 	        	if (!$model->save()) {
 	        		throw new \Exception(Helper::renderErrors($model->getErrors()));
@@ -198,18 +194,14 @@ class ClienteController extends BaseController
         		
         		// valida o tipo do cliente
         		if ($model->tipo == Cliente::TIPO_FISICO) {
-        			$model->nome = $post['cliente-nome'];
         			$model->documento = Helper::unmask($post['cliente-cpf'], true);
         			$model->nome_social = $post['cliente-apelido'];
+            		$model->rg = Helper::unmask($model->rg);
         		} else {
-        			$model->nome = $post['cliente-razao-social'];
         			$model->documento = Helper::unmask($post['cliente-cnpj'], true);
         			$model->nome_social = $post['cliente-fantasia'];
         		}
-        		
-        		// remove a mascara do rg
-        		$model->rg = Helper::unmask($model->rg);
-        		
+        		        		
         		// salva o cliente
         		if (!$model->save()) {
         			throw new \Exception(Helper::renderErrors($model->getErrors()));

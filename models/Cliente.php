@@ -55,8 +55,7 @@ class Cliente extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [
-            //[['nome'], 'required'],
+        $rules = [
             [['sexo', 'ativo', 'tipo'], 'string'],
             [['data_nascimento', 'data_cadastro'], 'safe'],
             [['estado_civil'], 'integer'],
@@ -67,6 +66,15 @@ class Cliente extends \yii\db\ActiveRecord
             [['inscricao_estadual'], 'string', 'max' => 15],
             [['profissao'], 'string', 'max' => 100],
         ];
+        
+        // valida o tipo do cliente
+        if ($this->tipo == self::TIPO_FISICO) {
+            $rules[] = [['nome'], 'required', 'message' => 'O "Nome" não pode ficar em branco.'];
+        } elseif ($this->tipo == self::TIPO_JURIDICO) {
+            $rules[] = [['nome'], 'required', 'message' => 'A "Razão Social" não pode ficar em branco.'];
+        }
+        
+        return $rules;
     }
 
     /**
@@ -173,6 +181,11 @@ class Cliente extends \yii\db\ActiveRecord
     	// formata o nome da mae e pai
     	$this->nome_mae = ucwords(strtolower($this->nome_mae));
     	$this->nome_pai = ucwords(strtolower($this->nome_pai));
+    	
+    	// valida o apelido/razao social
+    	if (empty($this->nome_social)) {
+    	    $this->nome_social = $this->nome;
+    	}
     	
     	return parent::beforeSave($insert);
     }

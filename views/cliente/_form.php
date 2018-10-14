@@ -35,12 +35,11 @@ use yii\helpers\ArrayHelper;
 	                        ?>
 	        			</div>
 	        			<div class="col-md-9 col-sm-9 col-lg-9 col-xs-12">
-	        				<div class="cliente-fisico" style="display: <?= $layout == Cliente::TIPO_FISICO ? 'block' : 'none'; ?>;">
-		                        <?= $form->field($model, 'nome')->textInput(['name' => 'cliente-nome', 'id' => 'cliente-nome', 'maxlength' => true]); ?>
-	        				</div>
-							<div class="cliente-juridico" style="display: <?= $layout == Cliente::TIPO_FISICO ? 'none' : 'block'; ?>;">
-		                        <?= $form->field($model, 'nome')->textInput(['name' => 'cliente-razao-social', 'id' => 'cliente-razao-social', 'maxlength' => true])->label('Razão Social'); ?>
-	        				</div>
+	                        <?= $form->field($model, 'nome')->textInput([
+                                    'id' => 'cliente-nome', 
+                                    'maxlength' => true,
+	                           ])->label($layout == Cliente::TIPO_FISICO ? 'Nome' : 'Razão Social'); 
+	                        ?>
 	        			</div>
 	        		</div>
 	        		<!-- ./row -->
