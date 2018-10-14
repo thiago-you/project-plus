@@ -502,6 +502,7 @@ section.main-content {
 	text-align: center;
 	position: fixed;
 	bottom: 0px;
+	width: 130px;
 }
 
 .sidenav footer p {
@@ -511,9 +512,9 @@ section.main-content {
 }
 
 .sidenav footer hr {
-	margin: 0px 15px 6px 15px;
+	margin-bottom: 6px;
 	border-color: #f7f7f7;
-	width: 125px;
+	width: 100%;
 }
 
 /* cards */
