@@ -204,7 +204,7 @@ CREATE TABLE `negociacao_parcela` (
   `data_vencimento` DATE NOT NULL,
   `valor` DECIMAL(10,2),
   `observacao` VARCHAR(250),
-  `status` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar as situacoes possiveis',
+  `status` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Consultar model para checar as situacoes possiveis',
   FOREIGN KEY (`id_negociacao`) REFERENCES `negociacao`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de parcela do contrato
