@@ -167,15 +167,15 @@ function Negociacao() {
 					// se o valor desejado for maior que o principal, entao calcula o desconto dos honorarios
 					if (self.desconto_total > principal) {
 						// calcula o total removendo os honorarios
-						let totalTemp = Math.floor(((principal + encargos) + ((principal + encargos) * (honorarioTaxa / 100))) * 100) / 100;
-						totalTemp = Math.floor((totalTemp - (totalTemp * (honorarioTaxa / 100))) * 100) / 100;
+						let totalTemp = Math.round(((principal + encargos) + ((principal + encargos) * (honorarioTaxa / 100))) * 100) / 100;
+						totalTemp = Math.round((totalTemp - (totalTemp * (honorarioTaxa / 100))) * 100) / 100;
 						
 						// calcula o desconto total dos encargos 
 						self.desconto_total = self.desconto_total - (self.desconto_total * (honorarioTaxa / 100));
-						self.desconto_total = Math.floor((totalTemp - self.desconto_total) * 100) / 100;
+						self.desconto_total = Math.round((totalTemp - self.desconto_total) * 100) / 100;
 						
 						// calcula o desconto dos encargos
-						self.desconto_encargos = Math.floor((100 - ((self.desconto_total / encargos) * 100)) * 100) / 100;
+						self.desconto_encargos = Math.round((100 - ((self.desconto_total / encargos) * 100)) * 100) / 100;
 						
 						// seta os descontos dos honorarios
 						$('#desconto_encargos-disp').val(accounting.formatMoney(self.desconto_encargos, '', 4, '.', '.') + '%');
@@ -189,8 +189,8 @@ function Negociacao() {
 		
 		// calcula o desconto da receita
 		if (self.receita > 0 && self.desconto_honorarios > 0) {
-			self.desconto += Math.floor((self.receita * (self.desconto_honorarios / 100)) * 100) / 100;
-			self.receita -= Math.floor((self.receita * (self.desconto_honorarios / 100)) * 100) / 100;
+			self.desconto += Math.round((self.receita * (self.desconto_honorarios / 100)) * 100) / 100;
+			self.receita -= Math.round((self.receita * (self.desconto_honorarios / 100)) * 100) / 100;
 		}
 		
 		// atualiza os totais da parcela
@@ -198,7 +198,7 @@ function Negociacao() {
 		$('.panel-calculo .parcelas-total-total').data('value', self.subtotal).html(`<b>${accounting.formatMoney(self.subtotal, 'R$ ', 2, '.', ',')}</b>`);
 		
 		// calcula o total
-		self.total = Math.floor((self.subtotal - self.desconto) * 100) / 100;
+		self.total = Math.round((self.subtotal - self.desconto) * 100) / 100;
 		
 		// atualiza os valores da self
 		$('#negociacao-subtotal').data('value', self.subtotal).text(accounting.formatMoney(self.subtotal, 'R$ ', 2, '.', ','));
@@ -252,10 +252,10 @@ function Negociacao() {
 			receita = ((principal - principalDesconto) + (encargos - encargosDesconto)) * (taxaHonorario / 100);
 			
 			// calcula o total da parcela
-			total = Math.floor((principal + encargos + receita) * 100) / 100;
+			total = Math.round((principal + encargos + receita) * 100) / 100;
 			
 			// arredonda a receita para baixo
-			receita = Math.floor(receita * 100) / 100;
+			receita = Math.round(receita * 100) / 100;
 			
 			// atualiza os valores na listagem
 			$(this).find('td.honorario').text(accounting.formatMoney(receita, 'R$ ', 2, '.', ','));
@@ -298,10 +298,10 @@ function Negociacao() {
 		
 		// divide o valor das parcelas
 		valorParcela = self.valor_entrada > 0 ? (valorParcela / (quantParcelas - 1)) : (valorParcela / quantParcelas);
-		valorParcela = Math.floor(valorParcela * 100) / 100;
+		valorParcela = Math.round(valorParcela * 100) / 100;
 		
 		// soma a taxa de juros no valor da parcela
-		valorParcela = Math.floor((valorParcela + taxa) * 100) / 100;
+		valorParcela = Math.round((valorParcela + taxa) * 100) / 100;
 		
 		// calcula o vencimento da primeira parcela
 		let vencimento = new Date();
@@ -589,6 +589,8 @@ $(document).ready(function() {
 	
 	// fatura a negociacao
 	$('body').on('click', '#faturar-contrato', function() {
+		// remove o focus
+		this.blur();
 		// pega a negociacao
 		const idNegociacao = $('#negociacao-id').val();
 		
@@ -667,6 +669,8 @@ $(document).ready(function() {
 	
 	// fatura uma parcela específica
 	$('body').on('click', '.faturar-parcela', function() {
+		// remove o focus
+		this.blur();
 		// pega a parcela
 		const idParcela = $(this).data('id');
 		
@@ -682,7 +686,7 @@ $(document).ready(function() {
 		}
 		
 		// verifica se a neociacao ja esta faturada e exibe um alerta de confirmação
-		if ($(this).data('status') == 2) {			
+		if ($(this).data('status') == 1) {			
 			// mensagem de confirmação
 			$.confirm({
 				content: 'Você deseja mesmo estornar esta parcela?',
