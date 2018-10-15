@@ -1,13 +1,16 @@
 <?php 
 $this->title = 'Home';
 ?>
-<div class='site-index'>
+<div class="site-index">
 	<section>
-		<div class='card'>
-			<div class='card-body'>
-            	<h3 class='card-title'><i class='fa fa-user-plus'></i>&nbsp; Novos Clientes</h3>
+		<div class="card">
+			<div class="card-body">
+            	<h3 class="card-title"><i class="fa fa-user-plus"></i>&nbsp; Novos Clientes</h3>
             	<br>
-            	<canvas id='card-cliente-chart' width="300" height="120"></canvas>
+            	<canvas id="card-cliente-chart" width="300" height="120"></canvas>
+            	<!-- ./grafico -->
+            	<div class="card-cliente-content hidden"></div>
+            	<!-- ./data do grafico -->
 			</div>
 		</div>
 		<!-- ./card -->
@@ -17,11 +20,24 @@ $this->title = 'Home';
 <?php
 $js = <<< JS
     $(document).ready(function() {
-        let ctx = document.getElementById('card-cliente-chart');
+        // seleciona os elementos que vão conter os gráfcos
+        const ctx = document.getElementById('card-cliente-chart');
+
+        // monsta a lista dos ultimos 5 meses
+        const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        const today = new Date();
+        const lastMonths = [];
+
+        // lop para montar a lista dos ultimos seis meses
+        for (let i = 5; i >= 0; i--) {
+            let temp = new Date(today.getFullYear(), today.getMonth() - i, 1);
+            lastMonths.push(months[temp.getMonth()]);
+        }
+
         let chartCliente = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto'],
+                labels: lastMonths,
                 datasets: [{
                     label: ' Quantidade de Clientes',
                     data: [6, 4, 11, 5, 7, 10],
