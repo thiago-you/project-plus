@@ -325,7 +325,7 @@ class ContratoController extends Controller
         // se houver mais contatos com este nome
         // redireciona para a página de listagem de contratos
         if (!empty($value) && count($contrato) == 1) {
-            return $this->redirect(['update', 'id' => $contrato[0]->id]);
+            return $this->redirect(['negociacao', 'id' => $contrato[0]->id]);
         }
         
         return $this->redirect(['index', 'index' => $index, 'value' => $value]);
@@ -414,7 +414,7 @@ class ContratoController extends Controller
             }
         }
         
-        return array_unique($data);
+        return $data;
     }
     
     /**

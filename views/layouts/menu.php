@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 use kartik\typeahead\Typeahead;
 use yii\web\View;
+use yii\web\JsExpression;
 ?>
 <div class="collapse navbar-collapse" id="menu-navbar-collapse">
 	<ul class="nav navbar-nav">
@@ -27,6 +28,9 @@ use yii\web\View;
 								'url' => Url::to(['contrato/search-list']).'?q[quick]=%QUERY',
 								'wildcard' => '%QUERY',
 							],
+			                'templates' => [
+                                'suggestion' => new JsExpression("Handlebars.compile('<p style=\"white-space: normal; word-wrap: break-word;\">{{value}}</p>')"),
+			                ],
 						],
 					],
 					'pluginEvents' => [
