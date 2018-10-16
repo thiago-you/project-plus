@@ -249,9 +249,9 @@ use app\models\NegociacaoParcela;
                     			<tbody>
                     				<?php if (!empty($contrato->contratoParcelas) && is_array($contrato->contratoParcelas)): ?>
                     					<?php 
-                        					$descEncargosMax = 100;
-                        					$descHonorariosMax = 100;
-                        					$descPrincipalMax = 100;
+                        					$descEncargosMax = '100.0000';
+                        					$descHonorariosMax = '100.0000';
+                        					$descPrincipalMax = '100.0000';
                     					?>
                     					<?php foreach ($contrato->contratoParcelas as $parcela): ?>
                 							<?php $parcela->calcularValores($negociacao->id_campanha); ?>
@@ -276,13 +276,13 @@ use app\models\NegociacaoParcela;
                                                     $taxa = $parcela->honorariosCalculo;
                                                     
                                                     // seta o menor desconto máximo como limite
-                                                    if ($descEncargosMax > $parcela->faixaCalculo->desc_encargos_max) {                                                    
+                                                    if ($descEncargosMax > $parcela->faixaCalculo->desc_encargos_max && $parcela->faixaCalculo->desc_encargos_max > 0) {                                                    
                                                         $descEncargosMax = $parcela->faixaCalculo->desc_encargos_max;
                                                     }
-                                                    if ($descHonorariosMax > $parcela->faixaCalculo->desc_honorario_max) {                                                    
+                                                    if ($descHonorariosMax > $parcela->faixaCalculo->desc_honorario_max && $parcela->faixaCalculo->desc_honorario_max > 0) {                                                    
                                                         $descHonorariosMax = $parcela->faixaCalculo->desc_honorario_max;
                                                     }
-                                                    if ($descPrincipalMax > $parcela->faixaCalculo->desc_principal_max) {                                                    
+                                                    if ($descPrincipalMax > $parcela->faixaCalculo->desc_principal_max && $parcela->faixaCalculo->desc_principal_max > 0) {                                                    
                                                         $descPrincipalMax = $parcela->faixaCalculo->desc_principal_max;
                                                     }
                             					?>

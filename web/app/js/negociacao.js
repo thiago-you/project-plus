@@ -26,9 +26,9 @@ function Negociacao() {
 	self.parcelas = [];
 	
 	// configura o máximo de desconto permitido
-	self.desconto_max_encargos = 100;
-	self.desconto_max_principal = 100;
-	self.desconto_max_honorarios = 100;
+	self.desconto_max_encargos = 100.0000;
+	self.desconto_max_principal = 100.0000;
+	self.desconto_max_honorarios = 100.0000;
 	self.desconto_max_total = 9999;
 	
 	// carrega os dados no objeto
@@ -69,28 +69,38 @@ function Negociacao() {
 		self.desconto_principal = accounting.unformat(self.desconto_principal, '.');
 		self.desconto_honorarios = accounting.unformat(self.desconto_honorarios, '.');
 		self.desconto_total = accounting.unformat(self.desconto_total, '.');
+		
+		return true;
 	}
 	
 	// valida o limite de desconto concedido
 	self.validarDesconto = () => {
-		// limpa as mensagens de aviso
-		toastr.clear();
+		// configura para nao duplicar os toastr
+		toastr.options = {preventDuplicates: true};
 		
 		// valida o desconto máximo
-		if (self.desconto_encargos > 0 && self.desconto_encargos > self.desconto_max_encargos) {
-			toastr.warning('O desconto dos encargos é superior ao limite permitido.');
+		if (self.desconto_encargos > 0 && self.desconto_encargos > self.desconto_max_encargos && self.desconto_max_encargos > 0) {
+			toastr.warning(`O desconto dos encargos é superior ao limite permitido.<br>(Limite: ${self.desconto_max_encargos}%)`).attr('style', 'width: 450px !important');
+			// seta o desconto para o máximo permitido
+			$('#desconto_encargos-disp').val(self.desconto_max_encargos+'%').trigger('change');
 			return false;
 		}
-		if (self.desconto_principal > 0 && self.desconto_principal > self.desconto_max_principal) {
-			toastr.warning('O desconto principal é superior ao limite permitido.');
+		if (self.desconto_principal > 0 && self.desconto_principal > self.desconto_max_principal && self.desconto_max_principal > 0) {
+			toastr.warning(`O desconto dos principal é superior ao limite permitido.<br>(Limite: ${self.desconto_max_principal}%)`).attr('style', 'width: 450px !important');
+			// seta o desconto para o máximo permitido
+			$('#desconto_principal-disp').val(self.desconto_max_principal+'%').trigger('change');
 			return false;
 		}
-		if (self.desconto_honorarios > 0 && self.desconto_honorarios > self.desconto_max_honorarios) {
-			toastr.warning('O desconto dos honorários é superior ao limite permitido.');
+		if (self.desconto_honorarios > 0 && self.desconto_honorarios > self.desconto_max_honorarios && self.desconto_max_honorarios > 0) {
+			toastr.warning(`O desconto dos honorários é superior ao limite permitido.<br>(Limite: ${self.desconto_max_honorarios}%)`).attr('style', 'width: 450px !important');
+			// seta o desconto para o máximo permitido
+			$('#desconto_honorarios-disp').val(self.desconto_max_honorarios+'%').trigger('change');
 			return false;
 		}
-		if (self.desconto_total > 0 && self.desconto_total > self.desconto_max_total) {
-			toastr.warning('O desconto total é superior ao limite permitido.');
+		if (self.desconto_total > 0 && self.desconto_total > self.desconto_max_total && self.desconto_max_total > 0) {
+			toastr.warning(`O desconto dos total é superior ao limite permitido.<br>(Limite: ${self.desconto_max_total}%)`).attr('style', 'width: 450px !important');
+			// seta o desconto para o máximo permitido
+			$('#desconto_total-disp').val(self.desconto_max_total+'%').trigger('change');
 			return false;
 		}
 		
@@ -455,15 +465,17 @@ $(document).ready(function() {
 	$('body').on('change', '.negociacao-descontos:hidden', function(e) {
 		// verifica se o evento foi ativiado pelo usuario
 		if (e.isTrigger) {
-			// carrega os dados de desconto
-			negociacao.loadDesconto();
-			// valida os descontos
+			// carrea e valida os descontos
+			negociacao.loadDesconto(); 
 			negociacao.validarDesconto();
+			
 			// calcula os descontos
 			negociacao.calcularNegociacao();
-
+			
 			// ativa o evento de change para recalcular as parcelas
 			$('#quant-parcelas').trigger('change');
+			
+			return false;
 		}
 	});
 	
