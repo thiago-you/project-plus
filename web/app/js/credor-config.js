@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function() {	
     // insere a animação quando a modal for dechada
     $('.modal').on('hidden.bs.modal', function() {
         $(this).find('.modal-body').html('<br><br><h1 class="text-center text-primary"><i class="fa fa-spinner fa-pulse"></i>&nbsp; Carregando</h1><br><br>');
@@ -159,6 +159,13 @@ $(document).ready(function() {
         // exibe a modal
         $.post(BASE_PATH + 'credor-calculo/create', function(response) {
             modal.find('.modal-body').html(response).find('form input#credorcalculo-id_campanha').val($('#credor-id_campanha').val());
+        }).done(function() {
+        	// carrega os plugins de mascara
+        	$('.maskmoney-input').maskMoney({
+        		'suffix': '%',
+        		'decimal': '.',
+        		'precision': 4,
+        	});        	
         });
     });
 
@@ -206,6 +213,13 @@ $(document).ready(function() {
         // exibe a modal
         $.post(BASE_PATH + 'credor-calculo/update?id='+id, function(response) {
             modal.find('.modal-body').html(response);
+        }).done(function() {
+        	// carrega os plugins de mascara
+        	$('.maskmoney-input').maskMoney({
+        		'suffix': '%',
+        		'decimal': '.',
+        		'precision': 4,
+        	}).trigger('focus');        	
         });
     });
 
