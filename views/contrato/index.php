@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 	'header' => '',
                 	'buttons' => [
     	                'negociacao' => function ($url, $model) {
-                            return Html::a('<i class="fa fa-cog"></i>', ['/contrato/negociacao/', 'id' => $model->id], [
+                            return Html::a('<i class="fa fa-dollar-sign"></i>', ['/contrato/negociacao/', 'id' => $model->id], [
                                 'class' => Helper::BTN_COLOR_PURPLE,
                                 'title' => 'Negociação',
                                 'data-toggle' => 'tooltip',
