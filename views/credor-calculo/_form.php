@@ -1,7 +1,6 @@
 <?php
 use app\base\Helper;
 use yii\widgets\ActiveForm;
-use kartik\money\MaskMoney;
 use yii\widgets\MaskedInput;
 ?>
 <?php $form = ActiveForm::begin(['id' => 'form-calculo']); ?>
@@ -26,85 +25,25 @@ use yii\widgets\MaskedInput;
 	<!-- ./row -->
 	<div class="row">
         <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
-            <?= $form->field($model, 'multa')->widget(MaskMoney::className(), [
-                    'options' => [
-                        'maxlength' => 9,
-                    ],
-	                'pluginOptions' => [
-                        'suffix' => '%',
-                        'precision' => 4,
-                        'decimal' => ',',
-                    ],
-                ]);
-            ?>
+            <?= $form->field($model, 'multa', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input', 'maxlength' => 9]);?>
 		</div>
 		<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
-        	<?= $form->field($model, 'juros')->widget(MaskMoney::className(), [
-	                'options' => [
-                        'maxlength' => 9,
-	                ],
-                    'pluginOptions' => [
-                        'suffix' => '%',
-                        'precision' => 4,
-                        'decimal' => ',',
-                    ],
-                ]);
-        	?>
+        	<?= $form->field($model, 'juros', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input', 'maxlength' => 9]);?>
         </div>
         <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
-        	<?= $form->field($model, 'honorario')->widget(MaskMoney::className(), [
-	                'options' => [
-                        'maxlength' => 9,
-	                ],
-                    'pluginOptions' => [
-                        'suffix' => '%',
-                        'precision' => 4,
-                        'decimal' => ',',
-                    ],
-                ]);
-        	?>
+        	<?= $form->field($model, 'honorario', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input', 'maxlength' => 9]);?>
         </div>
 	</div>
 	<!-- ./row -->
 	<div class="row">
         <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
-            <?= $form->field($model, 'desc_encargos_max')->widget(MaskMoney::className(), [
-                    'options' => [
-                        'maxlength' => 8,
-                    ],
-	                'pluginOptions' => [
-                        'suffix' => '%',
-                        'precision' => 4,
-                        'decimal' => ',',
-                    ],
-                ]);
-            ?>
+            <?= $form->field($model, 'desc_encargos_max', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input', 'maxlength' => 8]);?>
 		</div>
 		<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
-        	<?= $form->field($model, 'desc_principal_max')->widget(MaskMoney::className(), [
-	                'options' => [
-                        'maxlength' => 8,
-	                ],
-                    'pluginOptions' => [
-                        'suffix' => '%',
-                        'precision' => 4,
-                        'decimal' => ',',
-                    ],
-                ]);
-        	?>
+        	<?= $form->field($model, 'desc_principal_max', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input', 'maxlength' => 8]);?>
         </div>
         <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
-        	<?= $form->field($model, 'desc_honorario_max')->widget(MaskMoney::className(), [
-	                'options' => [
-                        'maxlength' => 8,
-	                ],
-                    'pluginOptions' => [
-                        'suffix' => '%',
-                        'precision' => 4,
-                        'decimal' => ',',
-                    ],
-                ]);
-        	?>
+        	<?= $form->field($model, 'desc_honorario_max', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input', 'maxlength' => 8]);?>
         </div>
 	</div>
 	<!-- ./row -->

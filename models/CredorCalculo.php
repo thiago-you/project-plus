@@ -1,10 +1,7 @@
 <?php
-
 namespace app\models;
 
 use Yii;
-
-
 
 /**
  * This is the model class for table "credor_calculo".
@@ -41,7 +38,7 @@ class CredorCalculo extends \yii\db\ActiveRecord
         return [
             [['id_campanha'], 'required'],
             [['id_campanha', 'parcela_num'], 'integer'],
-            [['multa', 'juros', 'honorario', 'desc_encargos_max', 'desc_principal_max', 'desc_honorario_max'], 'number'],
+            [['multa', 'juros', 'honorario', 'desc_encargos_max', 'desc_principal_max', 'desc_honorario_max'], 'safe'],
             [['atraso_inicio', 'atraso_fim'], 'string', 'max' => 5],
             [['id_campanha'], 'exist', 'skipOnError' => true, 'targetClass' => CredorCampanha::className(), 'targetAttribute' => ['id_campanha' => 'id']],
         ];
@@ -94,6 +91,14 @@ class CredorCalculo extends \yii\db\ActiveRecord
             $this->atraso_fim = 99999;
         }
         
+        // seta os valores direto do plugin
+        $this->multa = str_replace('%', '', $this->multa);
+        $this->juros = str_replace('%', '', $this->juros);
+        $this->honorario = str_replace('%', '', $this->honorario);
+        $this->desc_encargos_max = str_replace('%', '', $this->desc_encargos_max);
+        $this->desc_principal_max = str_replace('%', '', $this->desc_principal_max);
+        $this->desc_honorario_max = str_replace('%', '', $this->desc_honorario_max);
+        
         return parent::beforeSave($insert);    
     }
     
@@ -106,7 +111,7 @@ class CredorCalculo extends \yii\db\ActiveRecord
             '<=', 'atraso_inicio', $atraso
         ])->andWhere([
             '>=', 'atraso_fim', $atraso
-        ])->one();
+        ])->orderBy(['id' => SORT_DESC])->one();
     }
 }
 

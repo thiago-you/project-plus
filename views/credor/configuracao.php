@@ -155,7 +155,9 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <!-- /.modal faixa de calculo -->
 <?php 
-$this->registerJsFile(Url::home().'app/js/credor-config.js', ['depends' => [JqueryAsset::className()]]);
+// PLUGIN
+$this->registerJsFile(Url::home().'plugins/jquery-maskmoney/jquery.maskMoney.min.js', ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile(Url::home().'app/js/credor-config.js?d=201810152210', ['depends' => [JqueryAsset::className()]]);
 ?>
 
 
