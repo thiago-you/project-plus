@@ -151,7 +151,7 @@ class Helper
                 }
                 
                 // força o 0 quando o número for zero
-                if (intval(abs($val)) == 0) {
+                if (floatval(abs($val)) == 0) {
                     $val = 0;
                 }
                 
@@ -199,6 +199,7 @@ class Helper
                         $val = $val[0].'.'.str_pad($val[1], $length, '0');
                     }
                 }
+                
                 return $val;
                 break;
             case self::MASK_PERCENT:
@@ -222,11 +223,13 @@ class Helper
             $k = 0;
             for ($i = 0; $i < strlen($mask); $i++) {
                 if ($mask[$i] == '#') {
-                    if (isset($val[$k]))
+                    if (isset($val[$k])) {
                         $maskared .= $val[$k++];
+                    }
                 } else {
-                    if (isset($mask[$i]))
+                    if (isset($mask[$i])) {
                         $maskared .= $mask[$i];
+                    }
                 }
             }
         }
@@ -278,6 +281,12 @@ class Helper
             $remover = array_merge($remover, [' ']);
             // remove chars que não sejam utf-8
             $campo = preg_replace('/[\x00-\x1F\x80-\xFF]/', ' ', $campo);
+        }
+        
+        // troca as casas decimais (para nao remover o ponto)
+        if ($extra['invert']) {
+            // fomat and return  value
+            $campo = str_replace('.', ',', $campo);
         }
         
         // fomat and return  value
