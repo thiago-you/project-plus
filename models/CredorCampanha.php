@@ -104,8 +104,8 @@ class CredorCampanha extends \yii\db\ActiveRecord
     public function beforeSave($insert) 
     {
         // formata a data para salvar
-        $this->vigencia_inicial = Helper::formatDateToSave($this->vigencia_inicial, Helper::DATE_DEFAULT);
-        $this->vigencia_final = Helper::formatDateToSave($this->vigencia_final, Helper::DATE_DEFAULT);
+        $this->vigencia_inicial = Helper::dateUnmask($this->vigencia_inicial, Helper::DATE_DEFAULT);
+        $this->vigencia_final = Helper::dateUnmask($this->vigencia_final, Helper::DATE_DEFAULT);
         
         return parent::beforeSave($insert);    
     }
@@ -117,7 +117,7 @@ class CredorCampanha extends \yii\db\ActiveRecord
     public function afterFind()
     {
         // formata a data para ser exibida
-        $this->vigencia_inicial = Helper::formatDateToDisplay($this->vigencia_inicial, Helper::DATE_DEFAULT);
-        $this->vigencia_final = Helper::formatDateToDisplay($this->vigencia_final, Helper::DATE_DEFAULT);
+        $this->vigencia_inicial = Helper::dateMask($this->vigencia_inicial, Helper::DATE_DEFAULT);
+        $this->vigencia_final = Helper::dateMask($this->vigencia_final, Helper::DATE_DEFAULT);
     }
 }

@@ -37,13 +37,13 @@ use yii\widgets\MaskedInput;
 	<!-- ./row -->
 	<div class="row">
         <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
-            <?= $form->field($model, 'desc_encargos_max', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input', 'maxlength' => 8]);?>
+            <?= $form->field($model, 'desc_encargos_max', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input max-desconto', 'maxlength' => 9]);?>
 		</div>
 		<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
-        	<?= $form->field($model, 'desc_principal_max', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input', 'maxlength' => 8]);?>
+        	<?= $form->field($model, 'desc_principal_max', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input max-desconto', 'maxlength' => 9]);?>
         </div>
         <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
-        	<?= $form->field($model, 'desc_honorario_max', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input', 'maxlength' => 8]);?>
+        	<?= $form->field($model, 'desc_honorario_max', ['enableClientValidation' => false])->textInput(['class' => 'form-control maskmoney-input max-desconto', 'maxlength' => 9]);?>
         </div>
 	</div>
 	<!-- ./row -->
