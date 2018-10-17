@@ -158,7 +158,7 @@ class Negociacao extends \yii\db\ActiveRecord
         }
         
         // formata a data antes de salvar
-        $this->data_negociacao = Helper::formatDateToSave($this->data_negociacao, Helper::DATE_DEFAULT);
+        $this->data_negociacao = Helper::dateUnmask($this->data_negociacao, Helper::DATE_DEFAULT);
         
         // altera o status das parcelas
         if ($insert) {
@@ -188,7 +188,7 @@ class Negociacao extends \yii\db\ActiveRecord
     public function afterFind() 
     {
         // formata a data para exibicao
-        $this->data_negociacao = Helper::formatDateToDisplay($this->data_negociacao, Helper::DATE_DEFAULT);
+        $this->data_negociacao = Helper::dateMask($this->data_negociacao, Helper::DATE_DEFAULT);
     }
 
     /**

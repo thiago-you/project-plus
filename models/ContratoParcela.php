@@ -107,7 +107,7 @@ class ContratoParcela extends \yii\db\ActiveRecord
         }
         
         // formata a data para salvar
-        $this->data_vencimento = Helper::formatDateToSave($this->data_vencimento, Helper::DATE_DEFAULT);
+        $this->data_vencimento = Helper::dateUnmask($this->data_vencimento, Helper::DATE_DEFAULT);
         
         return parent::beforeSave($insert);
     }
@@ -119,7 +119,7 @@ class ContratoParcela extends \yii\db\ActiveRecord
     public function afterFind()
     {
         // formata a data para ser exibida
-        $this->data_vencimento = Helper::formatDateToDisplay($this->data_vencimento, Helper::DATE_DEFAULT);
+        $this->data_vencimento = Helper::dateMask($this->data_vencimento, Helper::DATE_DEFAULT);
     }
     
     /**
@@ -130,7 +130,7 @@ class ContratoParcela extends \yii\db\ActiveRecord
         // verifica se o atras ja foi calculado
         if (!$this->atraso) {            
             $dataAtual = time();
-            $vencimento = strtotime(Helper::formatDateToSave($this->data_vencimento, Helper::DATE_DEFAULT));
+            $vencimento = strtotime(Helper::dateUnmask($this->data_vencimento, Helper::DATE_DEFAULT));
             $diferenca = $dataAtual - $vencimento;
 
             // calcula o atraso e

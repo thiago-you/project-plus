@@ -475,9 +475,9 @@ class SiteController extends BaseController
         $worksheet->parcela = empty($worksheet->parcela) ? 0 : $worksheet->parcela;
         
         // formata as datas
-        $worksheet->data_contrato = Helper::formatDateToSave($worksheet->data_contrato, Helper::DATE_EXCEL);
-        $worksheet->data_vencimento = Helper::formatDateToSave($worksheet->data_vencimento, Helper::DATE_EXCEL);
-        $worksheet->data_sem_nome = Helper::formatDateToSave($worksheet->data_sem_nome, Helper::DATE_EXCEL);
+        $worksheet->data_contrato = Helper::dateUnmask($worksheet->data_contrato, Helper::DATE_EXCEL);
+        $worksheet->data_vencimento = Helper::dateUnmask($worksheet->data_vencimento, Helper::DATE_EXCEL);
+        $worksheet->data_sem_nome = Helper::dateUnmask($worksheet->data_sem_nome, Helper::DATE_EXCEL);
         
         // formata os valores removendo a virgula
         $worksheet->valor = str_replace(',', '', $worksheet->valor);

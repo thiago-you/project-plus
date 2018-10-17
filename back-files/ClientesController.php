@@ -328,7 +328,7 @@ class ClientesController extends MasterController
                 }
                 
                 if(!empty($model->dtanascto)) {
-                    $model->dtanascto = Helper::formatDateToSave($model->dtanascto, Helper::DATE_DEFAULT);
+                    $model->dtanascto = Helper::dateUnmask($model->dtanascto, Helper::DATE_DEFAULT);
                 }
                 
                 $model->vlrult_compra = Helper::removeMascara($model->vlrult_compra, true);
@@ -438,7 +438,7 @@ class ClientesController extends MasterController
             $model->bairro      = strtoupper($model->bairro);
             
             if (!empty($model->dtanascto)) {
-                $model->dtanascto = Helper::formatDateToSave($model->dtanascto, Helper::DATE_DEFAULT);
+                $model->dtanascto = Helper::dateUnmask($model->dtanascto, Helper::DATE_DEFAULT);
             }
             
             // valida os dados de endereço
@@ -525,11 +525,11 @@ class ClientesController extends MasterController
         $model->cnpj = Helper::maskBackend($model->cnpj, Helper::MASK_CNPJ);
         
         if (!empty($model->dtanascto)) {
-            $model->dtanascto = Helper::formatDateToDisplay($model->dtanascto, Helper::DATE_DEFAULT);
+            $model->dtanascto = Helper::dateMask($model->dtanascto, Helper::DATE_DEFAULT);
         }
         
-        $model->dtault_compra = Helper::formatDateToDisplay($model->dtault_compra, Helper::DATE_DEFAULT);
-        $model->data_cadastro = Helper::formatDateToDisplay($model->data_cadastro, Helper::DATE_DEFAULT, ['removeMask' => true]);
+        $model->dtault_compra = Helper::dateMask($model->dtault_compra, Helper::DATE_DEFAULT);
+        $model->data_cadastro = Helper::dateMask($model->data_cadastro, Helper::DATE_DEFAULT, ['removeMask' => true]);
         $errotab = $model->getErrors();
     	
         if (isset($_REQUEST['forma'])) {
@@ -883,11 +883,11 @@ class ClientesController extends MasterController
 	public function atualizar_fatura($data_vencimento,$valor_parcela,$tipo)
 	{
 		$data_base = date('Ymd');
-		$data_final =  Helper::formatDateToDisplay($data_base, Helper::DATE_DEFAULT);
+		$data_final =  Helper::dateMask($data_base, Helper::DATE_DEFAULT);
 		$data_inicial = $data_vencimento;
 	
-		$time_inicial = Helper::formatDateToSave($data_inicial, Helper::DATE_TIMESTAMP);
-		$time_final = Helper::formatDateToSave($data_final, Helper::DATE_TIMESTAMP);
+		$time_inicial = Helper::dateUnmask($data_inicial, Helper::DATE_TIMESTAMP);
+		$time_final = Helper::dateUnmask($data_final, Helper::DATE_TIMESTAMP);
 		$diferenca = $time_final - $time_inicial; // 19522800 segundos
 		$dias = (int)floor( $diferenca / (60 * 60 * 24)); // 225 dias
 

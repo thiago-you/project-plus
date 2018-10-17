@@ -272,7 +272,7 @@ JS;
             				                'hAlign' => 'center',
             				                'width' => '15%',
             				                'value' => function($model) {
-            				                    return Helper::formatDateToDisplay($model['data'], Helper::DATE_DEFAULT, true);
+            				                    return Helper::dateMask($model['data'], Helper::DATE_DEFAULT, true);
             				                },
             				            ],
             			    	        [

@@ -15,7 +15,7 @@ use app\models\Colaborador;
     				</p>
     			</div>
     			<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 text-right">
-    				<p><?= Helper::formatDateToDisplay($acionamento->data); ?></p>
+    				<small><?= Helper::dateMask($acionamento->data, Helper::DATE_DATETIME); ?></small>
     			</div>
     		</div>
     		<!-- ./row -->

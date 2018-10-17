@@ -130,7 +130,7 @@ class NegociacaoController extends Controller
                         $modelParcela = new NegociacaoParcela();
                         $modelParcela->id_negociacao = $model->id ? $model->id : $model->getPrimaryKey();
                         $modelParcela->num_parcela = $parcela['num'];
-                        $modelParcela->data_vencimento = Helper::formatDateToSave($parcela['vencimento'], Helper::DATE_DEFAULT);
+                        $modelParcela->data_vencimento = Helper::dateUnmask($parcela['vencimento'], Helper::DATE_DEFAULT);
                         $modelParcela->valor = $parcela['valor'];
                         
                         // salva a parcela da negociacao

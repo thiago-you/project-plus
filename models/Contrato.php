@@ -165,12 +165,12 @@ class Contrato extends \yii\db\ActiveRecord
         if (empty($this->data_cadastro)) {
             $this->data_cadastro = date('Y-m-d');
         } else {
-            $this->data_cadastro = Helper::formatDateToSave($this->data_cadastro, Helper::DATE_DEFAULT);
+            $this->data_cadastro = Helper::dateUnmask($this->data_cadastro, Helper::DATE_DEFAULT);
         }
         
         // formata as datas para salvar
-        $this->data_vencimento = Helper::formatDateToSave($this->data_vencimento, Helper::DATE_DEFAULT);
-        $this->data_negociacao = Helper::formatDateToSave($this->data_negociacao, Helper::DATE_DEFAULT);
+        $this->data_vencimento = Helper::dateUnmask($this->data_vencimento, Helper::DATE_DEFAULT);
+        $this->data_negociacao = Helper::dateUnmask($this->data_negociacao, Helper::DATE_DEFAULT);
         
         return parent::beforeSave($insert);        
     }
@@ -182,9 +182,9 @@ class Contrato extends \yii\db\ActiveRecord
     public function afterFind()
     {
         // formata a data para ser exibida
-        $this->data_cadastro = Helper::formatDateToDisplay($this->data_cadastro, Helper::DATE_DEFAULT);
-        $this->data_vencimento = Helper::formatDateToDisplay($this->data_vencimento, Helper::DATE_DEFAULT);
-        $this->data_negociacao = Helper::formatDateToDisplay($this->data_negociacao, Helper::DATE_DEFAULT);
+        $this->data_cadastro = Helper::dateMask($this->data_cadastro, Helper::DATE_DEFAULT);
+        $this->data_vencimento = Helper::dateMask($this->data_vencimento, Helper::DATE_DEFAULT);
+        $this->data_negociacao = Helper::dateMask($this->data_negociacao, Helper::DATE_DEFAULT);
     }
     
     /**

@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
     	</small>
     </div>
     <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-    	<small><b>Data de Nasc.:</b>&nbsp; <?= Helper::formatDateToDisplay($cliente->data_nascimento, Helper::DATE_DEFAULT); ?></small>
+    	<small><b>Data de Nasc.:</b>&nbsp; <?= Helper::dateMask($cliente->data_nascimento, Helper::DATE_DEFAULT); ?></small>
     </div>
     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
     	<small><b>Endereço:</b>&nbsp; <?= $cliente->getEnderecoCompleto(); ?></small>
@@ -154,7 +154,7 @@ $this->params['breadcrumbs'][] = $this->title;
     			  				</tr>
     		  					<tr>
     			  					<td>Data de Nascimento</td>
-    			  					<td><?= Helper::formatDateToDisplay($cliente->data_nascimento, Helper::DATE_DEFAULT); ?></td>
+    			  					<td><?= Helper::dateMask($cliente->data_nascimento, Helper::DATE_DEFAULT); ?></td>
     			  				</tr>
     		  					<tr>
     			  					<td>Nome do Pai</td>
@@ -257,7 +257,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         <?= "{$parcela->num_parcela}/{$numParcelas}"; ?>
                 			  						</td>
                 			  						<td>
-                                                        <?= Helper::formatDateToDisplay($parcela->data_vencimento, Helper::DATE_DEFAULT); ?>
+                                                        <?= Helper::dateMask($parcela->data_vencimento, Helper::DATE_DEFAULT); ?>
                 			  						</td>
                 			  						<td>
                                                         <?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?>
@@ -444,7 +444,7 @@ $this->params['breadcrumbs'][] = $this->title;
 // CSS
 $this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [BootstrapAsset::className()]]);
 // JS
-$this->registerJsFile(Url::home().'app/js/negociacao.js?d=201810152208', ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile(Url::home().'app/js/negociacao.js?d=201810162243', ['depends' => [JqueryAsset::className()]]);
 ?>
 
 

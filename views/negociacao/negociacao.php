@@ -105,7 +105,7 @@ use app\models\NegociacaoParcela;
             						<?php foreach($negociacao->parcelas as $negociacaoParcela): ?>
             							<tr>
             								<td class="text-center"><?= $negociacaoParcela->num_parcela; ?></td>
-            								<td><?= Helper::formatDateToDisplay($negociacaoParcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
+            								<td><?= Helper::dateMask($negociacaoParcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
             								<td><?= Helper::mask($negociacaoParcela->valor, Helper::MASK_MONEY); ?></td>
         									<td>
             									<?php if($negociacaoParcela->status == NegociacaoParcela::STATUS_ABERTA): ?>
@@ -258,7 +258,7 @@ use app\models\NegociacaoParcela;
                 							<!-- ./calcula os valores totais -->
                     						<tr class="contrato-parcela">
                             					<td class="text-center"><?= $parcela->num_parcela; ?></td>
-                            					<td><?= Helper::formatDateToDisplay($parcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
+                            					<td><?= Helper::dateMask($parcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
                             					<td><?= $parcela->atraso; ?></td>
                             					<td class="principal" data-value="<?= $parcela->valor; ?>"><?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?></td>
                             					<td class="multa" data-value="<?= $parcela->multa; ?>"><?= Helper::mask($parcela->multa, Helper::MASK_MONEY); ?></td>
@@ -383,7 +383,7 @@ use app\models\NegociacaoParcela;
                                 						<?php foreach($negociacao->parcelas as $negociacaoParcela): ?>
                                 							<tr>
                                 								<td class="text-center"><?= $negociacaoParcela->num_parcela; ?></td>
-                                								<td><?= Helper::formatDateToDisplay($negociacaoParcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
+                                								<td><?= Helper::dateMask($negociacaoParcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
                                 								<td><?= Helper::mask($negociacaoParcela->valor, Helper::MASK_MONEY); ?></td>
                                 							</tr>
                                 						<?php endforeach; ?>

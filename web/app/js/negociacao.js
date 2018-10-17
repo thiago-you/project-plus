@@ -499,7 +499,9 @@ $(document).ready(function() {
 	
 		// valida os dados necessários
 		if (!post.cliente || !post.contrato || !post.tipo || !post.titulo || !post.data || !post.descricao) {
+			toastr.options = {preventDuplicates: true};
 			toastr.warning('Por favor, preencha todos os dados obrigatórios. (Tipo, Título, Data, Descrição)');
+			return false;
 		}
 	
 		// envia a requisicao

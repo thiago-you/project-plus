@@ -176,7 +176,7 @@ class Cliente extends \yii\db\ActiveRecord
     	}
     	
     	// formata a data para salvar
-    	$this->data_nascimento = Helper::formatDateToSave($this->data_nascimento, Helper::DATE_DEFAULT);
+    	$this->data_nascimento = Helper::dateUnmask($this->data_nascimento, Helper::DATE_DEFAULT);
     	
     	// formata o nome da mae e pai
     	$this->nome_mae = ucwords(strtolower($this->nome_mae));
@@ -197,7 +197,7 @@ class Cliente extends \yii\db\ActiveRecord
     public function afterFind() 
     {
         // formata a data para ser exibida
-        $this->data_nascimento = Helper::formatDateToDisplay($this->data_nascimento, Helper::DATE_DEFAULT);        
+        $this->data_nascimento = Helper::dateMask($this->data_nascimento, Helper::DATE_DEFAULT);        
     }
     
     /**

@@ -145,7 +145,7 @@ class Acionamento extends \yii\db\ActiveRecord
     public function beforeSave($insert) 
     {
         if (!empty($this->data)) {
-            $this->data = Helper::formatDateToSave($this->data, true);
+            $this->data = Helper::dateUnmask($this->data, Helper::DATE_DEFAULT, true);
         } else {
             $this->data = date('Y-m-d H:i:s');
         }

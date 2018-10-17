@@ -77,6 +77,14 @@ $(document).ready(function() {
         });
     });
 
+    // limita o desconto máximo para 100%
+    $('body').on('change', '.max-desconto', function() {
+    	if (parseFloat(this.value.replace('%', '')) > 100.0000) {
+			$(this).val('100.0000%').trigger('change');
+		}		
+		return false;
+    });
+    
     // evento quando o select de campanha for alterado
     $('body').on('change', '#credor-id_campanha', function() {
         if (this.value != '') {
@@ -173,10 +181,26 @@ $(document).ready(function() {
 	$('body').on('submit', '#form-calculo', function(e) {
         e.preventDefault();			
 
-        // pega a lista e o id            
+        // pega os values de deconto para validar
+        const descEncargos = $('#credorcalculo-desc_encagos_max').val() || '';
+        const descPrincipal = $('#credorcalculo-desc_principal_max').val() || '';
+        const descHonorario = $('#credorcalculo-desc_honorario_max').val() || '';
+        
+        // valida os descontos máximos
+        if (descEncargos.length > 0 && parseFloat(descEncargos.replace('%', '')) > 100.0000) {
+			$('#credorcalculo-desc_encagos_max').val('100.0000%').trigger('change');
+		}
+        if (descPrincipal.length > 0 && parseFloat(descPrincipal.replace('%', '')) > 100.0000) {
+			$('#credorcalculo-desc_principal_max').val('100.0000%').trigger('change');
+		}
+        if (descHonorario.length > 0 && parseFloat(descHonorario.replace('%', '')) > 100.0000) {
+			$('#credorcalculo-desc_honorario_max').val('100.0000%').trigger('change');
+		}
+
+        // pega os params e a action           
         let action = $('#form-calculo').attr('action');
         let params = $('#form-calculo').serializeArray();
-
+        
         // envia a requisicao para cadastrar a campanha
         $.post(action, params, function(response) {
             let data = JSON.parse(response);

@@ -4,7 +4,7 @@ namespace app\base;
 /**
  * Help class
  *
- * @author Thiago You <thya9o@outlook.com>
+ * @author Thiago You <thiago.youx@gmail.com>
  */
 class Helper
 {
@@ -43,12 +43,12 @@ class Helper
 
     // constantes para formatar e setar datas
     CONST DATE_DEFAULT    = 'DEFAULT';    // save as (Y-m-d), display as (d/m/Y)
+    CONST DATE_DATETIME   = 'DATETIME';   // save as (Y-m-d H:i:s), display as (d/m/Y H:i)
     CONST DATE_MONTH      = 'MONTH';      // save as (m), display as (M)
     CONST DATE_MONTH_YEAR = 'MONTH_YEAR'; // save as (Y-m), display as (M/Y)
     CONST DATE_YEAR       = 'YEAR';       // save as (Y), display as (Y)
     CONST DATE_INI        = 'DATE_INI';   // save as (Y-m-d 00:00:00), display as (d/m/Y 00:00:00)
     CONST DATE_END        = 'DATE_END';   // save as (Y-m-d 23:59:59), display as (d/m/Y 23:59:59)
-    CONST DATE_TIMESTAMP  = 'TIMESTAMP';  // return timeStamp (mkdir)
     CONST DATE_TIME       = 'TIME';       // return only time (H:i:s)
     CONST DATE_EXCEL      = 'EXCEL';      // change day by month
    
@@ -300,7 +300,7 @@ class Helper
      * @param $format (date format: pre-defined const's)
      * @return $data (formated date)
      */
-    public static function formatDateToDisplay($data, $format = null, $completeFormat = null)
+    public static function dateMask($data, $format = null, $completeFormat = null)
     {
         // seta a data atual se nada for enviado (empty)
         if (empty($data)) {
@@ -311,6 +311,10 @@ class Helper
         switch ($format) {
             case self::DATE_DEFAULT:
                 $format = 'd/m/Y';
+                break;
+            case self::DATE_DATETIME:
+                $format = 'd/m/Y H:i';
+                $completeFormat = false;
                 break;
             case self::DATE_MONTH:
                 $format = 'M';
@@ -366,7 +370,7 @@ class Helper
      * @param $format (date format: pre-defined const's)
      * @return $data (formated date)
      */
-    public static function formatDateToSave($data, $format = null, $completeFormat = null)
+    public static function dateUnmask($data, $format = null, $completeFormat = null)
     {
         // seta a data atual se nada for enviado (empty)
         if (empty($data)) {
@@ -385,6 +389,10 @@ class Helper
         switch ($format) {
             case self::DATE_DEFAULT:
                 $format = 'Y-m-d';
+                break;
+            case self::DATE_DATETIME:
+                $format = 'd/m/Y H:i';
+                $completeFormat = false;
                 break;
             case self::DATE_MONTH:
                 $format = 'm';
