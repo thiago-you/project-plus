@@ -79,7 +79,18 @@ class SiteController extends BaseController
         // registra a api para gerar graficos
         AppAsset::register(\Yii::$app->view)->js[] = 'plugins/chart.js/dist/Chart.js';
         
-        return $this->render('index');
+        // busca os novos clientes nos ultimos 5 meses
+        $novosClientes = Cliente::find()
+        ->select('Month(`data_cadastro`) as "mes", Count(*) as "quant"')
+        ->where('`data_cadastro` >= CURDATE() - INTERVAL 5 MONTH')
+        ->groupBy('Month(`data_cadastro`)')
+        ->orderBy(['data_cadastro' => SORT_DESC])
+        ->asArray(true)
+        ->all();
+        
+        return $this->render('index', [
+            'novosClientes' => $novosClientes,
+        ]);
     }
 
     /**

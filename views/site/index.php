@@ -9,7 +9,13 @@ $this->title = 'Home';
             	<br>
             	<canvas id="card-cliente-chart" width="300" height="120"></canvas>
             	<!-- ./grafico -->
-            	<div class="card-cliente-content hidden"></div>
+            	<div class="card-cliente-content hidden">
+            		<?php if (isset($novosClientes) && is_array($novosClientes)): ?>
+            			<?php foreach ($novosClientes as $cliente): ?>
+            				<span class="novos-clientes mes-<?= $cliente['mes'] ?>" data-quant="<?= $cliente['quant']; ?>"></span>
+            			<?php endforeach; ?>
+            		<?php endif; ?>
+            	</div>
             	<!-- ./data do grafico -->
 			</div>
 		</div>
@@ -24,38 +30,49 @@ $js = <<< JS
         const ctx = document.getElementById('card-cliente-chart');
 
         // monsta a lista dos ultimos 5 meses
-        const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        const months = {1: 'Janeiro', 2: 'Fevereiro', 3: 'Março', 4: 'Abril', 5: 'Maio', 6: 'Junho', 7: 'Julho', 8: 'Agosto', 9: 'Setembro', 10: 'Outubro', 11: 'Novembro', 12: 'Dezembro'};
         const today = new Date();
-        const lastMonths = [];
+        const lastMonthsLabels = [];
+        const lastMonthsQuant = [];
 
         // lop para montar a lista dos ultimos seis meses
-        for (let i = 5; i >= 0; i--) {
-            let temp = new Date(today.getFullYear(), today.getMonth() - i, 1);
-            lastMonths.push(months[temp.getMonth()]);
+        for (let i = 4; i >= 0; i--) {
+            const temp = new Date(today.getFullYear(), today.getMonth() - i, 1);
+            lastMonthsLabels.push(months[temp.getMonth()+1]);
+
+            // pega a quantidade do mes
+            const mesQaunt = $('.novos-clientes.mes-'+(temp.getMonth()+1)).data('quant');
+
+            // valida a quantidade
+            if (mesQaunt != undefined && mesQaunt > 0) {
+                lastMonthsQuant.push(mesQaunt);
+            } else {
+                lastMonthsQuant.push(0);
+            }
         }
 
         let chartCliente = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: lastMonths,
+                labels: lastMonthsLabels,
                 datasets: [{
                     label: ' Quantidade de Clientes',
-                    data: [6, 4, 11, 5, 7, 10],
+                    data: lastMonthsQuant,
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.6)',
-                        'rgba(54, 162, 235, 0.6)',
-                        'rgba(255, 206, 86, 0.6)',
-                        'rgba(75, 192, 192, 0.6)',
-                        'rgba(153, 102, 255, 0.6)',
-                        'rgba(255, 159, 64, 0.6)'
+                        'rgba(38, 222, 129, 0.8)',
+                        'rgba(136, 84, 208, 0.8)',
+                        'rgba(255, 165, 2, 0.8)',
+                        'rgba(255, 71, 87, 0.8)',
+                        'rgba(0, 168, 255, 0.8)',
+                        'rgba(85, 239, 196, 0.8)'
                     ],
                     borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgb(38, 222, 129)',
+                        'rgb(136, 84, 208)',
+                        'rgb(255, 165, 2)',
+                        'rgb(255, 71, 87)',
+                        'rgb(0, 168, 255)',
+                        'rgb(85, 239, 196)'
                     ],
                     borderWidth: 1
                 }]
