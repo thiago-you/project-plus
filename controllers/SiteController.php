@@ -83,8 +83,8 @@ class SiteController extends BaseController
         $novosClientes = Cliente::find()
         ->select('Month(`data_cadastro`) as "mes", Count(*) as "quant"')
         ->where('`data_cadastro` >= CURDATE() - INTERVAL 5 MONTH')
-        ->groupBy('Month(`data_cadastro`)')
-        ->orderBy(['data_cadastro' => SORT_DESC])
+        ->groupBy('YEAR(`data_cadastro`), Month(`data_cadastro`)')
+        ->orderBy(['YEAR(`data_cadastro`)' => SORT_DESC, 'Month(`data_cadastro`)' => SORT_DESC])
         ->asArray(true)
         ->all();
         
