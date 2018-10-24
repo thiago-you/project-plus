@@ -444,7 +444,7 @@ $this->params['breadcrumbs'][] = $this->title;
 // CSS
 $this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [BootstrapAsset::className()]]);
 // JS
-$this->registerJsFile(Url::home().'app/js/negociacao.js?d=201810162243', ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile(Url::home().'app/js/negociacao.js?d=201810232236', ['depends' => [JqueryAsset::className()]]);
 ?>
 
 
