@@ -165,7 +165,7 @@ class ContratoController extends Controller
                     ContratoParcela::deleteAll(['id_contrato' => $model->id]);
                     
                     // cadastra/recadastra as parcelas
-                    foreach ($post['Parcela'] as $key => $parcela) {
+                    foreach ($post['Parcela'] as $parcela) {
                         if (isset($parcela['vencimento']) && !empty($parcela['vencimento']) &&
                             isset($parcela['valor']) && !empty($parcela['valor'])
                         ) {
@@ -175,7 +175,7 @@ class ContratoController extends Controller
                             $modelParcela->id_contrato = $model->id;
                             $modelParcela->data_vencimento = $parcela['vencimento'];
                             $modelParcela->valor = $parcela['valor'];
-                            $modelParcela->num_parcela = ++$key;
+                            $modelParcela->num_parcela = ++$i;
                             
                             // seta o status da parcela
                             if ($model->negociacao) {

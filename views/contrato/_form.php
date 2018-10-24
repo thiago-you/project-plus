@@ -1,14 +1,14 @@
 <?php
+use yii\web\View;
 use app\base\Helper;
 use app\models\Credor;
 use app\models\Cliente;
 use kartik\helpers\Html;
+use app\models\Contrato;
 use kartik\date\DatePicker;
 use kartik\form\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\money\MaskMoney;
-use yii\web\View;
-use app\models\Contrato;
 ?>
 <?php $form = ActiveForm::begin(); ?>
 	<div class="panel panel-primary panel-box">
@@ -139,47 +139,50 @@ use app\models\Contrato;
                 	<!-- ./row -->
                 	<div class="row">
                 		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-                			<table id="table-parcelas" class="table table-bordered table-hover">
-                				<thead>
-                					<tr>
-                						<th class="text-center">N°</th>
-                						<th>Vencimento</th>
-                						<th>Valor</th>
-                						<th></th>
-                					</tr>
-                				</thead>
-                				<!-- ./thead -->
-                				<tbody data-num="<?= $model->isNewRecord ? 0 : count($model->contratoParcelas) ?>">
-        							<!-- ./template row -->
-                					<?php if (!$model->isNewRecord && count($model->contratoParcelas) > 0): ?>
-                						<?php foreach($model->contratoParcelas as $parcela): ?>
-                							<tr id="linha-<?= ++$num; ?>">
-                								<td class="text-center"><?= $num; ?></td>
-                								<td>
-                									<?= $parcela->data_vencimento; ?>
-                									<input name="Parcela[<?= $num; ?>][vencimento]" value="<?= $parcela->data_vencimento; ?>" class="hidden"/>
-            									</td>
-                								<td>
-                									<?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?>
-                									<input name="Parcela[<?= $num; ?>][valor]" value="<?= $parcela->valor; ?>" class="hidden"/>
-                								</td>
-                								<td class="text-center">
-                									<?= Html::button('<i class="fa fa-edit fa-fw"></i>', [
-        									                'class' => Helper::BTN_COLOR_WARNING.' btn-xs editar-parcela',
-                									   ]); 
-                									?>
-                									<?= Html::button('<i class="fa fa-times fa-fw"></i>', [
-        									                'class' => Helper::BTN_COLOR_DANGER.' btn-xs deletar-parcela',
-                									   ]); 
-                									?>
-                								</td>
-                							</tr>
-                						<?php endforeach; ?>
-                					<?php endif; ?>
-                				</tbody>
-                				<!-- ./tbody -->
-                			</table>
-                			<!-- ./table -->
+                			<div class="parcelas" style="max-height: 400px; overflow-y: auto; display: block;">
+                    			<table id="table-parcelas" class="table table-bordered table-hover">
+                    				<thead>
+                    					<tr>
+                    						<th class="text-center">N°</th>
+                    						<th>Vencimento</th>
+                    						<th>Valor</th>
+                    						<th></th>
+                    					</tr>
+                    				</thead>
+                    				<!-- ./thead -->
+                    				<tbody data-num="<?= $model->isNewRecord ? 0 : count($model->contratoParcelas) ?>">
+            							<!-- ./template row -->
+                    					<?php if (!$model->isNewRecord && count($model->contratoParcelas) > 0): ?>
+                    						<?php foreach($model->contratoParcelas as $parcela): ?>
+                    							<tr id="linha-<?= ++$num; ?>">
+                    								<td class="text-center"><?= $num; ?></td>
+                    								<td>
+                    									<?= $parcela->data_vencimento; ?>
+                    									<input name="Parcela[<?= $num; ?>][vencimento]" value="<?= $parcela->data_vencimento; ?>" class="hidden"/>
+                									</td>
+                    								<td>
+                    									<?= Helper::mask($parcela->valor, Helper::MASK_MONEY); ?>
+                    									<input name="Parcela[<?= $num; ?>][valor]" value="<?= $parcela->valor; ?>" class="hidden"/>
+                    								</td>
+                    								<td class="text-center">
+                    									<?= Html::button('<i class="fa fa-edit fa-fw"></i>', [
+            									                'class' => Helper::BTN_COLOR_WARNING.' btn-xs editar-parcela',
+                    									   ]); 
+                    									?>
+                    									<?= Html::button('<i class="fa fa-times fa-fw"></i>', [
+            									                'class' => Helper::BTN_COLOR_DANGER.' btn-xs deletar-parcela',
+                    									   ]); 
+                    									?>
+                    								</td>
+                    							</tr>
+                    						<?php endforeach; ?>
+                    					<?php endif; ?>
+                    				</tbody>
+                    				<!-- ./tbody -->
+                    			</table>
+                    			<!-- ./table -->
+                			</div>
+                			<!-- ./parcelas -->
                 		</div>
                 	</div>
                 	<!-- ./row -->
@@ -213,22 +216,24 @@ use app\models\Contrato;
     <!-- ./panel -->
 <?php ActiveForm::end(); ?>
 <!-- ./form -->
-<div id="modal-parcela" class="modal fade" tabindex="-1" role="dialog">
+<div id="modal-parcela" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
   			<div class="modal-header">
     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    			<h4 class="modal-title">Parcela</h4>
+    			<h4 class="modal-title">
+    				<i class="fa fa-credit-card"></i>&nbsp; Parcelas
+				</h4>
   			</div>
   			<!-- ./modal-header -->
   			<div class="modal-body">
   				<input id="parcela-num" value="" class="hidden"/>
   				<!-- ./hidden input -->
   				<div class="row">
-  					<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+  					<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
     					<?= Html::label('Vencimento', 'parcela-vencimento'); ?>
     					<?= DatePicker::widget([
-                                'name' => "parcela-vencimento",
+                                'name' => 'parcela-vencimento',
 				                'id' => 'parcela-vencimento',
     			                'removeButton' => false,
     			                'pluginOptions' => [
@@ -238,10 +243,10 @@ use app\models\Contrato;
     					   ]); 
     					?>
 					</div>    			
-					<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+					<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
 						<?= Html::label('Valor', 'parcela-valor'); ?>
     					<?= MaskMoney::widget([
-    			                'name' => "parcela-valor",
+    			                'name' => 'parcela-valor',
 				                'id' => 'parcela-valor',
                                 'options' => [
                                     'maxlength' => '14',
@@ -253,6 +258,19 @@ use app\models\Contrato;
                                 ],
                             ]);
                         ?>
+					</div>
+					<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+						<?= Html::label('Núm. Parcelas', 'parcela-quant'); ?>
+    					<?= Html::textInput('parcela-quant', 1, [
+				                'id' => 'parcela-quant',
+				                'type' => 'number',
+				                'class' => 'form-control',
+				                'min' => '1',
+                            ]);
+                        ?>
+                        <small class="help-block">
+                        	<i class="fa fa-info-circle"></i>&nbsp; A parcela vai se repetir mensalmente.
+                        </small>
 					</div>
 				</div>		
 				<!-- ./row -->
@@ -298,6 +316,7 @@ $(document).ready(function() {
         $(this).find('#parcela-num').val('');
         $(this).find('#parcela-vencimento').val('').trigger('change');
         $(this).find('#parcela-valor-disp').val('').trigger('change');
+        $(this).find('#parcela-quant').val(1).prop('disabled', false);
     });
 
     // abre a modal para adicionar a parcela
@@ -327,9 +346,17 @@ $(document).ready(function() {
         modalParcela.find('#parcela-num').val(parcelaNum);
         modalParcela.find('#parcela-vencimento').val(vencimento).trigger('change');
         modalParcela.find('#parcela-valor-disp').val(valor).trigger('change');
+        modalParcela.find('#parcela-quant').prop('disabled', true);
         modalParcela.modal('show');
 
         return false;
+    });
+
+    // valida o numero máximo de parcelas
+    $('body').on('change', '#parcela-quant', function() {
+        if (Number(this.value) > 500) {
+            $(this).val(500).trigger('change');
+        }
     });
 
     // adiciona a parcela na lista
@@ -343,6 +370,7 @@ $(document).ready(function() {
         let parcelaVencimento = modalParcela.find('#parcela-vencimento').val();
         let parcelaValor = modalParcela.find('#parcela-valor').val();
         let parcelaValorDisp = modalParcela.find('#parcela-valor-disp').val();
+        const parcelaQuant = Number(modalParcela.find('#parcela-quant').val());
 
         // valida os valores da modal
         if (parcelaVencimento == undefined || parcelaVencimento == '' ||
@@ -355,17 +383,46 @@ $(document).ready(function() {
         // adiciona a nova linha
         if (parcelaNum == '') {
             // incrementa o numero da parcela        
-            let num = parseInt(tabela.data('num'));
-            tabela.data('num', ++num);
-            
-            // adiciona a linha na tabela
-            tabela.append('<tr></tr>').find('tr:last').attr('id', 'linha-'+num);
-            let linha = tabela.find('tr:last');
+            let num = parseInt(tabela.attr('data-num'));
+    
+            // pega o vencimento da primeira parcela
+            let vencimento = parcelaVencimento.split('/');
+    		vencimento = new Date(vencimento[2], Number(vencimento[1])-1, vencimento[0]);
+    		let dd, mm, yyyy;
+           
+            // insere todas as parcelas
+            for (let i = 0; i < parcelaQuant; i++) {
+                // atualiza o numero da parcela
+                tabela.attr('data-num', ++num);
+                
+                // adiciona a linha na tabela
+                tabela.append('<tr></tr>').find('tr:last').attr('id', 'linha-'+num);
+                let linha = tabela.find('tr:last');
+    
+                // calcula o vencimento da próxima parcela
+                if (i > 0) {
+        			vencimento.setMonth(vencimento.getMonth() + 1);
+        			dd = vencimento.getDate();
+        			mm = vencimento.getMonth() + 1;
+        			yyyy = vencimento.getFullYear();
+        
+        			// formata o dia e mes
+        			if (dd < 10) {
+        			    dd = '0'+dd
+        			} 
+        			if (mm < 10) {
+        			    mm = '0'+mm
+        			}
 
-            linha.append('<td class="text-center"></td>').find('td:last').append(num);
-            linha.append('<td></td>').find('td:last').append(parcelaVencimento + '<input name="Parcela['+num+'][vencimento]" value="'+parcelaVencimento+'" class="hidden"/>');
-            linha.append('<td></td>').find('td:last').append(parcelaValorDisp + '<input name="Parcela['+num+'][valor]" value="'+parcelaValor+'" class="hidden"/>');
-            linha.append('<td class="text-center"></td>').find('td:last').append('<button class="btn btn-warning btn-flat btn-xs editar-parcela"><i class="fa fa-edit fa-fw"></i></button>&nbsp;<button class="btn btn-danger btn-flat btn-xs deletar-parcela"><i class="fa fa-times fa-fw"></i></button>');
+                    // seta o vencimento
+                    parcelaVencimento = dd+'/'+mm+'/'+yyyy;
+                }
+
+                linha.append('<td class="text-center"></td>').find('td:last').append(num);
+                linha.append('<td></td>').find('td:last').append(parcelaVencimento + '<input name="Parcela['+num+'][vencimento]" value="'+parcelaVencimento+'" class="hidden"/>');
+                linha.append('<td></td>').find('td:last').append(parcelaValorDisp + '<input name="Parcela['+num+'][valor]" value="'+parcelaValor+'" class="hidden"/>');
+                linha.append('<td class="text-center"></td>').find('td:last').append('<button class="btn btn-warning btn-flat btn-xs editar-parcela"><i class="fa fa-edit fa-fw"></i></button>&nbsp;<button class="btn btn-danger btn-flat btn-xs deletar-parcela"><i class="fa fa-times fa-fw"></i></button>');
+            }
         } else {
             // busca a linha alterada        
             let linha = tabela.find('tr#linha-'+parcelaNum);
@@ -383,6 +440,19 @@ $(document).ready(function() {
     $('body').on('click', '.deletar-parcela', function() {
         // busca e remove a linha
         $(this).closest('tr').remove();
+        
+        // atualiza o numero de linhas na tabela
+        const tabela = $('#table-parcelas tbody');
+        const numParcelas = Number($('#table-parcelas tbody').attr('data-num')) - 1;
+        tabela.attr('data-num', numParcelas);
+
+        // atualiza o numero de cada tabela
+        let num = 0;
+        tabela.find('tr').each(function() {
+            $(this).attr('id', 'linha-'+(++num));
+            $(this).find('td:first').text(num);
+        });
+
         return false;
     });
 });

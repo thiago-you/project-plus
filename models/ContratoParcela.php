@@ -136,6 +136,11 @@ class ContratoParcela extends \yii\db\ActiveRecord
             // calcula o atraso e
             // não considera o dia do vencimento
             $this->atraso = round($diferenca / (60 * 60 * 24)) - 1;
+            
+            // valida o atraso negativo
+            if ($this->atraso < 0) {
+                $this->atraso = 0;
+            }
         }
         
         return $this->atraso;
