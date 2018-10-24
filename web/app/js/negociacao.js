@@ -20,7 +20,6 @@ function Negociacao() {
 	self.desconto_total = 0;
 	self.observacao = '';
 	self.valor_entrada = '';
-	self.taxa_parcelado = '';
 	
 	// array com a lista de parcelas da negociacao
 	self.parcelas = [];
@@ -45,7 +44,6 @@ function Negociacao() {
 		self.total = $('#negociacao-total').data('value') || 0;
 		self.observacao = $('#negociacao-observacao').val() || '';
 		self.valor_entrada = $('#valor-entrada').val() || 0;
-		self.taxa_parcelado = $('#parcelado-valor-taxa').data('valor') || '';
 		
 		// atualiza os valores de desconto
 		self.loadDesconto();
@@ -281,8 +279,6 @@ function Negociacao() {
 	// calcula o valor de vada parcela da negociacao
 	self.calcularValorParcela = quantParcelas => {
 		self.parcelas = [];
-		self.taxa_parcelado = 0;
-		let taxa = 0;
 		
 		// valida o valor de entrada
 		if (self.valor_entrada == undefined || isNaN(self.valor_entrada)) {
@@ -292,26 +288,16 @@ function Negociacao() {
 		if (quantParcelas == undefined || !quantParcelas) {
 			quantParcelas = 0;
 		}
-				
+			
+		// parse number
+		self.valor_entrada = Number(self.valor_entrada);
+		
 		// calcula o valor das parcelas
 		let valorParcela = (self.total - self.valor_entrada);
-		
-		// calcula a taxa de juros de cada parcela
-		if (quantParcelas > 0) {			
-			// calcula a taxa de juros da parcela
-			taxa = (valorParcela * 0.15) * quantParcelas;
-			taxa = taxa / (self.valor_entrada > 0 ? quantParcelas - 1 : quantParcelas); 
-		
-			// calcula a taxa de juros total
-			self.taxa_parcelado = Math.floor((taxa * (self.valor_entrada > 0 ? quantParcelas - 1 : quantParcelas)) * 100) / 100;
-		}
 		
 		// divide o valor das parcelas
 		valorParcela = self.valor_entrada > 0 ? (valorParcela / (quantParcelas - 1)) : (valorParcela / quantParcelas);
 		valorParcela = Math.round(valorParcela * 100) / 100;
-		
-		// soma a taxa de juros no valor da parcela
-		valorParcela = Math.round((valorParcela + taxa) * 100) / 100;
 		
 		// calcula o vencimento da primeira parcela
 		let vencimento = new Date();
@@ -334,7 +320,8 @@ function Negociacao() {
 			valor: self.valor_entrada > 0 ? self.valor_entrada : valorParcela,
 		});
 		
-		// seta cada parcela
+		// rateia o valor em cada parcela
+		let somaValor = self.valor_entrada;
 		for (let i = 1; i < quantParcelas; i++) {
 			// calcula o vencimento
 			vencimento.setMonth(vencimento.getMonth() + 1);
@@ -350,19 +337,23 @@ function Negociacao() {
 			    mm = '0'+mm
 			}
 			
-			self.parcelas.push({
-				num: i + 1,
-				vencimento: `${dd}/${mm}/${yyyy}`,
-				valor: valorParcela,
-			});
+			// arredonda os valores na última parcela
+			if ((i+1) == quantParcelas) {
+				self.parcelas.push({
+					num: i + 1,
+					vencimento: `${dd}/${mm}/${yyyy}`,
+					valor: Math.round((self.total - somaValor) * 100)  / 100,
+				});
+			} else {
+				self.parcelas.push({
+					num: i + 1,
+					vencimento: `${dd}/${mm}/${yyyy}`,
+					valor: valorParcela,
+				});
+				
+				somaValor += valorParcela;
+			}
 		}
-		
-		// adiciona o valor total de taxa
-		$('#parcelado-valor-taxa').data('value', self.taxa_parcelado).text(accounting.formatMoney(self.taxa_parcelado, 'R$ ', 2, '.', ','));
-
-		// seta o novo valor total
-		self.total = self.total + self.taxa_parcelado;
-		$('#negociacao-total').data('value', 100).text(accounting.formatMoney(self.total, 'R$ ', 2, '.', ','));
 	}
 };
 

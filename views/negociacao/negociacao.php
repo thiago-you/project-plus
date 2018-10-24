@@ -342,11 +342,6 @@ use app\models\NegociacaoParcela;
                                     				]); 
                                 				?>      
                             				</div>
-                            				<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-                                				<br>
-                            					<p><b>Taxa:</b> 15,00% am</p>
-                            					<p><b>Valor da Taxa:</b> <span id="parcelado-valor-taxa" data-value="<?= $negociacao->taxa_parcelado; ?>"><?= Helper::mask($negociacao->taxa_parcelado, Helper::MASK_MONEY); ?></span></p>
-                            				</div>
                         				</div>
                         				<!-- ./row -->       					
             						</div>
