@@ -162,7 +162,7 @@ class ContratoController extends Controller
                 // salva as parcelas cadastrados
                 if (isset($post['Parcela']) && is_array($post['Parcela'])) {
                     // deleta todos as parcelas do contrato
-                    ContratoParcela::deleteAll();
+                    ContratoParcela::deleteAll(['id_contrato' => $model->id]);
                     
                     // cadastra/recadastra as parcelas
                     foreach ($post['Parcela'] as $key => $parcela) {
@@ -172,7 +172,7 @@ class ContratoController extends Controller
                             // cria a model de parcela e
                             // seta os dados
                             $modelParcela = new ContratoParcela();
-                            $modelParcela->id_contrato = $model->id ? $model->id : $model->getPrimaryKey();
+                            $modelParcela->id_contrato = $model->id;
                             $modelParcela->data_vencimento = $parcela['vencimento'];
                             $modelParcela->valor = $parcela['valor'];
                             $modelParcela->num_parcela = ++$key;

@@ -194,7 +194,7 @@ class Contrato extends \yii\db\ActiveRecord
     public function beforeDelete() 
     {
         // deleta todas as parcelas do contrato
-        ContratoParcela::deleteAll();
+        ContratoParcela::deleteAll(['id_contrato' => $this->id]);
         
         return parent::beforeDelete();
     }
