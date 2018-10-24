@@ -443,7 +443,7 @@ class ClienteController extends BaseController
             }
         }
         
-        return array_unique($data);
+        return $data;
     }
     
     /**
