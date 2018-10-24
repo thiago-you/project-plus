@@ -46,26 +46,17 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <!-- ./dados do cliente -->
 <div class="row">
-    <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
+    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         <div class="panel panel-primary panel-box panel-dados-cliente">
         	<div class="panel-body">
-        		<div class="nav-tabs-custom">
-            		<ul class="nav nav-tabs">
-    					<li class="active"><a href="#tab-telefone" data-toggle="tab">Telefones</a></li>
-    					<li><a href="#tab-endereco" data-toggle="tab">Endereços</a></li>
-    					<li><a href="#tab-email" data-toggle="tab">Emails</a></li>
-    					<li><a href="#tab-dados" data-toggle="tab">Dados</a></li>
-    				</ul>
-    			</div>
-    			<div class="tab-content">
-    				<div class="tab-pane active" id="tab-telefone">
+    			<div class="row">
+    				<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
     					<table id="table-telefones" class="table table-bordered table-hover">
     			  			<thead>
     			  				<tr>
     			  					<th>Telefone</th>
     			  					<th>Tipo</th>
     			  					<th>Observação</th>
-    			  					<th></th>
     			  				</tr>
     			  			</thead>
     			  			<tbody>
@@ -81,48 +72,19 @@ $this->params['breadcrumbs'][] = $this->title;
     					  					<td>
     					  						<?= $telefone->observacao; ?>
     					  					</td>
-    					  					<td class="text-center">
-    					  					</td>
     					  				</tr>
     				  				<?php endforeach; ?>
 				  				<?php endif; ?>
     			  			</tbody>
     			  		</table>
-    			  		<!-- ./table telefone -->
-    				</div>
-    				<!-- ./tab telefone -->
-    				<div class="tab-pane" id="tab-endereco">
-    					<table id="table-enderecos" class="table table-bordered table-hover">
-    			  			<thead>
-    			  				<tr>
-    			  					<th>Endereço</th>
-    			  					<th width="10%"></th>
-    			  				</tr>
-    			  			</thead>
-    			  			<tbody>
-    			  				<?php if (is_array($cliente->enderecos) && !empty($cliente->enderecos)): ?>
-    			  					<?php foreach ($cliente->enderecos as $endereco): ?>
-    				  					<tr>
-    					  					<td>
-    					  						<?= $endereco->getEnderecoCompleto(); ?>
-    				  						</td>
-    					  					<td class="text-center">
-    					  					</td>
-    					  				</tr>
-    				  				<?php endforeach; ?>
-    			  				<?php endif; ?>
-    			  			</tbody>
-    			  		</table>
-    			  		<!-- ./table telefone -->
-    				</div>
-    				<!-- ./tab endereco -->
-    				<div class="tab-pane" id="tab-email">
+			  		</div>
+			  		<!-- ./table telefone -->
+			  		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
     					<table id="table-emails" class="table table-bordered table-hover">
     			  			<thead>
     			  				<tr>
     			  					<th>Email</th>
     			  					<th>Observação</th>
-    			  					<th></th>
     			  				</tr>
     			  			</thead>
     			  			<tbody>
@@ -135,18 +97,41 @@ $this->params['breadcrumbs'][] = $this->title;
     					  					<td>
     					  						<?= $email->observacao; ?>
     					  					</td>
-    					  					<td class="text-center">
-    					  					</td>
     					  				</tr>
     				  				<?php endforeach; ?>
     			  				<?php endif; ?>
     			  			</tbody>
     			  		</table>
-    			  		<!-- ./table email -->
-    				</div>
-    				<!-- ./tab email -->
-    				<div class="tab-pane" id="tab-dados">
+			  		</div>
+			  		<!-- ./table email -->
+			  		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
+    					<table id="table-enderecos" class="table table-bordered table-hover">
+    			  			<thead>
+    			  				<tr>
+    			  					<th>Endereço</th>
+    			  				</tr>
+    			  			</thead>
+    			  			<tbody>
+    			  				<?php if (is_array($cliente->enderecos) && !empty($cliente->enderecos)): ?>
+    			  					<?php foreach ($cliente->enderecos as $endereco): ?>
+    				  					<tr>
+    					  					<td>
+    					  						<?= $endereco->getEnderecoCompleto(); ?>
+    				  						</td>
+    					  				</tr>
+    				  				<?php endforeach; ?>
+    			  				<?php endif; ?>
+    			  			</tbody>
+    			  		</table>
+			  		</div>
+			  		<!-- ./table telefone -->
+			  		<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
         				<table id="table-dados" class="table table-bordered table-hover">
+        					<thead>
+    			  				<tr>
+    			  					<th colspan="2">Outros Dados</th>
+    			  				</tr>
+    			  			</thead>
     			  			<tbody>
     		  					<tr>
     			  					<td>RG</td>
@@ -190,23 +175,28 @@ $this->params['breadcrumbs'][] = $this->title;
     			  				</tr>
     			  			</tbody>
     			  		</table>
-    			  		<!-- ./table dados -->
-    				</div>
-    				<!-- ./tab dados -->
-				</div>
-    			<!-- ./tabs -->
+			  		</div>
+			  		<!-- ./table dados -->
+		  		</div>
+		  		<!-- ./row -->
             </div>
             <!-- ./panel-body - dados do cliente -->
     	</div>
     	<!-- ./panel dados do cliente-->
-    	<div class="panel panel-primary panel-box panel-contratos">
+	</div>
+	<!-- ./col -->
+</div>
+<!-- ./row dados -->
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+		<div class="panel panel-primary panel-box panel-contratos">
     		<div class="panel-heading">
     			<div class="row">
                 	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
                 		<h3>Contratos</h3>
                 	</div>
                 	<div class="col-md-8 col-sm-8 col-lg-8 col-xs-8 text-right">
-                		<h3 class="text-danger">Total em Aberto: <?= Helper::mask($totalContratos, Helper::MASK_MONEY); ?></h3>
+                		<h3>Total em Aberto: <?= Helper::mask($totalContratos, Helper::MASK_MONEY); ?></h3>
                 	</div>
             	</div>
             	<!-- ./row -->
@@ -245,7 +235,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     		  					<th>Núm.</th>
                     		  					<th>Vencimento</th>
                     		  					<th>Valor</th>
-                    		  					<th>Atraso</th>
+                    		  					<th>Atraso (dias)</th>
                     		  					<th>Status</th>
                     		  					<th>Observação</th>
                     		  				</tr>
@@ -288,8 +278,25 @@ $this->params['breadcrumbs'][] = $this->title;
     	</div>
     	<!-- ./panel contratos -->
 	</div>
-	<!-- ./contrato -->
-	<div class="col-md-5 col-sm-5 col-lg-5 col-xs-12">
+	<!-- ./col -->
+</div>
+<!-- ./row contratos -->
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+        <div class="panel panel-primary panel-box panel-calculo">
+        	<div class="panel-body">
+        		<?= $this->render('/negociacao/negociacao', [
+                        'contrato' => $contrato,
+	                    'negociacao' => $negociacao,
+            		]); 
+        		?>
+        	</div>
+    	</div>
+	</div>
+</div>
+<!-- ./row calculo -->
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
 		<div class="panel panel-primary panel-box panel-acionamento">
         	<div class="panel-heading">
         		<div class="row">
@@ -316,23 +323,8 @@ $this->params['breadcrumbs'][] = $this->title;
     	</div>
     	<!-- ./panel -->
 	</div>
-	<!-- ./ acionamentos -->
-</div>
-<!-- ./row -->
-<div class="row">
-    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-        <div class="panel panel-primary panel-box panel-calculo">
-        	<div class="panel-body">
-        		<?= $this->render('/negociacao/negociacao', [
-                        'contrato' => $contrato,
-	                    'negociacao' => $negociacao,
-            		]); 
-        		?>
-        	</div>
-    	</div>
-	</div>
-</div>
-<!-- ./row calculo -->
+</div>	
+<!-- ./ row acionamentos -->
 <?php Modal::begin([
     'id' => 'modal-acionamento',
     'header' => '<h4 class="modal-title text-primary"><i class="fa fa-plus"></i>&nbsp; Acionamento</h4>',
