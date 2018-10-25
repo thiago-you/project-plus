@@ -477,24 +477,32 @@ $(document).ready(function() {
 	
 	// salva o acionamento
 	$('body').on('click', '#save-acionamento', function() {
+		
 		// seta os dados enviados por post
 		const post = {
 			cliente: $('#id-cliente').data('id'),
 			contrato: $('#id-contrato').val(),
 			tipo: $('#acionamento-tipo').val(),
 			titulo: $('#acionamento-titulo').val(),
-			data: $('#acionamento-data').val(),
+			dataAgendamento: $('#acionamento-data-agendamento').val(),
+			colaboradorAgendamento: $('#acionamento-colab').val(),
 			hora: $('#acionamento-hora').val(),
 			descricao: $('#acionamento-desc').val(),
 		};
 	
 		// valida os dados necessários
-		if (!post.cliente || !post.contrato || !post.tipo || !post.titulo || !post.data || !post.descricao) {
+		if (!post.cliente || !post.contrato || !post.tipo || !post.descricao) {
 			toastr.options = {preventDuplicates: true};
-			toastr.warning('Por favor, preencha todos os dados obrigatórios. (Tipo, Título, Data, Descrição)');
+			toastr.warning('Por favor, preencha todos os dados obrigatórios (Tipo, Título, Descrição).');
 			return false;
 		}
-	
+		// valida o agendamento
+		if (!post.colaboradorAgendamento != !post.dataAgendamento) {
+			toastr.options = {preventDuplicates: true};
+			toastr.warning('Por favor, preencha todos os dados obrigatórios para o agendamento (Colaborador e Data).');
+			return false;
+		}
+		
 		// envia a requisicao
 		$.post(BASE_PATH + 'acionamento/create', post, function(response) {
 			const retorno = JSON.parse(response);
@@ -506,11 +514,11 @@ $(document).ready(function() {
 				toastr.success('Acionamento salvo com sucesso.');
 				
 				// reseta o form
-				$('#acionamento-tipo').val('');
+				$('#acionamento-tipo').val($('#acionamento-tipo option:first').val()).trigger('change');
 				$('#acionamento-titulo').val('');
-				$('#acionamento-data').val($('#acionamento-data').data('value')).trigger('change');
-				$('#acionamento-hora').val('').trigger('change');
 				$('#acionamento-desc').val('');
+				$('#acionamento-data-agendamento').val('').trigger('change');
+				$('#acionamento-colab').val('').trigger('change');
 				
 				// atualiza a lista de acionamentos
 				$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+post.contrato);
@@ -747,33 +755,6 @@ $(document).ready(function() {
 		}
 		
 		return false;
-	});
-	
-	// abre o contrato para negociacao
-	$('body').on('click', '.set-contrato', function() {
-		const idContrato = $(this).data('id'); 
-		
-		// valida se o cotrato já esta aberto
-		if (idContrato == $('#id-contrato').val()) {
-			toastr.info('Este contrato já esta aberto.');
-			return false;
-		}
-		
-		// mensagem de loading
-		toastr.clear();
-		toastr.info('<i class="fa fa-spinner fa-pulse"></i>&nbsp; Carregando Contrato ...');
-		
-		// envia a requisição
-		$.get(BASE_PATH+'contrato/negociacao/'+idContrato, function(response) {
-			const retorno = JSON.parse(response);
-			
-			// seta o conteudo
-			if (retorno.success == true) {				
-				$('section.main-content').html(retorno.content);
-			}
-		}).fail(function() {
-			toastr.error('Não foi possível abrir o contrato.');
-		});
 	});
 	
 	// recalcula o valor das parcelas da negociacao

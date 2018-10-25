@@ -88,7 +88,8 @@ class AcionamentoController extends Controller
             $model->colaborador_id = \Yii::$app->user->id;
             $model->id_cliente = $post['cliente'];
             $model->id_contrato = $post['contrato'];
-            $model->hora = isset($post['hora']) ? $post['hora'] : null;
+            $model->colaborador_agendamento = isset($post['colaboradorAgendamento']) ? $post['colaboradorAgendamento'] : null;
+            $model->data_agendamento = isset($post['dataAgendamento']) ? $post['dataAgendamento'] : null;
             
             // salva a model
             if (!$model->save()) {
@@ -97,7 +98,7 @@ class AcionamentoController extends Controller
                 $retorno->success = true;                
             }
         }
-        
+                
         // retorna o array conevrtido
         return Json::encode($retorno);
     }

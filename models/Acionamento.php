@@ -12,10 +12,11 @@ use app\base\Helper;
  * @property int $id_cliente
  * @property int $id_contrato
  * @property int $colaborador_id
+ * @property int $colaborador_agendamento
  * @property string $titulo
  * @property string $descricao
  * @property string $data
- * @property string $hora
+ * @property string $data_agendamento
  * @property string $telefone
  * @property int $tipo Flag que valida o tipo do evento
  * @property int $subtipo
@@ -44,8 +45,8 @@ class Acionamento extends \yii\db\ActiveRecord
     {
         $rules = [
             [['id_cliente', 'tipo'], 'required'],
-            [['id_cliente', 'id_contrato', 'colaborador_id', 'tipo', 'subtipo'], 'integer'],
-            [['data', 'hora'], 'safe'],
+            [['id_cliente', 'id_contrato', 'colaborador_id', 'colaborador_agendamento', 'tipo', 'subtipo'], 'integer'],
+            [['data', 'data_agendamento'], 'safe'],
             [['titulo'], 'string', 'max' => 100],
             [['descricao'], 'string', 'max' => 250],
             [['telefone'], 'string', 'max' => 15],
@@ -72,10 +73,11 @@ class Acionamento extends \yii\db\ActiveRecord
             'id_cliente' => 'Id Cliente',
             'id_contrato' => 'Id Contrato',
             'colaborador_id' => 'Colaborador ID',
+            'colaborador_agendamento' => 'Colaborador Agendamento',
             'titulo' => 'Titulo',
             'descricao' => 'Descricao',
             'data' => 'Data',
-            'hora' => 'Hora',
+            'data_agendamento' => 'Data Agendamento',
             'telefone' => 'Telefone',
             'tipo' => 'Tipo',
             'subtipo' => 'Subtipo',
@@ -144,10 +146,14 @@ class Acionamento extends \yii\db\ActiveRecord
      */
     public function beforeSave($insert) 
     {
+        // formata as datas
         if (!empty($this->data)) {
             $this->data = Helper::dateUnmask($this->data, Helper::DATE_DEFAULT, true);
         } else {
             $this->data = date('Y-m-d H:i:s');
+        }
+        if (!empty($this->data)) {
+            $this->data_agendamento = Helper::dateUnmask($this->data_agendamento, Helper::DATE_DEFAULT, true);
         }
         
         return parent::beforeSave($insert);
@@ -169,7 +175,8 @@ class Acionamento extends \yii\db\ActiveRecord
         $acionamento->descricao = $params['descricao'];
         $acionamento->tipo = $params['tipo'];
         $acionamento->subtipo = isset($params['subtipo']) ? $params['subtipo'] : 0;
-        $acionamento->hora = isset($params['hora']) ? $params['hora'] : '';
+        $acionamento->data_agendamento = isset($params['data_agendamento']) ? $params['data_agendamento'] : '';
+        $acionamento->colaborador_agendamento = isset($params['colaborador_agendamento']) ? $params['colaborador_agendamento'] : '';
         
         // salva o acionamento
         return $acionamento->save();

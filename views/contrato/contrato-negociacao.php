@@ -3,13 +3,14 @@ use yii\helpers\Url;
 use app\base\Helper;
 use app\models\Cliente;
 use yii\web\JqueryAsset;
-use yii\bootstrap\BootstrapAsset;
 use kartik\helpers\Html;
 use yii\bootstrap\Modal;
 use kartik\select2\Select2;
 use app\models\Acionamento;
+use app\models\Colaborador;
+use yii\helpers\ArrayHelper;
+use yii\bootstrap\BootstrapAsset;
 use kartik\datetime\DateTimePicker;
-use kartik\time\TimePicker;
 
 $this->title = 'Negociação';
 $this->params['breadcrumbs'][] = $this->title;
@@ -223,9 +224,9 @@ $this->params['breadcrumbs'][] = $this->title;
         		  				<?php if (is_array($clienteContrato->contratoParcelas) && !empty($clienteContrato->contratoParcelas)): ?>
         		  					<?php $numParcelas = count($clienteContrato->contratoParcelas); ?>
         		  					
-                                	<?= Html::button('<i class="fa fa-file-signature"></i>&nbsp; Abrir Contrato', [
-                        	                'class' => Helper::BTN_COLOR_PURPLE.' btn-sm set-contrato pull-right',
-                    	                    'data-id' => $clienteContrato->id,
+                                	<?= Html::a('<i class="fa fa-file-signature"></i>&nbsp; Abrir Contrato', Url::to(['negociacao', 'id' => $clienteContrato->id]), [
+                        	                'class' => Helper::BTN_COLOR_PURPLE.' btn-sm pull-right',
+                    	                    'target' => '_self',
                                     	]);
                                 	?>
         		  					<!-- ./row -->
@@ -358,44 +359,6 @@ $this->params['breadcrumbs'][] = $this->title;
     	</div>
     	<!-- ./row -->
   		<div class="row">
-  			<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
-    			<div class="form-group"> 	
-        			<?= Html::label('Data do Acionametno', 'acionamento-data'); ?>
-        			<?= DateTimePicker::widget([
-                            'name' => 'acionamento-data',
-        	                'id' => 'acionamento-data',
-			                'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
-			                'value' => date('d/m/Y H:i'),
-			                'removeButton' => ['title' => 'Remover Data', 'data-toggle' => 'tooltip'],
-			                'options' => [
-                                'data-value' => date('d/m/Y H:i'),
-			                ],
-    		                'pluginOptions' => [
-                                'autoclose' => true,
-                                'format' => 'dd/mm/yyyy hh:ii',
-                                'orientation' => 'bottom',
-    		                ],
-            			]); 
-        			?>
-    			</div>
-    		</div>
-    		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12 hidden">
-    			<div class="form-group"> 	
-        			<?= Html::label('Hora', 'acionamento-hora'); ?>
-        			<?= TimePicker::widget([
-                            'name' => 'acionamento-hora',
-        	                'id' => 'acionamento-hora',
-       		                'value' => date('H:i'),
-			                'pluginOptions' => [    	                                
-    			                'showMeridian' => false,
-			                ],
-            			]); 
-        			?>
-    			</div>
-    		</div>
-  		</div>
-  		<!-- ./row -->
-  		<div class="row">
     		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         		<div class="form-group"> 	
     				<?= Html::label('Descrição', 'acionamento-desc'); ?>
@@ -410,6 +373,43 @@ $this->params['breadcrumbs'][] = $this->title;
     		</div>
     	</div>
     	<!-- ./row -->
+    	<hr>	
+		<div class="row">
+			<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+				<?= Html::label('Colaborador do Agendamento', 'acionamento-colab'); ?>
+    			<?= Select2::widget([
+		                'data' => ArrayHelper::map(Colaborador::find()->where(['!=', 'cargo', Colaborador::CARGO_CLIENTE])->all(), 'id', 'nome'),
+                        'name' => 'acionamento-colab',
+    	                'id' => 'acionamento-colab',
+		                'pluginOptions' => [
+                            'allowClear' => true
+		                ],
+		                'options' => [
+                            'class' => 'form-control',
+                            'placeholder' => 'Selecione ...',
+		                ],
+        			]); 
+    			?>
+			</div>
+  			<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+    			<div class="form-group"> 	
+        			<?= Html::label('Data do Agendamento', 'acionamento-data-agendamento'); ?>
+        			<?= DateTimePicker::widget([
+                            'name' => 'acionamento-data-agendmaneto',
+        	                'id' => 'acionamento-data-agendamento',
+			                'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
+			                'removeButton' => ['title' => 'Remover Data', 'data-toggle' => 'tooltip'],
+    		                'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => 'dd/mm/yyyy hh:ii',
+                                'orientation' => 'bottom',
+    		                ],
+            			]); 
+        			?>
+    			</div>
+    		</div>
+  		</div>
+  		<!-- ./row -->
     </div>
     <!-- ./modal-body -->
     <div class="modal-footer">
@@ -436,7 +436,7 @@ $this->params['breadcrumbs'][] = $this->title;
 // CSS
 $this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [BootstrapAsset::className()]]);
 // JS
-$this->registerJsFile(Url::home().'app/js/negociacao.js?d=201810232236', ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile(Url::home().'app/js/negociacao.js?d=201810242229', ['depends' => [JqueryAsset::className()]]);
 ?>
 
 
