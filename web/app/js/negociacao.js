@@ -591,10 +591,10 @@ $(document).ready(function() {
 				toastr.warning(retorno.message);
 			}
 			
-			// seta o conteudo da negociacao
-			$('.panel-calculo .panel-body').html(retorno.content);
 			// atualiza a lista de acionamentos
 			$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
+			// seta o conteudo da negociacao
+			$('.panel-calculo .panel-body').html(retorno.content);
 		}).fail(function() {
 			$('.panel-calculo .panel-body').html(negociacaoContent);
 		});
