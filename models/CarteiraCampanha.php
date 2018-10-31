@@ -82,7 +82,7 @@ class CarteiraCampanha extends \yii\db\ActiveRecord
      */
     public function getCarteiraCalculos()
     {
-        return $this->hasMany(Carteira::className(), ['id_campanha' => 'id']);
+        return $this->hasMany(CarteiraCalculo::className(), ['id_campanha' => 'id']);
     }
     
     /**
