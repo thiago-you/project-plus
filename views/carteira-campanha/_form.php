@@ -2,11 +2,11 @@
 use app\base\Helper;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
-use app\models\CredorCampanha;
+use app\models\CarteiraCampanha;
 ?>
 <?php $form = ActiveForm::begin(['id' => 'form-campanha']); ?>
-	<?= $form->field($model, 'id_credor')->hiddenInput()->label(false); ?>
-	<!-- ./hidden id_credor -->
+	<?= $form->field($model, 'id_carteira')->hiddenInput()->label(false); ?>
+	<!-- ./hidden id_carteira -->
 	<div class="row">
 		<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
             <?= $form->field($model, 'nome')->textInput(['maxlength' => true, 'readonly' => $readonly]); ?>
@@ -53,8 +53,8 @@ use app\models\CredorCampanha;
                     </div>
     				<div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
                         <?= $form->field($model, 'por_parcela')->dropDownList([
-                                CredorCampanha::NAO => 'Não',
-                                CredorCampanha::SIM => 'Sim',
+                                CarteiraCampanha::NAO => 'Não',
+                                CarteiraCampanha::SIM => 'Sim',
                             ], [
                                 'disabled' => $readonly,
                             ]);
@@ -62,8 +62,8 @@ use app\models\CredorCampanha;
 					</div>
     				<div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">    				
                 		<?= $form->field($model, 'por_portal')->dropDownList([
-        		                CredorCampanha::NAO => 'Não',  
-        		                CredorCampanha::SIM => 'Sim', 
+        		                CarteiraCampanha::NAO => 'Não',  
+        		                CarteiraCampanha::SIM => 'Sim', 
                             ], [
                                 'disabled' => $readonly,
                             ]);

@@ -1,4 +1,4 @@
-<div class="credor-campanha-create">
+<div class="carteira-campanha-create">
     <?= $this->render('_form', [
             'model' => $model,
         ]);

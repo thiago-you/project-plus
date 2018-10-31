@@ -91,8 +91,8 @@ CREATE TABLE `referencia` (
   `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`)
 );
--- cria a tabela de credor
-CREATE TABLE `credor` (
+-- cria a tabela de carteira
+CREATE TABLE `carteira` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_campanha` INT,
   `nome` VARCHAR(250) NOT NULL,
@@ -110,14 +110,14 @@ CREATE TABLE `credor` (
   `cep` CHAR(8),
   `cidade_id` INT,
   `estado_id` INT,
-  `logo` VARCHAR(250) COMMENT 'Caminho para a logo do credor',
+  `logo` VARCHAR(250) COMMENT 'Caminho para a logo do carteira',
   `codigo` VARCHAR(250),
   `sigla` VARCHAR(250)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
--- tabela de campanha de calculo do credor
-CREATE TABLE `credor_campanha` (
+-- tabela de campanha de calculo do carteira
+CREATE TABLE `carteira_campanha` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `id_credor` INT NOT NULL,
+  `id_carteira` INT NOT NULL,
   `nome` VARCHAR(250) NOT NULL,
   `vigencia_inicial` DATE NOT NULL,
   `vigencia_final` DATE,
@@ -125,10 +125,10 @@ CREATE TABLE `credor_campanha` (
   `por_parcela` ENUM('S', 'N'),
   `por_portal` ENUM('S', 'N'),
   `tipo` ENUM('V', 'P') NOT NULL DEFAULT 'V' COMMENT 'Tipo do calculo => V: A vista / P: Parcelado',
-  FOREIGN KEY (`id_credor`) REFERENCES `credor`(`id`)
+  FOREIGN KEY (`id_carteira`) REFERENCES `carteira`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
--- tabela de calculo do credor
-CREATE TABLE `credor_calculo` (
+-- tabela de calculo do carteira
+CREATE TABLE `carteira_calculo` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_campanha` INT NOT NULL,
   `atraso_inicio` VARCHAR(5),
@@ -140,13 +140,13 @@ CREATE TABLE `credor_calculo` (
   `desc_principal_max` DECIMAL(7,4) DEFAULT 0.0000 COMMENT 'desconto máximo permitido do valor principal',
   `desc_honorario_max` DECIMAL(7,4) DEFAULT 0.0000 COMMENT 'desconto máximo permitido dos honorarios',
   `parcela_num` INT COMMENT 'Numero da parcela qunado o tipo for parcelado',
-  FOREIGN KEY (`id_campanha`) REFERENCES `credor_campanha`(`id`)
+  FOREIGN KEY (`id_campanha`) REFERENCES `carteira_campanha`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de contrato
 CREATE TABLE `contrato` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_cliente` INT NOT NULL,
-  `id_credor` INT,
+  `id_carteira` INT,
   `codigo_cliente` VARCHAR(50),
   `codigo_contrato` VARCHAR(50),
   `num_contrato` VARCHAR(50),
@@ -161,14 +161,14 @@ CREATE TABLE `contrato` (
   `observacao` VARCHAR(250),
   `situacao` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar as situacoes possiveis',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`),
-  FOREIGN KEY (`id_credor`) REFERENCES `credor`(`id`)
+  FOREIGN KEY (`id_carteira`) REFERENCES `carteira`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de negociacao
 CREATE TABLE `negociacao` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_contrato` INT NOT NULL,
   `id_campanha` INT NOT NULL,
-  `id_credor` INT NOT NULL,
+  `id_carteira` INT NOT NULL,
   `data_negociacao` DATE NOT NULL,
   `data_cadastro` DATETIME NOT NULL,
   `desconto_encargos` DECIMAL(7,4) DEFAULT 0.0000,

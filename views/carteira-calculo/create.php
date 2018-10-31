@@ -1,9 +1,9 @@
 <?php
 $this->title = 'Cadastrar Faixa de Cálculo';
-$this->params['breadcrumbs'][] = ['label' => 'Credor Calculos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Carteira Calculos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="credor-calculo-create">
+<div class="carteira-calculo-create">
     <?= $this->render('_form', [
             'model' => $model,
         ]);

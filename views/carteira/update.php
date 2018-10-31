@@ -1,10 +1,10 @@
 <?php
-$this->title = 'Alterar Faixa de Cálculo: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Credor Calculos', 'url' => ['index']];
+$this->title = 'Alterar Carteira: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Carteiraes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="credor-calculo-update">
+<div class="carteira-update">
     <?= $this->render('_form', [
             'model' => $model,
         ]);

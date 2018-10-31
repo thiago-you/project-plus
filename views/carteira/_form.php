@@ -1,7 +1,7 @@
 <?php
 use app\base\Helper;
 use yii\helpers\Html;
-use app\models\Credor;
+use app\models\Carteira;
 use yii\widgets\ActiveForm;
 use yii\widgets\MaskedInput;
 use kartik\select2\Select2;
@@ -18,21 +18,21 @@ use app\models\Cidade;
     			</div>
     			<div class="col-md-2 col-sm-2 col-xs-12 col-lg-2">
                     <?= $form->field($model, 'tipo')->dropDownList([
-                        	Credor::TIPO_PADRAO => 'Padrão',
+                        	Carteira::TIPO_PADRAO => 'Padrão',
                         ]); 
                     ?>
     			</div>
     			<div class="col-md-2 col-sm-2 col-xs-12 col-lg-2">
                     <?= $form->field($model, 'tipo_cobranca')->dropDownList([
-                        	Credor::TIPO_COBRANCA_ADM => 'Administrativa',
-                            Credor::TIPO_COBRANCA_JUR => 'Jurídica',
+                        	Carteira::TIPO_COBRANCA_ADM => 'Administrativa',
+                            Carteira::TIPO_COBRANCA_JUR => 'Jurídica',
                         ]); 
                     ?>
     			</div>
     			<div class="col-md-2 col-sm-2 col-xs-12 col-lg-2">
                     <?= $form->field($model, 'ativo')->dropDownList([
-                        	Credor::ATIVO => 'Ativo',
-                            Credor::NAO_ATIVO => 'Não Ativo',
+                        	Carteira::ATIVO => 'Ativo',
+                            Carteira::NAO_ATIVO => 'Não Ativo',
                         ]); 
                     ?>
     			</div>
@@ -94,7 +94,7 @@ use app\models\Cidade;
                                     // envia a requisicao para buscar as cidades do estado
                                     $.get(BASE_PATH + 'site/cidades?ufId='+$(this).find('option:selected').val(), function(response) {
                                         // seta as cidades encontradas para o estado
-                                        $('#credor-cidade_id').html(response);
+                                        $('#carteira-cidade_id').html(response);
                                     });
                                 }",
                             ],
@@ -137,7 +137,7 @@ use app\models\Cidade;
     			</div>
     			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6 pull-right">
                     <div class="form-group">
-                        <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/credor'], [
+                        <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/carteira'], [
                                 'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
                             ]);
                         ?>

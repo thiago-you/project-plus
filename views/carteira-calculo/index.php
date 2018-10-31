@@ -2,10 +2,10 @@
 use yii\helpers\Html;
 use app\base\Helper;
 
-$this->title = 'Credor Calculos';
+$this->title = 'Carteira Calculos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="credor-calculo-index">
+<div class="carteira-calculo-index">
 	<table class="table table-bordered table-hover">
 		<thead>
 			<tr>

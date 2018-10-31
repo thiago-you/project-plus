@@ -2,9 +2,9 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use app\base\Helper;
-use app\models\Credor;
+use app\models\Carteira;
 
-$this->title = 'Credores';
+$this->title = 'Carteiraes';
 $this->params['breadcrumbs'][] = $this->title;
 
 // columns
@@ -24,7 +24,7 @@ $columns = [
         'attribute' => 'ativo',
         'hAlign' => GridView::ALIGN_CENTER,
     	'value' => function($model) {
-	    	if ($model->ativo == Credor::ATIVO) {
+	    	if ($model->ativo == Carteira::ATIVO) {
 	    		return 'SIM';
 	    	}
 	    	
@@ -39,14 +39,14 @@ $columns = [
         'width' => '10%',
     	'buttons' => [
             'configuracao' => function ($url, $model) {
-                return Html::a('<i class="fa fa-cogs fa-fw"></i>', ['/credor/configuracao/', 'id' => $model->id], [
+                return Html::a('<i class="fa fa-cogs fa-fw"></i>', ['/carteira/configuracao/', 'id' => $model->id], [
                     'class' => Helper::BTN_COLOR_PURPLE.' btn-xs',
                     'title' => 'Configurar Cálculo',
                     'data-toggle' => 'tooltip',
                 ]);
             },
             'update' => function ($url, $model) {
-    			return Html::a('<i class="fa fa-pencil-alt fa-fw"></i>', ['/credor/update/', 'id' => $model->id], [
+    			return Html::a('<i class="fa fa-pencil-alt fa-fw"></i>', ['/carteira/update/', 'id' => $model->id], [
 	                'class' => Helper::BTN_COLOR_WARNING.' btn-xs',
     				'title' => 'Alterar',
     				'data-toggle' => 'tooltip',
@@ -80,7 +80,7 @@ echo GridView::widget([
         ],
     ], */
     'toolbar' => [
-        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Credor', ['create'], ['class' => Helper::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Credor', 'data-toggle' => 'tooltip',])],
+        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Carteira', ['create'], ['class' => Helper::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Carteira', 'data-toggle' => 'tooltip',])],
         ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Helper::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
         '{toggleData}',
     ],

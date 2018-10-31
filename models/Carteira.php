@@ -6,7 +6,7 @@ use Yii;
 use app\base\Helper;
 
 /**
- * This is the model class for table "credor".
+ * This is the model class for table "carteira".
  *
  * @property int    $id
  * @property int    $id_campanha
@@ -25,16 +25,16 @@ use app\base\Helper;
  * @property string $cep
  * @property int    $cidade_id
  * @property int    $estado_id
- * @property string $logo Caminho para a logo do credor
+ * @property string $logo Caminho para a logo do carteira
  * @property string $codigo
  * @property string $sigla
  *
- * @property CredorCampanha   $credorCampanha
- * @property CredorCampanha[] $credorCampanhas
+ * @property CarteiraCampanha   $carteiraCampanha
+ * @property CarteiraCampanha[] $carteiraCampanhas
  */
-class Credor extends \yii\db\ActiveRecord
+class Carteira extends \yii\db\ActiveRecord
 {
-	// flag que determina se o credor esta ativo ou nao
+	// flag que determina se o carteira esta ativo ou nao
 	CONST ATIVO = 'S';
 	CONST NAO_ATIVO = 'N';
 	// const para o tipo
@@ -48,7 +48,7 @@ class Credor extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'credor';
+        return 'carteira';
     }
 
     /**
@@ -100,17 +100,17 @@ class Credor extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCredorCampanha()
+    public function getCarteiraCampanha()
     {
-        return $this->hasOne(CredorCampanha::className(), ['id' => 'id_campanha']);
+        return $this->hasOne(CarteiraCampanha::className(), ['id' => 'id_campanha']);
     }
     
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCredorCampanhas()
+    public function getCarteiraCampanhas()
     {
-        return $this->hasMany(CredorCampanha::className(), ['id_credor' => 'id']);
+        return $this->hasMany(CarteiraCampanha::className(), ['id_carteira' => 'id']);
     }
     
     /**
@@ -138,8 +138,8 @@ class Credor extends \yii\db\ActiveRecord
      */
     public function beforeDelete() 
     {
-        // deleta todas as campanhas do credor
-        foreach($this->credorCampanhas as $campanha) {
+        // deleta todas as campanhas do carteira
+        foreach($this->carteiraCampanhas as $campanha) {
             $campanha->delete();
         }
                 

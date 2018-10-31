@@ -2,16 +2,16 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-$this->title = 'Credor Campanhas';
+$this->title = 'Carteira Campanhas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="credor-campanha-index">
+<div class="carteira-campanha-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Credor Campanha', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Carteira Campanha', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'id_credor',
+            'id_carteira',
             'nome',
             'vigencia_inicial',
             'vigencia_final',

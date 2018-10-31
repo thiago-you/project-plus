@@ -41,11 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ],
                 [
-                    'attribute' => 'credor.nome',
+                    'attribute' => 'carteira.nome',
                     'format' => 'raw',
-                    'header' => '<span class="text-primary">Credor</span>',
+                    'header' => '<span class="text-primary">Carteira</span>',
                     'value' => function($modeç) {
-                        return $model->id_credor ? $model->credor->nome : '';  
+                        return $model->id_carteira ? $model->carteira->nome : '';  
                     },
                 ],
                 [

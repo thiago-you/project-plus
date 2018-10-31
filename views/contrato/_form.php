@@ -1,7 +1,7 @@
 <?php
 use yii\web\View;
 use app\base\Helper;
-use app\models\Credor;
+use app\models\Carteira;
 use app\models\Cliente;
 use kartik\helpers\Html;
 use app\models\Contrato;
@@ -49,8 +49,8 @@ use kartik\money\MaskMoney;
                 	<!-- ./row -->
                 	<div class="row">
                 		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-                			<?= $form->field($model, 'id_credor')->dropDownList(ArrayHelper::map(Credor::find()->all(), 'id', 'nome'), [
-	                                'prompt' => 'Selecione o credor...',
+                			<?= $form->field($model, 'id_carteira')->dropDownList(ArrayHelper::map(Carteira::find()->all(), 'id', 'nome'), [
+	                                'prompt' => 'Selecione o carteira...',
                     			]); 
                 			?>
                 		</div>

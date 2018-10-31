@@ -6,7 +6,7 @@ function Negociacao() {
 	// atributos do objeto
 	self.id = null;
 	self.id_contrato = null;
-	self.id_credor = null;
+	self.id_carteira = null;
 	self.id_campanha = null;
 	self.data_negociacao = '';
 	self.tipo = '';
@@ -34,7 +34,7 @@ function Negociacao() {
 	self.load = () => {
 		self.id = $('#negociacao-id').val() || null;
 		self.id_contrato = $('#negociacao-contrato').val() || null;
-		self.id_credor = $('#negociacao-credor').val() || null;
+		self.id_carteira = $('#negociacao-carteira').val() || null;
 		self.id_campanha = $('#negociacao-campanha').val() || null;
 		self.data_negociacao = $('#negociacao-data').val() || '';
 		self.tipo = $('#negociacao-tipo').val() || 'V';

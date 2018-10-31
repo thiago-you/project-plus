@@ -18,10 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box-body">  
         	<div class="row">
         		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
-        			<?= Html::label('Credor', 'credor'); ?>
-        			<?= Html::dropDownList('credor', null, $credores, [
-                            'id' => 'credor',
-			                'prompt' => 'Selecione o credor para a importação ...',
+        			<?= Html::label('Carteira', 'carteira'); ?>
+        			<?= Html::dropDownList('carteira', null, $carteiraes, [
+                            'id' => 'carteira',
+			                'prompt' => 'Selecione o carteira para a importação ...',
 			                'class' => 'form-control',
             			]); 
         			?>

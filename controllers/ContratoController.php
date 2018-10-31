@@ -213,17 +213,17 @@ class ContratoController extends Controller
         $contrato = $this->findModel($id);
         $cliente = $contrato->cliente;
         
-        // valida se o contrato possui um credor
-        if (empty($contrato->id_credor)) {
-            throw new UserException('Não foi encontrador o credor do contrato.');
+        // valida se o contrato possui um carteira
+        if (empty($contrato->id_carteira)) {
+            throw new UserException('Não foi encontrador o carteira do contrato.');
         }
         
         // pega a negociacao do contrato ou cria uma nova
         if (!$negociacao = $contrato->negociacao) {
             $negociacao = new Negociacao();
             $negociacao->id_contrato = $contrato->id;
-            $negociacao->id_credor = $contrato->id_credor;
-            $negociacao->id_campanha = $contrato->credor->id_campanha;
+            $negociacao->id_carteira = $contrato->id_carteira;
+            $negociacao->id_campanha = $contrato->carteira->id_campanha;
             $negociacao->tipo = Negociacao::A_VISTA;
             
             // calcula os valores da negociacao

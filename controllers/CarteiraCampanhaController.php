@@ -5,13 +5,13 @@ use yii\helpers\Json;
 use yii\web\Controller;
 use app\base\AjaxResponse;
 use yii\filters\VerbFilter;
-use app\models\CredorCalculo;
+use app\models\CarteiraCampanha;
 use yii\web\NotFoundHttpException;
 
 /**
- * CredorCalculoController implements the CRUD actions for CredorCalculo model.
+ * CarteiraCampanhaController implements the CRUD actions for CarteiraCampanha model.
  */
-class CredorCalculoController extends Controller
+class CarteiraCampanhaController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -29,22 +29,25 @@ class CredorCalculoController extends Controller
     }
 
     /**
-     * Lists all CredorCalculo models.
+     * Displays a single CarteiraCampanha model.
+     * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionIndex($id = null)
+    public function actionView($id)
     {
-        $model = CredorCalculo::findAll(['id_campanha' => $id]);
+        // valida a requisição
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException();
+        }
         
-        return $this->renderAjax('index', [
-            'model' => $model,
+        return $this->render('view', [
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new CredorCalculo model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Cadastra uma nova campanha por Ajax
      */
     public function actionCreate()
     {
@@ -54,18 +57,23 @@ class CredorCalculoController extends Controller
         }
         
         // cria a model
-        $model = new CredorCalculo();
-        
-        // salva a faixa de calculo
+        $model = new CarteiraCampanha();
+
+        // salva a camapnha
         if ($post = \Yii::$app->request->post()) {
             try {
-                // cria o retorno e carrega os dados da model
+                // cria o retorno e carrega os dados da campanha
                 $retorno = new AjaxResponse();
                 $model->load($post);
-                
+
                 if (!$model->save()) {
                     throw new \Exception();
-                }
+                }                
+                
+                // seta os dados de retorno
+                $retorno->id = $model->id ? $model->id : $model->getPrimaryKey();
+                $retorno->nome = $model->nome;
+                $retorno->newRecord = true;
             } catch(\Exception $e) {
                 $retorno->success = false;
             }
@@ -79,7 +87,7 @@ class CredorCalculoController extends Controller
     }
 
     /**
-     * Updates an existing CredorCalculo model.
+     * Updates an existing CarteiraCampanha model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -95,16 +103,21 @@ class CredorCalculoController extends Controller
         // busca a model
         $model = $this->findModel($id);
 
-        // salva a faixa de calculo
+        // salva a camapnha
         if ($post = \Yii::$app->request->post()) {
             try {
-                // cria o retorno e carrega os dados da model
+                // cria o retorno e carrega os dados da campanha
                 $retorno = new AjaxResponse();
                 $model->load($post);
                 
                 if (!$model->save()) {
                     throw new \Exception();
                 }
+                
+                // seta os dados de retorno
+                $retorno->id = $model->id;
+                $retorno->nome = $model->nome;
+                $retorno->newRecord = false;
             } catch(\Exception $e) {
                 $retorno->success = false;
             }
@@ -118,7 +131,7 @@ class CredorCalculoController extends Controller
     }
 
     /**
-     * Deletes an existing CredorCalculo model.
+     * Deletes an existing CarteiraCampanha model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -128,13 +141,13 @@ class CredorCalculoController extends Controller
     {
         // busca a model
         $model = $this->findModel($id);
-
+        
         try {
             $transaction = \Yii::$app->db->beginTransaction();
-            // cria o retorno e carrega os dados da model
+            // cria o retorno e carrega os dados da campanha
             $retorno = new AjaxResponse();
             
-            // deleta a model
+            // deleta a campanha
             $model->delete();
             
             $transaction->commit();
@@ -147,15 +160,15 @@ class CredorCalculoController extends Controller
     }
 
     /**
-     * Finds the CredorCalculo model based on its primary key value.
+     * Finds the CarteiraCampanha model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return CredorCalculo the loaded model
+     * @return CarteiraCampanha the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = CredorCalculo::findOne($id)) !== null) {
+        if (($model = CarteiraCampanha::findOne($id)) !== null) {
             return $model;
         }
 

@@ -2,8 +2,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Credor;
-use app\models\CredorSearch;
+use app\models\Carteira;
+use app\models\CarteiraSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,9 +12,9 @@ use app\base\AjaxResponse;
 use yii\helpers\Json;
 
 /**
- * CredorController implements the CRUD actions for Credor model.
+ * CarteiraController implements the CRUD actions for Carteira model.
  */
-class CredorController extends Controller
+class CarteiraController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,12 +32,12 @@ class CredorController extends Controller
     }
 
     /**
-     * Lists all Credor models.
+     * Lists all Carteira models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CredorSearch();
+        $searchModel = new CarteiraSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,13 +47,13 @@ class CredorController extends Controller
     }
 
     /**
-     * Creates a new Credor model.
+     * Creates a new Carteira model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Credor();
+        $model = new Carteira();
 
         if ($post = \Yii::$app->request->post()) {
             try {
@@ -68,7 +68,7 @@ class CredorController extends Controller
                 }
                 
                 $transaction->commit();
-                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O credor foi alterado com sucesso.');
+                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O carteira foi alterado com sucesso.');
                 return $this->redirect(['configuracao', 'id' => $model->id]);
             } catch (\Exception $e) {
                 $transaction->rollBack();
@@ -82,7 +82,7 @@ class CredorController extends Controller
     }
 
     /**
-     * Updates an existing Credor model.
+     * Updates an existing Carteira model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -105,7 +105,7 @@ class CredorController extends Controller
                 }
 
                 $transaction->commit();
-                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O credor foi alterado com sucesso.');
+                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O carteira foi alterado com sucesso.');
                 return $this->redirect(['index']);
             } catch (\Exception $e) {
                 $transaction->rollBack();
@@ -119,7 +119,7 @@ class CredorController extends Controller
     }
 
     /**
-     * Configuração de campanha e cálculo do credor
+     * Configuração de campanha e cálculo do carteira
      */
     public function actionConfiguracao($id)
     {
@@ -131,7 +131,7 @@ class CredorController extends Controller
     }
     
     /**
-     * Atualiza a campanha do credor
+     * Atualiza a campanha do carteira
      */
     public function actionUpdateCampanha()
     {
@@ -140,8 +140,8 @@ class CredorController extends Controller
             throw new NotFoundHttpException();
         }
         
-        // busca o credor
-        $model = $this->findModel($post['id_credor']);
+        // busca o carteira
+        $model = $this->findModel($post['id_carteira']);
         
         try {
             // cria o retorno e carrega os dados da campanha
@@ -159,7 +159,7 @@ class CredorController extends Controller
     }
     
     /**
-     * Deletes an existing Credor model.
+     * Deletes an existing Carteira model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -177,7 +177,7 @@ class CredorController extends Controller
             $model->delete();
             
             $transaction->commit();
-            \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O credor foi excluído com sucesso.');
+            \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O carteira foi excluído com sucesso.');
         } catch (\Exception $e) {
             $transaction->rollBack();
             \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
@@ -187,15 +187,15 @@ class CredorController extends Controller
     }
 
     /**
-     * Finds the Credor model based on its primary key value.
+     * Finds the Carteira model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Credor the loaded model
+     * @return Carteira the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Credor::findOne($id)) !== null) {
+        if (($model = Carteira::findOne($id)) !== null) {
             return $model;
         }
 

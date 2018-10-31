@@ -4,7 +4,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "credor_calculo".
+ * This is the model class for table "carteira_calculo".
  *
  * @property int    $id
  * @property int    $id_campanha
@@ -18,16 +18,16 @@ use Yii;
  * @property string $desc_honorario_max
  * @property int    $parcela_num Numero da parcela qunado o tipo for parcelado
  * 
- * @property CredorCampanha $credorCampanha
+ * @property CarteiraCampanha $carteiraCampanha
  */
-class CredorCalculo extends \yii\db\ActiveRecord
+class CarteiraCalculo extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'credor_calculo';
+        return 'carteira_calculo';
     }
 
     /**
@@ -40,7 +40,7 @@ class CredorCalculo extends \yii\db\ActiveRecord
             [['id_campanha', 'parcela_num'], 'integer'],
             [['multa', 'juros', 'honorario', 'desc_encargos_max', 'desc_principal_max', 'desc_honorario_max'], 'safe'],
             [['atraso_inicio', 'atraso_fim'], 'string', 'max' => 5],
-            [['id_campanha'], 'exist', 'skipOnError' => true, 'targetClass' => CredorCampanha::className(), 'targetAttribute' => ['id_campanha' => 'id']],
+            [['id_campanha'], 'exist', 'skipOnError' => true, 'targetClass' => CarteiraCampanha::className(), 'targetAttribute' => ['id_campanha' => 'id']],
         ];
     }
 
@@ -67,9 +67,9 @@ class CredorCalculo extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCredorCampanha()
+    public function getCarteiraCampanha()
     {
-        return $this->hasOne(CredorCampanha::className(), ['id' => 'id_campanha']);
+        return $this->hasOne(CarteiraCampanha::className(), ['id' => 'id_campanha']);
     }
     
     /**
@@ -107,7 +107,7 @@ class CredorCalculo extends \yii\db\ActiveRecord
      */
     public static function findFaixa($campanhaId, $atraso) 
     {
-        return CredorCalculo::find()->where(['id_campanha' => $campanhaId])->andWhere([
+        return CarteiraCalculo::find()->where(['id_campanha' => $campanhaId])->andWhere([
             '<=', 'atraso_inicio', $atraso
         ])->andWhere([
             '>=', 'atraso_fim', $atraso

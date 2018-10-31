@@ -167,7 +167,7 @@ class ContratoParcela extends \yii\db\ActiveRecord
     public function calcularValores($id_campanha)
     {
         // busca a faixa de calculo
-        if ($this->faixaCalculo = CredorCalculo::findFaixa($id_campanha, $this->getAtraso())) {            
+        if ($this->faixaCalculo = CarteiraCalculo::findFaixa($id_campanha, $this->getAtraso())) {            
             $this->multa = floor(($this->valor * ($this->faixaCalculo->multa / 100)) * 100) / 100;
             $this->juros = floor(($this->valor * (($this->faixaCalculo->juros / 30 * $this->getAtraso()) / 100)) * 100) / 100;
             $this->honorarios = floor((($this->valor + $this->juros + $this->multa) * ($this->faixaCalculo->honorario / 100)) * 100) / 100;

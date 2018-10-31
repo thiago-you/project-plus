@@ -9,7 +9,7 @@ use app\base\Helper;
  *
  * @property int    $id
  * @property int    $id_cliente
- * @property int    $id_credor
+ * @property int    $id_carteira
  * @property string $codigo_cliente
  * @property string $codigo_contrato
  * @property string $num_contrato
@@ -25,7 +25,7 @@ use app\base\Helper;
  * @property int    $situacao
  *
  * @property Cliente $cliente
- * @property Credor $credor
+ * @property Carteira $carteira
  * @property Acionamento[] $acionamentos
  * @property ContratoParcela[] $contratoParcelas
  * @property Negociacao $negociacao
@@ -56,7 +56,7 @@ class Contrato extends \yii\db\ActiveRecord
     {
         return [
             [['id_cliente',], 'required'],
-            [['id_cliente', 'id_credor', 'tipo', 'situacao'], 'integer'],
+            [['id_cliente', 'id_carteira', 'tipo', 'situacao'], 'integer'],
             [['valor'], 'number'],
             [['data_cadastro', 'data_vencimento', 'data_negociacao'], 'safe'],
             [['codigo_cliente', 'codigo_contrato', 'num_contrato', 'num_plano', 'regiao', 'filial'], 'string', 'max' => 50],
@@ -73,7 +73,7 @@ class Contrato extends \yii\db\ActiveRecord
         return [
             'id' => 'Cód.',
             'id_cliente' => 'Cliente',
-            'id_credor' => 'Credor',
+            'id_carteira' => 'Carteira',
             'codigo_cliente' => 'Código do Cliente',
             'codigo_contrato' => 'Código do Contrato',
             'num_contrato' => 'N° Contrato',
@@ -101,9 +101,9 @@ class Contrato extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCredor()
+    public function getCarteira()
     {
-        return $this->hasOne(Credor::className(), ['id' => 'id_credor']);
+        return $this->hasOne(Carteira::className(), ['id' => 'id_carteira']);
     }
 
     /**
@@ -221,7 +221,7 @@ class Contrato extends \yii\db\ActiveRecord
             $totalTemp = $parcela->valor;
             
             // busca a faixa e calcula os encargos
-            if ($faixaCalculo = CredorCalculo::findFaixa($this->credor->id_campanha, $parcela->getAtraso())) {                
+            if ($faixaCalculo = CarteiraCalculo::findFaixa($this->carteira->id_campanha, $parcela->getAtraso())) {                
                 // soma o total da parcela
                 $totalTemp += floor(($parcela->valor * ($faixaCalculo->multa / 100)) * 100) / 100;
                 $totalTemp += floor(($parcela->valor * (($faixaCalculo->juros / 30 * $parcela->getAtraso()) / 100)) * 100) / 100;

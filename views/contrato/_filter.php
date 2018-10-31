@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 use kartik\typeahead\Typeahead;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
-use app\models\Credor;
+use app\models\Carteira;
 ?>
 <div class="box">
 	<div class="row">
@@ -81,8 +81,8 @@ use app\models\Credor;
                             ?>	
                 		</div>
                 		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-                			<?= $form->field($model, 'id_credor')->widget(Select2::className(), [
-                    			   'data' => ArrayHelper::map(Credor::find()->all(), 'id', 'nome'),
+                			<?= $form->field($model, 'id_carteira')->widget(Select2::className(), [
+                    			   'data' => ArrayHelper::map(Carteira::find()->all(), 'id', 'nome'),
         			                'options' => [
 		                                'placeholder' => 'Selecione ...',
         			                ],

@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Credor;
+use app\models\Carteira;
 
 /**
- * CredorSearch represents the model behind the search form of `app\models\Credor`.
+ * CarteiraSearch represents the model behind the search form of `app\models\Carteira`.
  */
-class CredorSearch extends Credor
+class CarteiraSearch extends Carteira
 {
     /**
      * {@inheritdoc}
@@ -42,7 +42,7 @@ class CredorSearch extends Credor
      */
     public function search($params)
     {
-        $query = Credor::find();
+        $query = Carteira::find();
 
         // add conditions that should always apply here
 

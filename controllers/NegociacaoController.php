@@ -57,8 +57,8 @@ class NegociacaoController extends Controller
             
             // seta os dados do contrato
             $model->id_contrato = $contrato->id;
-            $model->id_credor = $contrato->id_credor;
-            $model->id_campanha = $contrato->credor->id_campanha;
+            $model->id_carteira = $contrato->id_carteira;
+            $model->id_campanha = $contrato->carteira->id_campanha;
             $model->tipo = Negociacao::A_VISTA;
             
             // calcula os valores da negociacao

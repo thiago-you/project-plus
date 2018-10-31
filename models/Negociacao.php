@@ -10,7 +10,7 @@ use app\base\Helper;
  *
  * @property int $id
  * @property int $id_contrato
- * @property int $id_credor
+ * @property int $id_carteira
  * @property int $id_campanha
  * @property string $data_negociacao
  * @property string $data_cadastro
@@ -55,8 +55,8 @@ class Negociacao extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['data_negociacao', 'id_contrato', 'id_credor', 'id_campanha'], 'required'],
-            [['id_contrato', 'id_credor', 'id_campanha', 'status'], 'integer'],
+            [['data_negociacao', 'id_contrato', 'id_carteira', 'id_campanha'], 'required'],
+            [['id_contrato', 'id_carteira', 'id_campanha', 'status'], 'integer'],
             [[
                 'subtotal', 'desconto', 'receita', 'total', 'desconto_encargos', 'taxa_parcelado',
                 'desconto_principal', 'desconto_honorarios', 'desconto_total', 'valor_entrada'           
@@ -78,7 +78,7 @@ class Negociacao extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'id_contrato' => 'Id Contrato',
-            'id_credor' => 'Id Credor',
+            'id_carteira' => 'Id Carteira',
             'id_campanha' => 'Id Campanha',
             'data_negociacao' => 'Data Negociacao',
             'data_cadastro' => 'Data Cadastro',
@@ -131,7 +131,7 @@ class Negociacao extends \yii\db\ActiveRecord
             foreach ($contrato->contratoParcelas as $parcela) {                
                 // busca a faixa de calculo
                 // e calcula o subtotal e a receita
-                if ($faixaCalculo = CredorCalculo::findFaixa($this->id_campanha, $parcela->getAtraso())) {
+                if ($faixaCalculo = CarteiraCalculo::findFaixa($this->id_campanha, $parcela->getAtraso())) {
                     // calcula os valores da parcela
                     $multa = floor(($parcela->valor * ($faixaCalculo->multa / 100)) * 100) / 100;
                     $juros = floor(($parcela->valor * (($faixaCalculo->juros / 30 * $parcela->getAtraso()) / 100)) * 100) / 100;

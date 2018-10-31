@@ -5,20 +5,20 @@ use yii\helpers\Html;
 use yii\web\JqueryAsset;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
-use app\models\CredorCampanha;
+use app\models\CarteiraCampanha;
 
 $this->title = 'Configuração de Cálculo';
-$this->params['breadcrumbs'][] = ['label' => 'Credores', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Carteiraes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php $form = ActiveForm::begin(); ?>
     <div class="panel panel-primary panel-box">
 		<div class="panel-body">
       		<?= $form->field($model, 'id')->hiddenInput()->label(false); ?>
-        	<!-- ./hidden id_credor -->
+        	<!-- ./hidden id_carteira -->
       		<div class="row">
       			<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-                	<?= $form->field($model, 'id_campanha')->dropDownList(ArrayHelper::map($model->credorCampanhas, 'id', 'nome'), [
+                	<?= $form->field($model, 'id_campanha')->dropDownList(ArrayHelper::map($model->carteiraCampanhas, 'id', 'nome'), [
         	                'prompt' => 'Selecione a Campanha ...',
                     	]); 
                 	?>
@@ -61,11 +61,11 @@ $this->params['breadcrumbs'][] = $this->title;
     			</div>
     			<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
     				<?= Html::label('Cálculo'); ?>
-        			<?= Html::dropDownList('CredorCampanha[tipo]', null, [
-                            CredorCampanha::CALCULO_A_VISTA => 'À Vista',
-    		                CredorCampanha::CALCULO_PARCELADO => 'Parcelado',
+        			<?= Html::dropDownList('CarteiraCampanha[tipo]', null, [
+                            CarteiraCampanha::CALCULO_A_VISTA => 'À Vista',
+    		                CarteiraCampanha::CALCULO_PARCELADO => 'Parcelado',
         			    ], [
-        	                'id' => 'credor-campanha-tipo',
+        	                'id' => 'carteira-campanha-tipo',
                 	        'class' => 'form-control', 
                         ]); 
                 	?>
@@ -85,8 +85,8 @@ $this->params['breadcrumbs'][] = $this->title;
       		<div class="row">
       			<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
       				<div id="lista-faixas">
-						<?= $this->render('/credor-calculo/index', [
-				                'model' => $model->id_campanha ? $model->credorCampanha->credorCalculos : [],        
+						<?= $this->render('/carteira-calculo/index', [
+				                'model' => $model->id_campanha ? $model->carteiraCampanha->carteiraCalculos : [],        
                             ]); 
 						?>
       				</div>
@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
     			</div>
     			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6 pull-right">
                     <div class="form-group">
-                        <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/credor'], [
+                        <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/carteira'], [
                                 'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
                             ]);
                         ?>
@@ -157,7 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 // PLUGIN
 $this->registerJsFile(Url::home().'plugins/jquery-maskmoney/jquery.maskMoney.min.js', ['depends' => [JqueryAsset::className()]]);
-$this->registerJsFile(Url::home().'app/js/credor-config.js?d=201810152210', ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile(Url::home().'app/js/carteira-config.js?d=201810152210', ['depends' => [JqueryAsset::className()]]);
 ?>
 
 

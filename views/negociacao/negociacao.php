@@ -9,7 +9,7 @@ use app\models\NegociacaoParcela;
 ?>
 <input id="negociacao-id" class="hidden" value="<?= $negociacao->isNewRecord ? null : $negociacao->id; ?>"/>
 <input id="negociacao-contrato" class="hidden" value="<?= $negociacao->id_contrato; ?>"/>
-<input id="negociacao-credor" class="hidden" value="<?= $negociacao->id_credor; ?>"/>
+<input id="negociacao-carteira" class="hidden" value="<?= $negociacao->id_carteira; ?>"/>
 <input id="negociacao-campanha" class="hidden" value="<?= $negociacao->id_campanha; ?>"/>
 <!-- ./hidden values da negociacao -->
 <div class="nav-tabs-custom">

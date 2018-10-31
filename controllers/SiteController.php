@@ -10,7 +10,7 @@ use yii\filters\AccessControl;
 
 use app\base\Helper;
 use app\models\Email;
-use app\models\Credor;
+use app\models\Carteira;
 use app\models\Estado;
 use app\models\Cliente;
 use app\models\Telefone;
@@ -323,7 +323,7 @@ class SiteController extends BaseController
                                     // cria um novo contrato                              
                                     $contrato = new Contrato();
                                     $contrato->id_cliente = $id_cliente;
-                                    $contrato->id_credor = $post['credor'];
+                                    $contrato->id_carteira = $post['carteira'];
                                     $contrato->data_cadastro = $data->data_contrato;
                                     $contrato->data_negociacao = $data->data_contrato;
                                     $contrato->observacao = $data->obs_contrato;
@@ -380,7 +380,7 @@ class SiteController extends BaseController
         // importacao
         return $this->render('importacao', [
             'model' => $model,
-            'credores' => ArrayHelper::map(Credor::find()->all(), 'id', 'nome'),
+            'carteiraes' => ArrayHelper::map(Carteira::find()->all(), 'id', 'nome'),
         ]);
     }
     

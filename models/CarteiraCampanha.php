@@ -5,10 +5,10 @@ use Yii;
 use app\base\Helper;
 
 /**
- * This is the model class for table "credor_campanha".
+ * This is the model class for table "carteira_campanha".
  *
  * @property int $id
- * @property int $id_credor
+ * @property int $id_carteira
  * @property string $nome
  * @property string $vigencia_inicial
  * @property string $vigencia_final
@@ -17,10 +17,10 @@ use app\base\Helper;
  * @property string $por_portal
  * @property string $tipo
  *
- * @property Credor $credor
- * @property CredorCalculo[] $credorCalculos
+ * @property Carteira $carteira
+ * @property CarteiraCalculo[] $carteiraCalculos
  */
-class CredorCampanha extends \yii\db\ActiveRecord
+class CarteiraCampanha extends \yii\db\ActiveRecord
 {
     // flag para whatsapp e ativo
     CONST SIM = 'S';
@@ -34,7 +34,7 @@ class CredorCampanha extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'credor_campanha';
+        return 'carteira_campanha';
     }
 
     /**
@@ -43,12 +43,12 @@ class CredorCampanha extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_credor', 'nome', 'vigencia_inicial'], 'required'],
-            [['id_credor', 'prioridade'], 'integer'],
+            [['id_carteira', 'nome', 'vigencia_inicial'], 'required'],
+            [['id_carteira', 'prioridade'], 'integer'],
             [['vigencia_inicial', 'vigencia_final'], 'safe'],
             [['por_parcela', 'por_portal'], 'string'],
             [['nome'], 'string', 'max' => 250],
-            [['id_credor'], 'exist', 'skipOnError' => true, 'targetClass' => Credor::className(), 'targetAttribute' => ['id_credor' => 'id']],
+            [['id_carteira'], 'exist', 'skipOnError' => true, 'targetClass' => Carteira::className(), 'targetAttribute' => ['id_carteira' => 'id']],
         ];
     }
 
@@ -59,7 +59,7 @@ class CredorCampanha extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_credor' => 'Id Credor',
+            'id_carteira' => 'Id Carteira',
             'nome' => 'Nome',
             'vigencia_inicial' => 'Vigência Inicial',
             'vigencia_final' => 'Vigência Final',
@@ -72,17 +72,17 @@ class CredorCampanha extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCredor()
+    public function getCarteira()
     {
-        return $this->hasOne(Credor::className(), ['id' => 'id_credor']);
+        return $this->hasOne(Carteira::className(), ['id' => 'id_carteira']);
     }
     
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCredorCalculos()
+    public function getCarteiraCalculos()
     {
-        return $this->hasMany(CredorCalculo::className(), ['id_campanha' => 'id']);
+        return $this->hasMany(Carteira::className(), ['id_campanha' => 'id']);
     }
     
     /**
@@ -92,7 +92,7 @@ class CredorCampanha extends \yii\db\ActiveRecord
     public function beforeDelete() 
     {
         // deleta todas as faixas de cálculo da campanha
-        CredorCalculo::deleteAll(['id_campanha' => $this->id]);
+        CarteiraCalculo::deleteAll(['id_campanha' => $this->id]);
         
         return parent::beforeDelete(); 
     }

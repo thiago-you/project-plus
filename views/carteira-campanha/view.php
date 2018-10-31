@@ -1,4 +1,4 @@
-<div class="credor-campanha-view">
+<div class="carteira-campanha-view">
     <?= $this->render('_form', [
             'model' => $model,
             'readonly' => true,
