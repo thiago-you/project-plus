@@ -21,28 +21,51 @@ $this->params['breadcrumbs'][] = $this->title;
 <input id="id-contrato" class="hidden" value="<?= $contrato->id; ?>"/>
 <!-- ./hidden id contrato -->
 <div class="row">
-    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-    	<h2 class="font18">
-    		<span id="id-cliente" data-id="<?= $cliente->id; ?>"><?= $cliente->id; ?></span>
-    		&nbsp;-&nbsp;
-    		<?= $cliente->nome; ?>
-    	</h2>
+	<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+            	<h2 class="font16 text-primary">
+            		<span id="id-cliente" data-id="<?= $cliente->id; ?>"><?= $cliente->id; ?></span>
+            		&nbsp;-&nbsp;
+            		<?= $cliente->nome; ?>
+            	</h2>
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+            	<small>
+                	<?php if (strlen($cliente->documento) == 11) {
+                	       echo '<b>CPF:</b>&nbsp; '.Helper::mask($cliente->documento, Helper::MASK_CPF);
+                    	} else {            	    
+                    	    echo '<b>CNPJ:</b>&nbsp; '.Helper::mask($cliente->documento, Helper::MASK_CNPJ); 
+                    	}
+                	?>
+            	</small>
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+            	<small><b>Data de Nasc.:</b>&nbsp; <?= Helper::dateMask($cliente->data_nascimento, Helper::DATE_DEFAULT); ?></small>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+            	<small><b>Endereço:</b>&nbsp; <?= $cliente->getEnderecoCompleto(); ?></small>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-    	<small>
-        	<?php if (strlen($cliente->documento) == 11) {
-        	       echo '<b>CPF:</b>&nbsp; '.Helper::mask($cliente->documento, Helper::MASK_CPF);
-            	} else {            	    
-            	    echo '<b>CNPJ:</b>&nbsp; '.Helper::mask($cliente->documento, Helper::MASK_CNPJ); 
-            	}
-        	?>
-    	</small>
-    </div>
-    <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-    	<small><b>Data de Nasc.:</b>&nbsp; <?= Helper::dateMask($cliente->data_nascimento, Helper::DATE_DEFAULT); ?></small>
-    </div>
-    <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-    	<small><b>Endereço:</b>&nbsp; <?= $cliente->getEnderecoCompleto(); ?></small>
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+    	<div class="row">
+            <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+            	<h2 class="font16 text-primary">
+            		<?= "Carteira {$contrato->carteira->id} - {$contrato->carteira->nome}"; ?>
+            	</h2>
+            </div>
+            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+            	<small>
+                	<b>CNPJ:</b>&nbsp; <?= Helper::mask($contrato->carteira->cnpj, Helper::MASK_CNPJ); ?>
+            	</small>
+            </div>
+            <div class="col-md-8 col-sm-8 col-lg-8 col-xs-12">
+            	<small>
+                	<b>Email:</b>&nbsp; <?= $contrato->carteira->email; ?>
+            	</small>
+            </div>
+        </div>
     </div>
 </div>
 <!-- ./dados do cliente -->
