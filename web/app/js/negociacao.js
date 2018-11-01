@@ -561,7 +561,8 @@ $(document).ready(function() {
 	});
 	
 	// altera o status da negociação
-	$('body').on('click', '#alterar-negociacao', function() {
+	$('body').on('click', '#alterar-negociacao', function(e) {
+		e.preventDefault();
 		// salva o html da negociacao
 		const negociacaoContent = $('.panel-calculo .panel-body').html();
 		const idNegociacao = $('#negociacao-id').val();
@@ -591,13 +592,15 @@ $(document).ready(function() {
 				toastr.warning(retorno.message);
 			}
 			
-			// atualiza a lista de acionamentos
-			$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
 			// seta o conteudo da negociacao
 			$('.panel-calculo .panel-body').html(retorno.content);
+			// atualiza a lista de acionamentos
+			$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
 		}).fail(function() {
 			$('.panel-calculo .panel-body').html(negociacaoContent);
 		});
+		
+		return false;
 	});
 	
 	// fatura a negociacao

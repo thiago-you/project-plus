@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-- ./dados do cliente -->
 <div class="row">
     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-        <div class="panel panel-primary panel-box panel-dados-cliente">
+        <div class="panel panel-primary panel-dados-cliente">
         	<div class="panel-body">
     			<div class="row">
     				<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
@@ -190,7 +190,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-- ./row dados -->
 <div class="row">
 	<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-		<div class="panel panel-primary panel-box panel-contratos">
+		<div class="panel panel-primary panel-contratos">
     		<div class="panel-heading">
     			<div class="row">
                 	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4">
@@ -284,7 +284,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-- ./row contratos -->
 <div class="row">
     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-        <div class="panel panel-primary panel-box panel-calculo">
+        <div class="panel panel-primary panel-calculo">
         	<div class="panel-body">
         		<?= $this->render('/negociacao/negociacao', [
                         'contrato' => $contrato,
@@ -298,7 +298,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-- ./row calculo -->
 <div class="row">
 	<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-		<div class="panel panel-primary panel-box panel-acionamento">
+		<div class="panel panel-primary panel-acionamento">
         	<div class="panel-heading">
         		<div class="row">
         			<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
@@ -433,6 +433,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 <?php Modal::end(); ?>
 <?php 
+// PLUGIN (evita bug ao carregar conteudo por ajax)
+$this->registerJsFile(Url::home().'plugins/jquery-maskmoney/jquery.maskMoney.min.js', ['depends' => [JqueryAsset::className()]]);
 // CSS
 $this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [BootstrapAsset::className()]]);
 // JS
