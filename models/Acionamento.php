@@ -114,6 +114,14 @@ class Acionamento extends \yii\db\ActiveRecord
     }
     
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getColaboradorAgendamento()
+    {   
+        return $this->hasOne(Colaborador::className(), ['id' => 'colaborador_agendamento']);
+    }
+    
+    /**
      * Retorna os tipos de acionamento
      */
     public static function getTipos() 

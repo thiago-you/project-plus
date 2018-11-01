@@ -31,7 +31,12 @@ use app\models\Colaborador;
     		<!-- ./row -->
     		<div class="row">
     			<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-    				<p><?= $acionamento->descricao; ?></p>
+    				<p><?= $acionamento->descricao; ?></p>    				
+    				<?php if ($acionamento->colaboradorAgendamento): ?>
+    					<p>
+    						<b>OBS.:</b> Agendamento do próximo contato para o colaborador(a) <b>"<?= $acionamento->colaboradorAgendamento->nome; ?>"</b> na data <b><?= Helper::dateMask($acionamento->data_agendamento, Helper::DATE_DATETIME); ?></b>. 
+    					</p>
+    				<?php endif; ?>
     			</div>
     		</div>
     		<!-- ./row -->
