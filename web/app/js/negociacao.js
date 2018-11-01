@@ -359,6 +359,15 @@ function Negociacao() {
 
 // eventos da página
 $(document).ready(function() {
+	// inicializa o plugin de data
+    $('#negociacao-data').datepicker({
+    	format: "dd/mm/yyyy",
+    	autoclose: true,
+    	clearBtn: true,
+    	language: "pt-BR",
+    	todayHighlight: true,
+    });
+	
 	// cria o objeto de negociacao
 	let negociacao = new Negociacao($('.panel-calculo'));
 	
@@ -424,6 +433,14 @@ $(document).ready(function() {
 				}
 			}).fail(function() {
 				$('.panel-calculo .panel-body').html(negociacaoContent);
+			}).done(function() {
+				// inicializa o plugin de data
+				$('#negociacao-data').datepicker({
+			    	format: "dd/mm/yyyy",
+			    	autoclose: true,
+			    	clearBtn: true,
+			    	language: "pt-BR",
+			    });
 			});
 		}		
 	});
@@ -449,6 +466,14 @@ $(document).ready(function() {
 			}
 		}).fail(function() {
 			$('.panel-calculo .panel-body').html(negociacaoContent);
+		}).done(function() {
+			// inicializa o plugin de data
+			$('#negociacao-data').datepicker({
+		    	format: "dd/mm/yyyy",
+		    	autoclose: true,
+		    	clearBtn: true,
+		    	language: "pt-BR",
+		    });
 		});
 	});
 	
@@ -563,6 +588,7 @@ $(document).ready(function() {
 	// altera o status da negociação
 	$('body').on('click', '#alterar-negociacao', function(e) {
 		e.preventDefault();
+		
 		// salva o html da negociacao
 		const negociacaoContent = $('.panel-calculo .panel-body').html();
 		const idNegociacao = $('#negociacao-id').val();
@@ -598,6 +624,80 @@ $(document).ready(function() {
 			$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
 		}).fail(function() {
 			$('.panel-calculo .panel-body').html(negociacaoContent);
+		}).done(function() {
+			// inicializa o plugin de data
+			$('#negociacao-data').datepicker({
+		    	format: "dd/mm/yyyy",
+		    	autoclose: true,
+		    	clearBtn: true,
+		    	language: "pt-BR",
+		    	todayHighlight: true,
+		    });
+		});
+		
+		return false;
+	});
+	
+	// altera o status da negociação
+	$('body').on('click', '.action-quebrar-negociacao, .action-fechar-negociacao', function(e) {
+		e.preventDefault();
+		
+		// salva o html da negociacao e pega os atributos da action ativada
+		const negociacaoContent = $('.panel-calculo .panel-body').html();
+		const idNegociacao = $('#negociacao-id').val();
+		const action = $(this).data('action');
+		
+		// verifica se a negociacao existe
+		if (!idNegociacao) {
+			toastr.warning('A negociação não foi encontrada. Atualize a página e tente novamente.');
+			return false;
+		}
+		
+		// verifica se alguma parcela ja foi faturada
+		if ($('.faturar-parcela[data-status="1"]').length > 0) {
+			toastr.options = {preventDuplicates: true};
+		    toastr.warning('Não é possível abrir o contrato enquanto houver parcelas já faturadas.');
+		    return false;
+		}
+		
+		// valida o status da negociacao conforme a action
+		if (action == 'quebrar' && $('#alterar-negociacao').data('status') == '0') {
+			toastr.options = {preventDuplicates: true};
+			toastr.warning('A negociação ainda não esta fechada.');
+			return false;
+		} else if (action == 'fechar' && $('#alterar-negociacao').data('status') == '1') {
+			toastr.options = {preventDuplicates: true};
+			toastr.warning('A negociação ja esta fechada.');
+			return false;
+		}
+		
+		// seta a mensagem de loading
+		$('.panel-calculo .panel-body').html('<br><br><br><h2 class="text-primary text-center"><i class="fa fa-spinner fa-pulse"></i>&nbsp; Carregando ...</h2><br><br><br>');
+		
+		// envia a requisicao para alterar o status da negociação
+		$.get(`${BASE_PATH}negociacao/alterar?id=${idNegociacao}&action=${action}`, function(response) {
+			const retorno = JSON.parse(response);
+			
+			// verifica se houve erro
+			if (retorno.success != true) {
+				toastr.warning(retorno.message);
+			}
+			
+			// seta o conteudo da negociacao
+			$('.panel-calculo .panel-body').html(retorno.content);
+			// atualiza a lista de acionamentos
+			$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
+		}).fail(function() {
+			$('.panel-calculo .panel-body').html(negociacaoContent);
+		}).done(function() {
+			// inicializa o plugin de data
+			$('#negociacao-data').datepicker({
+		    	format: "dd/mm/yyyy",
+		    	autoclose: true,
+		    	clearBtn: true,
+		    	language: "pt-BR",
+		    	todayHighlight: true,
+		    });
 		});
 		
 		return false;
@@ -646,6 +746,15 @@ $(document).ready(function() {
 								$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
 							}).fail(function() {
 								$('.panel-calculo .panel-body').html(negociacaoContent);
+							}).done(function() {
+								// inicializa o plugin de data
+								$('#negociacao-data').datepicker({
+							    	format: "dd/mm/yyyy",
+							    	autoclose: true,
+							    	clearBtn: true,
+							    	language: "pt-BR",
+							    	todayHighlight: true,
+							    });
 							});
 						},
 					},
@@ -673,6 +782,15 @@ $(document).ready(function() {
 				$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
 			}).fail(function() {
 				$('.panel-calculo .panel-body').html(negociacaoContent);
+			}).done(function() {
+				// inicializa o plugin de data
+				$('#negociacao-data').datepicker({
+			    	format: "dd/mm/yyyy",
+			    	autoclose: true,
+			    	clearBtn: true,
+			    	language: "pt-BR",
+			    	todayHighlight: true,
+			    });
 			});
 		}
 		
@@ -727,6 +845,15 @@ $(document).ready(function() {
 								$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
 							}).fail(function() {
 								$('.panel-calculo .panel-body').html(negociacaoContent);
+							}).done(function() {
+								// inicializa o plugin de data
+								$('#negociacao-data').datepicker({
+							    	format: "dd/mm/yyyy",
+							    	autoclose: true,
+							    	clearBtn: true,
+							    	language: "pt-BR",
+							    	todayHighlight: true,
+							    });
 							});
 						},
 					},
@@ -754,6 +881,15 @@ $(document).ready(function() {
 				$('.panel-acionamento .panel-body').load(BASE_PATH+'acionamento/index?contrato='+$('#id-contrato').val());
 			}).fail(function() {
 				$('.panel-calculo .panel-body').html(negociacaoContent);
+			}).done(function() {
+				// inicializa o plugin de data
+				$('#negociacao-data').datepicker({
+			    	format: "dd/mm/yyyy",
+			    	autoclose: true,
+			    	clearBtn: true,
+			    	language: "pt-BR",
+			    	todayHighlight: true,
+			    });
 			});
 		}
 		
@@ -815,6 +951,13 @@ $(document).ready(function() {
 				});
 			}
 		}
+	});
+	
+	// abre o datepicker
+	$('body').on('click', '.open-datepicker', function(e) {
+	    e.preventDefault();
+	    $('#negociacao-data').datepicker('show');
+	    return false;
 	});
 });
 

@@ -456,12 +456,16 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 <?php Modal::end(); ?>
 <?php 
-// PLUGIN (evita bug ao carregar conteudo por ajax)
+// PLUGIN MASKMONEY (evita bug ao carregar conteudo por ajax)
 $this->registerJsFile(Url::home().'plugins/jquery-maskmoney/jquery.maskMoney.min.js', ['depends' => [JqueryAsset::className()]]);
+// PLUGIN DATEPICKER (evita bug ao carregar conteudo por ajax)
+$this->registerJsFile(Url::home().'plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js', ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile(Url::home().'plugins/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js', ['depends' => [JqueryAsset::className()]]);
+$this->registerCssFile(Url::home().'plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css', ['depends' => [BootstrapAsset::className()]]);
 // CSS
 $this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [BootstrapAsset::className()]]);
 // JS
-$this->registerJsFile(Url::home().'app/js/negociacao.js?d=201810302229', ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile(Url::home().'app/js/negociacao.js?d=201810312229', ['depends' => [JqueryAsset::className()]]);
 ?>
 
 

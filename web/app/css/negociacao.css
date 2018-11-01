@@ -162,3 +162,6 @@
 	display: inline-block;
 	width: 100%;
 }
+.dropdown-menu {
+	padding-left: 10px !important;
+}

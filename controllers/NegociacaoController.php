@@ -170,7 +170,7 @@ class NegociacaoController extends Controller
     /**
      * Altera uma negociacao
      */
-    public function actionAlterar($id)
+    public function actionAlterar($id, $action = null)
     {
         // valida a requisição
         if (!\Yii::$app->request->isAjax) {
@@ -182,29 +182,61 @@ class NegociacaoController extends Controller
         // busca a model
         $model = $this->findModel($id);
 
-        // altera o status da negociacao
-        if ($model->status == Negociacao::STATUS_ABERTA) {
-            $model->status = Negociacao::STATUS_FECHADA;
-            
-            // registra o acionamento
-            Acionamento::setAcionamento([
-                'id_cliente' => $model->contrato->id_cliente,
-                'id_contrato' => $model->id_contrato,
-                'tipo' => Acionamento::TIPO_SISTEMA,
-                'titulo' => 'Alteração na Negociação',
-                'descricao' => 'Alteração da situação da negociação de "aberta" para "fechada".',
-            ]);
-        } elseif ($model->status == Negociacao::STATUS_FECHADA) {
-            $model->status = Negociacao::STATUS_ABERTA;
-
-            // registra o acionamento
-            Acionamento::setAcionamento([
-                'id_cliente' => $model->contrato->id_cliente,
-                'id_contrato' => $model->id_contrato,
-                'tipo' => Acionamento::TIPO_SISTEMA,
-                'titulo' => 'Alteração na Negociação',
-                'descricao' => 'Alteração da situação da negociação de "fechada" para "aberta".',
-            ]);
+        if (empty($action)) {            
+            // altera o status da negociacao
+            if ($model->status == Negociacao::STATUS_ABERTA) {
+                $model->status = Negociacao::STATUS_FECHADA;
+                
+                // registra o acionamento
+                Acionamento::setAcionamento([
+                    'id_cliente' => $model->contrato->id_cliente,
+                    'id_contrato' => $model->id_contrato,
+                    'tipo' => Acionamento::TIPO_SISTEMA,
+                    'titulo' => 'Alteração na Negociação',
+                    'descricao' => 'A negociação do contrato foi fechada.',
+                ]);
+            } elseif ($model->status == Negociacao::STATUS_FECHADA) {
+                $model->status = Negociacao::STATUS_ABERTA;
+    
+                // registra o acionamento
+                Acionamento::setAcionamento([
+                    'id_cliente' => $model->contrato->id_cliente,
+                    'id_contrato' => $model->id_contrato,
+                    'tipo' => Acionamento::TIPO_SISTEMA,
+                    'titulo' => 'Alteração na Negociação',
+                    'descricao' => 'A negociação do contrato foi quebrada.',
+                ]);
+            }
+        } else {
+            // altera o status da negociacao
+            if ($action == 'fechar') {
+                if ($model->status != Negociacao::STATUS_FECHADA) {
+                    $model->status = Negociacao::STATUS_FECHADA;
+                    
+                    // registra o acionamento
+                    Acionamento::setAcionamento([
+                        'id_cliente' => $model->contrato->id_cliente,
+                        'id_contrato' => $model->id_contrato,
+                        'tipo' => Acionamento::TIPO_SISTEMA,
+                        'titulo' => 'Alteração na Negociação',
+                        'descricao' => 'A negociação do contrato foi fechada.',
+                    ]);
+                
+                }                
+            } elseif ($action == 'quebrar') {
+                if ($model->status != Negociacao::STATUS_ABERTA) {                    
+                    $model->status = Negociacao::STATUS_ABERTA;
+                    
+                    // registra o acionamento
+                    Acionamento::setAcionamento([
+                        'id_cliente' => $model->contrato->id_cliente,
+                        'id_contrato' => $model->id_contrato,
+                        'tipo' => Acionamento::TIPO_SISTEMA,
+                        'titulo' => 'Alteração na Negociação',
+                        'descricao' => 'A negociação do contrato foi quebrada.',
+                    ]);
+                }
+            }
         }
 
         // salva a negociacao

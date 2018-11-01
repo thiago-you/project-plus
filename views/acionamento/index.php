@@ -8,11 +8,21 @@ use app\models\Colaborador;
 		<div class="acionamento-body">
     		<div class="row">
     			<div class="col-md-8 col-sm-8 col-lg-8 col-xs-12">
-    				<p>
-    					<b><?= $acionamento->titulo; ?></b>
-    					<br>
-    					<small><b>Tipo:</b>&nbsp; <i><?= $acionamento->getTipo(); ?></i></small>
-    				</p>
+    				<span class="dropdown">
+						<button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="dropActions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        	<i class="fa fa-chevron-down"></i>&nbsp; Ações
+                      	</button>
+                      	<span class="dropdown-menu" aria-labelledby="dropActions">
+                      		<?php if (1 == 1 || $acionamento->titulo == 'Alteração na Negociação'): ?>
+                            	<a class="action-quebrar-negociacao dropdown-item" data-action="quebrar" href="#">Quebrar Negociação</a>
+                            	<a class="action-fechar-negociacao dropdown-item" data-action="fechar" href="#">Fechar Negociação</a>
+                        	<?php endif; ?>
+                      	</span>
+                    </span>
+                    <!-- ./dropdown -->
+					&nbsp;<b><?= $acionamento->titulo; ?></b>
+					<br>
+					<small><b>Tipo:</b>&nbsp; <i><?= $acionamento->getTipo(); ?></i></small>
     			</div>
     			<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 text-right">
     				<small><?= Helper::dateMask($acionamento->data, Helper::DATE_DATETIME); ?></small>

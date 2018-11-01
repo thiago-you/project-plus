@@ -4,7 +4,6 @@ use kartik\helpers\Html;
 use app\models\Negociacao;
 use kartik\money\MaskMoney;
 use kartik\select2\Select2;
-use kartik\date\DatePicker;
 use app\models\NegociacaoParcela;
 ?>
 <input id="negociacao-id" class="hidden" value="<?= $negociacao->isNewRecord ? null : $negociacao->id; ?>"/>
@@ -151,9 +150,10 @@ use app\models\NegociacaoParcela;
         	<br><br><br>
         	<div class="row">
         		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">	
-            		<?= Html::button('<i class="fa fa-briefcase"></i>&nbsp; '.($negociacao->status == Negociacao::STATUS_FECHADA ? 'Abrir Negociação' : 'Fechar Negociação'), [
+            		<?= Html::button('<i class="fa fa-briefcase"></i>&nbsp; '.($negociacao->status == Negociacao::STATUS_FECHADA ? 'Quebrar Negociação' : 'Fechar Negociação'), [
                             'class' => Helper::BTN_COLOR_PRIMARY.' btn-block',
                             'id' => 'alterar-negociacao',
+    		                'data-status' => $negociacao->status,
     		                'disabled' => $negociacao->status == Negociacao::STATUS_FATURADA ? true : false,
                 		]);
             		?>
@@ -177,19 +177,20 @@ use app\models\NegociacaoParcela;
         	<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
                 <div class="row">
                 	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-                		<?= Html::label('Data da Negociação', 'negociacao-data'); ?>
-                		<?= DatePicker::widget([
-                                'name' => 'Negociacao[data]',
-                                'id' => 'negociacao-data',
-        		                'value' => $negociacao->data_negociacao ? $negociacao->data_negociacao : date('Y-m-d'),
-                                'removeButton' => false,
-        		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
-                                'pluginOptions' => [
-                                    'autoclose' => true,
-                                    'format' => 'dd/mm/yyyy'
-                                ],
-                		   ]); 
-                		?>
+                		<div class="form-group">
+                    		<?= Html::label('Data da Negociação', 'negociacao-data'); ?>
+                    		<div class="input-group">
+                                <label class="input-group-addon btn open-datepicker" for="negociacao-data">
+                                   <i class="fa fa-calendar"></i>
+                                </label>
+                        		<?= Html::input('text', 'Negociacao[data]', $negociacao->data_negociacao ? Helper::dateMask($negociacao->data_negociacao, Helper::DATE_DEFAULT) : date('d/m/Y'), [
+                		                'id' => 'negociacao-data',
+                		                'class' => 'form-control',
+                		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+                                    ]);
+                        		?>
+                            </div>
+                		</div>
                 	</div>
                 	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
                 		<?= Html::label('Pagamento', 'negociacao-tipo'); ?>
