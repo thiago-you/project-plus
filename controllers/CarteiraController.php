@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use app\models\Colaborador;
 use app\models\CarteiraSearch;
 use yii\web\NotFoundHttpException;
+use yii\db\IntegrityException;
 
 /**
  * CarteiraController implements the CRUD actions for Carteira model.
@@ -25,9 +26,6 @@ class CarteiraController extends Controller
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
             ],
         ];
     }
@@ -194,6 +192,9 @@ class CarteiraController extends Controller
             
             $transaction->commit();
             \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O carteira foi excluído com sucesso.');
+        } catch (IntegrityException $e) {
+            $transaction->rollBack();
+            \Yii::$app->session->setFlash('danger', '<i class="fa fa-exclamation-triangle"></i>&nbsp; A carteira não pode ser deletada pois possui dados vinculados.');
         } catch (\Exception $e) {
             $transaction->rollBack();
             \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");

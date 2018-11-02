@@ -26,7 +26,7 @@ class AppAsset extends AssetBundle
         'plugins/fontawesome-5.3.1/js/all.min.js',
         'plugins/accounting/accounting.js',
         'plugins/toastr/toastr.min.js',
-        'app/js/main.js?v=1.0',
+        'app/js/main.js?d=201811021858',
     ];
     public $depends = [
         'yii\web\YiiAsset',

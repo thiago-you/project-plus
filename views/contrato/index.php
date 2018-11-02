@@ -98,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 		},
                 		'delete' => function ($url, $model) {
                 			return Html::a('<i class="fa fa-trash-alt"></i>', $url, [
-                				'class' => Helper::BTN_COLOR_DANGER,
+                				'class' => Helper::BTN_COLOR_DANGER.' btn-delete',
                 				'title' => 'Excluír',
                 				'data-toggle' => 'tooltip',
                 				'data-method' => 'post',

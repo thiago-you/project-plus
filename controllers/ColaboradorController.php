@@ -8,6 +8,7 @@ use yii\filters\VerbFilter;
 use app\models\Colaborador;
 use app\models\ColaboradorSearch;
 use yii\web\NotFoundHttpException;
+use yii\db\IntegrityException;
 
 /**
  * ColaboradorController implements the CRUD actions for Colaborador model.
@@ -22,9 +23,6 @@ class ColaboradorController extends Controller
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
             ],
         ];
     }
@@ -178,6 +176,9 @@ class ColaboradorController extends Controller
             
             $transaction->commit();
             \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O colaborador foi excluído com sucesso.');
+        } catch (IntegrityException $e) {
+            $transaction->rollBack();
+            \Yii::$app->session->setFlash('danger', '<i class="fa fa-exclamation-triangle"></i>&nbsp; O colaborador não pode ser deletado pois possui dados vinculados.');
         } catch (\Exception $e) {
             $transaction->rollBack();
             \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");

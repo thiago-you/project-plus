@@ -15,6 +15,7 @@ use app\models\ContratoSearch;
 use app\models\ContratoParcela;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
+use yii\db\IntegrityException;
 
 /**
  * ContratoController implements the CRUD actions for Contrato model.
@@ -29,9 +30,6 @@ class ContratoController extends Controller
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
             ],
         ];
     }
@@ -301,6 +299,9 @@ class ContratoController extends Controller
             
             $transaction->commit();
             \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O contrato foi excluído com sucesso.');
+        } catch (IntegrityException $e) {
+            $transaction->rollBack();
+            \Yii::$app->session->setFlash('danger', '<i class="fa fa-exclamation-triangle"></i>&nbsp; O contrato não pode ser deletado pois possui outros dados vinculados.');
         } catch (\Exception $e) {
             $transaction->rollBack();
             \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");

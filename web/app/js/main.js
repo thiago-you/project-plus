@@ -55,4 +55,26 @@ $(document).ready(function() {
 		// inicializa o tooltip
 		$('[data-toggle="tooltip"]').tooltip();
 	});
+	
+	// confirm para o delete
+	$('body').on('click', '.btn-delete', function(e) {
+		e.preventDefault();
+		this.blur();
+		const href = this.href;
+		
+		// mensagem de confirmação
+        $.confirm({
+            content: 'Você deseja mesmo exclúir este item?',
+            backgroundDismiss: true,
+            buttons: {
+				ok: { 
+					action: function() {
+						window.location.href = href;
+                    },
+				},
+			},
+        });
+        
+        return false;
+	});
 });

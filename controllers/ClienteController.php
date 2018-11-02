@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use app\models\ClienteSearch;
 use yii\web\NotFoundHttpException;
+use yii\db\IntegrityException;
 
 /**
  * ClienteController implements the CRUD actions for Cliente model.
@@ -27,9 +28,6 @@ class ClienteController extends BaseController
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
             ],
         ];
     }
@@ -373,7 +371,10 @@ class ClienteController extends BaseController
 	        
 	        $transaction->commit();
 	        \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O cliente foi excluído com sucesso.');
-	    } catch (\Exception $e) {
+        } catch (IntegrityException $e) {
+            $transaction->rollBack();
+            \Yii::$app->session->setFlash('danger', '<i class="fa fa-exclamation-triangle"></i>&nbsp; O cliente não pode ser deletado pois possui um contrato vinculado.');
+        } catch (\Exception $e) {
 	    	$transaction->rollBack();
 	    	\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
 	    }
