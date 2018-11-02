@@ -137,8 +137,6 @@ class SiteController extends BaseController
     {
         if (\Yii::$app->user->isGuest) {
             return $this->redirect(['site/login'])->send();
-        } else {
-            $this->layout = '@app/views/layouts/main';
         }
         
         $exception = \Yii::$app->errorHandler->exception;

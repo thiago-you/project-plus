@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <!-- ./box-header -->
         <br><br>
-        <div class="box-body">  
+        <div class="panel-body">  
         	<div class="row">
         		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
         			<?= Html::label('Carteira', 'carteira'); ?>
