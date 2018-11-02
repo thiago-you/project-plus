@@ -509,7 +509,7 @@ $(document).ready(function() {
 			contrato: $('#id-contrato').val(),
 			id: $('#acionamento-id').val(),
 			tipo: $('#acionamento-tipo').val(),
-			titulo: $('#acionamento-titulo').val(),
+			subtipo: $('#acionamento-subtipo').val(),
 			dataAgendamento: $('#acionamento-data-agendamento').val(),
 			colaboradorAgendamento: $('#acionamento-colab').val(),
 			descricao: $('#acionamento-desc').val(),
@@ -540,7 +540,7 @@ $(document).ready(function() {
 				
 				// reseta o form
 				$('#acionamento-tipo').val($('#acionamento-tipo option:first').val()).trigger('change');
-				$('#acionamento-titulo').val('');
+				$('#acionamento-subtipo').val('').trigger('change');
 				$('#acionamento-desc').val('');
 				$('#acionamento-data-agendamento').val('').trigger('change');
 				$('#acionamento-colab').val('').trigger('change');
@@ -598,8 +598,8 @@ $(document).ready(function() {
 		
 		// adiciona os valores ao form
 		$('#acionamento-id').val(id);
-		$('#acionamento-tipo').val(acionamento.find('input.tipo').val());
-		$('#acionamento-titulo').val(acionamento.find('input.titulo').val());
+		$('#acionamento-tipo').val(acionamento.find('input.tipo').val()).trigger('change');
+		$('#acionamento-subtipo').val(acionamento.find('input.subtipo').val()).trigger('change');
 		$('#acionamento-data-agendamento').val(acionamento.find('input.data-agendamento').val());
 		$('#acionamento-colab').val(acionamento.find('input.colab-agendamento').val()).trigger('change');
 		$('#acionamento-desc').val(acionamento.find('input.descricao').val());
@@ -628,7 +628,7 @@ $(document).ready(function() {
 	$('#modal-acionamento').on('hidden.bs.modal', function() {
 		$('#acionamento-id').val('');
 		$('#acionamento-tipo').val($('#acionamento-tipo option:first').val()).trigger('change');
-		$('#acionamento-titulo').val('');
+		$('#acionamento-subtipo').val('').trigger('change');
 		$('#acionamento-data-agendamento').val('');
 		$('#acionamento-colab').val('').trigger('change');
 		$('#acionamento-desc').val('');

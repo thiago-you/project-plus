@@ -93,7 +93,7 @@ class NegociacaoParcelaController extends Controller
                     'id_cliente' => $model->negociacao->contrato->id_cliente,
                     'id_contrato' => $model->negociacao->id_contrato,
                     'tipo' => Acionamento::TIPO_SISTEMA,
-                    'titulo' => 'Alteração na Negociação',
+                    'subtipo' => Acionamento::SUBTIPO_NEGOCIACAO,
                     'descricao' => "A parcela N° {$model->num_parcela} foi faturada.",
                 ]);
             } elseif ($model->status == NegociacaoParcela::STATUS_FATURADA) {
@@ -104,7 +104,7 @@ class NegociacaoParcelaController extends Controller
                     'id_cliente' => $model->negociacao->contrato->id_cliente,
                     'id_contrato' => $model->negociacao->id_contrato,
                     'tipo' => Acionamento::TIPO_SISTEMA,
-                    'titulo' => 'Alteração na Negociação',
+                    'subtipo' => Acionamento::SUBTIPO_NEGOCIACAO,
                     'descricao' => "A parcela N° {$model->num_parcela} foi estornada.",
                 ]);
             }

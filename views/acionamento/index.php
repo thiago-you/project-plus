@@ -7,8 +7,8 @@ use app\models\Negociacao;
 <?php foreach ($acionamentos as $acionamento): ?>
 	<div class="acionamento-box">
 		<div class="acionamento-values hidden">
-			<input class="titulo" value="<?= $acionamento->titulo; ?>"/>
 			<input class="tipo" value="<?= $acionamento->tipo; ?>"/>
+			<input class="subtipo" value="<?= $acionamento->subtipo; ?>"/>
 			<input class="data-agendamento" value="<?= $acionamento->data_agendamento; ?>"/>
 			<input class="colab-agendamento" value="<?= $acionamento->colaborador_agendamento; ?>"/>
 			<input class="descricao" value="<?= $acionamento->descricao; ?>"/>
@@ -22,7 +22,7 @@ use app\models\Negociacao;
                         	<i class="fa fa-chevron-down"></i>&nbsp; Ações
                       	</button>
                       	<span class="dropdown-menu" aria-labelledby="dropActions">
-                      		<?php if ($acionamento->titulo == 'Alteração na Negociação'): ?>
+                      		<?php if ($acionamento->subtipo == Acionamento::SUBTIPO_NEGOCIACAO): ?>
                   				<span class="action-faturar-negociacao dropdown-item" data-action="faturar">
                   					<?= $negociacao->status == Negociacao::STATUS_FECHADA ? 'Faturar' : 'Estornar'; ?> Negociação	
                   				</span>
@@ -36,11 +36,16 @@ use app\models\Negociacao;
                       	</span>
                     </span>
                     <!-- ./dropdown -->
-					&nbsp;<b><?= $acionamento->titulo; ?></b>
-					<br>
-					<small><b>Tipo:</b>&nbsp; <i><?= $acionamento->getTipo(); ?></i></small>
+					<small>
+						<b>Tipo:</b>&nbsp; <i><?= $acionamento->getTipo(); ?></i>
+						<?php if (!empty($acionamento->subtipo)): ?>
+    						&nbsp; | &nbsp;
+    						<b>Subtipo:</b>&nbsp; <i><?= $acionamento->getSubtipo(); ?></i>
+						<?php endif; ?>
+					</small>
     			</div>
     			<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 text-right">
+    				<br>
     				<small><?= Helper::dateMask($acionamento->data, Helper::DATE_DATETIME); ?></small>
     			</div>
     		</div>

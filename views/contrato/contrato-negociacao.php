@@ -363,16 +363,20 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>	
 <!-- ./ row acionamentos -->
 <?php Modal::begin([
-    'id' => 'modal-acionamento',
-    'header' => '<h4 class="modal-title text-primary"><i class="fa fa-plus"></i>&nbsp; Acionamento</h4>',
-]); ?>
+        'id' => 'modal-acionamento',
+        'header' => '<h4 class="modal-title text-primary"><i class="fa fa-plus"></i>&nbsp; Acionamento</h4>',
+        'options' => [
+            'tabindex' => false,
+        ],
+    ]); 
+?>
     <div class="modal-body">
     	<?= Html::hiddenInput('acionamento-id', '', ['id' => 'acionamento-id']); ?>
     	<!-- ./hidden id -->
     	<div class="row">
     		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
     			<div class="form-group"> 	
-        			<?= Html::label('Acionamento', 'acionamento-tipo'); ?>
+        			<?= Html::label('Tipo', 'acionamento-tipo'); ?>
         			<?= Select2::widget([
                             'name' => 'acionamento-tipo',
         	                'id' => 'acionamento-tipo',
@@ -385,11 +389,19 @@ $this->params['breadcrumbs'][] = $this->title;
   		<!-- ./row -->
   		<div class="row">
     		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-        		<div class="form-group"> 	
-    				<?= Html::label('Título', 'acionamento-titulo'); ?>
-        			<?= Html::textInput('acionamento-titulo', '', [
-        	                'id' => 'acionamento-titulo',
-                            'class' => 'form-control',
+    			<div class="form-group"> 	
+        			<?= Html::label('Subtipo', 'acionamento-subtipo'); ?>
+        			<?= Select2::widget([
+                            'name' => 'acionamento-subtipo',
+        	                'id' => 'acionamento-subtipo',
+        	                'data' => Acionamento::getSubtipos(),
+			                'hideSearch' => false,
+			                'pluginOptions' => [
+                                'allowClear' => true,
+			                ],
+			                'options' => [
+                                'placeholder' => 'Escolha o subtipo opcional ...',
+			                ],
             			]); 
         			?>
     			</div>

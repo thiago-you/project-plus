@@ -91,7 +91,7 @@ class AcionamentoController extends Controller
                 $model->tipo = $post['tipo'];
                 $model->data = $post['data'];
                 $model->descricao = $post['descricao'];
-                $model->titulo = $post['titulo'];
+                $model->subtipo = $post['subtipo'];
                 $model->colaborador_id = \Yii::$app->user->id;
                 $model->id_cliente = $post['cliente'];
                 $model->id_contrato = $post['contrato'];

@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use Yii;
@@ -13,7 +12,6 @@ use app\base\Helper;
  * @property int $id_contrato
  * @property int $colaborador_id
  * @property int $colaborador_agendamento
- * @property string $titulo
  * @property string $descricao
  * @property string $data
  * @property string $data_agendamento
@@ -29,6 +27,8 @@ class Acionamento extends \yii\db\ActiveRecord
 {
     // const para o tipo de acionamento do sistema
     CONST TIPO_SISTEMA = '0';
+    // const para o subtipo de acionamento de negociacao
+    CONST SUBTIPO_NEGOCIACAO = '1';
     
     /**
      * {@inheritdoc}
@@ -47,7 +47,6 @@ class Acionamento extends \yii\db\ActiveRecord
             [['id_cliente', 'tipo'], 'required'],
             [['id_cliente', 'id_contrato', 'colaborador_id', 'colaborador_agendamento', 'tipo', 'subtipo'], 'integer'],
             [['data', 'data_agendamento'], 'safe'],
-            [['titulo'], 'string', 'max' => 100],
             [['descricao'], 'string', 'max' => 250],
             [['telefone'], 'string', 'max' => 15],
             [['id_cliente'], 'exist', 'skipOnError' => true, 'targetClass' => Cliente::className(), 'targetAttribute' => ['id_cliente' => 'id']],
@@ -74,7 +73,6 @@ class Acionamento extends \yii\db\ActiveRecord
             'id_contrato' => 'Id Contrato',
             'colaborador_id' => 'Colaborador ID',
             'colaborador_agendamento' => 'Colaborador Agendamento',
-            'titulo' => 'Titulo',
             'descricao' => 'Descricao',
             'data' => 'Data',
             'data_agendamento' => 'Data Agendamento',
@@ -134,7 +132,7 @@ class Acionamento extends \yii\db\ActiveRecord
     }
     
     /**
-     * Retorna os tipos de acionamento
+     * Retorna a descrição do tipo
      */
     public function getTipo()
     {
@@ -146,6 +144,61 @@ class Acionamento extends \yii\db\ActiveRecord
         
         // retorna a descrição do tipo atual
         return $tipos[$this->tipo];
+    }
+    
+    /**
+     * Retorna os subtipos de acionamento
+     */
+    public static function getSubtipos()
+    {
+        $subtipos = [
+            '1' => 'Negociação',
+            '2' => 'Alega pagamento',            
+            '3' => 'Cadastro insuficiente',
+            '4' => 'Cliente desconhecido',
+            '5' => 'Contato receptivo',
+            '6' => 'Cobrança externa',
+            '7' => 'Despesa',
+            '8' => 'Devolução',
+            '9' => 'Envio de e-mail para o cliente',
+            '10' => 'Envio de e-mail para a carteira',
+            '11' => 'Envio de carta',
+            '12' => 'Falcido',
+            '13' => 'Mudou-se / Saiu da empresa',
+            '14' => 'Não anotou recado',
+            '15' => 'Não reconhece débito',
+            '16' => 'Notificação',
+            '17' => 'Observação',
+            '18' => 'Protesto',
+            '19' => 'Recado com terceiros',
+            '20' => 'Recado na residência',
+            '21' => 'Alega Pagamento',
+            '22' => 'Recado no trabalho',
+            '23' => 'Reclamação',
+            '24' => 'Sem condição de pagamento',
+            '25' => 'Sem contato',
+            '26' => 'Suspeita de fraude',
+            '27' => 'Suspensão da cobrança',
+            '28' => 'Telefone desligado',
+            '29' => 'Telefone não atende',
+            '30' => 'Telfone não existe',
+            '31' => 'Telefone ocupado',
+            '32' => 'Outros',
+        ];
+        
+        // ordena o array pela nome
+        asort($subtipos);
+        
+        return $subtipos;
+    }
+    
+    /**
+     * Retorna a descrição do subtipo
+     */
+    public function getSubtipo()
+    {
+        // retorna a descrição do tipo atual
+        return Acionamento::getSubtipos()[$this->subtipo];
     }
     
     /** 
@@ -179,7 +232,6 @@ class Acionamento extends \yii\db\ActiveRecord
         $acionamento->id_cliente = $params['id_cliente'];
         $acionamento->id_contrato = $params['id_contrato'];
         $acionamento->colaborador_id = \Yii::$app->user->id;
-        $acionamento->titulo = $params['titulo'];
         $acionamento->descricao = $params['descricao'];
         $acionamento->tipo = $params['tipo'];
         $acionamento->subtipo = isset($params['subtipo']) ? $params['subtipo'] : 0;

@@ -146,7 +146,7 @@ class NegociacaoController extends Controller
                 'id_cliente' => $model->contrato->id_cliente,
                 'id_contrato' => $model->id_contrato,
                 'tipo' => Acionamento::TIPO_SISTEMA,
-                'titulo' => 'Alteração na Negociação',
+                'subtipo' => Acionamento::SUBTIPO_NEGOCIACAO,
                 'descricao' => 'Alteração dos cálculos da negociação.',
             ]);
             
@@ -192,7 +192,7 @@ class NegociacaoController extends Controller
                     'id_cliente' => $model->contrato->id_cliente,
                     'id_contrato' => $model->id_contrato,
                     'tipo' => Acionamento::TIPO_SISTEMA,
-                    'titulo' => 'Alteração na Negociação',
+                    'subtipo' => Acionamento::SUBTIPO_NEGOCIACAO,
                     'descricao' => 'A negociação do contrato foi fechada.',
                 ]);
             } elseif ($model->status == Negociacao::STATUS_FECHADA) {
@@ -203,7 +203,7 @@ class NegociacaoController extends Controller
                     'id_cliente' => $model->contrato->id_cliente,
                     'id_contrato' => $model->id_contrato,
                     'tipo' => Acionamento::TIPO_SISTEMA,
-                    'titulo' => 'Alteração na Negociação',
+                    'subtipo' => Acionamento::SUBTIPO_NEGOCIACAO,
                     'descricao' => 'A negociação do contrato foi quebrada.',
                 ]);
             }
@@ -218,7 +218,7 @@ class NegociacaoController extends Controller
                         'id_cliente' => $model->contrato->id_cliente,
                         'id_contrato' => $model->id_contrato,
                         'tipo' => Acionamento::TIPO_SISTEMA,
-                        'titulo' => 'Alteração na Negociação',
+                        'subtipo' => Acionamento::SUBTIPO_NEGOCIACAO,
                         'descricao' => 'A negociação do contrato foi fechada.',
                     ]);
                 
@@ -232,7 +232,7 @@ class NegociacaoController extends Controller
                         'id_cliente' => $model->contrato->id_cliente,
                         'id_contrato' => $model->id_contrato,
                         'tipo' => Acionamento::TIPO_SISTEMA,
-                        'titulo' => 'Alteração na Negociação',
+                        'subtipo' => Acionamento::SUBTIPO_NEGOCIACAO,
                         'descricao' => 'A negociação do contrato foi quebrada.',
                     ]);
                 }
@@ -295,7 +295,7 @@ class NegociacaoController extends Controller
                     'id_cliente' => $model->contrato->id_cliente,
                     'id_contrato' => $model->id_contrato,
                     'tipo' => Acionamento::TIPO_SISTEMA,
-                    'titulo' => 'Alteração na Negociação',
+                    'subtipo' => Acionamento::SUBTIPO_NEGOCIACAO,
                     'descricao' => 'A negociação foi faturada.',
                 ]);
             } elseif ($model->status == Negociacao::STATUS_FATURADA) {
@@ -317,7 +317,7 @@ class NegociacaoController extends Controller
                     'id_cliente' => $model->contrato->id_cliente,
                     'id_contrato' => $model->id_contrato,
                     'tipo' => Acionamento::TIPO_SISTEMA,
-                    'titulo' => 'Alteração na Negociação',
+                    'subtipo' => Acionamento::SUBTIPO_NEGOCIACAO,
                     'descricao' => 'Estorno da negociação e alteração da situação da negociação de "faturada" para "fechada".',
                 ]);
             }
