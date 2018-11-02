@@ -26,27 +26,11 @@ AppAsset::register($this);
             <?php $this->head(); ?>
         </head>
         <!-- ./head -->
-        <body>
+        <body class="nav-md">
             <?php $this->beginBody(); ?>
-                <div id="main-content-wrapper" class="wrap">
-                	<div class="main-header">
-                        <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
-                			<div id="main-container" class="container">
-                				<div class="navbar-header text-center">
-                                    <a class="navbar-brand" href="<?= \Yii::$app->homeUrl; ?>">
-                                    	Maklen <i>RC</i> <span class="separador">|</span>
-                                    </a>
-                                </div>
-                                <!-- ./brand -->
-                                <?= $this->render('menu'); ?>
-                                <!-- ./menu -->
-                			</div>
-                			<!-- ./main-container -->
-                        </nav>
-                        <!-- ./navbar -->
-                    </div>
-               		<div class="container-fluid">
-               			<div class="sidenav">
+                <div id="" class="container body">
+               		<div class="main_container">
+               			<div class="col-md-2 left_col">
                             <?php if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_ADMINISTRADOR): ?>
                    				<?= $this->render('side-menu-admin'); ?>
                             <?php else: ?>
@@ -54,18 +38,30 @@ AppAsset::register($this);
                             <?php endif; ?>
                			</div>
                			<!-- ./side menu -->
-                        <section class="main-content">
-                            <?php foreach (\Yii::$app->session->getAllFlashes() as $key => $message): ?>
-								<div class="alert alert-flat alert-<?= $key ?> flash-msg">
-                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    <?= $message ?>
+                        <div class="top_nav">
+							<div class="nav_menu">
+								<nav>
+									<?= $this->render('menu'); ?>
+								</nav>
+							</div>
+                      	</div>
+                      	<!-- ./menu-header -->
+               			<div class="right_col" role="main">
+               				<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                                    <?php foreach (\Yii::$app->session->getAllFlashes() as $key => $message): ?>
+            							<div class="alert alert-flat alert-<?= $key ?> flash-msg">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                            <?= $message ?>
+                                        </div>
+                                    <?php endforeach; ?>
+                                    <!-- ./flash-msg -->
+                                    <?= $content ?>
+                                    <!-- ./page-content -->
                                 </div>
-                            <?php endforeach; ?>
-                            <!-- ./flash-msg -->
-                            <?= $content ?>
-                            <!-- ./page-content -->
-                        </section>
-                        <!-- ./section-content -->                            
+                            </div>
+                        </div>
+                        <!-- ./main-content -->                  
                		</div> 
             	</div>
                 <!-- .content-wrapper -->

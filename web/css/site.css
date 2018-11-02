@@ -572,3 +572,14 @@ label.active-label {
 .table-info-import tbody tr td:last-child {
     font-weight: normal;
 }
+/**/
+.panel {
+	background-color: inherit !important;
+	border: none !important;
+}
+.panel .panel-body {
+	background-color: #fff !important;
+	border: 1px solid #337ab7 !important;
+	padding: 0px !important;
+}
+
