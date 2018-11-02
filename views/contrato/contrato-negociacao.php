@@ -11,6 +11,7 @@ use app\models\Colaborador;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\BootstrapAsset;
 use kartik\datetime\DateTimePicker;
+use app\models\Contrato;
 
 $this->title = 'Negociação';
 $this->params['breadcrumbs'][] = $this->title;
@@ -57,6 +58,16 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
             	<small>
+                	<b>Contrato:</b>&nbsp; <?= $contrato->num_contrato; ?>
+            	</small>
+            </div>
+            <div class="col-md-8 col-sm-8 col-lg-8 col-xs-12">
+            	<small>
+                	<b>Tipo:</b>&nbsp; <?= Contrato::getListaTipos()[$contrato->tipo]; ?>
+            	</small>
+            </div>
+            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+            	<small>
                 	<b>CNPJ:</b>&nbsp; <?= Helper::mask($contrato->carteira->cnpj, Helper::MASK_CNPJ); ?>
             	</small>
             </div>
@@ -69,6 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <!-- ./dados do cliente -->
+<br>
 <div class="row">
     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
         <div class="panel panel-primary panel-dados-cliente">
@@ -340,6 +352,7 @@ $this->params['breadcrumbs'][] = $this->title;
         		<hr>
         		<?= $this->renderAjax('/acionamento/index', [
 		                'acionamentos' => $acionamentos,
+		                'negociacao' => $negociacao,
             		]);
         		?>
             </div>
@@ -354,6 +367,8 @@ $this->params['breadcrumbs'][] = $this->title;
     'header' => '<h4 class="modal-title text-primary"><i class="fa fa-plus"></i>&nbsp; Acionamento</h4>',
 ]); ?>
     <div class="modal-body">
+    	<?= Html::hiddenInput('acionamento-id', '', ['id' => 'acionamento-id']); ?>
+    	<!-- ./hidden id -->
     	<div class="row">
     		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
     			<div class="form-group"> 	
@@ -463,7 +478,7 @@ $this->registerJsFile(Url::home().'plugins/bootstrap-datepicker/js/bootstrap-dat
 $this->registerJsFile(Url::home().'plugins/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js', ['depends' => [JqueryAsset::className()]]);
 $this->registerCssFile(Url::home().'plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css', ['depends' => [BootstrapAsset::className()]]);
 // CSS
-$this->registerCssFile(Url::home().'app/css/negociacao.css', ['depends' => [BootstrapAsset::className()]]);
+$this->registerCssFile(Url::home().'app/css/negociacao.css?d=201811010126', ['depends' => [BootstrapAsset::className()]]);
 // JS
 $this->registerJsFile(Url::home().'app/js/negociacao.js?d=201810312229', ['depends' => [JqueryAsset::className()]]);
 ?>

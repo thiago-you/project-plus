@@ -1,14 +1,13 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
+use app\base\Helper;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
 use app\models\Colaborador;
 use app\models\ColaboradorSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use app\base\Helper;
 
 /**
  * ColaboradorController implements the CRUD actions for Colaborador model.
@@ -102,6 +101,12 @@ class ColaboradorController extends Controller
      */
     public function actionUpdate($id)
     {
+        // valida o usuário admin
+        if ($id == 0) {
+            \Yii::$app->session->setFlash('warning', 'O usuário "Admin" não pode ser alterado.');
+            return $this->redirect(['site/index']);
+        }
+        
         // busca a model
         $model = $this->findModel($id);
 

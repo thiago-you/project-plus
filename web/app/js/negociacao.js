@@ -507,11 +507,11 @@ $(document).ready(function() {
 		const post = {
 			cliente: $('#id-cliente').data('id'),
 			contrato: $('#id-contrato').val(),
+			id: $('#acionamento-id').val(),
 			tipo: $('#acionamento-tipo').val(),
 			titulo: $('#acionamento-titulo').val(),
 			dataAgendamento: $('#acionamento-data-agendamento').val(),
 			colaboradorAgendamento: $('#acionamento-colab').val(),
-			hora: $('#acionamento-hora').val(),
 			descricao: $('#acionamento-desc').val(),
 		};
 	
@@ -529,7 +529,7 @@ $(document).ready(function() {
 		}
 		
 		// envia a requisicao
-		$.post(BASE_PATH + 'acionamento/create', post, function(response) {
+		$.post(BASE_PATH + 'acionamento/save', post, function(response) {
 			const retorno = JSON.parse(response);
 			
 			if (retorno.success == 1) {
@@ -554,8 +554,10 @@ $(document).ready(function() {
 		});
 	});
 	
-	// exlui um acionamento
-	$('body').on('click', '.delete-acionamento', function() {
+	// deleta um acionamento
+	$('body').on('click', '.action-delete-acionamento', function(e) {
+		e.preventDefault();
+		
 		const id = $(this).data('id');
 		
 		// mensagem de confirmação
@@ -583,6 +585,53 @@ $(document).ready(function() {
 				},
 			},
         });
+        
+        return false;
+	});
+	
+	// altera um acionamento
+	$('body').on('click', '.action-edit-acionamento', function(e) {
+		e.preventDefault();
+		
+		const id = $(this).data('id');
+		const acionamento = $(this).closest('.acionamento-box').find('.acionamento-values');
+		
+		// adiciona os valores ao form
+		$('#acionamento-id').val(id);
+		$('#acionamento-tipo').val(acionamento.find('input.tipo').val());
+		$('#acionamento-titulo').val(acionamento.find('input.titulo').val());
+		$('#acionamento-data-agendamento').val(acionamento.find('input.data-agendamento').val());
+		$('#acionamento-colab').val(acionamento.find('input.colab-agendamento').val()).trigger('change');
+		$('#acionamento-desc').val(acionamento.find('input.descricao').val());
+		
+		// exibe a modal
+		$('#modal-acionamento').modal('show');
+        
+        return false;
+	});
+	
+	// faz uma chamada para o evento para faturar/estornar a negociação
+	$('body').on('click', '.action-faturar-negociacao', function(e) {
+		e.preventDefault();
+		
+		if ($('#faturar-contrato').is(':disabled')) {
+			toastr.options = {preventDuplicates: true};
+			toastr.warning('A negociação precisa estar fechada para ser faturada.');
+		} else {
+			$('#faturar-contrato').trigger('click');
+		}
+		
+		return false;
+	});
+	
+	// limpa os valores da modal
+	$('#modal-acionamento').on('hidden.bs.modal', function() {
+		$('#acionamento-id').val('');
+		$('#acionamento-tipo').val($('#acionamento-tipo option:first').val()).trigger('change');
+		$('#acionamento-titulo').val('');
+		$('#acionamento-data-agendamento').val('');
+		$('#acionamento-colab').val('').trigger('change');
+		$('#acionamento-desc').val('');
 	});
 	
 	// altera o status da negociação

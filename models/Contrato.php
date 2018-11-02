@@ -200,6 +200,14 @@ class Contrato extends \yii\db\ActiveRecord
     }
 
     /**
+     * Retorna um tipo pelo codigo
+     */
+    public static function getTipoByCod($tipo)
+    {
+        return self::getListaTipos()[$tipo];
+    }
+    
+    /**
      * Retorna um tipo pelo nome
      */
     public static function getTipoByName($name) 

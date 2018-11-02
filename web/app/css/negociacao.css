@@ -162,6 +162,16 @@
 	display: inline-block;
 	width: 100%;
 }
+/* dropdown menu */
 .dropdown-menu {
 	padding-left: 10px !important;
+}
+.dropdown-menu span {
+    cursor: pointer;
+    color: #337ab7;
+    text-decoration: none;
+}
+.dropdown-menu span:hover {
+    color: #1f4d75;
+    text-decoration: underline;
 }
