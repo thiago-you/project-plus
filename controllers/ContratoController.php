@@ -9,10 +9,12 @@ use app\models\Contrato;
 use app\base\AjaxResponse;
 use app\models\Negociacao;
 use yii\base\UserException;
+use app\models\Colaborador;
 use yii\filters\VerbFilter;
 use app\models\ContratoSearch;
 use app\models\ContratoParcela;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 
 /**
  * ContratoController implements the CRUD actions for Contrato model.
@@ -34,6 +36,23 @@ class ContratoController extends Controller
         ];
     }
 
+    /**
+     * Valida a permissão do usuário com base no cargo
+     *
+     * @inheritDoc
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        if ($this->action->id == 'delete') {
+            if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+                throw new ForbiddenHttpException();
+            }
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
     /**
      * Lists all Contrato models.
      * @return mixed

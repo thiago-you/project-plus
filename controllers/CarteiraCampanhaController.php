@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\helpers\Json;
 use yii\web\Controller;
 use app\base\AjaxResponse;
+use app\models\Colaborador;
 use yii\filters\VerbFilter;
 use app\models\CarteiraCampanha;
 use yii\web\NotFoundHttpException;
@@ -28,6 +29,21 @@ class CarteiraCampanhaController extends Controller
         ];
     }
 
+    /**
+     * Valida a permissão do usuário com base no cargo
+     *
+     * @inheritDoc
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+            throw new NotFoundHttpException();
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
     /**
      * Displays a single CarteiraCampanha model.
      * @param integer $id

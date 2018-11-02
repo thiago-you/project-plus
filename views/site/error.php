@@ -10,10 +10,5 @@ $this->title = $title ? $title : 'Erro Inesperado';
         <?= $message; ?>
         <br><br>
     </div>
-    <br><br>
     <!-- ./mensagem de erro -->
-    <p class="text-center font16">
-        <i class="fa fa-wrench"></i>&nbsp; A aplicação ainda esta em desenvolvimento e pode apresentar instabilidade e erros inesperados.
-    </p>
-    <!-- ./mensagem do ambiente de dev -->
 </div>

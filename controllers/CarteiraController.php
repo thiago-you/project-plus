@@ -2,14 +2,15 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Carteira;
-use app\models\CarteiraSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use app\base\Helper;
-use app\base\AjaxResponse;
 use yii\helpers\Json;
+use yii\web\Controller;
+use app\models\Carteira;
+use app\base\AjaxResponse;
+use yii\filters\VerbFilter;
+use app\models\Colaborador;
+use app\models\CarteiraSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * CarteiraController implements the CRUD actions for Carteira model.
@@ -31,6 +32,21 @@ class CarteiraController extends Controller
         ];
     }
 
+    /**
+     * Valida a permissão do usuário com base no cargo
+     *
+     * @inheritDoc
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+            throw new NotFoundHttpException();
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
     /**
      * Lists all Carteira models.
      * @return mixed

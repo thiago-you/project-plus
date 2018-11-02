@@ -1,18 +1,17 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
-use app\models\NegociacaoParcela;
-use yii\data\ActiveDataProvider;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\helpers\Json;
-use yii\base\UserException;
-use app\models\Acionamento;
+use yii\web\Controller;
 use app\base\AjaxResponse;
 use app\models\Negociacao;
+use yii\base\UserException;
+use app\models\Acionamento;
+use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
+use app\models\NegociacaoParcela;
+use yii\web\NotFoundHttpException;
 
 /**
  * NegociacaoParcelaController implements the CRUD actions for NegociacaoParcela model.
@@ -33,7 +32,7 @@ class NegociacaoParcelaController extends Controller
             ],
         ];
     }
-
+    
     /**
      * Lists all NegociacaoParcela models.
      * @return mixed

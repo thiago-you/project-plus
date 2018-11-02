@@ -30,11 +30,33 @@ class ColaboradorController extends Controller
     }
 
     /**
+     * Valida a permissão do usuário com base no cargo
+     *
+     * @inheritDoc
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        if ($this->action->id != 'index' && $this->action->id != 'update') {
+            if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+                throw new NotFoundHttpException();
+            }
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
+    /**
      * Lists all Colaborador models.
      * @return mixed
      */
     public function actionIndex()
     {
+        // valida o usuario operador
+        if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_OPERADOR) {
+            return $this->redirect(['update', 'id' => \Yii::$app->user->identity->id]);
+        }
+        
         $searchModel = new ColaboradorSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

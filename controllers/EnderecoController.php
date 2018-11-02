@@ -1,13 +1,13 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
 use app\models\Endereco;
-use app\models\EnderecoSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Colaborador;
+use app\models\EnderecoSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * EnderecoController implements the CRUD actions for Endereco model.
@@ -29,6 +29,21 @@ class EnderecoController extends Controller
         ];
     }
 
+    /**
+     * Valida a permissão do usuário com base no cargo
+     *
+     * @inheritDoc
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+            throw new NotFoundHttpException();
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
     /**
      * Lists all Endereco models.
      * @return mixed

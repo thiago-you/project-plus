@@ -78,13 +78,9 @@ class SiteController extends Controller
      */
     public function actionError()
     {
-        die;
         if (\Yii::$app->user->isGuest) {
             return $this->redirect(['site/login'])->send();
-        } else {
-            $this->layout = '@app/views/layouts/main';
         }
-        
         
         $exception = \Yii::$app->errorHandler->exception;
         

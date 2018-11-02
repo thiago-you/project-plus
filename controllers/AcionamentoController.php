@@ -1,16 +1,16 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
-use app\models\Acionamento;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\helpers\Json;
-use app\base\AjaxResponse;
 use app\base\Helper;
+use yii\helpers\Json;
+use yii\web\Controller;
 use app\models\Contrato;
+use app\base\AjaxResponse;
+use app\models\Colaborador;
+use yii\filters\VerbFilter;
+use app\models\Acionamento;
+use yii\web\NotFoundHttpException;
 
 /**
  * AcionamentoController implements the CRUD actions for Acionamento model.
@@ -31,7 +31,24 @@ class AcionamentoController extends Controller
             ],
         ];
     }
-
+    
+    /**
+     * Valida a permissão do usuário com base no cargo
+     *
+     * @inheritDoc
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        if ($this->action->id == 'delete') {
+            if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+                throw new NotFoundHttpException();
+            }
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
     /**
      * Retorna uma lista de acionamentos 
      * @return mixed

@@ -32,7 +32,7 @@ class NegociacaoController extends Controller
             ],
         ];
     }
-
+    
     /**
      * Retorna a negociacao do contrato
      */

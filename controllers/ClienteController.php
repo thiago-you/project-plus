@@ -7,11 +7,12 @@ use app\models\Estado;
 use app\models\Cliente;
 use app\models\Endereco;
 use app\models\Telefone;
+use app\models\Contrato;
+use app\models\Colaborador;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use app\models\ClienteSearch;
 use yii\web\NotFoundHttpException;
-use app\models\Contrato;
 
 /**
  * ClienteController implements the CRUD actions for Cliente model.
@@ -33,6 +34,23 @@ class ClienteController extends BaseController
         ];
     }
 
+    /**
+     * Valida a permissão do usuário com base no cargo
+     * 
+     * @inheritDoc
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        if ($this->action->id != 'search-list') {            
+            if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+                throw new NotFoundHttpException();
+            }
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
     /**
      * Lists all Cliente models.
      * 

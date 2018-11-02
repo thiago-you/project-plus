@@ -2,6 +2,7 @@
 use yii\web\View;
 use yii\helpers\Html;
 use app\assets\AppAsset;
+use app\models\Colaborador;
 
 $base_path = \Yii::getAlias('@web');
 $script = <<< JS
@@ -46,7 +47,11 @@ AppAsset::register($this);
                     </div>
                		<div class="container-fluid">
                			<div class="sidenav">
-               				<?= $this->render('side-menu'); ?>
+                            <?php if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_ADMINISTRADOR): ?>
+                   				<?= $this->render('side-menu-admin'); ?>
+                            <?php else: ?>
+                            	<?= $this->render('side-menu-operario'); ?>
+                            <?php endif; ?>
                			</div>
                			<!-- ./side menu -->
                         <section class="main-content">
@@ -56,7 +61,6 @@ AppAsset::register($this);
                                     <?= $message ?>
                                 </div>
                             <?php endforeach; ?>
-                           		
                             <!-- ./flash-msg -->
                             <?= $content ?>
                             <!-- ./page-content -->

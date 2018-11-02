@@ -5,6 +5,7 @@ use yii\helpers\Json;
 use yii\web\Controller;
 use app\base\AjaxResponse;
 use yii\filters\VerbFilter;
+use app\models\Colaborador;
 use app\models\CarteiraCalculo;
 use yii\web\NotFoundHttpException;
 
@@ -28,6 +29,21 @@ class CarteiraCalculoController extends Controller
         ];
     }
 
+    /**
+     * Valida a permissão do usuário com base no cargo
+     *
+     * @inheritDoc
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+            throw new NotFoundHttpException();
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
     /**
      * Lists all CarteiraCalculo models.
      * @return mixed

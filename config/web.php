@@ -137,6 +137,10 @@ $config = [
             ],
         ],
     ],
+    // valida o layout conforme o usuário logado (nao implementado ainda)
+    'on beforeRequest' => function ($event) {
+        
+    }
 ];
 
 if ($envDev) {
