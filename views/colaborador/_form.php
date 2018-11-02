@@ -13,7 +13,10 @@ use app\models\Colaborador;
                     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]); ?>
                 </div>
                 <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-                    <?= $form->field($model, 'cargo')->dropDownList(Colaborador::getListaCargos()); ?>
+                    <?= $form->field($model, 'cargo')->dropDownList(Colaborador::getListaCargos(), [
+                                    'disabled' => \Yii::$app->user->identity->cargo == Colaborador::CARGO_ADMINISTRADOR ? false : true,
+                        ]); 
+                    ?>
                 </div>
 			</div>
 			<!-- ./row -->

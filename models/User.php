@@ -9,7 +9,8 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     public $authKey;
     public $accessToken;
     public $cargo;
-
+    public $nome;
+    
     /**
      * @var string => usuario admin
      */
@@ -25,6 +26,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     	'authKey' => '0-key',
     	'accessToken' => '0-token',
         'cargo' => Colaborador::CARGO_ADMINISTRADOR,
+        'nome' => 'Admin',
     ];
 
     /**
@@ -38,7 +40,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
             $user = self::$admin;
         } else {            
             $user = Colaborador::find()->where(['id' => $id])->select([
-                'id', 'username', 'password', 'authKey', 'cargo'
+                'id', 'username', 'password', 'authKey', 'cargo', 'nome'
             ])->asArray(true)->one();
         }
         

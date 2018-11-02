@@ -3,6 +3,7 @@ use yii\helpers\Url;
 use kartik\typeahead\Typeahead;
 use yii\web\View;
 use yii\web\JsExpression;
+use app\models\User;
 ?>
 <div class="collapse navbar-collapse" id="menu-navbar-collapse">
 	<ul class="nav navbar-nav">
@@ -46,6 +47,12 @@ use yii\web\JsExpression;
 	</form>
 	<!-- ./pesquisa -->
 	<ul class="nav navbar-nav navbar-right">
+		<li>
+			<a href="<?= Url::to(['/colaborador/update', 'id' => \Yii::$app->user->identity->id]); ?>">
+				<i class="fa fa-user"></i>&nbsp; 
+				<?= User::findIdentity(\Yii::$app->user->identity->id)->nome; ?>
+			</a>
+		</li>
 		<li>
             <a data-method="post" href="<?= Url::to(['/site/logout']); ?>">
             	<i class="fa fa-power-off"></i>&nbsp; Logout
