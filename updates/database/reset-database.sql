@@ -226,7 +226,6 @@ CREATE TABLE `acionamento` (
   `id_contrato` INT NOT NULL,
   `colaborador_id` INT NOT NULL,
   `colaborador_agendamento` INT NULL,
-  `titulo` VARCHAR(100) NOT NULL,
   `descricao` VARCHAR(250),
   `data` DATETIME,
   `data_agendamento` DATETIME,
