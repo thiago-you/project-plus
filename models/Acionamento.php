@@ -160,7 +160,7 @@ class Acionamento extends \yii\db\ActiveRecord
         } else {
             $this->data = date('Y-m-d H:i:s');
         }
-        if (!empty($this->data)) {
+        if (!empty($this->data_agendamento)) {
             $this->data_agendamento = Helper::dateUnmask($this->data_agendamento, Helper::DATE_DEFAULT, true);
         }
         

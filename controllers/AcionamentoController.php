@@ -43,11 +43,12 @@ class AcionamentoController extends Controller
             throw new NotFoundHttpException();
         }
         
-        // busca os acionamentos
-        $acionamentos = Contrato::findOne(['id' => $contrato])->acionamentos;
+        // busca o contrato
+        $contrato = Contrato::findOne(['id' => $contrato]);
         
         return $this->renderAjax('index', [
-            'acionamentos' => $acionamentos,
+            'acionamentos' => $contrato->acionamentos,
+            'negociacao' => $contrato->negociacao,
         ]);                
     }
 
@@ -65,9 +66,9 @@ class AcionamentoController extends Controller
     }
 
     /**
-     * Cadastra um acionamento por Ajax
+     * Cadastra/Altera um acionamento por Ajax
      */
-    public function actionCreate()
+    public function actionSave()
     {
         // valida a requisicao
         if (!\Yii::$app->request->isAjax) {
@@ -78,24 +79,33 @@ class AcionamentoController extends Controller
         
         // receb o post
         if ($post = \Yii::$app->request->post()) {
-            $model = new Acionamento();
+            // valida se esta alterando ou cadastrando um novo acionamento
+            if (isset($post['id']) && !empty($post['id'])) {
+                $model = Acionamento::findOne(['id' => $post['id']]);
+            } else {                
+                $model = new Acionamento();
+            }
             
-            // seta os dados da model
-            $model->tipo = $post['tipo'];
-            $model->data = $post['data'];
-            $model->descricao = $post['descricao'];
-            $model->titulo = $post['titulo'];
-            $model->colaborador_id = \Yii::$app->user->id;
-            $model->id_cliente = $post['cliente'];
-            $model->id_contrato = $post['contrato'];
-            $model->colaborador_agendamento = isset($post['colaboradorAgendamento']) ? $post['colaboradorAgendamento'] : null;
-            $model->data_agendamento = isset($post['dataAgendamento']) ? $post['dataAgendamento'] : null;
-            
-            // salva a model
-            if (!$model->save()) {
-                $retorno->message = Helper::renderErrors($model->getErrors());
+            if ($model) {                
+                // seta os dados da model
+                $model->tipo = $post['tipo'];
+                $model->data = $post['data'];
+                $model->descricao = $post['descricao'];
+                $model->titulo = $post['titulo'];
+                $model->colaborador_id = \Yii::$app->user->id;
+                $model->id_cliente = $post['cliente'];
+                $model->id_contrato = $post['contrato'];
+                $model->colaborador_agendamento = isset($post['colaboradorAgendamento']) ? $post['colaboradorAgendamento'] : null;
+                $model->data_agendamento = isset($post['dataAgendamento']) ? $post['dataAgendamento'] : null;
+                
+                // salva a model
+                if (!$model->save()) {
+                    $retorno->message = Helper::renderErrors($model->getErrors());
+                } else {
+                    $retorno->success = true;                
+                }
             } else {
-                $retorno->success = true;                
+                $retorno->message = 'O acionamento não foi encontrado. Por favor, recarregue a página e tente novamente.';
             }
         }
                 
