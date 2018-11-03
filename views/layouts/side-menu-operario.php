@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 ?>
 <div class="sidenav-header">
+	<img src="<?= \Yii::$app->request->baseUrl; ?>/img/logo.png"/>
     <a class="navbar-brand" href="<?= \Yii::$app->homeUrl; ?>">
     	Maklen <i>RC</i>
     </a>
