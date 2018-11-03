@@ -32,19 +32,11 @@ AppAsset::register($this);
                 	<div class="main-header">
                         <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
                 			<div id="main-container" class="container">
-                				<div class="navbar-header text-center">
-                                    <a class="navbar-brand" href="<?= \Yii::$app->homeUrl; ?>">
-                                    	Maklen <i>RC</i> <span class="separador">|</span>
-                                    </a>
-                                </div>
-                                <!-- ./brand -->
                                 <?= $this->render('menu'); ?>
-                                <!-- ./menu -->
                 			</div>
-                			<!-- ./main-container -->
                         </nav>
-                        <!-- ./navbar -->
                     </div>
+                    <!-- ./main menu -->
                		<div class="container-fluid">
                			<div class="sidenav">
                             <?php if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_ADMINISTRADOR): ?>
@@ -67,6 +59,7 @@ AppAsset::register($this);
                         </section>
                         <!-- ./section-content -->                            
                		</div> 
+               		<!-- ./main-content -->
             	</div>
                 <!-- .content-wrapper -->
             <?php $this->endBody() ?>

@@ -1,6 +1,12 @@
 <?php
 use yii\helpers\Url;
 ?>
+<div class="sidenav-header">
+    <a class="navbar-brand" href="<?= \Yii::$app->homeUrl; ?>">
+    	Maklen <i>RC</i>
+    </a>
+</div>
+<!-- ./brand -->
 <div class="sidenav-content">
 	<a href="<?= Url::to(['/contrato']); ?>"><i class="fa fa-file-invoice-dollar"></i>&nbsp; Contrato</a>
 	<a href="<?= Url::to(['/cliente']); ?>"><i class="fa fa-users"></i>&nbsp; Cliente</a>
@@ -10,11 +16,8 @@ use yii\helpers\Url;
 </div>
 <!-- ./conteudo do side nav -->
 <footer>
-	<p>&copy; Maklen RC</p>
-	<hr>
-   	<p><?= date('Y') ?> - v<?= \Yii::$app->params['version']; ?></p>
+	<p>
+		&copy; Maklen RC - <?= date('Y') ?> - v<?= \Yii::$app->params['version']; ?>
+	</p>
 </footer>
 <!-- ./footer do sidenav -->	
-		
-		
-		

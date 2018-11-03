@@ -19,7 +19,7 @@ class AppAsset extends AssetBundle
         'plugins/fontawesome-5.3.1/css/all.min.css',
         'plugins/jquery-confirm/jquery-confirm.css?v=1.0',
         'plugins/toastr/toastr.min.css',
-        'css/site.css?v=1.0',
+        'css/site.css?d=201811022229',
     ];
     public $js = [
         'plugins/jquery-confirm/jquery-confirm.js?v=1.0',

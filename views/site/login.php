@@ -10,7 +10,7 @@ $this->title = \Yii::$app->name;
     <div class="panel panel-default panel-box">
     	<div class="panel-body">
             <h2 class="text-center"><?= Html::encode($this->title); ?></h2>
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+            <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
             	<div class="row">
                 	<div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1 col-xs-12">
                         <div class="form-group">
@@ -53,7 +53,7 @@ $this->title = \Yii::$app->name;
 <!-- ./container -->
 <style type="text/css">
 #login-page {
-    background-image: url('<?= Url::home().'img/img-'.rand(1, 10); ?>.jpg');
+    background: linear-gradient(rgba(211, 211, 211, 0.05), rgba(94, 115, 255, 0.30)), url('<?= Url::home().'img/img-'.rand(1, 10); ?>.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
@@ -68,7 +68,9 @@ $this->title = \Yii::$app->name;
     width: 430px;
     left: 50%;
     margin-left: -215px;
-    box-shadow: 0px 2px 6px 0px rgba(0,0,0,.6);
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.5);
+    border-top: none;
 }
 #login-page .container .panel,
 #login-page .container .panel .panel-body {
@@ -77,7 +79,6 @@ $this->title = \Yii::$app->name;
 #login-page .container .panel .sys-info {
     margin-top: 20px;
     font-size: 10px;
-    color: #737373;
     font-weight: bold;
 }
 .content-error {
@@ -87,6 +88,13 @@ $this->title = \Yii::$app->name;
 }
 .alert {
     border-radius: 0px;
+}
+#login-page .container .panel,
+#login-page .container .panel .help-block {
+    color: #f2f2f2;
+}
+#login-page button.btn-primary {
+    background-color: #0984e3;
 }
 @media screen and (max-width: 480px) {
     #login-page .container .panel {
