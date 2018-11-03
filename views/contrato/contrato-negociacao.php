@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <input id="id-contrato" class="hidden" value="<?= $contrato->id; ?>"/>
 <!-- ./hidden id contrato -->
 <div class="row">
-	<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+	<div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
             	<h2 class="font16 text-primary">
@@ -49,29 +49,29 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+    <div class="col-md-5 col-sm-5 col-lg-5 col-xs-12">
     	<div class="row">
             <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
             	<h2 class="font16 text-primary">
             		<?= "Carteira {$contrato->carteira->id} - {$contrato->carteira->nome}"; ?>
             	</h2>
             </div>
-            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
             	<small>
                 	<b>Contrato:</b>&nbsp; <?= $contrato->num_contrato; ?>
             	</small>
             </div>
-            <div class="col-md-8 col-sm-8 col-lg-8 col-xs-12">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
             	<small>
                 	<b>Tipo:</b>&nbsp; <?= Contrato::getListaTipos()[$contrato->tipo]; ?>
             	</small>
             </div>
-            <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
             	<small>
                 	<b>CNPJ:</b>&nbsp; <?= Helper::mask($contrato->carteira->cnpj, Helper::MASK_CNPJ); ?>
             	</small>
             </div>
-            <div class="col-md-8 col-sm-8 col-lg-8 col-xs-12">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
             	<small>
                 	<b>Email:</b>&nbsp; <?= $contrato->carteira->email; ?>
             	</small>
