@@ -7,7 +7,7 @@ $this->title = 'Home';
 			<div class="card-body">
             	<h3 class="card-title"><i class="fa fa-user-plus"></i>&nbsp; Novos Clientes</h3>
             	<br>
-            	<?php if (1 > 1 && !empty($novosClientes)): ?>
+            	<?php if (!empty($novosClientes)): ?>
                 	<canvas id="card-cliente-chart" width="300" height="120"></canvas>
                 	<!-- ./grafico -->
                 	<div class="card-cliente-content hidden">
