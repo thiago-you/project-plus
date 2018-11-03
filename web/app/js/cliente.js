@@ -119,7 +119,35 @@ $(document).ready(function() {
 		// ativa o plugin e insere a lista de estados (const no main.js)
 		linha.find('select:last').select2({
 			'placeholder': 'Selecione o estado'
-		}).html(listaEstados).val('1').trigger('change.select2');
+		}).html(''
+			+ '<option value="1">Acre</option>'
+			+ '<option value="2">Alagoas</option>'
+			+ '<option value="3">Amazonas</option>'
+			+ '<option value="4">Amapá</option>'
+			+ '<option value="5">Bahia</option>'
+			+ '<option value="6">Ceará</option>'
+			+ '<option value="7">Distrito Federal</option>'
+			+ '<option value="8">Espírito Santo</option>'
+			+ '<option value="9">Goiás</option>'
+			+ '<option value="10">Maranhão</option>'
+			+ '<option value="11">Minas Gerais</option>'
+			+ '<option value="12">Mato Grosso do Sul</option>'
+			+ '<option value="13">Mato Grosso</option>'
+			+ '<option value="14">Pará</option>'
+			+ '<option value="15">Paraíba</option>'
+			+ '<option value="16">Pernambuco</option>'
+			+ '<option value="17">Piauí</option>'
+			+ '<option value="18">Paraná</option>'
+			+ '<option value="19">Rio de Janeiro</option>'
+			+ '<option value="20">Rio Grande do Norte</option>'
+			+ '<option value="21">Rondônia</option>'
+			+ '<option value="22">Roraima</option>'
+			+ '<option value="23">Rio Grande do Sul</option>'
+			+ '<option value="24">Santa Catarina</option>'
+			+ '<option value="25">Sergipe</option>'
+			+ '<option value="26">São Paulo</option>'
+			+ '<option value="27">Tocantins</option>'
+		).val('1').trigger('change.select2');
 	});
 
 	// deleta um registro
