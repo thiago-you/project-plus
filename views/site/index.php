@@ -7,16 +7,24 @@ $this->title = 'Home';
 			<div class="card-body">
             	<h3 class="card-title"><i class="fa fa-user-plus"></i>&nbsp; Novos Clientes</h3>
             	<br>
-            	<canvas id="card-cliente-chart" width="300" height="120"></canvas>
-            	<!-- ./grafico -->
-            	<div class="card-cliente-content hidden">
-            		<?php if (isset($novosClientes) && is_array($novosClientes)): ?>
-            			<?php foreach ($novosClientes as $cliente): ?>
-            				<span class="novos-clientes mes-<?= $cliente['mes'] ?>" data-quant="<?= $cliente['quant']; ?>"></span>
-            			<?php endforeach; ?>
-            		<?php endif; ?>
-            	</div>
-            	<!-- ./data do grafico -->
+            	<?php if (1 > 1 && !empty($novosClientes)): ?>
+                	<canvas id="card-cliente-chart" width="300" height="120"></canvas>
+                	<!-- ./grafico -->
+                	<div class="card-cliente-content hidden">
+                		<?php if (isset($novosClientes) && is_array($novosClientes)): ?>
+                			<?php foreach ($novosClientes as $cliente): ?>
+                				<span class="novos-clientes mes-<?= $cliente['mes'] ?>" data-quant="<?= $cliente['quant']; ?>"></span>
+                			<?php endforeach; ?>
+                		<?php endif; ?>
+                	</div>
+                	<!-- ./data do grafico -->
+            	<?php else: ?>
+            		<h4 class="text-center font16">
+            			<i class="fa fa-user-circle fa-fw fa-2x"></i>
+            			<br><br>
+            			Sem novos clientes no últimos 5 meses
+        			</h4>
+            	<?php endif; ?>
 			</div>
 		</div>
 		<!-- ./card -->
