@@ -255,6 +255,7 @@ use kartik\money\MaskMoney;
                                     'prefix' => 'R$ ',
                                     'precision' => 2,
 	                                'decimal' => ',',
+	                                'thousands' => '.',
                                 ],
                             ]);
                         ?>
@@ -322,7 +323,7 @@ $(document).ready(function() {
     // abre a modal para adicionar a parcela
     $('body').on('click', '#nova-parcela', function() {
         // busca a modal
-        let modalParcela = $('#modal-parcela');        
+        const modalParcela = $('#modal-parcela');        
             
         // exibe a modal
         modalParcela.modal('show');
@@ -333,14 +334,14 @@ $(document).ready(function() {
     // abre a modal de edicao da parcela
     $('body').on('click', '.editar-parcela', function() {
         // busca a linha e os valores
-        let linha = $(this).closest('tr');
+        const linha = $(this).closest('tr');
         
-        let parcelaNum = linha.attr('id').replace('linha-', '');
-        let vencimento = linha.find('td:nth-child(2)').find('input').val();
-        let valor = linha.find('td:nth-child(3)').text().trim();
+        const parcelaNum = linha.attr('id').replace('linha-', '');
+        const vencimento = linha.find('td:nth-child(2)').find('input').val();
+        const valor = linha.find('td:nth-child(3)').text().trim();
 
         // busca a modal
-        let modalParcela = $('#modal-parcela');        
+        const modalParcela = $('#modal-parcela');        
             
         // limpa os dados e exibe a modal
         modalParcela.find('#parcela-num').val(parcelaNum);
@@ -362,14 +363,14 @@ $(document).ready(function() {
     // adiciona a parcela na lista
     $('body').on('click', '#save-parcela', function() {
         // busca a modal e a tabela
-        let modalParcela = $('#modal-parcela');
-        let tabela = $('#table-parcelas tbody');
+        const modalParcela = $('#modal-parcela');
+        const tabela = $('#table-parcelas tbody');
 
         // pega os valores da modal
-        let parcelaNum = modalParcela.find('#parcela-num').val();
         let parcelaVencimento = modalParcela.find('#parcela-vencimento').val();
-        let parcelaValor = modalParcela.find('#parcela-valor').val();
-        let parcelaValorDisp = modalParcela.find('#parcela-valor-disp').val();
+        const parcelaNum = modalParcela.find('#parcela-num').val();
+        const parcelaValor = modalParcela.find('#parcela-valor').val();
+        const parcelaValorDisp = modalParcela.find('#parcela-valor-disp').val();
         const parcelaQuant = Number(modalParcela.find('#parcela-quant').val());
 
         // valida os valores da modal
