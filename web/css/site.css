@@ -488,7 +488,14 @@ section.main-content {
 }
 .sidenav footer p {
 	font-size: 10px;
-	padding: 7px 0 3px;
+	padding: 2px 0 3px;
+    display: block;
+    background: #172D44;
+    margin-bottom: 0px !important;
+}
+.sidenav footer p.datetime-clock {
+    font-size: 9px;
+    padding: 3px 0 0px;
     display: block;
     background: #172D44;
     margin-bottom: 0px !important;
@@ -497,33 +504,6 @@ section.main-content {
 	margin-bottom: 6px;
 	border-color: #f7f7f7;
 	width: 100%;
-}
-/* cards */
-.card {
-	width: 350px;
-	height: 200px;
-	box-shadow: 2px 2px 4px 0px rgba(0,0,0,.1);
-	border: 1px solid rgba(0,0,0,0.1);
-	border-radius: 2px;
-	background-color: #fff;
-    margin: 10px 20px;
-}
-.card .card-body {
-	padding-left: 20px;
-	padding-right: 10px;
-}
-.card .card-body .card-title {
-	font-size: 18px;
-}
-.card-header {
-    border-bottom: 1px solid rgba(0,0,0,0.5);
-    padding: 10px;
-}
-.card-info, .card-info .card-header {
-    border-color: #31708f;
-}
-.card-info .card-header {
-    background-color: #d9edf7;
 }
 /* custom fieldset */
 fieldset {

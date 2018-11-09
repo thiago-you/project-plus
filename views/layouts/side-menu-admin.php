@@ -17,6 +17,7 @@ use yii\helpers\Url;
 </div>
 <!-- ./conteudo do side nav -->
 <footer>
+	<p class="datetime-clock"></p>
 	<p>
 		&copy; Maklen RC - <?= date('Y') ?> - v<?= \Yii::$app->params['version']; ?>
 	</p>
