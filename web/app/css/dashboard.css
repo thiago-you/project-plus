@@ -1,0 +1,68 @@
+/* flex box */
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+/* cards */
+.card {
+    width: 430px;
+    height: 250px;
+    box-shadow: 2px 2px 4px 0px rgba(0,0,0,.1);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 2px;
+    background-color: #fff;
+    margin: 10px 20px;
+}
+.card .card-body {
+    padding-left: 20px;
+    padding-right: 10px;
+}
+.card .card-title {
+    font-size: 18px;
+}
+.card-header {
+    border-bottom: 1px solid rgba(0,0,0,0.5);
+    padding: 10px;
+}
+.card-info, .card-info .card-header {
+    border-color: #31708f;
+}
+.card-info .card-header {
+    background-color: #d9edf7;
+}
+.card.left {
+	margin-right: 80px;
+}
+/* card agendamento */
+.card-agendamento {	
+	display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.card-agendamento .card-header {
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom: none;
+    margin-bottom: 10px;    
+}
+.card-agendamento .card-body {
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 15px;
+	font-size: 9pt;  
+}
+.card-agendamento .card-body .item {
+	padding: 10px;
+	border: 1px solid rgba(0,0,0,0.2);
+	margin-bottom: 10px;
+}
+.card-agendamento .card-body .item p {
+    font-size: 8pt;  
+}
+.card-agendamento .card-body hr {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}

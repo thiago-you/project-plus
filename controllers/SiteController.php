@@ -22,6 +22,7 @@ use moonland\phpexcel\Excel;
 use app\models\ContratoParcela;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
+use app\models\Acionamento;
 
 class SiteController extends BaseController
 {
@@ -88,8 +89,17 @@ class SiteController extends BaseController
         ->asArray(true)
         ->all();
         
+        // busca os agendamentos para o colaborador logado
+        $agendamentos = Acionamento::find()->where([
+            //'colaborador_agendamento' => \Yii::$app->user->identity->id,
+            'colaborador_agendamento' => 1,
+        ])->andWhere([
+            '>=', 'data_agendamento', date('Y-m-d 00:00:00'),
+        ])->orderBy(['data_agendamento' => SORT_ASC])->all();
+        
         return $this->render('index', [
             'novosClientes' => $novosClientes,
+            'agendamentos' => $agendamentos,
         ]);
     }
 

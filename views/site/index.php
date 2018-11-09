@@ -1,14 +1,18 @@
 <?php 
+use yii\helpers\Url;
+use yii\bootstrap\BootstrapAsset;
+use app\base\Helper;
+
 $this->title = 'Home';
 ?>
 <div class="site-index">
-	<section>
-		<div class="card">
+	<section class="flex-container">
+		<div class="card left">
 			<div class="card-body">
             	<h3 class="card-title"><i class="fa fa-user-plus"></i>&nbsp; Novos Clientes</h3>
             	<br>
             	<?php if (!empty($novosClientes)): ?>
-                	<canvas id="card-cliente-chart" width="300" height="120"></canvas>
+                	<canvas id="card-cliente-chart" width="430" height="180"></canvas>
                 	<!-- ./grafico -->
                 	<div class="card-cliente-content hidden">
                 		<?php if (isset($novosClientes) && is_array($novosClientes)): ?>
@@ -27,7 +31,74 @@ $this->title = 'Home';
             	<?php endif; ?>
 			</div>
 		</div>
-		<!-- ./card -->
+		<!-- ./card clientes -->
+		<div class="card card-agendamento">
+			<div class="card-header">
+				<h3 class="card-title"><i class="fa fa-comment-alt"></i>&nbsp; Agendamentos</h3>
+			</div>
+			<!-- ./card-header -->
+			<div class="card-body">
+            	<?php if (!empty($agendamentos)): ?>
+					<?php foreach ($agendamentos as $agendamento): ?>
+						<div class="row">
+							<?php if ($agendamento == $agendamentos[0] && $agendamento->data_agendamento <= date('Y-m-d 23:59:59')): ?>
+								<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
+									<small>
+										<b>Agendamentos para Hoje</b>
+									</small>
+        						</div>
+        						<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 text-right">
+            						<small>
+            							<b>Data:</b>&nbsp; <?= Helper::dateMask($agendamento->data_agendamento, Helper::DATE_DATETIME); ?>
+            						</small>
+        						</div>
+							<?php elseif (!$labelProximoAgendamento && $agendamento->data_agendamento > date('Y-m-d 23:59:59')): ?>
+								<?php $labelProximoAgendamento = true; ?>
+								<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+									<hr>
+								</div>
+								<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
+    								<small>
+    									<b>Próximos Agendamentos</b>
+    								</small>
+								</div>
+								<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 text-right">
+            						<small>
+            							<b>Data:</b>&nbsp; <?= Helper::dateMask($agendamento->data_agendamento, Helper::DATE_DATETIME); ?>
+            						</small>
+        						</div>
+    						<?php else: ?>
+    							<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 text-right">
+            						<small>
+            							<b>Data:</b>&nbsp; <?= Helper::dateMask($agendamento->data_agendamento, Helper::DATE_DATETIME); ?>
+            						</small>
+        						</div>
+							<?php endif; ?>
+						</div>
+						<!-- ./row -->
+						<div class="item">
+							<small>
+								<b>Tipo:</b>&nbsp; <i><?= $agendamento->getTipo(); ?></i>
+        						<?php if (!empty($agendamento->subtipo)): ?>
+            						&nbsp; | &nbsp;
+            						<b>Subtipo:</b>&nbsp; <i><?= $agendamento->getSubtipo(); ?></i>
+        						<?php endif; ?>
+    						</small>	
+    						<br><br>
+    						<p><?= $agendamento->descricao; ?></p>								
+						</div>		
+						<!-- ./item -->					
+					<?php endforeach; ?>
+            	<?php else: ?>
+            		<h4 class="text-center font16">
+            			<i class="fa fa-comment-slash fa-fw fa-2x"></i>
+            			<br><br>
+            			Sem novos agendamentos
+        			</h4>
+            	<?php endif; ?>
+			</div>
+		</div>
+		<!-- ./card agendamentos -->
 	</section>
 	<!-- ./container -->
 </div>
@@ -108,5 +179,10 @@ $js = <<< JS
         });
     });
 JS;
-
+// JS
 $this->registerJs($js);
+// CSS
+$this->registerCssFile(Url::home().'app/css/dashboard.css', ['depends' => [BootstrapAsset::className()]]);
+?>
+
+
