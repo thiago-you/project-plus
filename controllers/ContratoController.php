@@ -232,7 +232,7 @@ class ContratoController extends Controller
         
         // valida se o contrato possui um carteira
         if (empty($contrato->id_carteira)) {
-            throw new UserException('Não foi encontrador o carteira do contrato.');
+            throw new UserException('Não foi encontrado a carteira do contrato.');
         }
         
         // pega a negociacao do contrato ou cria uma nova
@@ -260,6 +260,7 @@ class ContratoController extends Controller
             $retorno->content = $this->renderAjax('contrato-negociacao', [
                 'contrato' => $contrato,
                 'cliente' => $cliente,
+                'responsavel' => $cliente->responsavel,
                 'acionamentos' => $contrato->acionamentos,
                 'negociacao' => $negociacao,
                 'contratos' => $contratos,
@@ -272,6 +273,7 @@ class ContratoController extends Controller
         return $this->render('contrato-negociacao', [
             'contrato' => $contrato,
             'cliente' => $cliente,
+            'responsavel' => $cliente->responsavel,
             'acionamentos' => $contrato->acionamentos,
             'negociacao' => $negociacao,
             'contratos' => $contratos,

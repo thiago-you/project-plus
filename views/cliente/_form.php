@@ -26,6 +26,7 @@ use yii\helpers\ArrayHelper;
 			<!-- ./tabs -->
 			<div class="tab-content">
 				<div class="tab-pane active" id="tab-principal">
+					<br>
 					<div class="row">
 	        			<div class="col-md-3 col-sm-3 col-xs-12 col-lg-3">
 	                        <?= $form->field($model, 'tipo')->dropDownList([
@@ -151,7 +152,38 @@ use yii\helpers\ArrayHelper;
 		        		</div>
 		        		<!-- ./row -->
 					</div>	  
-					<!-- ./cliente fisico -->      		
+					<!-- ./cliente fisico -->     
+					<div class="row">
+	        			<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
+	                        <?= $form->field($model, 'tipo_cadastro')->widget(Select2::classname(), [
+					                'data' => [
+		                                Cliente::TIPO_CADASTRO_CLIENTE => 'Cliente',
+		                                Cliente::TIPO_CADASTRO_RESPONSAVEL => 'Responsável/Avalista',
+					                ],
+                                    'hideSearch' => true,
+                                    'pluginOptions' => [
+                                        'allowClear' => false,
+                                    ],
+	  						   ]);
+                            ?>
+	        			</div>
+	        			<div class="col-md-8 col-sm-8 col-lg-8 col-xs-12">
+	                        <?= $form->field($model, 'id_responsavel')->widget(Select2::classname(), [
+					                'data' => ArrayHelper::map(Cliente::find()->where([
+                                        'tipo_cadastro' => Cliente::TIPO_CADASTRO_RESPONSAVEL,
+					                ])->all(), 'id', 'nome'),
+                                    'disabled' => $model->tipo_cadastro == Cliente::TIPO_CADASTRO_RESPONSAVEL ? true : false,
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                    ],
+                                    'options' => [
+                                        'placeholder' => 'Selecione o responsável/avalista...',
+                                    ],
+	  						   ]);
+                            ?>
+	        			</div>
+	        		</div>
+	        		<!-- ./row --> 		
 				</div>
 				<!-- ./tab principal -->
 			  	<div class="tab-pane" id="tab-contato">

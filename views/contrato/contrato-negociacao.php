@@ -80,6 +80,39 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <!-- ./dados do cliente -->
+<?php if ($responsavel): ?>
+    <div class="row">
+        <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+                	<h2 class="font15 text-primary">
+                		Responsável/Avalista: 
+                		<?= $responsavel->id; ?>
+                		&nbsp;-&nbsp;
+                		<?= $responsavel->nome; ?>
+                	</h2>
+                </div>
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+                	<small>
+                    	<?php if (strlen($responsavel->documento) == 11) {
+                    	       echo '<b>CPF:</b>&nbsp; '.Helper::mask($responsavel->documento, Helper::MASK_CPF);
+                        	} else {            	    
+                        	    echo '<b>CNPJ:</b>&nbsp; '.Helper::mask($responsavel->documento, Helper::MASK_CNPJ); 
+                        	}
+                    	?>
+                	</small>
+                </div>
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+                	<small><b>Data de Nasc.:</b>&nbsp; <?= Helper::dateMask($responsavel->data_nascimento, Helper::DATE_DEFAULT); ?></small>
+                </div>
+                <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+                	<small><b>Endereço:</b>&nbsp; <?= $responsavel->getEnderecoCompleto(); ?></small>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+<!-- ./dados do responsavel do cliente -->
 <br>
 <div class="row">
     <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
@@ -111,6 +144,28 @@ $this->params['breadcrumbs'][] = $this->title;
     					  				</tr>
     				  				<?php endforeach; ?>
 				  				<?php endif; ?>
+				  				<?php if ($responsavel): ?>
+    				  				<?php if (is_array($responsavel->telefones) && !empty($responsavel->telefones)): ?>
+        			  					<tr>
+    					  					<td colspan="3">
+    					  						<b>Telefones do Responsável</b>
+    				  						</td>
+    					  				</tr>
+        			  					<?php foreach ($responsavel->telefones as $telefone): ?>
+        				  					<tr>
+        					  					<td>
+        					  						<?= Helper::mask($telefone->numero, Helper::MASK_TELEFONE); ?>
+        				  						</td>
+        					  					<td>
+        					  						<?= $telefone->getTipoDescricao(); ?>
+        				  						</td>
+        					  					<td>
+        					  						<?= $telefone->observacao; ?>
+        					  					</td>
+        					  				</tr>
+        				  				<?php endforeach; ?>
+    				  				<?php endif; ?>
+				  				<?php endif; ?>
     			  			</tbody>
     			  		</table>
 			  		</div>
@@ -136,6 +191,25 @@ $this->params['breadcrumbs'][] = $this->title;
     					  				</tr>
     				  				<?php endforeach; ?>
     			  				<?php endif; ?>
+    			  				<?php if ($responsavel): ?>
+    			  					<?php if (is_array($responsavel->emails) && !empty($responsavel->emails)): ?>
+    			  						<tr>
+    					  					<td colspan="3">
+    					  						<b>E-mails do Responsável</b>
+    				  						</td>
+    					  				</tr>
+        			  					<?php foreach ($responsavel->emails as $email): ?>
+        				  					<tr>
+        					  					<td>
+                                                    <?= $email->email; ?>
+        				  						</td>
+        					  					<td>
+        					  						<?= $email->observacao; ?>
+        					  					</td>
+        					  				</tr>
+        				  				<?php endforeach; ?>
+        			  				<?php endif; ?>
+    			  				<?php endif; ?>
     			  			</tbody>
     			  		</table>
 			  		</div>
@@ -157,6 +231,22 @@ $this->params['breadcrumbs'][] = $this->title;
     					  				</tr>
     				  				<?php endforeach; ?>
     			  				<?php endif; ?>
+    			  				<?php if ($responsavel): ?>
+    			  					<?php if (is_array($responsavel->enderecos) && !empty($responsavel->enderecos)): ?>
+    			  						<tr>
+    					  					<td colspan="3">
+    					  						<b>Endereços do Responsável</b>
+    				  						</td>
+    					  				</tr>
+        			  					<?php foreach ($responsavel->enderecos as $endereco): ?>
+        				  					<tr>
+        					  					<td>
+        					  						<?= $endereco->getEnderecoCompleto(); ?>
+        				  						</td>
+        					  				</tr>
+        				  				<?php endforeach; ?>
+        			  				<?php endif; ?>
+    			  				<?php endif; ?>	
     			  			</tbody>
     			  		</table>
 			  		</div>

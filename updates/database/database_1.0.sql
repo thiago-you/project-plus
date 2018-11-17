@@ -16,6 +16,7 @@ USE `maklenrc`;
 -- cria a tabela de clientes
 CREATE TABLE `cliente` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_responsavel` INT NULL,
   `nome` VARCHAR(250) NOT NULL COMMENT 'Razao social ou nome do cliente',
   `nome_social` VARCHAR(250) COMMENT 'Nome fantasia ou apelido do cliente',
   `rg` VARCHAR(14),
@@ -32,7 +33,9 @@ CREATE TABLE `cliente` (
   `profissao` VARCHAR(100),
   `salario` DECIMAL(10,2),
   `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
-  `tipo` ENUM('F', 'J') NOT NULL DEFAULT 'F' COMMENT 'Flag que valida se o cliente é tipo fisico (F) ou juridico (J)'
+  `tipo` ENUM('F', 'J') NOT NULL DEFAULT 'F' COMMENT 'Flag que valida se o cliente é tipo fisico (F) ou juridico (J)',
+  `tipo_cadastro` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Flag que valida se o cliente é responsável/avalista de outro cliente',
+  FOREIGN KEY (`id_responsavel`) REFERENCES `cliente`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de colaborador
 CREATE TABLE `colaborador` (

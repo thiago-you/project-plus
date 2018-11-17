@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         			<?= Html::label('Carteira', 'carteira'); ?>
         			<?= Html::dropDownList('carteira', null, $carteiraes, [
                             'id' => 'carteira',
-			                'prompt' => 'Selecione o carteira para a importação ...',
+			                'prompt' => 'Selecione a carteira para a importação ...',
 			                'class' => 'form-control',
             			]); 
         			?>

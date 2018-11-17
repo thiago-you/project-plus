@@ -168,6 +168,15 @@ $(document).ready(function() {
             cidadesSelect.html(response);
         });
 	});
+	
+	// valida o tipo de cadastro do cliente
+	$('body').on('change', '#cliente-tipo_cadastro', function() {
+		if (this.value == 1) {
+			$('#cliente-id_responsavel').prop('disabled', false);
+		} else {
+			$('#cliente-id_responsavel').val('').trigger('change').prop('disabled', true);
+		}
+	});
 });
 
 
