@@ -50,6 +50,19 @@ $(document).ready(function() {
         
         return false;
 	});
+	
+	// realiza a navegação do menu
+	$('body').on('click', '.sidenav-content ul li.section-item > a', function(e) {
+		e.preventDefault();
+		
+		if (!$(this).siblings('ul').is(':visible')) {
+			$(this).addClass('active').siblings('ul').slideDown();
+		} else {
+			$(this).removeClass('active').siblings('ul').slideUp();
+		}
+		
+		return false;
+	});
 });
 
 // cria o relogio no rodape do menu lateral

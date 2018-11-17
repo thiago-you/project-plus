@@ -9,8 +9,14 @@ use yii\helpers\Url;
 </div>
 <!-- ./brand -->
 <div class="sidenav-content">
-	<a href="<?= Url::to(['/contrato']); ?>"><i class="fa fa-file-invoice-dollar"></i>&nbsp; Contrato</a>
-	<a href="<?= Url::to(['/colaborador']); ?>"><i class="fa fa-user"></i>&nbsp; Colaborador</a>
+	<ul>
+		<li>
+        	<a href="<?= Url::to(['/contrato']); ?>"><i class="fa fa-file-invoice-dollar"></i>&nbsp; Contrato</a>
+    	</li>
+    	<li>
+        	<a href="<?= Url::to(['/colaborador']); ?>"><i class="fa fa-user"></i>&nbsp; Colaborador</a>
+    	</li>
+	</ul>
 </div>
 <!-- ./conteudo do side nav -->
 <footer>

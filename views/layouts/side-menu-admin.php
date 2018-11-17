@@ -9,11 +9,31 @@ use yii\helpers\Url;
 </div>
 <!-- ./brand -->
 <div class="sidenav-content">
-	<a href="<?= Url::to(['/contrato']); ?>"><i class="fa fa-file-invoice-dollar"></i>&nbsp; Contrato</a>
-	<a href="<?= Url::to(['/cliente']); ?>"><i class="fa fa-users"></i>&nbsp; Cliente</a>
-	<a href="<?= Url::to(['/colaborador']); ?>"><i class="fa fa-user"></i>&nbsp; Colaborador</a>
-	<a href="<?= Url::to(['/carteira']); ?>"><i class="fa fa-university"></i>&nbsp; Carteira</a>
-	<a href="<?= Url::to(['/site/importacao']); ?>"><i class="fa fa-file-upload"></i>&nbsp; Importação</a>
+	<ul>
+		<li class="section-item">
+        	<a href="#" class="item"><i class="fa fa-file-invoice-dollar fa-fw"></i>&nbsp; Contrato<i class="fa fa-chevron-down fa-fw"></i></a>
+        	<ul class="child-menu">
+        		<li>
+        			<a href="<?= Url::to(['/contrato']); ?>">Contratos</a>
+        		</li>
+        		<li>
+        			<a href="<?= Url::to(['/contrato-tipo']); ?>">Tipos</a>
+        		</li>
+        	</ul>
+		</li>
+		<li>
+        	<a href="<?= Url::to(['/cliente']); ?>" class="item"><i class="fa fa-users fa-fw"></i>&nbsp; Cliente</a>
+		</li>
+		<li>
+	    	<a href="<?= Url::to(['/colaborador']); ?>" class="item"><i class="fa fa-user fa-fw"></i>&nbsp; Colaborador</a>
+		</li>
+		<li>
+        	<a href="<?= Url::to(['/carteira']); ?>" class="item"><i class="fa fa-university fa-fw"></i>&nbsp; Carteira</a>
+		</li>
+		<li>
+        	<a href="<?= Url::to(['/site/importacao']); ?>" class="item"><i class="fa fa-file-upload fa-fw"></i>&nbsp; Importação</a>
+		</li>
+	</ul>
 </div>
 <!-- ./conteudo do side nav -->
 <footer>
