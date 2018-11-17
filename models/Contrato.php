@@ -131,31 +131,6 @@ class Contrato extends \yii\db\ActiveRecord
     }
     
     /**
-     * Retorna a lista de tipos do contrato
-     */
-    public static function getListaTipos() 
-    {
-        return [
-            '1' => 'Boleto / Mensalidade',
-            '2' => 'Capital de Giro Fisica',
-            '3' => 'Capital de Giro Juridica',
-            '4' => 'Cheque',
-            '5' => 'Curso Profissionalizante',
-            '6' => 'Depósito Indevido',
-            '7' => 'Desc. Cheque-Fisica',
-            '8' => 'Desc. Cheque-Juridica',
-            '9' => 'Desconto P. Juridica',
-            '10' => 'Ensino',
-            '11' => 'Espanhol',
-            '12' => 'Inglês',
-            '13' => 'Material Didadíco',
-            '14' => 'Mensalidade',
-            '15' => 'Nota Fiscal',
-            '16' => 'Nota Promissória',
-        ];
-    }
-    
-    /**
      * @inheritDoc
      * @see \yii\db\BaseActiveRecord::beforeSave()
      */
@@ -200,22 +175,16 @@ class Contrato extends \yii\db\ActiveRecord
     }
 
     /**
-     * Retorna um tipo pelo codigo
-     */
-    public static function getTipoByCod($tipo)
-    {
-        return self::getListaTipos()[$tipo];
-    }
-    
-    /**
      * Retorna um tipo pelo nome
      */
     public static function getTipoByName($name) 
     {
-        $listaTipos = self::getListaTipos(); 
-        $tipo = array_search(ucfirst(strtolower($name)), $listaTipos);
+        $tipo = ContratoTipo::find()->where([
+            'ativo' => ContratoTipo::ATIVO,
+            'descricao' => $name,
+        ])->orderBy(['id' => SORT_DESC])->one(); 
         
-        return $tipo ? $tipo : 1;
+        return $tipo ? $tipo : null;
     }
     
     /**
