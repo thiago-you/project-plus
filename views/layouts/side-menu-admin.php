@@ -17,6 +17,9 @@ use yii\helpers\Url;
         			<a href="<?= Url::to(['/contrato']); ?>">Contratos</a>
         		</li>
         		<li>
+        			<a href="<?= Url::to(['/contrato/create']); ?>">Novo Contrato</a>
+        		</li>
+        		<li>
         			<a href="<?= Url::to(['/contrato-tipo']); ?>">Tipos</a>
         		</li>
         	</ul>
