@@ -145,6 +145,12 @@ CREATE TABLE `carteira_calculo` (
   `parcela_num` INT COMMENT 'Numero da parcela qunado o tipo for parcelado',
   FOREIGN KEY (`id_campanha`) REFERENCES `carteira_campanha`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- cria a tabela de tipo de contrato
+CREATE TABLE `contrato_tipo` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `descricao` VARCHAR(100) NOT NULL,
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S'
+);
 -- cria a tabela de contrato
 CREATE TABLE `contrato` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -158,13 +164,14 @@ CREATE TABLE `contrato` (
   `data_cadastro` DATE NOT NULL,
   `data_vencimento` DATE,
   `data_negociacao` DATE,
-  `tipo` TINYINT(1) DEFAULT '1',
+  `tipo` INT NOT NULL,
   `regiao` VARCHAR(50),
   `filial` VARCHAR(50),
   `observacao` VARCHAR(250),
   `situacao` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar as situacoes possiveis',
   FOREIGN KEY (`id_cliente`) REFERENCES `cliente`(`id`),
-  FOREIGN KEY (`id_carteira`) REFERENCES `carteira`(`id`)
+  FOREIGN KEY (`id_carteira`) REFERENCES `carteira`(`id`),
+  FOREIGN KEY (`tipo`) REFERENCES `contrato_tipo`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de negociacao
 CREATE TABLE `negociacao` (
@@ -230,3 +237,27 @@ CREATE TABLE `acionamento` (
   FOREIGN KEY (`colaborador_agendamento`) REFERENCES `colaborador`(`id`),
   FOREIGN KEY (`id_contrato`) REFERENCES `contrato`(`id`)
 );
+-- --------------------------------------------------------------------------
+-- Insere os valores iniciais de algumas tabelas
+-- --------------------------------------------------------------------------
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Boleto / Mensalidade', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Capital de Giro Fisica', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Capital de Giro Juridica', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Cheque', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Curso Profissionalizante', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Depósito Indevido', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Desc. Cheque-Fisica', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Desc. Cheque-Juridica', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Desconto P. Juridica', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Ensino', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Espanhol', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Inglês', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Material Didadíco', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Mensalidade', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Nota Fiscal', 'S');
+INSERT INTO `contrato_tipo` (`descricao`, `ativo`) VALUES ('Nota Promissória', 'S');
+
+
+
+
+
