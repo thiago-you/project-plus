@@ -184,7 +184,7 @@ class Contrato extends \yii\db\ActiveRecord
             'descricao' => $name,
         ])->orderBy(['id' => SORT_DESC])->one(); 
         
-        return $tipo ? $tipo : null;
+        return $tipo ? $tipo->id : null;
     }
     
     /**
