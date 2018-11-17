@@ -164,7 +164,7 @@ CREATE TABLE `contrato` (
   `data_cadastro` DATE NOT NULL,
   `data_vencimento` DATE,
   `data_negociacao` DATE,
-  `tipo` INT NOT NULL,
+  `tipo` INT NULL,
   `regiao` VARCHAR(50),
   `filial` VARCHAR(50),
   `observacao` VARCHAR(250),
