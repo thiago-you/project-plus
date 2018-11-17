@@ -1,16 +1,15 @@
 <?php
 use yii\web\View;
 use app\base\Helper;
-use app\models\Carteira;
 use app\models\Cliente;
+use app\models\Carteira;
 use kartik\helpers\Html;
-use app\models\Contrato;
 use kartik\date\DatePicker;
 use kartik\form\ActiveForm;
-use yii\helpers\ArrayHelper;
 use kartik\money\MaskMoney;
 use kartik\select2\Select2;
 use app\models\ContratoTipo;
+use yii\helpers\ArrayHelper;
 ?>
 <?php $form = ActiveForm::begin(); ?>
 	<div class="panel panel-primary panel-box">
@@ -94,6 +93,12 @@ use app\models\ContratoTipo;
             		                'data' => ArrayHelper::map(ContratoTipo::find()->where([
         		                         'ativo' => ContratoTipo::ATIVO       
             		                ])->all(), 'id', 'descricao'),
+            		                'pluginOptions' => [
+		                                'allowClear' => true,
+            		                ],
+            		                'options' => [
+		                                'placeholder' => 'Selecione o tipo...'
+            		                ],
                         		]); 
                     		?>
                     	</div>
