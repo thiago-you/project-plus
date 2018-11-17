@@ -80,7 +80,7 @@ echo GridView::widget([
         ],
     ], */
     'toolbar' => [
-        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Carteira', ['create'], ['class' => Helper::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Carteira', 'data-toggle' => 'tooltip',])],
+        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Carteira', ['create'], ['class' => Helper::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Nova Carteira', 'data-toggle' => 'tooltip',])],
         ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Helper::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
         '{toggleData}',
     ],

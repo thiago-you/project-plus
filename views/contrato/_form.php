@@ -9,6 +9,8 @@ use kartik\date\DatePicker;
 use kartik\form\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\money\MaskMoney;
+use kartik\select2\Select2;
+use app\models\ContratoTipo;
 ?>
 <?php $form = ActiveForm::begin(); ?>
 	<div class="panel panel-primary panel-box">
@@ -50,7 +52,7 @@ use kartik\money\MaskMoney;
                 	<div class="row">
                 		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
                 			<?= $form->field($model, 'id_carteira')->dropDownList(ArrayHelper::map(Carteira::find()->all(), 'id', 'nome'), [
-	                                'prompt' => 'Selecione o carteira...',
+	                                'prompt' => 'Selecione a carteira...',
                     			]); 
                 			?>
                 		</div>
@@ -88,8 +90,10 @@ use kartik\money\MaskMoney;
                 	<!-- ./row -->
                 	<div class="row">
                     	<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-                    		<?= $form->field($model, 'tipo')->dropDownList(Contrato::getListaTipos(), [
-                                    'prompt' => '',
+                    		<?= $form->field($model, 'tipo')->widget(Select2::className(), [
+            		                'data' => ArrayHelper::map(ContratoTipo::find()->where([
+        		                         'ativo' => ContratoTipo::ATIVO       
+            		                ])->all(), 'id', 'descricao'),
                         		]); 
                     		?>
                     	</div>

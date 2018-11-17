@@ -82,7 +82,7 @@ class CarteiraController extends Controller
                 }
                 
                 $transaction->commit();
-                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O carteira foi alterado com sucesso.');
+                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; A carteira foi alterado com sucesso.');
                 return $this->redirect(['configuracao', 'id' => $model->id]);
             } catch (\Exception $e) {
                 $transaction->rollBack();
@@ -119,7 +119,7 @@ class CarteiraController extends Controller
                 }
 
                 $transaction->commit();
-                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O carteira foi alterado com sucesso.');
+                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; A carteira foi alterado com sucesso.');
                 return $this->redirect(['index']);
             } catch (\Exception $e) {
                 $transaction->rollBack();
@@ -133,7 +133,7 @@ class CarteiraController extends Controller
     }
 
     /**
-     * Configuração de campanha e cálculo do carteira
+     * Configuração de campanha e cálculo da carteira
      */
     public function actionConfiguracao($id)
     {
@@ -145,7 +145,7 @@ class CarteiraController extends Controller
     }
     
     /**
-     * Atualiza a campanha do carteira
+     * Atualiza a campanha da carteira
      */
     public function actionUpdateCampanha()
     {
@@ -154,7 +154,7 @@ class CarteiraController extends Controller
             throw new NotFoundHttpException();
         }
         
-        // busca o carteira
+        // busca a carteira
         $model = $this->findModel($post['id_carteira']);
         
         try {
@@ -191,7 +191,7 @@ class CarteiraController extends Controller
             $model->delete();
             
             $transaction->commit();
-            \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O carteira foi excluído com sucesso.');
+            \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; A carteira foi excluído com sucesso.');
         } catch (IntegrityException $e) {
             $transaction->rollBack();
             \Yii::$app->session->setFlash('danger', '<i class="fa fa-exclamation-triangle"></i>&nbsp; A carteira não pode ser deletada pois possui dados vinculados.');

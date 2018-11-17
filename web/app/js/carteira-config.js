@@ -104,7 +104,7 @@ $(document).ready(function() {
         $.post(BASE_PATH + 'carteira/update-campanha', postData, function(response) {
             let data = JSON.parse(response);
             if (data.success == false) {
-                toastr.error('Não foi possível atualizar o carteira. Por favor, tente novamente mais tarde.');
+                toastr.error('Não foi possível atualizar a carteira. Por favor, tente novamente mais tarde.');
             }
 
             // exibe animação de carregamento
@@ -115,7 +115,7 @@ $(document).ready(function() {
                 $('#lista-faixas').html(response);
             });
         }).fail(function() {
-            toastr.error('Não foi possível atualizar o carteira. Por favor, tente novamente mais tarde.');
+            toastr.error('Não foi possível atualizar a carteira. Por favor, tente novamente mais tarde.');
         }).always(function() {
             $('#carteira-id_campanha').prop('disabled', false);
         });    

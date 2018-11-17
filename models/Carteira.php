@@ -25,7 +25,7 @@ use app\base\Helper;
  * @property string $cep
  * @property int    $cidade_id
  * @property int    $estado_id
- * @property string $logo Caminho para a logo do carteira
+ * @property string $logo Caminho para a logo da carteira
  * @property string $codigo
  * @property string $sigla
  *
@@ -34,7 +34,7 @@ use app\base\Helper;
  */
 class Carteira extends \yii\db\ActiveRecord
 {
-	// flag que determina se o carteira esta ativo ou nao
+	// flag que determina se a carteira esta ativo ou nao
 	CONST ATIVO = 'S';
 	CONST NAO_ATIVO = 'N';
 	// const para o tipo
@@ -138,7 +138,7 @@ class Carteira extends \yii\db\ActiveRecord
      */
     public function beforeDelete() 
     {
-        // deleta todas as campanhas do carteira
+        // deleta todas as campanhas da carteira
         foreach($this->carteiraCampanhas as $campanha) {
             $campanha->delete();
         }
