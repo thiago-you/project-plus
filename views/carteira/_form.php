@@ -32,7 +32,7 @@ use app\models\Cidade;
     			<div class="col-md-2 col-sm-2 col-xs-12 col-lg-2">
                     <?= $form->field($model, 'ativo')->dropDownList([
                         	Carteira::ATIVO => 'Ativo',
-                            Carteira::NAO_ATIVO => 'Não Ativo',
+                            Carteira::NAO_ATIVO => 'Inativo',
                         ]); 
                     ?>
     			</div>

@@ -2,13 +2,15 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\ContratoTipo;
-use app\models\ContratoTipoSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Colaborador;
+use app\models\ContratoTipo;
 use yii\db\IntegrityException;
+use app\models\ContratoTipoSearch;
+use yii\web\NotFoundHttpException;
+use yii\base\UserException;
+use app\base\Helper;
 
 /**
  * ContratoTipoController implements the CRUD actions for ContratoTipo model.
@@ -58,16 +60,23 @@ class ContratoTipoController extends Controller
     }
 
     /**
-     * Creates a new ContratoTipo model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Cadastra um novo tipo de contrato
      */
     public function actionCreate()
     {
         $model = new ContratoTipo();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($post = \Yii::$app->request->post()) {
+            try {
+                if (!$model->load($post) || !$model->save()) {
+                    throw new UserException(Helper::renderErrors($model->getErrors()));
+                }
+                
+                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O tipo de contrato foi cadastrado com sucesso.');
+                return $this->redirect(['index']);
+            } catch (\Exception $e) {
+                \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
+            }
         }
 
         return $this->render('create', [
@@ -76,18 +85,23 @@ class ContratoTipoController extends Controller
     }
 
     /**
-     * Updates an existing ContratoTipo model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * Altera o tipo do contrato
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($post = \Yii::$app->request->post()) {
+            try {
+                if (!$model->load($post) || !$model->save()) {
+                    throw new UserException(Helper::renderErrors($model->getErrors()));
+                }
+                
+                \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O tipo de contrato foi alterado com sucesso.');
+                return $this->redirect(['index']);
+            } catch (\Exception $e) {
+                \Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
+            }
         }
 
         return $this->render('update', [
@@ -96,11 +110,7 @@ class ContratoTipoController extends Controller
     }
 
     /**
-     * Deletes an existing ContratoTipo model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * Deleta o tipo de contrato
      */
     public function actionDelete($id)
     {
@@ -127,11 +137,7 @@ class ContratoTipoController extends Controller
     }
 
     /**
-     * Finds the ContratoTipo model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return ContratoTipo the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * Busca a model
      */
     protected function findModel($id)
     {

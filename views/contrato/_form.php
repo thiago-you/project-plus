@@ -91,8 +91,8 @@ use yii\helpers\ArrayHelper;
                     	<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
                     		<?= $form->field($model, 'tipo')->widget(Select2::className(), [
             		                'data' => ArrayHelper::map(ContratoTipo::find()->where([
-        		                         'ativo' => ContratoTipo::ATIVO       
-            		                ])->all(), 'id', 'descricao'),
+        		                         'ativo' => ContratoTipo::ATIVO,       
+            		                ])->orderBy(['descricao' => SORT_ASC])->all(), 'id', 'descricao'),
             		                'pluginOptions' => [
 		                                'allowClear' => true,
             		                ],

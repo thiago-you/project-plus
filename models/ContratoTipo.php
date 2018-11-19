@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use Yii;
@@ -48,7 +47,7 @@ class ContratoTipo extends \yii\db\ActiveRecord
         return [
             'id' => 'Cód.',
             'descricao' => 'Descrição',
-            'ativo' => 'Ativo',
+            'ativo' => 'Status',
         ];
     }
 
