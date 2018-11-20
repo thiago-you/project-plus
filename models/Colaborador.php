@@ -36,7 +36,8 @@ class Colaborador extends \yii\db\ActiveRecord
             [['nome', 'username', 'password'], 'required'],
             [['nome'], 'string', 'max' => 250],
             [['cargo', 'id_carteira'], 'integer'],
-            [['username', 'password', 'authKey'], 'string', 'max' => 30],
+            [['username', 'authKey'], 'string', 'max' => 30],
+            [['password'], 'string', 'max' => 60],
             ['username', function ($attribute, $params, $validator) {
                 if (strtoupper($this->$attribute) == 'ADMIN') {
                     $this->addError($attribute, 'O username "Admin" é reservado pelo sistema.');
@@ -97,5 +98,21 @@ class Colaborador extends \yii\db\ActiveRecord
         $admin->isNewRecord = false;
         
         return $admin;
+    }
+    
+    /** 
+     * {@inheritDoc}
+     * @see \yii\db\BaseActiveRecord::beforeSave()
+     */
+    public function beforeSave($insert) 
+    {
+        // transforma o password em um hash
+        if ($insert || !empty($this->password) && $this->password != $this->oldAttributes['password']) {
+            $this->password = \Yii::$app->getSecurity()->generatePasswordHash($this->password);
+        } else {
+            $this->password = $this->oldAttributes['password'];
+        }
+        
+        return parent::beforeSave($insert);
     }
 }

@@ -140,7 +140,7 @@ class ColaboradorController extends Controller
                 if (!$model->save()) {
                     throw new \Exception(Helper::renderErrors($model->getErrors()));
                 }
-                
+
                 $transaction->commit();
                 \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O colaborador foi alterado com sucesso.');
                 return $this->redirect(['index']);

@@ -8,7 +8,7 @@ use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use app\models\Carteira;
 ?>
-<?php $form = ActiveForm::begin(['options' => ['data-new' => $model->isNewRecord ? '1' : '0']]); ?>
+<?php $form = ActiveForm::begin(); ?>
 	<div class="panel panel-primary panel-box">
 		<div class="panel-body">
             <div class="row">
@@ -29,7 +29,7 @@ use app\models\Carteira;
             	</div>
         		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
         			<input style="display: none;">
-            		<?= $form->field($model, 'password', ['enableClientValidation' => false])->passwordInput(['maxlength' => true, 'data-senha' => $model->password]); ?>
+            		<?= $form->field($model, 'password', ['enableClientValidation' => false])->passwordInput(['maxlength' => true, 'data-hash' => $model->password, 'value' => $model->password]); ?>
             	</div>
             	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 <?= $model->cargo == Colaborador::CARGO_CLIENTE ? '' : 'd-none'; ?>">
                 	<div class="col-carteira">
@@ -83,21 +83,9 @@ use app\models\Carteira;
 <?php 
 $script = <<<JS
     $(document).ready(function() {
-        // remove o autocomplete do browser
-        $(window).on('load', function() {
-            if ($('form').data('new') ==  '1') {
-                $('#colaborador-username').val('').trigger('change');
-                $('#colaborador-password').val('').trigger('change');
-            } else {
-                $('#colaborador-username').val($('#colaborador-username').data('user')).trigger('change');
-                $('#colaborador-password').val($('#colaborador-password').data('senha')).trigger('change');
-            }
-        });
-
         // show/hide do select da carteira quando o cargo for alterado
         $('body').on('change', '#colaborador-cargo', function() {
             // 3 => cliente
-            console.log('to aqui', this.value);
             if (this.value == 3) {
                 $('.col-carteira').slideDown();
             } else {
@@ -105,6 +93,40 @@ $script = <<<JS
                     $('#colaborador-id_carteira').val('').trigger('change');
                 });
             }
+        });
+
+        // select all on focus
+        $('#colaborador-password').on('click', function(e) {
+           $(this).select();
+        });
+
+        // primeira verificação para remover o autofill
+        $(window).on('load', function() {
+            const passInput = $('#colaborador-password');
+            if (passInput.data('hash') != undefined && passInput.data('hash').length > 0) {
+                passInput.val(passInput.data('hash')).trigger('change');
+            } else {
+                passInput.val('').trigger('change');
+            }
+        });
+
+        // segunda verificação para remover o autofill
+        $('#colaborador-password').on('change', function(e) {
+            const passInput = $(this);
+            if (e.originalEvent === undefined) {
+                setTimeout(function() {
+                    if (passInput.val().length > 0 && passInput.data('hash') == undefined || passInput.val() != passInput.data('hash')) {
+                        passInput.val('').trigger('change');
+                    }
+                }, 100);
+                setTimeout(function() {
+                    if (passInput.val().length > 0 && passInput.data('hash') == undefined || passInput.val() != passInput.data('hash')) {
+                        passInput.val('').trigger('change');
+                    }
+                }, 300);
+            }
+
+            return true;
         });
     });
 JS;
