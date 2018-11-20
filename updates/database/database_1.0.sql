@@ -37,15 +37,6 @@ CREATE TABLE `cliente` (
   `tipo_cadastro` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Flag que valida se o cliente é responsável/avalista de outro cliente',
   FOREIGN KEY (`id_responsavel`) REFERENCES `cliente`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
--- cria a tabela de colaborador
-CREATE TABLE `colaborador` (
-  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `nome` VARCHAR(250) NOT NULL,
-  `username` VARCHAR(30) NOT NULL,
-  `password` VARCHAR(30) NOT NULL,
-  `authKey` CHAR(30),
-  `cargo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os cargos possiveis'
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de telefone
 CREATE TABLE `telefone` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -144,6 +135,17 @@ CREATE TABLE `carteira_calculo` (
   `desc_honorario_max` DECIMAL(7,4) DEFAULT 0.0000 COMMENT 'desconto máximo permitido dos honorarios',
   `parcela_num` INT COMMENT 'Numero da parcela qunado o tipo for parcelado',
   FOREIGN KEY (`id_campanha`) REFERENCES `carteira_campanha`(`id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+-- cria a tabela de colaborador
+CREATE TABLE `colaborador` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id_carteira` INT NULL,
+  `nome` VARCHAR(250) NOT NULL,
+  `username` VARCHAR(30) NOT NULL,
+  `password` VARCHAR(30) NOT NULL,
+  `authKey` CHAR(30),
+  `cargo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os cargos possiveis',
+  FOREIGN KEY (`id_carteira`) REFERENCES `carteira`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 -- cria a tabela de tipo de contrato
 CREATE TABLE `contrato_tipo` (
