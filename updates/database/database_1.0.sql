@@ -142,7 +142,7 @@ CREATE TABLE `colaborador` (
   `id_carteira` INT NULL,
   `nome` VARCHAR(250) NOT NULL,
   `username` VARCHAR(30) NOT NULL,
-  `password` VARCHAR(30) NOT NULL,
+  `password` VARCHAR(60) NOT NULL,
   `authKey` CHAR(30),
   `cargo` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Consultar model para checar os cargos possiveis',
   FOREIGN KEY (`id_carteira`) REFERENCES `carteira`(`id`)
