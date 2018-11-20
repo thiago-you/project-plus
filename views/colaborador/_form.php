@@ -4,6 +4,9 @@ use app\base\Helper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Colaborador;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+use app\models\Carteira;
 ?>
 <?php $form = ActiveForm::begin(['options' => ['data-new' => $model->isNewRecord ? '1' : '0']]); ?>
 	<div class="panel panel-primary panel-box">
@@ -14,7 +17,7 @@ use app\models\Colaborador;
                 </div>
                 <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
                     <?= $form->field($model, 'cargo')->dropDownList(Colaborador::getListaCargos(), [
-                                    'disabled' => \Yii::$app->user->identity->cargo == Colaborador::CARGO_ADMINISTRADOR ? false : true,
+                            'disabled' => \Yii::$app->user->identity->cargo == Colaborador::CARGO_ADMINISTRADOR ? false : true,
                         ]); 
                     ?>
                 </div>
@@ -27,6 +30,23 @@ use app\models\Colaborador;
         		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
         			<input style="display: none;">
             		<?= $form->field($model, 'password', ['enableClientValidation' => false])->passwordInput(['maxlength' => true, 'data-senha' => $model->password]); ?>
+            	</div>
+            	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 <?= $model->cargo == Colaborador::CARGO_CLIENTE ? '' : 'd-none'; ?>">
+                	<div class="col-carteira">
+                		<?= $form->field($model, 'id_carteira')->widget(Select2::className(), [
+        		                'data' => ArrayHelper::map(Carteira::find()->where([
+        		                    'ativo' => Carteira::ATIVO,            
+        		                ])->all(), 'id', 'nome'),
+                                'disabled' => \Yii::$app->user->identity->cargo == Colaborador::CARGO_ADMINISTRADOR ? false : true,
+        		                'pluginOptions' => [
+                                    'allowClear' => true,
+        		                ],
+        		                'options' => [
+                                    'placeholder' => 'Selecione ...',
+        		                ],
+                            ]); 
+                        ?>
+                	</div>
             	</div>
         	</div>
         	<!-- ./row -->
@@ -71,6 +91,19 @@ $script = <<<JS
             } else {
                 $('#colaborador-username').val($('#colaborador-username').data('user')).trigger('change');
                 $('#colaborador-password').val($('#colaborador-password').data('senha')).trigger('change');
+            }
+        });
+
+        // show/hide do select da carteira quando o cargo for alterado
+        $('body').on('change', '#colaborador-cargo', function() {
+            // 3 => cliente
+            console.log('to aqui', this.value);
+            if (this.value == 3) {
+                $('.col-carteira').slideDown();
+            } else {
+                $('.col-carteira').slideUp(function() {
+                    $('#colaborador-id_carteira').val('').trigger('change');
+                });
             }
         });
     });

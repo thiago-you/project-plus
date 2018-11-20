@@ -35,6 +35,9 @@ body {
 .no-margin .panel-body {
     padding: 0px !important;
 }
+.d-none {
+    display: none;	
+}
 /* add sorting icons to gridview sort links */
 a.asc:after, a.desc:after {
     position: relative;

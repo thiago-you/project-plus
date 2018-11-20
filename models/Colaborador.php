@@ -5,6 +5,7 @@ namespace app\models;
  * This is the model class for table "colaborador".
  *
  * @property int $id
+ * @property int $id_carteira Carteira do cliente
  * @property string $nome
  * @property string $username
  * @property string $password
@@ -34,7 +35,7 @@ class Colaborador extends \yii\db\ActiveRecord
         return [
             [['nome', 'username', 'password'], 'required'],
             [['nome'], 'string', 'max' => 250],
-            [['cargo'], 'integer'],
+            [['cargo', 'id_carteira'], 'integer'],
             [['username', 'password', 'authKey'], 'string', 'max' => 30],
             ['username', function ($attribute, $params, $validator) {
                 if (strtoupper($this->$attribute) == 'ADMIN') {
@@ -56,6 +57,7 @@ class Colaborador extends \yii\db\ActiveRecord
             'password' => 'Senha',
             'authKey' => 'authKey',
             'cargo' => 'Cargo',
+            'id_carteira' => 'Carteira',
         ];
     }
     

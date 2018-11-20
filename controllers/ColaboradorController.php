@@ -50,8 +50,8 @@ class ColaboradorController extends Controller
      */
     public function actionIndex()
     {
-        // valida o usuario operador
-        if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_OPERADOR) {
+        // valida o usuario pelo cargo
+        if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
             return $this->redirect(['update', 'id' => \Yii::$app->user->identity->id]);
         }
         
@@ -65,27 +65,19 @@ class ColaboradorController extends Controller
     }
 
     /**
-     * Displays a single Colaborador model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
      * Creates a new Colaborador model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
+        // valida a permissao pelo cargo do usuario
+        if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+            throw new NotFoundHttpException();
+        }
+        
         $model = new Colaborador();
-
+        
         if ($post = \Yii::$app->request->post()) {
             try {
                 $transaction = \Yii::$app->db->beginTransaction();
@@ -121,6 +113,13 @@ class ColaboradorController extends Controller
      */
     public function actionUpdate($id)
     {
+        // valida a permissao pelo cargo do usuario
+        if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR &&
+            \Yii::$app->user->identity->id != $id
+        ) {
+            throw new NotFoundHttpException();
+        }
+        
         // valida o usuário admin
         if ($id == 0) {
             \Yii::$app->session->setFlash('warning', 'O usuário "Admin" não pode ser alterado.');
