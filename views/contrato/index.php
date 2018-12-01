@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use app\models\Cliente;
 use kartik\grid\GridView;
 use app\models\Contrato;
+use app\models\Colaborador;
 
 $this->title = 'Contratos';
 $this->params['breadcrumbs'][] = $this->title;
@@ -78,7 +79,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'class' => 'kartik\grid\ActionColumn',
                 	'hAlign'=> GridView::ALIGN_CENTER,
-                	'template' => '{negociacao}{update}{delete}',
+                	'template' => \Yii::$app->user->identity->cargo == Colaborador::CARGO_CLIENTE ? 
+                    '{negociacao}' : 
+                    '{negociacao}{update}{delete}',
                     'width' => '150px',
                 	'header' => '',
                 	'buttons' => [

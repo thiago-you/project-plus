@@ -100,28 +100,30 @@ use app\models\NegociacaoParcela;
             				</thead>
             				<!-- ./thead -->
             				<tbody>
-            					<?php if($negociacao->parcelas): ?>
-            						<?php foreach($negociacao->parcelas as $negociacaoParcela): ?>
+            					<?php if ($negociacao->parcelas): ?>
+            						<?php foreach ($negociacao->parcelas as $negociacaoParcela): ?>
             							<tr>
             								<td class="text-center"><?= $negociacaoParcela->num_parcela; ?></td>
             								<td><?= Helper::dateMask($negociacaoParcela->data_vencimento, Helper::DATE_DEFAULT); ?></td>
             								<td><?= Helper::mask($negociacaoParcela->valor, Helper::MASK_MONEY); ?></td>
         									<td>
-            									<?php if($negociacaoParcela->status == NegociacaoParcela::STATUS_ABERTA): ?>
+            									<?php if ($negociacaoParcela->status == NegociacaoParcela::STATUS_ABERTA): ?>
             										<span class="label label-warning">ABERTA</span>
             									<?php else: ?>
             										<span class="label label-emerald">FATURADA</span>
             									<?php endif; ?>
             								</td>
             								<td class="text-center">
-            									<?= Html::button('<i class="fa fa-dollar-sign"></i>', [
-                                                        'class' => Helper::BTN_COLOR_INFO.' faturar-parcela btn-sm',
-    									                'title' => $negociacaoParcela->status == NegociacaoParcela::STATUS_ABERTA ? 'Faturar parcela' : 'Estornar parcela',
-    									                'data-id' => $negociacaoParcela->id,
-    									                'data-status' => $negociacaoParcela->status,
-    									                'disabled' => $negociacao->status == Negociacao::STATUS_ABERTA ? true : false,
-                                                    ]);
-            									?>
+            									<?php if (!$clienteView): ?>
+                									<?= Html::button('<i class="fa fa-dollar-sign"></i>', [
+                                                            'class' => Helper::BTN_COLOR_INFO.' faturar-parcela btn-sm',
+        									                'title' => $negociacaoParcela->status == NegociacaoParcela::STATUS_ABERTA ? 'Faturar parcela' : 'Estornar parcela',
+        									                'data-id' => $negociacaoParcela->id,
+        									                'data-status' => $negociacaoParcela->status,
+        									                'disabled' => $negociacao->status == Negociacao::STATUS_ABERTA ? true : false,
+                                                        ]);
+                									?>
+                                				<?php endif; ?>
         									</td>
             							</tr>
             						<?php endforeach; ?>
@@ -149,24 +151,26 @@ use app\models\NegociacaoParcela;
         	<!-- ./row -->
         	<br><br><br>
         	<div class="row">
-        		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">	
-            		<?= Html::button('<i class="fa fa-briefcase"></i>&nbsp; '.($negociacao->status == Negociacao::STATUS_FECHADA ? 'Quebrar Negociação' : 'Fechar Negociação'), [
-                            'class' => Helper::BTN_COLOR_PRIMARY.' btn-block',
-                            'id' => 'alterar-negociacao',
-    		                'data-status' => $negociacao->status,
-    		                'disabled' => $negociacao->status == Negociacao::STATUS_FATURADA ? true : false,
-                		]);
-            		?>
-            	</div>
-            	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 pull-right">	
-            		<?= Html::button('<i class="fa fa-hand-holding-usd"></i>&nbsp; ' .($negociacao->status == Negociacao::STATUS_FECHADA ? 'Faturar Contrato' : 'Estornar Contrato'), [
-    		                'id' => 'faturar-contrato',
-    		                'data-status' => $negociacao->status,
-                            'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
-    		                'disabled' => $negociacao->status == Negociacao::STATUS_ABERTA ? true : false,
-                		]);
-            		?>
-            	</div> 
+        		<?php if (!$clienteView): ?>
+            		<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">	
+                		<?= Html::button('<i class="fa fa-briefcase"></i>&nbsp; '.($negociacao->status == Negociacao::STATUS_FECHADA ? 'Quebrar Negociação' : 'Fechar Negociação'), [
+                                'class' => Helper::BTN_COLOR_PRIMARY.' btn-block',
+                                'id' => 'alterar-negociacao',
+        		                'data-status' => $negociacao->status,
+        		                'disabled' => $clienteView || $negociacao->status == Negociacao::STATUS_FATURADA ? true : false,
+                    		]);
+                		?>
+                	</div>
+                	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 pull-right">	
+                		<?= Html::button('<i class="fa fa-hand-holding-usd"></i>&nbsp; ' .($negociacao->status == Negociacao::STATUS_FECHADA ? 'Faturar Contrato' : 'Estornar Contrato'), [
+        		                'id' => 'faturar-contrato',
+        		                'data-status' => $negociacao->status,
+                                'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
+        		                'disabled' => $clienteView || $negociacao->status == Negociacao::STATUS_ABERTA ? true : false,
+                    		]);
+                		?>
+                	</div> 
+				<?php endif; ?>
         	</div>
         	<!-- ./row -->
 		<?php endif; ?>
@@ -186,7 +190,7 @@ use app\models\NegociacaoParcela;
                         		<?= Html::input('text', 'Negociacao[data]', $negociacao->data_negociacao ? Helper::dateMask($negociacao->data_negociacao, Helper::DATE_DEFAULT) : date('d/m/Y'), [
                 		                'id' => 'negociacao-data',
                 		                'class' => 'form-control',
-                		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+                		                'disabled' => $clienteView || $negociacao->status == Negociacao::STATUS_FECHADA,
                                     ]);
                         		?>
                             </div>
@@ -199,7 +203,7 @@ use app\models\NegociacaoParcela;
                 			    'id' => 'negociacao-tipo',
         		                'value' => $negociacao->tipo,
                 			    'hideSearch' => true,
-        		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+        		                'disabled' => $clienteView || $negociacao->status == Negociacao::STATUS_FECHADA,
                 			    'data' => [
                                     Negociacao::A_VISTA => 'À Vista', 
                                     Negociacao::PARCELADO => 'Parcela'
@@ -291,7 +295,7 @@ use app\models\NegociacaoParcela;
                     					<?php endforeach; ?>
                     					<!-- ./dados da parcela -->
                     					<tr>
-                    						<td colspan="7"></td>
+                    						<td colspan="8"></td>
                     					</tr>
                     					<tr>
                         					<td colspan="2" class="text-center"><b>Totais:</b></td>
@@ -330,7 +334,7 @@ use app\models\NegociacaoParcela;
                                 				<?= MaskMoney::widget([
                                     				    'name' => 'valor-entrada',    
                         				                'value' => $negociacao->valor_entrada,
-                        				                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+                        				                'disabled' => $clienteView || $negociacao->status == Negociacao::STATUS_FECHADA,
                         				                'options' => [
                         	                                'id' => 'valor-entrada',
                         	                                'maxlength' => 16,
@@ -353,7 +357,7 @@ use app\models\NegociacaoParcela;
                                 			    'id' => 'quant-parcelas',
                         		                'value' => count($negociacao->parcelas),
                                 			    'hideSearch' => true,
-                        		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+                				                'disabled' => $clienteView || $negociacao->status == Negociacao::STATUS_FECHADA,
                                 			    'data' => Negociacao::getQuantidadeParcelas(),
                 				                'pluginOptions' => [
                                                     'allowClear' => true,
@@ -431,7 +435,7 @@ use app\models\NegociacaoParcela;
                 				<?= MaskMoney::widget([
                     				    'name' => 'Negociacao[desconto_encargos]',    
         				                'value' => $negociacao->desconto_encargos,
-        				                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+        				                'disabled' => $clienteView || $negociacao->status == Negociacao::STATUS_FECHADA,
         				                'options' => [
         	                                'id' => 'desconto_encargos',
         	                                'maxlength' => 9,
@@ -449,7 +453,7 @@ use app\models\NegociacaoParcela;
                 				<?= MaskMoney::widget([
                     				    'name' => 'Negociacao[desconto_principal]',
         			                    'value' => $negociacao->desconto_principal,
-        				                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+        				                'disabled' => $clienteView || $negociacao->status == Negociacao::STATUS_FECHADA,
         				                'options' => [
         	                                'id' => 'desconto_principal',
         	                                'maxlength' => 9,
@@ -467,7 +471,7 @@ use app\models\NegociacaoParcela;
                 				<?= MaskMoney::widget([
                     				    'name' => 'Negociacao[desconto_honorarios]',   
         				                'value' => $negociacao->desconto_honorarios,
-        				                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+        				                'disabled' => $clienteView || $negociacao->status == Negociacao::STATUS_FECHADA,
         				                'options' => [
         	                                'id' => 'desconto_honorarios',
         	                                'maxlength' => 9,
@@ -485,7 +489,7 @@ use app\models\NegociacaoParcela;
                 				<?= MaskMoney::widget([
                                         'name' => 'Negociacao[desconto_total]',
         				                'value' => $negociacao->desconto_total,
-        				                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+    				                    'disabled' => $clienteView || $negociacao->status == Negociacao::STATUS_FECHADA,
         				                'options' => [
         	                                'id' => 'desconto_total',
         	                                'maxlength' => 14,
@@ -510,7 +514,7 @@ use app\models\NegociacaoParcela;
         		<?= Html::textarea('Negociacao[Observacao]', str_replace(['<br/>', '<br />', '<br>'], "\n", $negociacao->observacao), [
             		    'id' => 'negociacao-observacao',     
                         'class' => 'form-control',
-	                    'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+		                'disabled' => $clienteView || $negociacao->status == Negociacao::STATUS_FECHADA,
             		]); 
         		?>
         	</div>
@@ -518,22 +522,24 @@ use app\models\NegociacaoParcela;
         <!-- ./row -->
         <br><br>
         <div class="row">
-        	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">	
-        		<?= Html::button('<i class="fa fa-save"></i>&nbsp; Salvar a Negociação', [
-                        'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
-                        'id' => 'salvar-negociacao',
-		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
-            		]);
-        		?>
-        	</div>
-        	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 pull-right">	
-        		<?= Html::button(helper::BTN_CANCEL, [
-		                'id' => 'cancelar-alteracao',
-                        'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
-		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
-            		]);
-        		?>
-        	</div> 
+        	<?php if (!$clienteView): ?>
+            	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">	
+            		<?= Html::button('<i class="fa fa-save"></i>&nbsp; Salvar a Negociação', [
+                            'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
+                            'id' => 'salvar-negociacao',
+    		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+                		]);
+            		?>
+            	</div>
+            	<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12 pull-right">	
+            		<?= Html::button(helper::BTN_CANCEL, [
+    		                'id' => 'cancelar-alteracao',
+                            'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
+    		                'disabled' => $negociacao->status == Negociacao::STATUS_FECHADA,
+                		]);
+            		?>
+            	</div> 
+			<?php endif; ?>
         </div>
         <!-- ./row -->
     </div>

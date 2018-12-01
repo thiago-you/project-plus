@@ -68,9 +68,10 @@ class ContratoController extends Controller
         if (!empty($index) && !empty($value)) {
             $params['ContratoSearch'][$index] = $value;
         }
+        
         // exibe apenas os contratos do cliente
         if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_CLIENTE) {
-            $params['ContratoSearch']['id_carteira'] = \Yii::$app->user->identity->id;
+            $params['ContratoSearch']['id_carteira'] = Colaborador::findOne(['id' => \Yii::$app->user->identity->id])->id_carteira;
         }
         
         // realiza o filtro
@@ -83,25 +84,17 @@ class ContratoController extends Controller
     }
 
     /**
-     * Displays a single Contrato model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
      * Creates a new Contrato model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate($id_cliente = null)
     {
+        // valida se o usuário é um cliente
+        if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_CLIENTE) {
+            throw new NotFoundHttpException();
+        }
+        
         $model = new Contrato();
 
         // seta os dados e salva a model
@@ -165,6 +158,11 @@ class ContratoController extends Controller
      */
     public function actionUpdate($id)
     {
+        // valida se o usuário é um cliente
+        if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_CLIENTE) {
+            throw new NotFoundHttpException();
+        }
+        
         $model = $this->findModel($id);
 
         // seta os dados e salva a model
@@ -233,6 +231,13 @@ class ContratoController extends Controller
         // busca o contrato
         $contrato = $this->findModel($id);
         $cliente = $contrato->cliente;
+
+        // se o usuário for cliente, então valida se o contrato pertence ao cliente
+        if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_CLIENTE) {
+            if ($contrato->id_carteira != Colaborador::findOne(['id' => \Yii::$app->user->identity->id])->id_carteira) {
+                throw new NotFoundHttpException();
+            }
+        }
         
         // valida se o contrato possui um carteira
         if (empty($contrato->id_carteira)) {

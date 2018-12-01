@@ -429,9 +429,14 @@ $(document).ready(function() {
 					negociacao.calcularNegociacao();
 				} else {
 					// mensagem de erro
-					toastr.error('Houve um erro interno ao tentar salvar a negociação.');
+					toastr.error(retorno.message);
+					// reseta o html do conteudo
+					$('.panel-calculo .panel-body').html(negociacaoContent);
 				}
 			}).fail(function() {
+				// mensagem de erro
+				toastr.error('Houve um erro interno ao tentar salvar a negociação.');
+				// reseta o html do conteudo
 				$('.panel-calculo .panel-body').html(negociacaoContent);
 			}).done(function() {
 				// inicializa o plugin de data

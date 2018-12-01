@@ -55,7 +55,9 @@ class Negociacao extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['data_negociacao', 'id_contrato', 'id_carteira', 'id_campanha'], 'required'],
+            [['data_negociacao', 'id_contrato',], 'required'],
+            [['id_carteira'], 'required', 'message' => 'A "carteira" do contrato não foi configurada.'],
+            [['id_campanha'], 'required', 'message' => 'A "campanha" do contrato/carteira não foi configurada.'],
             [['id_contrato', 'id_carteira', 'id_campanha', 'status'], 'integer'],
             [[
                 'subtotal', 'desconto', 'receita', 'total', 'desconto_encargos', 'taxa_parcelado',
@@ -77,9 +79,9 @@ class Negociacao extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_contrato' => 'Id Contrato',
-            'id_carteira' => 'Id Carteira',
-            'id_campanha' => 'Id Campanha',
+            'id_contrato' => 'Contrato',
+            'id_carteira' => 'Carteira',
+            'id_campanha' => 'Campanha',
             'data_negociacao' => 'Data Negociacao',
             'data_cadastro' => 'Data Cadastro',
             'subtotal' => 'Subtotal',

@@ -348,11 +348,13 @@ $this->params['breadcrumbs'][] = $this->title;
         		  				<?php if (is_array($clienteContrato->contratoParcelas) && !empty($clienteContrato->contratoParcelas)): ?>
         		  					<?php $numParcelas = count($clienteContrato->contratoParcelas); ?>
         		  					
-                                	<?= Html::a('<i class="fa fa-file-signature"></i>&nbsp; Abrir Contrato', Url::to(['negociacao', 'id' => $clienteContrato->id]), [
-                        	                'class' => Helper::BTN_COLOR_PURPLE.' btn-sm pull-right',
-                    	                    'target' => '_self',
-                                    	]);
-                                	?>
+        		  					<?php if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_CLIENTE): ?>
+                                    	<?= Html::a('<i class="fa fa-file-signature"></i>&nbsp; Abrir Contrato', Url::to(['negociacao', 'id' => $clienteContrato->id]), [
+                            	                'class' => Helper::BTN_COLOR_PURPLE.' btn-sm pull-right',
+                        	                    'target' => '_self',
+                                        	]);
+                                    	?>
+                                	<?php endif; ?>
         		  					<!-- ./row -->
                                 	<table class="table table-bordered table-hover table-parcelas">
                     		  			<thead>
@@ -413,6 +415,7 @@ $this->params['breadcrumbs'][] = $this->title;
         		<?= $this->render('/negociacao/negociacao', [
                         'contrato' => $contrato,
 	                    'negociacao' => $negociacao,
+		                'clienteView' => \Yii::$app->user->identity->cargo == Colaborador::CARGO_CLIENTE,
             		]); 
         		?>
         	</div>
@@ -426,13 +429,20 @@ $this->params['breadcrumbs'][] = $this->title;
         	<div class="panel-heading">
         		<div class="row">
         			<div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-        				<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Acionamento', [
-				                'id' => 'add-acionamento',
-				                'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
-				                'title' => 'Novo acionamento',
-				                'data-toggle' => 'tooltip',
-            				]); 
-        				?>
+        				<?php if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_CLIENTE): ?>
+            				<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Acionamento', [
+    				                'id' => 'add-acionamento',
+    				                'class' => Helper::BTN_COLOR_EMERALD.' btn-block',
+    				                'title' => 'Novo acionamento',
+    				                'data-toggle' => 'tooltip',
+                				]); 
+            				?>
+        				<?php else: ?>
+        					<h3 class="font18">
+        						&nbsp;&nbsp;
+        						Acionamentos
+    						</h3>
+        				<?php endif; ?>
         			</div>
         		</div>
         	</div>
