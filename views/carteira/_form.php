@@ -73,16 +73,6 @@ use app\models\Cidade;
                     <?= $form->field($model, 'bairro')->textInput(['maxlength' => true]); ?>
     			</div>
     			<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
-                    <?= $form->field($model, 'cidade_id')->widget(Select2::classname(), [
-                            'data' => $model->cidade_id ? ArrayHelper::map(Cidade::find()->all(), 'id', 'nome') : [],
-                            'options' => ['placeholder' => 'Selecione a cidade ...'],
-                            'pluginOptions' => [
-                                'allowClear' => true
-                            ],
-                        ]);
-                    ?>
-    			</div>
-    			<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
                     <?= $form->field($model, 'estado_id')->widget(Select2::classname(), [
                             'data' => ArrayHelper::map(Estado::find()->all(), 'id', 'nome'),
                             'options' => ['placeholder' => 'Selecione o estado ...'],
@@ -97,6 +87,16 @@ use app\models\Cidade;
                                         $('#carteira-cidade_id').html(response);
                                     });
                                 }",
+                            ],
+                        ]);
+                    ?>
+    			</div>
+    			<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
+                    <?= $form->field($model, 'cidade_id')->widget(Select2::classname(), [
+                            'data' => $model->cidade_id ? ArrayHelper::map(Cidade::find()->all(), 'id', 'nome') : [],
+                            'options' => ['placeholder' => 'Selecione a cidade ...'],
+                            'pluginOptions' => [
+                                'allowClear' => true
                             ],
                         ]);
                     ?>

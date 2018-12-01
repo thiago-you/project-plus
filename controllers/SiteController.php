@@ -23,6 +23,7 @@ use app\models\ContratoParcela;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use app\models\Acionamento;
+use app\models\Colaborador;
 
 class SiteController extends BaseController
 {
@@ -79,6 +80,14 @@ class SiteController extends BaseController
         
         // registra a api para gerar graficos
         AppAsset::register(\Yii::$app->view)->js[] = 'plugins/chart.js/dist/Chart.js';
+        
+        // se for cliente, renderiza uma dashboard especifica
+        if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_CLIENTE) {            
+            // renderiza a index para clientes
+            return $this->render('index-cliente', [
+                            
+            ]);
+        }
         
         // busca os novos clientes nos ultimos 5 meses
         $novosClientes = Cliente::find()

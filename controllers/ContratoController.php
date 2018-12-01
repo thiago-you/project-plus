@@ -68,6 +68,10 @@ class ContratoController extends Controller
         if (!empty($index) && !empty($value)) {
             $params['ContratoSearch'][$index] = $value;
         }
+        // exibe apenas os contratos do cliente
+        if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_CLIENTE) {
+            $params['ContratoSearch']['id_carteira'] = \Yii::$app->user->identity->id;
+        }
         
         // realiza o filtro
         $dataProvider = $searchModel->search($params);

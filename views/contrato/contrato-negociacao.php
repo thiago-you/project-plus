@@ -11,7 +11,6 @@ use app\models\Colaborador;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\BootstrapAsset;
 use kartik\datetime\DateTimePicker;
-use app\models\Contrato;
 
 $this->title = 'Negociação';
 $this->params['breadcrumbs'][] = $this->title;
@@ -63,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
             	<small>
-                	<b>Tipo:</b>&nbsp; <?= Contrato::getListaTipos()[$contrato->tipo]; ?>
+                	<b>Tipo:</b>&nbsp; <?= $contrato->contratoTipo->descricao; ?>
             	</small>
             </div>
             <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">

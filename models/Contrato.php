@@ -29,6 +29,7 @@ use app\base\Helper;
  * @property Acionamento[] $acionamentos
  * @property ContratoParcela[] $contratoParcelas
  * @property Negociacao $negociacao
+ * @property ContratoTipo $tipo
  */
 class Contrato extends \yii\db\ActiveRecord
 {
@@ -131,6 +132,14 @@ class Contrato extends \yii\db\ActiveRecord
     }
     
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getContratoTipo()
+    {
+        return $this->hasOne(ContratoTipo::className(), ['id' => 'tipo']);
+    }
+    
+    /**
      * @inheritDoc
      * @see \yii\db\BaseActiveRecord::beforeSave()
      */
@@ -172,19 +181,6 @@ class Contrato extends \yii\db\ActiveRecord
         ContratoParcela::deleteAll(['id_contrato' => $this->id]);
         
         return parent::beforeDelete();
-    }
-
-    /**
-     * Retorna um tipo pelo nome
-     */
-    public static function getTipoByName($name) 
-    {
-        $tipo = ContratoTipo::find()->where([
-            'ativo' => ContratoTipo::ATIVO,
-            'descricao' => $name,
-        ])->orderBy(['id' => SORT_DESC])->one(); 
-        
-        return $tipo ? $tipo->id : null;
     }
     
     /**
