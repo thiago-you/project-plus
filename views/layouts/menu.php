@@ -2,10 +2,12 @@
 use yii\helpers\Url;
 use kartik\typeahead\Typeahead;
 use yii\web\View;
+use yii\web\JsExpression;
+use app\models\User;
 ?>
 <div class="collapse navbar-collapse" id="menu-navbar-collapse">
 	<ul class="nav navbar-nav">
-		<li><a href="<?= Url::to(['/cliente']); ?>"><i class="fa fa-users"></i>&nbsp; Clientes</a></li>
+		<li><a href="<?= Url::to(['/contrato']); ?>"><i class="fa fa-file-invoice-dollar"></i>&nbsp; Contratos</a></li>
 	</ul>
     <!-- ./menu -->
 	<form class="navbar-form navbar-left">
@@ -15,8 +17,8 @@ use yii\web\View;
 					'name' => 'nome',
 					'pluginOptions' => ['highlight' => true],
 					'options' => [
-						'placeholder' => 'Pesquisar cliente pelo nome ou CPF/CNPJ...',		
-						'style' => 'width: 400px;',
+						'placeholder' => 'Pesquisar contrato pelo nome ou CPF/CNPJ do cliente...',		
+						'style' => 'width: 450px;',
 						'autocomplete' => 'off',
 					],
 					'dataset' => [
@@ -24,15 +26,18 @@ use yii\web\View;
 							'display'=> 'value',
 							'notFound' => '<span class="alert alert-danger"><i class="fa fa-ban"></i>&nbsp; Nehum cliente foi encontrado ...</div>',
 							'remote'=>[
-								'url' => Url::to(['cliente/search-list']).'?q[quick]=%QUERY',
+								'url' => Url::to(['contrato/search-list']).'?q[quick]=%QUERY',
 								'wildcard' => '%QUERY',
 							],
+			                'templates' => [
+                                'suggestion' => new JsExpression("Handlebars.compile('<p style=\"white-space: normal; word-wrap: break-word;\">{{value}}</p>')"),
+			                ],
 						],
 					],
 					'pluginEvents' => [
 						'typeahead:select' => 'function(event, data) { 
 							if (data.value != undefined && data.value.length > 0) {
-								window.location = BASE_PATH + "cliente/quick-search?nome="+data.value;	
+								window.location = BASE_PATH + "contrato/quick-search?value="+data.value+"&strict=true";	
 							}
 						}',
 					],
@@ -42,6 +47,12 @@ use yii\web\View;
 	</form>
 	<!-- ./pesquisa -->
 	<ul class="nav navbar-nav navbar-right">
+		<li>
+			<a href="<?= Url::to(['/colaborador/update', 'id' => \Yii::$app->user->identity->id]); ?>">
+				<i class="fa fa-user"></i>&nbsp; 
+				<?= User::findIdentity(\Yii::$app->user->identity->id)->nome; ?>
+			</a>
+		</li>
 		<li>
             <a data-method="post" href="<?= Url::to(['/site/logout']); ?>">
             	<i class="fa fa-power-off"></i>&nbsp; Logout
@@ -57,7 +68,7 @@ $script = <<< JS
 		$('body').on('keypress keydown keyup', '#quick-search-nome', function(e) {
 			if (e.which == 13) {
 				if (this.value != undefined && this.value.length > 0) {
-					window.location = BASE_PATH + "cliente/quick-search?value="+this.value;
+					window.location = BASE_PATH + "contrato/quick-search?value="+this.value;
 				}
 			}
 		});

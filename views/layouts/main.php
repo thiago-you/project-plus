@@ -2,6 +2,7 @@
 use yii\web\View;
 use yii\helpers\Html;
 use app\assets\AppAsset;
+use app\models\Colaborador;
 
 $base_path = \Yii::getAlias('@web');
 $script = <<< JS
@@ -17,6 +18,9 @@ AppAsset::register($this);
             <meta charset="UTF-8"/>
             <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <!-- ./meta -->
+            <link rel="shortcut icon" href="<?= \Yii::$app->request->baseUrl; ?>/img/favicon-1.png" type="image/png" />
+            <!-- ./favicon -->
             <?= Html::csrfMetaTags(); ?>
             <title><?= \Yii::$app->name . ' | ' . Html::encode($this->title); ?></title>
             <?php $this->head(); ?>
@@ -28,41 +32,34 @@ AppAsset::register($this);
                 	<div class="main-header">
                         <nav id="main-navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
                 			<div id="main-container" class="container">
-                				<div class="navbar-header text-center">
-                                    <a class="navbar-brand" href="<?= \Yii::$app->homeUrl; ?>">
-                                    	Exemplo <span class="separador">|</span>
-                                    </a>
-                                </div>
-                                <!-- ./brand -->
                                 <?= $this->render('menu'); ?>
-                                <!-- ./menu -->
                 			</div>
-                			<!-- ./main-container -->
                         </nav>
-                        <!-- ./navbar -->
                     </div>
+                    <!-- ./main menu -->
                		<div class="container-fluid">
                			<div class="sidenav">
-               				<?= $this->render('side-menu'); ?>
+                            <?php if (\Yii::$app->user->identity->cargo == Colaborador::CARGO_ADMINISTRADOR): ?>
+                   				<?= $this->render('side-menu-admin'); ?>
+                            <?php else: ?>
+                            	<?= $this->render('side-menu-operario'); ?>
+                            <?php endif; ?>
                			</div>
                			<!-- ./side menu -->
                         <section class="main-content">
-                        	<div class="row">
-                            	<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            		<?php foreach (\Yii::$app->session->getAllFlashes() as $key => $message): ?>
-                                    	<div class="alert alert-flat alert-<?= $key ?> flash-msg">
-                                    		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    		<?= $message ?>
-                                    	</div>
-                            		<?php endforeach; ?>
-                           		</div>
-                            </div>
+                            <?php foreach (\Yii::$app->session->getAllFlashes() as $key => $message): ?>
+								<div class="alert alert-flat alert-<?= $key ?> flash-msg">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <?= $message ?>
+                                </div>
+                            <?php endforeach; ?>
                             <!-- ./flash-msg -->
                             <?= $content ?>
                             <!-- ./page-content -->
                         </section>
                         <!-- ./section-content -->                            
                		</div> 
+               		<!-- ./main-content -->
             	</div>
                 <!-- .content-wrapper -->
             <?php $this->endBody() ?>

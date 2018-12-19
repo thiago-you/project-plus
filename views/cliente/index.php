@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use yii\helpers\Html;
 use app\models\Cliente;
 use kartik\grid\GridView;
@@ -11,7 +11,6 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="panel-body">
 		<?= $this->render('_filter', [
                 'model' => $searchModel,
-		        'modelImport' => $modelImport,
             ]);                
         ?>
 	</div>
@@ -20,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?php $columns = [
                 [
                     'attribute' => 'id',
+                    'width' => '80px',
                     'hAlign' => GridView::ALIGN_CENTER,
                 ],
                 [
@@ -31,21 +31,47 @@ $this->params['breadcrumbs'][] = $this->title;
 					'label' => 'CPF/CNPJ',
 					'value' => function($model) {
 						if ($model->tipo == Cliente::TIPO_FISICO) {
-							return Util::mask($model->documento, Util::MASK_CPF);
+							return Helper::mask($model->documento, Helper::MASK_CPF);
 						}
 						
-						return Util::mask($model->documento, Util::MASK_CNPJ);
+						return Helper::mask($model->documento, Helper::MASK_CNPJ);
 					}
 				],
-    		    [
-                    'attribute' => 'sexo',
-    		        'hAlign' => GridView::ALIGN_CENTER,
-    		    ],
                 [
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{update}{delete}',
+                    'class' => 'kartik\grid\ActionColumn',
+                	'hAlign'=> GridView::ALIGN_CENTER,
+                	'template' => '{contrato}{update}{delete}',
+                    'width' => '15%',
+                	'header' => '',
+                	'buttons' => [
+    	                'contrato' => function ($url, $model) {
+                            return Html::a('<i class="fa fa-file-invoice-dollar"></i>', $url, [
+                                'class' => Helper::BTN_COLOR_PURPLE,
+                                'title' => 'Contratos do Cliente',
+                                'data-toggle' => 'tooltip',
+        	                ]);
+    	                },
+    	                'update' => function ($url, $model) {
+                			return Html::a('<i class="fa fa-pencil-alt"></i>', $url, [
+                				'class' => Helper::BTN_COLOR_WARNING,
+                				'title' => 'Alterar',
+                				'data-toggle' => 'tooltip',
+                			]);
+                		},
+                		'delete' => function ($url, $model) {
+                			return Html::a('<i class="fa fa-trash-alt"></i>', $url, [
+                				'class' => Helper::BTN_COLOR_DANGER. ' btn-delete',
+                				'title' => 'Excluír',
+                				'data-toggle' => 'tooltip',
+                				'data-method' => 'post',
+                			]);
+                		},
+                	],
                 ],
             ];
+		
+            // sort desc
+            $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
 		
 		    // grid
             echo GridView::widget([
@@ -60,8 +86,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ], */
     		    'toolbar' => [
-    		        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Cliente', ['create'], ['class' => Util::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Cliente', 'data-toggle' => 'tooltip',])],
-    		        ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Util::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
+    		        ['content' => Html::a('<i class="fa fa-plus"></i>&nbsp; Cliente', ['create'], ['class' => Helper::BTN_COLOR_EMERALD, 'title' => 'Cadastrar Novo Cliente', 'data-toggle' => 'tooltip',])],
+    		        ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Helper::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
     		        '{toggleData}',
     		    ],
     		    'bordered' => true,

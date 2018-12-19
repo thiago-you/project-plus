@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 
 use JasperPHP\JasperPHP;
 
-use app\base\Util;
+use app\base\Helper;
 use app\models\Cidade;
 use app\models\Pedido;
 use app\models\Empresa;
@@ -118,7 +118,7 @@ class ClientesController extends MasterController
     	
         $params = Yii::$app->request->queryParams;
         if (isset($params['ClientesSearch']['tipo']) && strlen($params['ClientesSearch']['tipo']) > 10) {
-            strlen(Util::removeMascara($params['ClientesSearch']['tipo'])) == 11 ? $params['ClientesSearch']['cpf'] = Util::removeMascara($params['ClientesSearch']['tipo']) : $params['ClientesSearch']['cnpj'] = Util::removeMascara($params['ClientesSearch']['tipo']);
+            strlen(Helper::removeMascara($params['ClientesSearch']['tipo'])) == 11 ? $params['ClientesSearch']['cpf'] = Helper::removeMascara($params['ClientesSearch']['tipo']) : $params['ClientesSearch']['cnpj'] = Helper::removeMascara($params['ClientesSearch']['tipo']);
             unset($params['ClientesSearch']['tipo']);
         }
         $dataProvider = $searchModel->search($params);
@@ -207,16 +207,16 @@ class ClientesController extends MasterController
                 $model->data_cadastro = date('Y-m-d H:i:s');
                 $model->tipo          = empty($model->tipo)? Clientes::TIPO_PESSOA_FISICA : $model->tipo;
                 $model->ativo         = Clientes::CLIENTE_ATIVO;                
-                $model->cpf           = Util::removeMascara($model->cpf);
-                $model->cnpj          = Util::removeMascara($model->cnpj);
-                $model->cep           = Util::removeMascara($model->cep);
-                $model->fone          = Util::removeMascara($model->fone, true);
-                $model->fone_celular  = Util::removeMascara($model->fone_celular, true);
+                $model->cpf           = Helper::removeMascara($model->cpf);
+                $model->cnpj          = Helper::removeMascara($model->cnpj);
+                $model->cep           = Helper::removeMascara($model->cep);
+                $model->fone          = Helper::removeMascara($model->fone, true);
+                $model->fone_celular  = Helper::removeMascara($model->fone_celular, true);
                 $model->usuario       = \Yii::$app->user->identity->colaborador_id;
                 
                 if ($model->tipo == Clientes::TIPO_PESSOA_JURIDICA) {
                     $model->razao_social = $model->nome;
-                    $model->fantasia = Util::shortName($model->nome, 19);
+                    $model->fantasia = Helper::shortName($model->nome, 19);
                 }
                 
                 if ($model->save()) {                
@@ -231,7 +231,7 @@ class ClientesController extends MasterController
                 } else { 
                     $retorno = [
                         'success' => 0,
-                        'message' => Util::renderModelErrors($model->getErrors())
+                        'message' => Helper::renderModelErrors($model->getErrors())
                     ];
                 }
             }  catch (\Exception $e) {
@@ -316,22 +316,22 @@ class ClientesController extends MasterController
 
                 // valida o tipo do cliente
                 if ($model->tipo == Clientes::TIPO_PESSOA_JURIDICA) {
-                    $model->cnpj    = Util::removeMascara($model->cnpj);
+                    $model->cnpj    = Helper::removeMascara($model->cnpj);
                     $model->cpf     = null;
                     $model->nome    = strtoupper($_REQUEST['Clientes']['razao_social']);
                     $model->apelido = strtoupper($_REQUEST['Clientes']['fantasia']);
                 } else {
-                    $model->cpf     = Util::removeMascara($model->cpf);
+                    $model->cpf     = Helper::removeMascara($model->cpf);
                     $model->cnpj    = null;
     	        	$model->nome    = strtoupper($model->nome);
     	        	$model->apelido = strtoupper($model->apelido);
                 }
                 
                 if(!empty($model->dtanascto)) {
-                    $model->dtanascto = Util::formatDateToSave($model->dtanascto, Util::DATE_DEFAULT);
+                    $model->dtanascto = Helper::dateUnmask($model->dtanascto, Helper::DATE_DEFAULT);
                 }
                 
-                $model->vlrult_compra = Util::removeMascara($model->vlrult_compra, true);
+                $model->vlrult_compra = Helper::removeMascara($model->vlrult_compra, true);
                 
                 // valida os attrs da class
                 $erros .= $this->valida_campos($model);
@@ -438,7 +438,7 @@ class ClientesController extends MasterController
             $model->bairro      = strtoupper($model->bairro);
             
             if (!empty($model->dtanascto)) {
-                $model->dtanascto = Util::formatDateToSave($model->dtanascto, Util::DATE_DEFAULT);
+                $model->dtanascto = Helper::dateUnmask($model->dtanascto, Helper::DATE_DEFAULT);
             }
             
             // valida os dados de endereço
@@ -521,15 +521,15 @@ class ClientesController extends MasterController
             }     
         }
         
-        $model->cpf = Util::maskBackend($model->cpf, Util::MASK_CPF);
-        $model->cnpj = Util::maskBackend($model->cnpj, Util::MASK_CNPJ);
+        $model->cpf = Helper::maskBackend($model->cpf, Helper::MASK_CPF);
+        $model->cnpj = Helper::maskBackend($model->cnpj, Helper::MASK_CNPJ);
         
         if (!empty($model->dtanascto)) {
-            $model->dtanascto = Util::formatDateToDisplay($model->dtanascto, Util::DATE_DEFAULT);
+            $model->dtanascto = Helper::dateMask($model->dtanascto, Helper::DATE_DEFAULT);
         }
         
-        $model->dtault_compra = Util::formatDateToDisplay($model->dtault_compra, Util::DATE_DEFAULT);
-        $model->data_cadastro = Util::formatDateToDisplay($model->data_cadastro, Util::DATE_DEFAULT, ['removeMask' => true]);
+        $model->dtault_compra = Helper::dateMask($model->dtault_compra, Helper::DATE_DEFAULT);
+        $model->data_cadastro = Helper::dateMask($model->data_cadastro, Helper::DATE_DEFAULT, ['removeMask' => true]);
         $errotab = $model->getErrors();
     	
         if (isset($_REQUEST['forma'])) {
@@ -693,7 +693,7 @@ class ClientesController extends MasterController
     	$cod    = 0;
 
     	if ($tipo == 1) {
-	    	$cpf = Util::removeMascara($_REQUEST['cpf']);
+	    	$cpf = Helper::removeMascara($_REQUEST['cpf']);
 	    	$clientes = Clientes::findOne(['cpf' => $cpf]);
 	    	if ($clientes) {
 	    		$id_cliente = $clientes->id_cliente;
@@ -706,7 +706,7 @@ class ClientesController extends MasterController
     	}
 
     	if ($tipo == 2) {
-    		$cnpj = Util::removeMascara($_REQUEST['cnpj']);
+    		$cnpj = Helper::removeMascara($_REQUEST['cnpj']);
     		$clientes = Clientes::findOne(['cnpj' => $cnpj]);
     		if ($clientes) {
 	    		$id_cliente = $clientes->id_cliente;
@@ -795,10 +795,10 @@ class ClientesController extends MasterController
                 foreach( $out['items'] as $key=>$_itens){
                     if($key=='cpf'){
                         if(!empty($_itens['cpf'])){
-                            $out['items'][$_count]['cpf']= Util::maskBackend($_itens['cpf'], Util::MASK_CPF);
+                            $out['items'][$_count]['cpf']= Helper::maskBackend($_itens['cpf'], Helper::MASK_CPF);
                         }
                         if(!empty($_itens['cnpj'])){
-                            $out['items'][$_count]['cnpj']= Util::maskBackend($_itens['cnpj'], Util::MASK_CNPJ);
+                            $out['items'][$_count]['cnpj']= Helper::maskBackend($_itens['cnpj'], Helper::MASK_CNPJ);
                         }
                     }
                     $_count++;
@@ -839,13 +839,13 @@ class ClientesController extends MasterController
         
             foreach($out['items'] as $key => $item) {
                 
-                $out['items'][$key]['shortName'] = Util::shortName($out['items'][$key]['nome'], 25);
-                $out['items'][$key]['shortEmail'] = Util::shortName($out['items'][$key]['email'], 45);
+                $out['items'][$key]['shortName'] = Helper::shortName($out['items'][$key]['nome'], 25);
+                $out['items'][$key]['shortEmail'] = Helper::shortName($out['items'][$key]['email'], 45);
                 
                 if($out['items'][$key]['cpf']) {
-                    $out['items'][$key]['cpf'] = Util::maskBackend($out['items'][$key]['cpf'], Util::MASK_CPF);
+                    $out['items'][$key]['cpf'] = Helper::maskBackend($out['items'][$key]['cpf'], Helper::MASK_CPF);
                 }else if($out['items'][$key]['cnpj']) {
-                    $out['items'][$key]['cnpj'] = Util::maskBackend($out['items'][$key]['cnpj'], Util::MASK_CNPJ);
+                    $out['items'][$key]['cnpj'] = Helper::maskBackend($out['items'][$key]['cnpj'], Helper::MASK_CNPJ);
                 }   
             }
             
@@ -883,11 +883,11 @@ class ClientesController extends MasterController
 	public function atualizar_fatura($data_vencimento,$valor_parcela,$tipo)
 	{
 		$data_base = date('Ymd');
-		$data_final =  Util::formatDateToDisplay($data_base, Util::DATE_DEFAULT);
+		$data_final =  Helper::dateMask($data_base, Helper::DATE_DEFAULT);
 		$data_inicial = $data_vencimento;
 	
-		$time_inicial = Util::formatDateToSave($data_inicial, Util::DATE_TIMESTAMP);
-		$time_final = Util::formatDateToSave($data_final, Util::DATE_TIMESTAMP);
+		$time_inicial = Helper::dateUnmask($data_inicial, Helper::DATE_TIMESTAMP);
+		$time_final = Helper::dateUnmask($data_final, Helper::DATE_TIMESTAMP);
 		$diferenca = $time_final - $time_inicial; // 19522800 segundos
 		$dias = (int)floor( $diferenca / (60 * 60 * 24)); // 225 dias
 
@@ -913,7 +913,7 @@ class ClientesController extends MasterController
 	{
 		$erros = '';
         if (!$model->validate()) {
-            $erros = Util::renderModelErrors($model->getErrors());            
+            $erros = Helper::renderModelErrors($model->getErrors());            
         }
         
         return $erros;

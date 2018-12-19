@@ -8,7 +8,9 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     public $password;
     public $authKey;
     public $accessToken;
-
+    public $cargo;
+    public $nome;
+    
     /**
      * @var string => usuario admin
      */
@@ -23,6 +25,8 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
         'password' => 'admin',
     	'authKey' => '0-key',
     	'accessToken' => '0-token',
+        'cargo' => Colaborador::CARGO_ADMINISTRADOR,
+        'nome' => 'Admin',
     ];
 
     /**
@@ -34,9 +38,10 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
         $user = null;
         if (self::$admin['id'] === $id) {
             $user = self::$admin;
+            $user['password'] = \Yii::$app->getSecurity()->generatePasswordHash('admin');
         } else {            
             $user = Colaborador::find()->where(['id' => $id])->select([
-                'id', 'username', 'password', 'authKey'
+                'id', 'username', 'password', 'authKey', 'cargo', 'nome'
             ])->asArray(true)->one();
         }
         
@@ -61,9 +66,11 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     {
     	// retorna o admin ou busca um usuario no banco
         $user = self::$admin;
+        $user['password'] = \Yii::$app->getSecurity()->generatePasswordHash('admin');
+        
     	if ($username !== self::adminUsername) {
     	    $user = Colaborador::find()->where(['username' => $username])->select([
-    	        'id', 'username', 'password', 'authKey'
+    	        'id', 'username', 'password', 'authKey', 'cargo'
     	    ])->asArray(true)->one();
     	}
     	
@@ -102,6 +109,6 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-        return $this->password === $password;
+        return \Yii::$app->getSecurity()->validatePassword($password, $this->password);
     }
 }

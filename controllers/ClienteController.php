@@ -1,15 +1,19 @@
 <?php
 namespace app\controllers;
 
+use app\base\Helper;
+use app\models\Email;
+use app\models\Estado;
 use app\models\Cliente;
-use yii\web\UploadedFile;
+use app\models\Endereco;
+use app\models\Telefone;
+use app\models\Contrato;
+use app\models\Colaborador;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use app\models\ClienteSearch;
 use yii\web\NotFoundHttpException;
-use app\base\Util;
-use app\models\Telefone;
-use app\models\Email;
-use app\models\Endereco;
+use yii\db\IntegrityException;
 
 /**
  * ClienteController implements the CRUD actions for Cliente model.
@@ -24,13 +28,27 @@ class ClienteController extends BaseController
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
             ],
         ];
     }
 
+    /**
+     * Valida a permissão do usuário com base no cargo
+     * 
+     * @inheritDoc
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        if ($this->action->id != 'search-list') {            
+            if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+                throw new NotFoundHttpException();
+            }
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
     /**
      * Lists all Cliente models.
      * 
@@ -54,19 +72,13 @@ class ClienteController extends BaseController
         
         // realiza o filtro
         $dataProvider = $searchModel->search($params);
-        
-        // model do import file
-        $modelImport = new \yii\base\DynamicModel(['fileImport' => 'File Import']);
-        $modelImport->addRule(['fileImport'],'required');
-        $modelImport->addRule(['fileImport'], 'file', ['extensions' => 'ods,xls,xlsx']);
-        
+                
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        	'modelImport' => $modelImport
         ]);
     }
-
+    
     /**
      * Cadastra um registro
      */
@@ -80,24 +92,20 @@ class ClienteController extends BaseController
         		
         		// carrega os dados da model
         		$model->load($post);
-	        	
+        		
 	        	// valida o tipo do cliente
 	        	if ($model->tipo == Cliente::TIPO_FISICO) {
-	        		$model->nome = $post['cliente-nome'];
-	        		$model->documento = Util::unmask($post['cliente-cpf'], true);
+	        		$model->documento = Helper::unmask($post['cliente-cpf'], true);
 	        		$model->nome_social = $post['cliente-apelido'];
+    	        	$model->rg = Helper::unmask($model->rg);
 	        	} else {
-	        		$model->nome = $post['cliente-razao-social'];
-	        		$model->documento = Util::unmask($post['cliente-cnpj'], true);
+	        		$model->documento = Helper::unmask($post['cliente-cnpj'], true);
 	        		$model->nome_social = $post['cliente-fantasia'];
 	        	}
-	        	
-	        	// remove a mascara do rg
-	        	$model->rg = Util::unmask($model->rg);
-	        	
+	        		        	
 	        	// salva o cliente
 	        	if (!$model->save()) {
-	        		throw new \Exception(Util::renderErrors($model->getErrors()));
+	        		throw new \Exception(Helper::renderErrors($model->getErrors()));
 	        	}
 	        	
 	        	// salva os telefones cadastrados
@@ -108,7 +116,7 @@ class ClienteController extends BaseController
 	        				// seta os dados
 	        				$modelTelefone = new Telefone();
 	        				$modelTelefone->id_cliente = $model->id ? $model->id : $model->getPrimaryKey();
-	        				$modelTelefone->numero     = $telefone['numero'];
+	        				$modelTelefone->numero     = Helper::unmask($telefone['numero'], true);
 	        				$modelTelefone->ramal      = $telefone['ramal'];
 	        				$modelTelefone->tipo       = $telefone['tipo'];
 	        				$modelTelefone->contato    = $telefone['contato'];
@@ -118,7 +126,7 @@ class ClienteController extends BaseController
 	        				
 	        				// salva o telefone
 	        				if (!$modelTelefone->save()) {
-	        					throw new \Exception(Util::renderErrors($modelTelefone->getErrors()));
+	        					throw new \Exception(Helper::renderErrors($modelTelefone->getErrors()));
 	        				}
 	        			}
 	        		}
@@ -138,7 +146,7 @@ class ClienteController extends BaseController
 	        				
 	        				// salva o email
 	        				if (!$modelEmail->save()) {
-	        					throw new \Exception(Util::renderErrors($modelEmail->getErrors()));
+	        					throw new \Exception(Helper::renderErrors($modelEmail->getErrors()));
 	        				}
 	        			}
 	        		}
@@ -156,30 +164,32 @@ class ClienteController extends BaseController
 	        				$modelEndereco->numero      = $endereco['numero'];
 	        				$modelEndereco->complemento = $endereco['complemento'];
 	        				$modelEndereco->bairro      = $endereco['bairro'];
-	        				$modelEndereco->cep         = $endereco['cep'];
+	        				$modelEndereco->cep         = Helper::unmask($endereco['cep'], true);
 	        				$modelEndereco->cidade_id   = $endereco['cidade_id'];
 	        				$modelEndereco->estado_id   = $endereco['estado_id'];
 	        				
 	        				
 	        				// salva o endereco
 	        				if (!$modelEndereco->save()) {
-	        					throw new \Exception(Util::renderErrors($modelEndereco->getErrors()));
+	        					throw new \Exception(Helper::renderErrors($modelEndereco->getErrors()));
 	        				}
 	        			}
 	        		}
 	        	}
 	        	
 	        	$transaction->commit();
+	        	\Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O cliente foi cadastrado com sucesso.');
 	        	return $this->redirect(['index']);
         	} catch (\Exception $e) {
         		$transaction->rollBack();
-        		\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+        		\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
         	}
         }
           
         return $this->render('create', [
         	'model' => $model,
         	'layout' => $model->tipo && $model->tipo == Cliente::TIPO_JURIDICO ? 'J' : 'F',
+            'estados' => ArrayHelper::map(Estado::find()->all(), 'id', 'nome'),
         ]);
         
     }
@@ -200,21 +210,17 @@ class ClienteController extends BaseController
         		
         		// valida o tipo do cliente
         		if ($model->tipo == Cliente::TIPO_FISICO) {
-        			$model->nome = $post['cliente-nome'];
-        			$model->documento = Util::unmask($post['cliente-cpf'], true);
+        			$model->documento = Helper::unmask($post['cliente-cpf'], true);
         			$model->nome_social = $post['cliente-apelido'];
+            		$model->rg = Helper::unmask($model->rg);
         		} else {
-        			$model->nome = $post['cliente-razao-social'];
-        			$model->documento = Util::unmask($post['cliente-cnpj'], true);
+        			$model->documento = Helper::unmask($post['cliente-cnpj'], true);
         			$model->nome_social = $post['cliente-fantasia'];
         		}
-        		
-        		// remove a mascara do rg
-        		$model->rg = Util::unmask($model->rg);
-        		
+        		        		
         		// salva o cliente
         		if (!$model->save()) {
-        			throw new \Exception(Util::renderErrors($model->getErrors()));
+        			throw new \Exception(Helper::renderErrors($model->getErrors()));
         		}
         		
         		// verifica se algum telefone foi enviado
@@ -235,7 +241,7 @@ class ClienteController extends BaseController
         					
         					// seta os dados
         					$modelTelefone->id_cliente = $model->id;
-        					$modelTelefone->numero     = $telefone['numero'];
+        					$modelTelefone->numero     = Helper::unmask($telefone['numero'], true);
         					$modelTelefone->ramal      = $telefone['ramal'];
         					$modelTelefone->tipo       = $telefone['tipo'];
         					$modelTelefone->contato    = $telefone['contato'];
@@ -245,7 +251,7 @@ class ClienteController extends BaseController
         					
         					// salva o telefone
         					if (!$modelTelefone->save()) {
-        						throw new \Exception(Util::renderErrors($modelTelefone->getErrors()));
+        						throw new \Exception(Helper::renderErrors($modelTelefone->getErrors()));
         					}
         				}
         			}
@@ -275,7 +281,7 @@ class ClienteController extends BaseController
         					
         					// salva o email
         					if (!$modelEmail->save()) {
-        						throw new \Exception(Util::renderErrors($modelEmail->getErrors()));
+        						throw new \Exception(Helper::renderErrors($modelEmail->getErrors()));
         					}
         				}
         			}
@@ -303,64 +309,50 @@ class ClienteController extends BaseController
         					$modelEndereco->numero      = $endereco['numero'];
         					$modelEndereco->complemento = $endereco['complemento'];
         					$modelEndereco->bairro      = $endereco['bairro'];
-        					$modelEndereco->cep         = $endereco['cep'];
+        					$modelEndereco->cep         = Helper::unmask($endereco['cep'], true);
         					$modelEndereco->cidade_id   = $endereco['cidade_id'];
         					$modelEndereco->estado_id   = $endereco['estado_id'];
         					
-        					
         					// salva o endereco
         					if (!$modelEndereco->save()) {
-        						throw new \Exception(Util::renderErrors($modelEndereco->getErrors()));
+        						throw new \Exception(Helper::renderErrors($modelEndereco->getErrors()));
         					}
         				}
         			}
         		}
         		
         		$transaction->commit();
+        		\Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O cliente foi alterado com sucesso.');
         		return $this->redirect(['index']);
         	} catch (\Exception $e) {
         		$transaction->rollBack();
-        		\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+        		\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
         	}
         }
         
         return $this->render('update', [
             'model' => $model,
         	'layout' => $model->tipo && $model->tipo == Cliente::TIPO_JURIDICO ? 'J' : 'F',
+            'estados' => ArrayHelper::map(Estado::find()->all(), 'id', 'nome'),
         ]);
     }
 
     /**
-     * TODO
-     * Realiza o upload e processamento de um arquivo Excel
+     * Busca todos os contratos do clente/cadastra um contrato
      */
-    public function actionUploadExcel() 
+    public function actionContrato($id)
     {
-    	// model do import file
-    	$modelImport = new \yii\base\DynamicModel(['fileImport' => 'File Import']);
-    	$modelImport->addRule(['fileImport'],'required');
-    	$modelImport->addRule(['fileImport'], 'file', ['extensions' => 'ods,xls,xlsx']);
-		
-    	$modelImport->fileImport = UploadedFile::getInstance($modelImport,'fileImport');
-    	
-    	if ($modelImport->fileImport && $modelImport->validate()) {
-    		/* $inputFileType = \PHPExcel_IOFactory::identify($modelImport->fileImport->tempName);
-    		$objReader = \PHPExcel_IOFactory::createReader($inputFileType);
-    		$objPHPExcel = $objReader->load($modelImport->fileImport->tempName);
-    		$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-    		$baseRow = 3;
-    		
-    		while (!empty($sheetData[$baseRow]['B'])) {
-    			var_dump((string)$sheetData[$baseRow]['B']);
-    			$baseRow++;
-    		} */
-    		
-    		var_dump('to aqui');
-    	} else {
-    		var_dump($modelImport->errors);
-    	}
-    	
-    	die;	
+        // busca a model
+        $model = $this->findModel($id);
+        
+        // verifica se o cliente ja possui contratos
+        // se sim, lista os contratos do cliente
+        if (Contrato::findAll(['id_cliente' => $id])) {
+            return $this->redirect(['/contrato', 'index' => 'id_cliente', 'value' => $id]);
+        }
+        
+        // se nao achou nenhum contrato redireciona para a tela de cadastro do contrato
+        return $this->redirect(['/contrato/create', 'id_cliente' => $id]);
     }
     
     /**
@@ -378,40 +370,16 @@ class ClienteController extends BaseController
 	        $model->delete();
 	        
 	        $transaction->commit();
-	        return $this->redirect(['index']);
-	    } catch (\Exception $e) {
+	        \Yii::$app->session->setFlash('success', '<i class="fa fa-check"></i>&nbsp; O cliente foi excluído com sucesso.');
+        } catch (IntegrityException $e) {
+            $transaction->rollBack();
+            \Yii::$app->session->setFlash('danger', '<i class="fa fa-exclamation-triangle"></i>&nbsp; O cliente não pode ser deletado pois possui um contrato vinculado.');
+        } catch (\Exception $e) {
 	    	$transaction->rollBack();
-	    	\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; {$e->getMessage()}");
+	    	\Yii::$app->session->setFlash('danger', "<i class='fa fa-exclamation-triangle'></i>&nbsp; Erros: {$e->getMessage()}");
 	    }
         
         return $this->redirect(['index']);
-    }
-
-    /**
-     * Realiza a pesquisa rápida de um ou mais clientes
-     */
-    public function actionQuickSearch($value = null)
-    {    	
-    	// busca todos os clientes com o nome passado
-    	// se nao achou nenhum cliente pelo nome, tenta pesquisar pelo cpf/cnpj
-    	$index = 'nome';
-    	if (!$cliente = Cliente::find()->where(['like', 'nome', $value])->all()) {
-    		// remove a mascara
-    		$value = Util::unmask($value, true);
-    		
-    		// busca pelo busca pelo cpf/cnpj
-    		$cliente = Cliente::find()->where(['like', 'documento', $value])->all();
-    		$index = 'documento';
-    	}
-
-    	// se achou apenas um cliente, redireciona para a página do cliente
-    	// se houver mais clientes com este nome
-    	// redireciona para a página de listagem de clientes
-    	if (!empty($value) && count($cliente) == 1) {
-    		return $this->redirect(['update', 'id' => $cliente[0]->id]);
-    	}
-    	
-    	return $this->redirect(['index', 'index' => $index, 'value' => $value]);
     }
     
     /**
@@ -429,8 +397,17 @@ class ClienteController extends BaseController
         $query = Cliente::find();
         
         if (isset($q['nome'])) { $query->select('nome')->andWhere(['like', 'nome', $q['nome']])->distinct(true); }
-        if (isset($q['telefone'])) { $query->select('telefone')->andWhere(['like', 'telefone', $q['telefone']])->distinct(true); }
-        if (isset($q['documento'])) { $query->select('documento')->andWhere(['like', 'documento', $q['documento']])->distinct(true); }
+        if (isset($q['telefone'])) {
+            // remove a mascara antes de pesquisar
+            $q['telefone'] = Helper::unmask($q['telefone'], true);
+            $query->alias('cli')->innerJoin('telefone tel', 'tel.id_cliente = cli.id');
+            $query->andWhere(['like', 'tel.numero', $q['telefone']])->distinct(true); 
+        }
+        if (isset($q['documento'])) { 
+            // remove a mascara antes de pesquisar
+            $q['documento'] = Helper::unmask($q['documento'], true);
+            $query->select('documento')->andWhere(['like', 'documento', $q['documento']])->distinct(true); 
+        }
         
         // params da busca rapida
         if (isset($q['quick'])) {
@@ -449,17 +426,32 @@ class ClienteController extends BaseController
         if ($model != null) {
             foreach ($model as $key) {
                 if (isset($q['nome'])) { $data[]['value'] = $key['nome']; }
-                if (isset($q['telefone'])) { $data[]['value'] = $key['telefone']; }
-                if (isset($q['documento'])) { $data[]['value'] = $key['documento']; }
+                if (isset($q['telefone'])) { 
+                    foreach ($key->telefones as $telefone) {                        
+                        $data[]['value'] = Helper::mask($telefone->numero, Helper::MASK_TELEFONE); 
+                    }
+                }
+                if (isset($q['documento'])) { 
+                    $documento = $key['documento'];
+                    
+                    // verifica se é um cpf ou cnpj, se ssim formata o documento
+                    if (strlen($documento) == 11) {
+                        $documento = Helper::mask($documento, Helper::MASK_CPF);
+                    } elseif (strlen($documento) == 14) {
+                        $documento = Helper::mask($documento, Helper::MASK_CNPJ);
+                    }
+                    
+                    $data[]['value'] = $documento; 
+                }
                 if (isset($q['quick'])) { 
                 	if (isset($key['documento'])) {    
                 		$documento = $key['documento'];
                 		
-                		// verifica se é um cpf ou cpnj, se ssim formata o documento
+                		// verifica se é um cpf ou cnpj, se ssim formata o documento
                 		if (strlen($documento) == 11) {
-                			$documento = Util::mask($documento, Util::MASK_CPF);
+                			$documento = Helper::mask($documento, Helper::MASK_CPF);
                 		} elseif (strlen($documento) == 14) {
-                			$documento = Util::mask($documento, Util::MASK_CNPJ);
+                			$documento = Helper::mask($documento, Helper::MASK_CNPJ);
                 		}
                 		
                 		$data[]['value'] = $documento; 

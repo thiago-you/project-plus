@@ -3,6 +3,7 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use app\base\Helper;
 
 /**
  * ClienteSearch represents the model behind the search form of `app\models\Cliente`.
@@ -48,7 +49,7 @@ class ClienteSearch extends Cliente
      */
     public function search($params)
     {
-        $query = Cliente::find();
+        $query = Cliente::find()->alias('cli');
 
         // add conditions that should always apply here
 
@@ -66,26 +67,36 @@ class ClienteSearch extends Cliente
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'data_nascimento' => $this->data_nascimento,
+            'cli.id' => $this->id,
+            'cli.data_nascimento' => $this->data_nascimento,
             'data_cadastro' => $this->data_cadastro,
-            'estado_civil' => $this->estado_civil,
-            'salario' => $this->salario,
+            'cli.estado_civil' => $this->estado_civil,
+            'cli.salario' => $this->salario,
         ]);
 
-        $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'nome_social', $this->nome_social])
-            ->andFilterWhere(['like', 'rg', $this->rg])
-            ->andFilterWhere(['like', 'documento', $this->documento])
-            ->andFilterWhere(['like', 'inscricao_estadual', $this->inscricao_estadual])
-            ->andFilterWhere(['like', 'sexo', $this->sexo])
-            ->andFilterWhere(['like', 'nome_conjuge', $this->nome_conjuge])
-            ->andFilterWhere(['like', 'nome_pai', $this->nome_pai])
-            ->andFilterWhere(['like', 'nome_mae', $this->nome_mae])
-            ->andFilterWhere(['like', 'empresa', $this->empresa])
-            ->andFilterWhere(['like', 'profissao', $this->profissao])
-            ->andFilterWhere(['like', 'ativo', $this->ativo])
-            ->andFilterWhere(['like', 'tipo', $this->tipo]);
+        // remove a mascara antes de pesquisar
+        $this->documento = $this->documento ? Helper::unmask($this->documento, true) : null;
+        $this->telefone = $this->telefone ? Helper::unmask($this->telefone, true) : null;
+        
+        $query->andFilterWhere(['like', 'cli.nome', $this->nome])
+            ->andFilterWhere(['like', 'cli.nome_social', $this->nome_social])
+            ->andFilterWhere(['like', 'cli.rg', $this->rg])
+            ->andFilterWhere(['like', 'cli.documento', $this->documento])
+            ->andFilterWhere(['like', 'cli.inscricao_estadual', $this->inscricao_estadual])
+            ->andFilterWhere(['like', 'cli.sexo', $this->sexo])
+            ->andFilterWhere(['like', 'cli.nome_conjuge', $this->nome_conjuge])
+            ->andFilterWhere(['like', 'cli.nome_pai', $this->nome_pai])
+            ->andFilterWhere(['like', 'cli.nome_mae', $this->nome_mae])
+            ->andFilterWhere(['like', 'cli.empresa', $this->empresa])
+            ->andFilterWhere(['like', 'cli.profissao', $this->profissao])
+            ->andFilterWhere(['like', 'cli.ativo', $this->ativo])
+            ->andFilterWhere(['like', 'cli.tipo', $this->tipo]);
+        
+        // filtra pela telefone
+        if ($this->telefone) {
+            $query->innerJoin('telefone tel', 'tel.id_cliente = cli.id')
+            ->andWhere(['tel.numero' => $this->telefone]);            
+        }
 
         return $dataProvider;
     }

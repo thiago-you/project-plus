@@ -6,7 +6,7 @@ use yii\web\JqueryAsset;
 use yii\widgets\Breadcrumbs;
 use yii\bootstrap\BootstrapAsset;
 
-use app\base\Util;
+use app\base\Helper;
 use app\assets\AppAsset;
 use app\models\NfeEnviada;
 use app\models\EmpresaConfig;
@@ -101,7 +101,7 @@ if(EmpresaConfig::find(Yii::$app->user->identity->empresa_id)->one()->nf_conting
                 				<div id="main-navbar-header" class="navbar-header">
                                     <a id="logo" class="navbar-brand font20 text-center" href="/">
                                     	<b>GER</b>CPN<br/>
-                                    	<span class="subbrand navbar-fluid font9" title="<?= Yii::$app->user->identity->empresa_nome_fantasia ?>"><?= Util::shortName(Yii::$app->user->identity->empresa_nome_fantasia, 30); ?></span>
+                                    	<span class="subbrand navbar-fluid font9" title="<?= Yii::$app->user->identity->empresa_nome_fantasia ?>"><?= Helper::shortName(Yii::$app->user->identity->empresa_nome_fantasia, 30); ?></span>
                                     </a>
                                     <button id="navbar-collapse" class="navbar-toggle collapsed" data-target="#navbar-collapse" data-toggle="collapse" type="button">
                                     	<i class="fa fa-bars"></i>
@@ -175,7 +175,7 @@ if(EmpresaConfig::find(Yii::$app->user->identity->empresa_id)->one()->nf_conting
                     <footer class="main-footer">
                 		<div class="row">
                     		<div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                            	&copy; CPN Informática <?= date('Y') ?> - GERCPN - v<?= Util::getVersion(); ?>
+                            	&copy; CPN Informática <?= date('Y') ?> - GERCPN - v<?= Helper::getVersion(); ?>
                             </div>
                             <!-- ./copyright -->
                             <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-offset1 text-right pull-right">    

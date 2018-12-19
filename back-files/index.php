@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
@@ -52,10 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                             <div class="row">                            
                                 <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
-                                    <b>Telefone: </b>'.Util::maskBackend($model->fone, Util::MASK_TELEFONE).'<br>
+                                    <b>Telefone: </b>'.Helper::maskBackend($model->fone, Helper::MASK_TELEFONE).'<br>
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
-                                    <b>Celular: </b>'.Util::maskBackend($model->fone_celular, Util::MASK_TELEFONE).'<br>
+                                    <b>Celular: </b>'.Helper::maskBackend($model->fone_celular, Helper::MASK_TELEFONE).'<br>
                                 </div>
                             </div>
                             <div class="row">                            
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <b>Pessoa p/ Contato: </b>'.$model->nome_contato.'<br>
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
-                                    <b>Telefone p/ Contato: </b>'.Util::maskBackend($model->fone_contato, Util::MASK_TELEFONE).'<br>
+                                    <b>Telefone p/ Contato: </b>'.Helper::maskBackend($model->fone_contato, Helper::MASK_TELEFONE).'<br>
                                 </div>
                             </div>
                             <div class="row">
@@ -116,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         	            $abrevia = $model->nome;
             		    if(strlen($model->nome) > 30)
-            		        $abrevia  = Util::shortName($model->nome, 30);
+            		        $abrevia  = Helper::shortName($model->nome, 30);
 
         		        return $abrevia;
         	        },
@@ -147,9 +147,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'vAlign' => 'middle',
                     'contentOptions' => ['style' => 'min-width: 140px;',],
                     'value' => function ($model) {
-                        $docto = Util::maskBackend($model->cnpj, Util::MASK_CNPJ);
+                        $docto = Helper::maskBackend($model->cnpj, Helper::MASK_CNPJ);
                 	    if ($model->tipo == '1')
-                		    $docto = Util::maskBackend($model->cpf, Util::MASK_CPF);
+                		    $docto = Helper::maskBackend($model->cpf, Helper::MASK_CPF);
 
                 	    return $docto;
                     },
@@ -289,9 +289,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ],
                 'toolbar' => [
-                    ['content' => Html::a('<i class="fa fa-plus"></i> Cliente', ['create'], ['class' => Util::BTN_CREATE_CLASS, 'title' => 'Cadastrar Novo Cliente'])],
-                    ['content' => Html::button('<i class="fa fa-file-pdf"></i> Relatório', ['id' => 'btnRelatorio', 'class' => Util::BTN_COLOR_DANGER, 'data-toggle' => 'tooltip', 'title' => 'Gerar Relatório de Clientes'])],
-                    ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Util::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
+                    ['content' => Html::a('<i class="fa fa-plus"></i> Cliente', ['create'], ['class' => Helper::BTN_CREATE_CLASS, 'title' => 'Cadastrar Novo Cliente'])],
+                    ['content' => Html::button('<i class="fa fa-file-pdf"></i> Relatório', ['id' => 'btnRelatorio', 'class' => Helper::BTN_COLOR_DANGER, 'data-toggle' => 'tooltip', 'title' => 'Gerar Relatório de Clientes'])],
+                    ['content'=> Html::a('<i class="fa fa-undo"></i>', ['index'], ['id' => '_LimparFiltro', 'class' => Helper::BTN_COLOR_DEFAULT, 'data-toggle' => 'tooltip', 'title' => 'Limpar Filtros'])],
                     '{toggleData}',
                 ],
                 'bordered' => true,

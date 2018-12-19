@@ -8,6 +8,7 @@ $this->params['breadcrumbs'][] = 'Alterar';
     <?= $this->render('_form', [
             'model' => $model,
     		'layout' => $layout,
+            'estados' => $estados,
         ]);
     ?>
 </div>

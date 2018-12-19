@@ -1,0 +1,177 @@
+.main-content {
+	margin-top: 50px !important;
+}
+.panel-dados-cliente .panel-body {
+    height: 200px;
+    overflow-y: auto;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    font-size: 11px;
+}
+.panel-dados-cliente .panel-body [class*="col-"] {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+.panel-dados-cliente .panel-body .table {
+	margin-bottom: 0px;
+}
+.panel-contratos, .panel-contratos .panel-heading,
+.panel-contratos .panel-heading .row div {
+	padding: 0px;
+}
+.panel-contratos .panel-heading {
+    background-color: inherit;
+    color: inherit;
+    border-bottom: none;
+    padding: 2px 30px;
+}
+.panel-contratos .panel-body {
+    padding: 10px 30px;
+}
+.panel-contratos .panel-heading .row div h3 {
+    font-size: 16px;
+    position: relative;
+    bottom: 8px;
+}
+.panel-contratos .panel-heading .row div button {
+	font-size: 14px;
+	margin-top: 2px;
+}
+.table-parcela thead tr:first-child,
+.table-parcela thead tr:first-child th {
+	background-color: #f5f5f5;
+}
+.panel-valores .panel-heading {
+	padding: 8px;
+	line-height: 1.42857143;
+	font-weight: bold;
+}
+.panel-calculo .panel-body {
+	padding: 5px;
+}
+.panel-calculo .panel-body div label {
+    margin-top: 10px;
+}
+.table-parcelas, 
+.panel-valores .panel-body {
+	font-size: 12px;
+}
+.panel-valores .panel-body {
+	margin-bottom: 15px;
+}
+.panel-calculo .panel-body:first-child {
+	padding-bottom: 20px;
+}
+.panel-calculo textarea {
+	resize: vertical;
+	min-height: 100px;
+}
+.panel-calculo .negociacao-status {
+	width: 150px;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.panel-acionamento .panel-heading {
+    border-color: #fff;
+    padding: 0px 0px;
+}
+.panel-acionamento .panel-body {
+    min-height: 300px;
+    max-height: 580px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.panel-acionamento .panel-body hr {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.acionamento-box {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;	
+}
+.acionamento-box .acionamento-footer {
+    margin-bottom: 3px;
+}
+/* pane de contratos */
+.panel-contratos .panel-body .contratos-collapse div {
+    background-color: #2196F3;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    color: #f9f9f9;
+    border-bottom: 1px solid #f9f9f9;
+}
+/* pane de negociacao */
+#tab-negociacao .box .box-heading {
+	margin-top: 30px;
+}
+#tab-negociacao .box .box-content {
+    border: 1px solid #cecece;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 200px;  
+    min-height: 100px;  
+}
+/* css do contrato parcelado */
+.negociacao-parcelado .panel-heading {
+	padding: 9px 15px;
+}
+.negociacao-parcelado div label {
+    font-size: 14px;
+}
+.negociacao-parcelado div p {
+	font-size: 13px;
+	margin-bottom: 7px;
+}
+.negociacao-parcelado .select2-container {
+	width: 200px !important;
+}
+#negociacao-lista-parcelas {
+	border: 1px solid #cecece;
+    overflow-y: auto;
+    max-height: 200px;  
+    min-height: 100px; 
+    margin-top: 10px; 
+    margin-bottom: 20px;
+}
+#tab-negociacao .negociacao-view-parcelas-table {
+	border: 1px solid #cecece;
+	overflow-y: auto;
+    max-height: 250px;  
+    min-height: 100px; 
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.negociacao-view-parcelas-table .table thead th { 
+	font-size: 12px;
+	padding: 5px 5px;
+}
+.negociacao-view-parcelas-table .table tbody td { 
+    font-size: 13px;
+    padding: 5px 5px;
+}
+.negociacao-view-parcelas-table .table tbody td span.label {
+	display: inline-block;
+	width: 100%;
+}
+/* dropdown menu */
+.dropdown-menu {
+	padding-left: 10px !important;
+}
+.dropdown-menu span {
+    cursor: pointer;
+    color: #337ab7;
+    text-decoration: none;
+}
+.dropdown-menu span:hover {
+    color: #1f4d75;
+    text-decoration: underline;
+}

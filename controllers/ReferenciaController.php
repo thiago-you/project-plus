@@ -1,13 +1,13 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
-use app\models\Referencia;
-use app\models\ReferenciaSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use app\models\Referencia;
 use yii\filters\VerbFilter;
+use app\models\Colaborador;
+use app\models\ReferenciaSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * ReferenciaController implements the CRUD actions for Referencia model.
@@ -29,6 +29,21 @@ class ReferenciaController extends Controller
         ];
     }
 
+    /**
+     * Valida a permissão do usuário com base no cargo
+     *
+     * @inheritDoc
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+            throw new NotFoundHttpException();
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
     /**
      * Lists all Referencia models.
      * @return mixed

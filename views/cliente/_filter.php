@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -18,6 +18,9 @@ use kartik\typeahead\Typeahead;
             			<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
                 			<?= $form->field($model, 'nome')->widget(Typeahead::classname(),[
                                     'pluginOptions' => ['highlight' => true],
+        			                'options' => [
+		                                'autocomplete' => 'off',
+        			                ],
                                     'dataset' => [
                                        [
                                           'display'=> 'value',
@@ -37,6 +40,10 @@ use kartik\typeahead\Typeahead;
                     	<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
                 			<?= $form->field($model, 'telefone')->widget(Typeahead::classname(),[
                                     'pluginOptions' => ['highlight' => true],
+        			                'options' => [
+		                                'value' => Helper::mask($model->telefone, Helper::MASK_TELEFONE),
+		                                'autocomplete' => 'off',
+        			                ],
                                     'dataset' => [
                                        [
                                           'display'=> 'value',
@@ -53,6 +60,10 @@ use kartik\typeahead\Typeahead;
                 		<div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
                 			<?= $form->field($model, 'documento')->widget(Typeahead::classname(),[
                                     'pluginOptions' => ['highlight' => true],
+        			                'options' => [
+		                                'value' => strlen($model->documento) == 11 ? Helper::mask($model->documento, Helper::MASK_CPF) : (strlen($model->documento) == 14 ? Helper::mask($model->documento, Helper::MASK_CNPJ): $model->documento),
+		                                'autocomplete' => 'off',
+        			                ],
                                     'dataset' => [
                                        [
                                           'display'=> 'value',
@@ -75,38 +86,7 @@ use kartik\typeahead\Typeahead;
             		<div class="row">
                 		<div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
             				<?= Html::submitButton('<i class="fa fa-search"></i>&nbsp; Pesquisar', [
-            				        'class' => Util::BTN_COLOR_PRIMARY.' btn-block',
-            				    ]);
-            				?>
-                		</div>
-                	</div>
-            	</div>
-            	<!-- ./box-footer -->
-                <!-- ./box -->
-            <?php ActiveForm::end(); ?>
-            <!-- ./form -->
-        </div>
-        <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
-        	<?php $form = ActiveForm::begin(['action' => Url::to('cliente/upload-excel'), 'options' => ['enctype' => 'multipart/form-data']]) ?>
-        		<div class="box-header">
-            		<h4><i class="fa fa-upload"></i>&nbsp; Upload de Arquivo Excel</h4>
-        		</div>
-        		<!-- ./box-header -->
-        		<br><br>
-        		<div class="box-body">  
-        			<div class="row">
-                		<div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
-                        	<?= $form->field($modelImport, 'fileImport')->fileInput(); ?>
-                    	</div>
-                	</div>
-            	</div>
-            	<!-- ./box-body -->
-            	<br><br><br>
-            	<div class="box-footer">
-            		<div class="row">
-                		<div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
-            				<?= Html::submitButton('<i class="fa fa-paper-plane"></i>&nbsp; Enviar', [
-            				        'class' => Util::BTN_COLOR_PRIMARY.' btn-block',
+            				        'class' => Helper::BTN_COLOR_PRIMARY.' btn-block',
             				    ]);
             				?>
                 		</div>

@@ -16,15 +16,17 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
-        'css/fontawesome-5.0.12/css/fontawesome-all.min.css',
-        'plugins/jquery-confirm/jquery-confirm.min.css',
+        'plugins/fontawesome-5.3.1/css/all.min.css',
+        'plugins/jquery-confirm/jquery-confirm.css?v=1.0',
         'plugins/toastr/toastr.min.css',
+        'css/site.css?d=201811182226',
     ];
     public $js = [
-        'plugins/jquery-confirm/jquery-confirm.min.js',
+        'plugins/jquery-confirm/jquery-confirm.js?v=1.0',
+        'plugins/fontawesome-5.3.1/js/all.min.js',
+        'plugins/accounting/accounting.js',
         'plugins/toastr/toastr.min.js',
-        'app/js/main.js',
+        'app/js/main.js?d=201811171749',
     ];
     public $depends = [
         'yii\web\YiiAsset',

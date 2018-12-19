@@ -4,18 +4,19 @@ $db = file_exists(__DIR__ . '/../local/db.php') ? require(__DIR__ . '/../local/d
 $envDev = file_exists(__DIR__ . '/../local/env-dev.php') ? require(__DIR__ . '/../local/env-dev.php') : YII_ENV_DEV;
 
 $config = [
-    'id' => 'exemplo-demo',
+    'id' => 'maklenrc',
     'language' => 'pt-BR',
     'sourceLanguage' => 'pt-BR',
     'timeZone' => 'America/Sao_Paulo',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'name' => 'Exemplo',
+    'name' => 'Maklen RC',
     'components' => [
         'i18n' => [
             'translations' => [
                 'kvgrid'=> [
                     'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@kvgrid/messages',
                     'forceTranslation' => true,
                 ],
             ],
@@ -23,8 +24,6 @@ $config = [
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [
-                    //'js' => 'jquery-3.3.1.min.js',
-                    //'js' => ['jquery.js' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js'],
                     'jsOptions' => ['type' => 'text/javascript'],
                 ],
             ],
@@ -63,11 +62,30 @@ $config = [
    			'class' => 'yii\web\UrlManager',
    			'showScriptName' => false,
    			'enablePrettyUrl' => true,
-   			'rules' => array(
+   			/* 'rules' => array(
 				'<controller:\w+>/<id:\d+>' => '<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-  			),
+  			), */
+            /* 'rules'           => [
+                '<controller:[a-z-]+>/<id:\d+>'                                                   => '<controller>/view',
+                '<controller:[a-z-]+>/<action:[a-z-]+>/<id:\d+>'                                  => '<controller>/<action>',
+                '<controller:[a-z-]+>/<action:[a-z-]+>/<id:\d+>/<param:[a-z-]+>'                  => '<controller>/<action>',
+                '<controller:[a-z-]+>/<action:[a-z-]+>'                                           => '<controller>/<action>',
+            ], */
+            'rules' => [
+                '/' => '/site',
+                '<controller:\w+>/<id:\d+>'             => '<controller>/view',
+                '<controller:\w+>/<action>/<id:\d+>'    => '<controller>/<action>',
+                '<controller:[\w-]+>/<action>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>'         => '<controller>/<action>',
+                '<controller:[\w-]+>/update/<id:\d+>'   => '<controller>/update',
+                '<controller:[\w-]+>/delete/<id:\d+>'   => '<controller>/delete',
+                '<controller:[\w-]+>/<id:\d+>'          => '<controller>/view',
+                '<controller:[\w-]+>/<id:\d+>'          => '<controller>/detail',
+                '<controller:[\w-]+>/<id:\d+>'          => '<controller>/download',
+                '<controller:[\w-]+>/<id:\d+>'          => '<controller>/processar',
+            ],
     	],
     ],
     'params' => $params,
@@ -99,16 +117,16 @@ $config = [
                 ],
                 'toggleDataOptions' => [
                     'all' => [
-                        'icon' => 'resize-full',
+                        'icon' => 'glyphicon glyphicon-resize-full',
                         'label' => false,
-                        'class' => 'btn btn-default btn-flat',
+                        'class' => 'btn btn-default btn-flat btn-sm',
                         'title' => 'Mostrar todos os resultados',
                         'data-toggle' => 'tooltip',
                     ],
                     'page' => [
-                        'icon' => 'resize-small',
+                        'icon' => 'glyphicon glyphicon-resize-small',
                         'label' => false,
-                        'class' => 'btn btn-default btn-flat',
+                        'class' => 'btn btn-default btn-flat btn-sm',
                         'title' => 'Mostar resultados com paginação',
                         'data-toggle' => 'tooltip',
                     ],
@@ -119,6 +137,10 @@ $config = [
             ],
         ],
     ],
+    // valida o layout conforme o usuário logado (nao implementado ainda)
+    'on beforeRequest' => function ($event) {
+        
+    }
 ];
 
 if ($envDev) {

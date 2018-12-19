@@ -1,11 +1,8 @@
 <?php
-
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Negociacao;
 
 /**
  * NegociacaoSearch represents the model behind the search form of `app\models\Negociacao`.
@@ -18,8 +15,8 @@ class NegociacaoSearch extends Negociacao
     public function rules()
     {
         return [
-            [['id', 'id_contrato'], 'integer'],
-            [['data_negociacao', 'data_cadastro'], 'safe'],
+            [['id', 'id_contrato', 'id_carteira', 'id_campanha'], 'integer'],
+            [['data_negociacao', 'data_cadastro', 'subtotal', 'desconto', 'receita', 'total'], 'safe'],
         ];
     }
 

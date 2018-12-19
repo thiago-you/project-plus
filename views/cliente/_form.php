@@ -1,12 +1,17 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
+use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use app\models\Cidade;
 use app\models\Cliente;
-use yii\web\View;
 use app\models\Telefone;
+use yii\web\JqueryAsset;
+use kartik\money\MaskMoney;
+use kartik\select2\Select2;
 use kartik\date\DatePicker;
+use yii\widgets\ActiveForm;
 use yii\widgets\MaskedInput;
+use yii\helpers\ArrayHelper;
 ?>
 <?php $form = ActiveForm::begin(); ?>
 	<div class="panel panel-primary panel-box">
@@ -21,6 +26,7 @@ use yii\widgets\MaskedInput;
 			<!-- ./tabs -->
 			<div class="tab-content">
 				<div class="tab-pane active" id="tab-principal">
+					<br>
 					<div class="row">
 	        			<div class="col-md-3 col-sm-3 col-xs-12 col-lg-3">
 	                        <?= $form->field($model, 'tipo')->dropDownList([
@@ -30,12 +36,11 @@ use yii\widgets\MaskedInput;
 	                        ?>
 	        			</div>
 	        			<div class="col-md-9 col-sm-9 col-lg-9 col-xs-12">
-	        				<div class="cliente-fisico" style="display: <?= $layout == Cliente::TIPO_FISICO ? 'block' : 'none'; ?>;">
-		                        <?= $form->field($model, 'nome')->textInput(['name' => 'cliente-nome', 'id' => 'cliente-nome', 'maxlength' => true]); ?>
-	        				</div>
-							<div class="cliente-juridico" style="display: <?= $layout == Cliente::TIPO_FISICO ? 'none' : 'block'; ?>;">
-		                        <?= $form->field($model, 'nome')->textInput(['name' => 'cliente-razao-social', 'id' => 'cliente-razao-social', 'maxlength' => true])->label('Razão Social'); ?>
-	        				</div>
+	                        <?= $form->field($model, 'nome')->textInput([
+                                    'id' => 'cliente-nome', 
+                                    'maxlength' => true,
+	                           ])->label($layout == Cliente::TIPO_FISICO ? 'Nome' : 'Razão Social'); 
+	                        ?>
 	        			</div>
 	        		</div>
 	        		<!-- ./row -->
@@ -71,10 +76,12 @@ use yii\widgets\MaskedInput;
         				<div class="cliente-fisico" style="display: <?= $layout == Cliente::TIPO_FISICO ? 'block' : 'none'; ?>;">
 		        			<div class="col-md-3 col-sm-3 col-lg-3 col-xs-12">
 		                        <?= $form->field($model, 'data_nascimento')->widget(DatePicker::className(), [
-                        				'pluginOptions' => [
+                                        'removeButton' => false,
+                                        'pluginOptions' => [
                         					'autoclose' => true,
-                        					'format' => 'yyyy-mm-dd'
-                        				]
+                        					'format' => 'dd/mm/yyyy',
+                                            'orientation' => 'bottom',
+                        				],
 		                        	]);
 		                        ?>
 		                    </div>
@@ -131,17 +138,57 @@ use yii\widgets\MaskedInput;
 		                        <?= $form->field($model, 'profissao')->textInput(['maxlength' => true]); ?>
 		        			</div>
 		        			<div class="col-md-2 col-sm-2 col-lg-2 col-xs-12">
-		                        <?= $form->field($model, 'salario')->textInput(['maxlength' => true]); ?>
+		                        <?= $form->field($model, 'salario')->widget(MaskMoney::className(), [
+                                        'options' => [
+                                            'maxlength' => '14',
+                                        ],
+                                        'pluginOptions' => [
+                                            'prefix' => 'R$ ',
+                                            'precision' => 2
+                                        ],
+                                    ]);
+                                ?>
 		        			</div>
 		        		</div>
 		        		<!-- ./row -->
 					</div>	  
-					<!-- ./cliente fisico -->      		
+					<!-- ./cliente fisico -->     
+					<div class="row">
+	        			<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4">
+	                        <?= $form->field($model, 'tipo_cadastro')->widget(Select2::classname(), [
+					                'data' => [
+		                                Cliente::TIPO_CADASTRO_CLIENTE => 'Cliente',
+		                                Cliente::TIPO_CADASTRO_RESPONSAVEL => 'Responsável/Avalista',
+					                ],
+                                    'hideSearch' => true,
+                                    'pluginOptions' => [
+                                        'allowClear' => false,
+                                    ],
+	  						   ]);
+                            ?>
+	        			</div>
+	        			<div class="col-md-8 col-sm-8 col-lg-8 col-xs-12">
+	                        <?= $form->field($model, 'id_responsavel')->widget(Select2::classname(), [
+					                'data' => ArrayHelper::map(Cliente::find()->where([
+                                        'tipo_cadastro' => Cliente::TIPO_CADASTRO_RESPONSAVEL,
+					                ])->all(), 'id', 'nome'),
+                                    'disabled' => $model->tipo_cadastro == Cliente::TIPO_CADASTRO_RESPONSAVEL ? true : false,
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                    ],
+                                    'options' => [
+                                        'placeholder' => 'Selecione o responsável/avalista...',
+                                    ],
+	  						   ]);
+                            ?>
+	        			</div>
+	        		</div>
+	        		<!-- ./row --> 		
 				</div>
 				<!-- ./tab principal -->
 			  	<div class="tab-pane" id="tab-contato">
 			  		<br>
-			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Telefone', ['id' => 'add-telefone', 'class' => Util::BTN_COLOR_EMERALD]); ?>
+			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Telefone', ['id' => 'add-telefone', 'class' => Helper::BTN_COLOR_EMERALD]); ?>
 			  		<table id="table-telefones" class="table table-bordered table-hover">
 			  			<thead>
 			  				<tr>
@@ -166,17 +213,17 @@ use yii\widgets\MaskedInput;
 				  					<tr data-id="<?= $telefone->id; ?>">
 					  					<td>
 					  						<?= $form->field($telefone, 'numero')->textInput([
-		  											'id' => null,
-		  											'name' => "Telefones[$telefone->id][numero]",
-			  										'maxlength' => true,
-					  							])->label(false); 
+			  										'id' => null,
+			  										'name' => "Telefones[$telefone->id][numero]",
+			  										'class' => 'form-control input-numero',
+  												])->label(false); 
 					  						?>
 				  						</td>
 					  					<td>
 					  						<?= $form->field($telefone, 'ramal')->textInput([
 			  										'id' => null,
 			  										'name' => "Telefones[$telefone->id][ramal]",
-			  										'maxlength' => true,
+			  										'maxlength' => 5,
   												])->label(false); 
 					  						?>
 				  						</td>
@@ -227,7 +274,7 @@ use yii\widgets\MaskedInput;
 					  					</td>
 					  					<td class="text-center">
 					  						<?= Html::button('<i class="fa fa-times"></i>', [
-			  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+			  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 					  							]); 
 						  					?>
 					  					</td>
@@ -236,15 +283,16 @@ use yii\widgets\MaskedInput;
 			  				<?php else: ?>
 			  					<tr data-id="1">
 				  					<td>
-				  						<?= Html::textInput('Telefones[1][numero]', null, [
-		  										'maxlength' => true,
-				  								'class' => 'form-control',
-				  							]); 
-				  						?>
+				  						<?= MaskedInput::widget([
+		  						                'name' => 'Telefones[1][numero]',
+                                				'mask' => ['(99) 9999-9999', '(99) 9999-99999'],
+                                                'clientOptions' => ['greedy' => false]
+                                        	]);
+                                        ?>
 			  						</td>
 				  					<td>
 				  						<?= Html::textInput('Telefones[1][ramal]', null, [
-			  									'maxlength' => true,
+			  									'maxlength' => 5,
 				  								'class' => 'form-control',
   											]); 
 					  					?>
@@ -282,7 +330,7 @@ use yii\widgets\MaskedInput;
 				  					</td>
 				  					<td class="text-center">
 				  						<?= Html::button('<i class="fa fa-times"></i>', [
-		  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+		  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 				  							]); 
 					  					?>
 				  					</td>
@@ -291,7 +339,7 @@ use yii\widgets\MaskedInput;
 			  			</tbody>
 			  		</table>
 			  		<!-- ./table telefone -->
-			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Email', ['id' => 'add-email', 'class' => Util::BTN_COLOR_EMERALD]); ?>
+			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Email', ['id' => 'add-email', 'class' => Helper::BTN_COLOR_EMERALD]); ?>
 			  		<table id="table-emails" class="table table-bordered table-hover">
 			  			<thead>
 			  				<tr>
@@ -310,12 +358,13 @@ use yii\widgets\MaskedInput;
 				  					<!-- ./hidden id -->
 				  					<tr data-id="<?= $email->id; ?>">
 					  					<td>
-					  						<?= $form->field($email, 'email')->textInput([
-		  											'id' => null,
+                                            <?= $form->field($email, 'email')->textInput([
+				  									'id' => null,
 					  								'name' => "Emails[$email->id][email]",
-			  										'maxlength' => true,
-					  							])->label(false); 
-					  						?>
+                                                    'class' => 'form-control input-email',
+				  									'maxlength' => true,
+						  						])->label(false); 
+						  					?>
 				  						</td>
 					  					<td>
 					  						<?= $form->field($email, 'observacao')->textInput([
@@ -327,7 +376,7 @@ use yii\widgets\MaskedInput;
 					  					</td>
 					  					<td class="text-center">
 					  						<?= Html::button('<i class="fa fa-times"></i>', [
-			  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+			  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 					  							]); 
 						  					?>
 					  					</td>
@@ -336,11 +385,13 @@ use yii\widgets\MaskedInput;
 			  				<?php else: ?>
 			  					<tr data-id="1">
 				  					<td>
-				  						<?= Html::textInput('Emails[1][email]', null, [
-		  										'maxlength' => true,
-				  								'class' => 'form-control',
-				  							]); 
-				  						?>
+				  						<?= MaskedInput::widget([
+		  						                'name' => 'Emails[1][email]',
+                                				'clientOptions' => [
+                                				    'alias' => 'email', 
+                                				],
+                                        	]);
+                                        ?>
 			  						</td>
 				  					<td>
 				  						<?= Html::textInput('Emails[1][observacao]', null, [
@@ -351,7 +402,7 @@ use yii\widgets\MaskedInput;
 				  					</td>
 				  					<td class="text-center">
 				  						<?= Html::button('<i class="fa fa-times"></i>', [
-		  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+		  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 				  							]); 
 					  					?>
 				  					</td>
@@ -364,7 +415,7 @@ use yii\widgets\MaskedInput;
 			  	<!-- ./tab contato -->
 			  	<div class="tab-pane" id="tab-endereco">
 			  		<br>
-			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Endereço', ['id' => 'add-endereco', 'class' => Util::BTN_COLOR_EMERALD]); ?>
+			  		<?= Html::button('<i class="fa fa-plus"></i>&nbsp; Endereço', ['id' => 'add-endereco', 'class' => Helper::BTN_COLOR_EMERALD]); ?>
 			  		<table id="table-enderecos" class="table table-bordered table-hover">
 			  			<thead>
 			  				<tr>
@@ -420,32 +471,46 @@ use yii\widgets\MaskedInput;
 					  						?>
 				                        </td>
 					  					<td>
-					  						<?= $form->field($endereco, 'cep')->textInput([
+                                            <?= $form->field($endereco, 'cep')->textInput([
 			  										'id' => null,
 			  										'name' => "Enderecos[$endereco->id][cep]",
-			  										'maxlength' => true,
+                                                    'class' => 'form-control input-cep',
   												])->label(false); 
 					  						?>
 				                        </td>
-					  					<td>
-					  						<?= $form->field($endereco, 'cidade_id')->textInput([
-			  										'id' => null,
-			  										'name' => "Enderecos[$endereco->id][cidade_id]",
-			  										'maxlength' => true,
-  												])->label(false); 
-					  						?>
+					  					<td class="select-cidade">
+					  						<?= $form->field($endereco, 'cidade_id')->widget(Select2::classname(), [
+			  						                'data' => $endereco->estado_id ? ArrayHelper::map(Cidade::find()->where(['uf' => $endereco->cidade->uf])->all(), 'id', 'nome') : [],
+			  						                'theme' => Select2::THEME_DEFAULT,
+			  						                'options' => [
+  						                                 //'placeholder' => 'Selecione a cidade ...',
+    			  						                'name' => "Enderecos[$endereco->id][cidade_id]",
+    			  						                 'id' => "Enderecos-{$endereco->id}-cidade",
+			  						                ],
+                                                    'pluginOptions' => [
+                                                        'allowClear' => false,
+                                                    ],
+					  						   ])->label(false);
+                                            ?>
 				                        </td>
-					  					<td>
-					  						<?= $form->field($endereco, 'estado_id')->textInput([
-				  									'id' => null,
-			  										'name' => "Enderecos[$endereco->id][estado_id]",
-				  									'maxlength' => true,
-						  						])->label(false); 
-						  					?>
+					  					<td class="select-estado">
+						  					<?= $form->field($endereco, 'estado_id')->widget(Select2::classname(), [
+				  					                'data' => $estados,
+				  					                'theme' => Select2::THEME_DEFAULT,
+                                                    'options' => [
+                                                        //'placeholder' => 'Selecione o estado ...',
+    				  					                'name' => "Enderecos[$endereco->id][estado_id]",
+                                                        'id' => "Endereco-{$endereco->id}-estado",
+                                                    ],
+                                                    'pluginOptions' => [
+                                                        'allowClear' => false,
+                                                    ],
+						  					   ])->label(false);
+                                            ?>
 					  					</td>
 					  					<td class="text-center">
 					  						<?= Html::button('<i class="fa fa-times"></i>', [
-			  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+			  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 					  							]); 
 						  					?>
 					  					</td>
@@ -482,29 +547,46 @@ use yii\widgets\MaskedInput;
 					  					?>
 			                        </td>
 				  					<td>
-				  						<?= Html::textInput('Enderecos[1][cep]', null, [
-			  									'maxlength' => true,
-				  								'class' => 'form-control',
-  											]); 
-					  					?>
+					  					<?= MaskedInput::widget([
+                                				'mask' => '99999-999',
+			  					                'name' => 'Enderecos[1][cep]',
+                                                'clientOptions' => ['greedy' => false]
+                                        	]);
+                                        ?>
 			                        </td>
-				  					<td>
-				  						<?= Html::textInput('Enderecos[1][cidade_id]', null, [
-			  									'maxlength' => true,
-				  								'class' => 'form-control',
-  											]); 
-					  					?>
+				  					<td class="select-cidade">
+					  					<?= Select2::widget([
+			  					                'data' => ArrayHelper::map(Cidade::find()->where(['uf' => 'AC'])->all(), 'id', 'nome'),
+		  					                    'name' => 'Enderecos[1][cidade_id]',
+			  					                'theme' => Select2::THEME_DEFAULT,
+		  						                'options' => [
+					                                 //'placeholder' => 'Selecione a cidade ...',
+			  						                 'id' => "Enderecos-1-cidade",
+		  						                ],
+                                                'pluginOptions' => [
+                                                    'allowClear' => false,
+                                                ],
+				  						   ]);
+                                        ?>
 			                        </td>
-				  					<td>
-				  						<?= Html::textInput('Enderecos[1][estado_id]', null, [
-		  										'maxlength' => true, 
-		  										'class' => 'form-control',
-				  							]); 
-					  					?>
+				  					<td class="select-estado">
+					  					<?= Select2::widget([
+		  					                    'data' => $estados,
+			  					                'name' => 'Enderecos[1][estado_id]',
+			  					                'theme' => Select2::THEME_DEFAULT,
+                                                'options' => [
+                                                    //'placeholder' => 'Selecione o estado ...',
+                                                    'id' => 'Enderecos-1-estado',
+                                                ],
+                                                'pluginOptions' => [
+                                                    'allowClear' => false,
+                                                ],
+					  					   ]);
+                                        ?>
 				  					</td>
 				  					<td class="text-center">
 				  						<?= Html::button('<i class="fa fa-times"></i>', [
-		  										'class' => Util::BTN_COLOR_DANGER.' btn-sm btn-deletar', 
+		  										'class' => Helper::BTN_COLOR_DANGER.' btn-deletar', 
 				  							]); 
 					  					?>
 				  					</td>
@@ -515,34 +597,32 @@ use yii\widgets\MaskedInput;
 			  		<!-- ./table telefone -->
 			  	</div>
 			  	<!-- ./tab endereco -->
-			  	<div class="tab-pane" id="tab-contrato">
-			  		
-			  	</div>
-			  	<!-- ./tab contrato -->
 			</div>
+			<!-- ./tab content -->
         </div>
         <!-- ./painel-body -->
         <div class="panel-footer">
     		<div class="row">
-    			<div class="col-md-3">
+    			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6">
                     <div class="form-group">
                         <?= Html::submitButton('<i class="fa fa-save"></i>&nbsp; '. ($model->isNewRecord ? 'Cadastrar' : 'Alterar'), [
                                 'class' => $model->isNewRecord 
-                                ? Util::BTN_COLOR_SUCCESS.' btn-block' 
-                                : Util::BTN_COLOR_PRIMARY.' btn-block',
+                                ? Helper::BTN_COLOR_SUCCESS.' btn-block' 
+                                : Helper::BTN_COLOR_PRIMARY.' btn-block',
                             ]);
                         ?>
                     </div>
     			</div>
-    			<div class="col-md-3 pull-right">
+    			<div class="col-md-3 col-sm-4 col-lg-3 col-xs-6 pull-right">
                     <div class="form-group">
                         <?= Html::a('<i class="fa fa-reply"></i>&nbsp; Voltar', ['/cliente'], [
-                                'class' => Util::BTN_COLOR_DEFAULT.' btn-block',
+                                'class' => Helper::BTN_COLOR_DEFAULT.' btn-block',
                             ]);
                         ?>
                     </div>
     			</div>
     		</div>
+    		<!-- ./row -->
         </div>
         <!-- ./panel-footer -->
 	</div>
@@ -550,109 +630,8 @@ use yii\widgets\MaskedInput;
 <?php ActiveForm::end(); ?>
 <!-- ./form -->
 <?php 
-$script = <<<JS
-	$(document).ready(function() {
-		// valida o tipo do cliente
-		$('body').on('change', '#cliente-tipo', function() {
-			if (this.value == 'F') {
-				if (!$('.cliente-fisico').is(':visible')) {
-					$('.cliente-juridico').hide(function() {
-						$('.cliente-fisico').show();
-					});
-				}
-			} else {
-				if (!$('.cliente-juridico').is(':visible')) {
-					$('.cliente-fisico').hide(function() {
-						$('.cliente-juridico').show();
-					});
-				}
-			}
-		});
-
-		// adiciona um novo telefone na lista
-		$('body').on('click', '#add-telefone', function() {
-			// busca a tabela e o ultimo id
-			let tbody = $('#table-telefones').find('tbody');
-			let telefoneId = parseInt(tbody.find('tr:last').data('id'));
-			
-			// valida se é um numero 
-			if (isNaN(telefoneId)) {
-				telefoneId = 0;
-			}
-
-			// cria e atribui a linha
-			tbody.append('<tr></tr>');
-			let linha = tbody.find('tr:last');
-			
-			// adiciona os campos na linha
-			linha.attr('data-id', ++telefoneId);
-			linha.append('<td><input class="form-control" name="Telefones['+telefoneId+'][numero]" maxlength="" type="text"/></td>');
-			linha.append('<td><input class="form-control" name="Telefones['+telefoneId+'][ramal]" maxlength="" type="text"/></td>');
-			linha.append('<td><select class="form-control" name="Telefones['+telefoneId+'][tipo]"><option value="1">Residencial</option><option value="2">Móvel</option><option value="3">Comercial</option><option value="4">Fax</option><option value="5">Referência</option></select></td>');
-			linha.append('<td><select class="form-control" name="Telefones['+telefoneId+'][contato]"><option value="S">Sim</option><option value="N">Não</option></select></td>');
-			linha.append('<td><select class="form-control" name="Telefones['+telefoneId+'][whatsapp]"><option value="S">Sim</option><option value="N" selected="">Não</option></select></td>');
-			linha.append('<td><select class="form-control" name="Telefones['+telefoneId+'][ativo]"><option value="S">Sim</option><option value="N">Não</option></select></td>');
-			linha.append('<td><input class="form-control" name="Telefones['+telefoneId+'][observacao]" maxlength="" type="text"/></td>');
-			linha.append('<td class="text-center"><button class="btn btn-sm btn-danger btn-flat btn-deletar"><i class="fa fa-times"></i></button></td>');
-		});
-
-		// adiciona um novo email na lista
-		$('body').on('click', '#add-email', function() {
-			// busca a tabela e o ultimo id
-			let tbody = $('#table-emails').find('tbody');
-			let emailId = parseInt(tbody.find('tr:last').data('id'));
-			
-			// valida se é um numero 
-			if (isNaN(emailId)) {
-				emailId = 0;
-			}
-
-			// cria e atribui a linha
-			tbody.append('<tr></tr>');
-			let linha = tbody.find('tr:last');
-			
-			// adiciona os campos na linha
-			linha.attr('data-id', ++emailId);
-			linha.append('<td><input class="form-control" name="Emails['+emailId+'][email]" maxlength="" type="text"/></td>');
-			linha.append('<td><input class="form-control" name="Emails['+emailId+'][observacao]" maxlength="" type="text"/></td>');
-			linha.append('<td class="text-center"><button class="btn btn-sm btn-danger btn-flat btn-deletar"><i class="fa fa-times"></i></button></td>');
-		});
-
-		// adiciona um novo endereco na lista
-		$('body').on('click', '#add-endereco', function() {
-			// busca a tabela e o ultimo id
-			let tbody = $('#table-enderecos').find('tbody');
-			let enderecoId = parseInt(tbody.find('tr:last').data('id'));
-			
-			// valida se é um numero 
-			if (isNaN(enderecoId)) {
-				enderecoId = 0;
-			}
-
-			// cria e atribui a linha
-			tbody.append('<tr></tr>');
-			let linha = tbody.find('tr:last');
-			
-			// adiciona os campos na linha
-			linha.attr('data-id', ++enderecoId);
-			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][logradouro]" maxlength="" type="text"/></td>');
-			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][numero]" maxlength="" type="text"/></td>');
-			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][complemento]" maxlength="" type="text"/></td>');
-			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][bairro]" maxlength="" type="text"/></td>');
-			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][cep]" maxlength="" type="text"/></td>');
-			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][cidade_id]" maxlength="" type="text"/></td>');
-			linha.append('<td><input class="form-control" name="Enderecos['+enderecoId+'][estado_id]" maxlength="" type="text"/></td>');
-			linha.append('<td class="text-center"><button class="btn btn-sm btn-danger btn-flat btn-deletar"><i class="fa fa-times"></i></button></td>');
-		});
-
-		// deleta um registro
-		$('body').on('click', '.btn-deletar', function() {
-			$(this).closest('tr').remove();
-		});
-	});
-JS;
 // JS
-$this->registerJs($script, View::POS_READY);
+$this->registerJsFile(Url::home().'app/js/cliente.js', ['depends' => [JqueryAsset::className()]]);
 ?>
 
 

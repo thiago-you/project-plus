@@ -1,5 +1,5 @@
 <?php
-use app\base\Util;
+use app\base\Helper;
 use yii\helpers\Url;
 use yii\helpers\Json;
 use app\models\Empresa;
@@ -359,7 +359,7 @@ $colaboradorDados = Yii::$app->user->isGuest ? [] : $_colaboradorDados;
 	        ?>
 			<li>
             <a id="logo" class="navbar-brand font20" style="text-align: center;" href="/"><b>GER</b>CPN
-               <p class="navbar-fluid font11" title="<?= $empresaConfig['razao_social'] ?>"><?= Util::shortName($empresaConfig['razao_social'], 30); ?></p>
+               <p class="navbar-fluid font11" title="<?= $empresaConfig['razao_social'] ?>"><?= Helper::shortName($empresaConfig['razao_social'], 30); ?></p>
             </a>
 					</li>
 						<li class="dropdown menu-large">

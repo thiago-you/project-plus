@@ -1,13 +1,13 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
-use app\models\Telefone;
-use app\models\TelefoneSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use app\models\Telefone;
 use yii\filters\VerbFilter;
+use app\models\Colaborador;
+use app\models\TelefoneSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * TelefoneController implements the CRUD actions for Telefone model.
@@ -29,6 +29,21 @@ class TelefoneController extends Controller
         ];
     }
 
+    /**
+     * Valida a permissão do usuário com base no cargo
+     *
+     * @inheritDoc
+     * @see \yii\web\Controller::beforeAction()
+     */
+    public function beforeAction($action)
+    {
+        if (\Yii::$app->user->identity->cargo != Colaborador::CARGO_ADMINISTRADOR) {
+            throw new NotFoundHttpException();
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
     /**
      * Lists all Telefone models.
      * @return mixed
